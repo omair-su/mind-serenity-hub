@@ -36,13 +36,12 @@ import RitualsPage from "./pages/RitualsPage";
 import FocusModePage from "./pages/FocusModePage";
 import BodyScanPage from "./pages/BodyScanPage";
 import GratitudePage from "./pages/GratitudePage";
-import MasterclassPage from "./pages/MasterclassPage";
-import CommunityPage from "./pages/CommunityPage";
 import WalkingMeditationPage from "./pages/WalkingMeditationPage";
 import SoundscapeBuilderPage from "./pages/SoundscapeBuilderPage";
 import AIRecommendationsPage from "./pages/AIRecommendationsPage";
 import AdvancedAnalyticsPage from "./pages/AdvancedAnalyticsPage";
 import AboutPage from "./pages/AboutPage";
+import OfflineDownloadsPage from "./pages/OfflineDownloadsPage";
 import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
 
@@ -51,20 +50,24 @@ function AppInner() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
 
+        {/* Course foundation */}
         <Route path="/course" element={<WelcomePage />} />
         <Route path="/course/how-to-use" element={<HowToUsePage />} />
         <Route path="/course/science" element={<SciencePage />} />
         <Route path="/course/expectations" element={<ExpectationsPage />} />
         <Route path="/course/assessment" element={<AssessmentPage />} />
 
+        {/* Day & Week content */}
         <Route path="/week/:weekNum" element={<WeekPage />} />
         <Route path="/day/:dayNum" element={<DayPage />} />
 
+        {/* App (premium platform) */}
         <Route path="/app" element={<DashboardPage />} />
         <Route path="/app/profile" element={<ProfilePage />} />
         <Route path="/app/analytics" element={<AnalyticsPage />} />
@@ -89,12 +92,11 @@ function AppInner() {
         <Route path="/app/focus" element={<FocusModePage />} />
         <Route path="/app/body-scan" element={<BodyScanPage />} />
         <Route path="/app/gratitude" element={<GratitudePage />} />
-        <Route path="/app/masterclass" element={<MasterclassPage />} />
-        <Route path="/app/community" element={<CommunityPage />} />
         <Route path="/app/walking" element={<WalkingMeditationPage />} />
         <Route path="/app/soundscape-builder" element={<SoundscapeBuilderPage />} />
         <Route path="/app/ai-recommendations" element={<AIRecommendationsPage />} />
         <Route path="/app/advanced-analytics" element={<AdvancedAnalyticsPage />} />
+        <Route path="/app/offline-downloads" element={<OfflineDownloadsPage />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
