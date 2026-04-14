@@ -5,14 +5,14 @@ import sleepHero from "@/assets/sleep-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 const sleepGradients = [
-  "from-indigo-100/70 via-blue-50/50 to-violet-50/40",
-  "from-amber-100/60 via-yellow-50/40 to-orange-50/30",
-  "from-rose-100/60 via-pink-50/40 to-fuchsia-50/30",
-  "from-violet-100/60 via-purple-50/40 to-indigo-50/30",
-  "from-cyan-100/60 via-sky-50/40 to-blue-50/30",
-  "from-emerald-100/60 via-teal-50/40 to-green-50/30",
-  "from-pink-100/60 via-rose-50/40 to-red-50/30",
-  "from-teal-100/60 via-cyan-50/40 to-sky-50/30",
+  "from-[hsl(var(--forest-deep))]/15 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/8 to-[hsl(var(--cream-dark))]/5",
+  "from-[hsl(var(--sage-dark))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--forest-mid))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage))]/5",
+  "from-[hsl(var(--forest))]/12 via-[hsl(var(--sage-dark))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--gold-dark))]/12 via-[hsl(var(--gold))]/8 to-[hsl(var(--cream))]/5",
+  "from-[hsl(var(--sage))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--forest-deep))]/5",
+  "from-[hsl(var(--forest))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--gold-light))]/5",
 ];
 
 const sleepMeditations = [
@@ -47,14 +47,14 @@ export default function SleepPage() {
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl shadow-elevated">
           <img src={sleepHero} alt="Peaceful sleep environment" className="w-full h-44 sm:h-52 object-cover" width={1280} height={576} />
-          <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-900/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/90 via-[hsl(var(--forest-deep))]/50 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-1">
-              <Moon className="w-5 h-5 text-indigo-300" />
-              <span className="text-xs font-body font-semibold text-indigo-300 uppercase tracking-wider">Sleep Program</span>
+              <Moon className="w-5 h-5 text-[hsl(var(--sage))]" />
+              <span className="text-xs font-body font-semibold text-[hsl(var(--sage))] uppercase tracking-wider">Sleep Program</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Sleep Meditations</h1>
-            <p className="text-sm font-body text-white/70 mt-1">Wind down and prepare for deep, restorative sleep.</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground">Sleep Meditations</h1>
+            <p className="text-sm font-body text-primary-foreground/70 mt-1">Wind down and prepare for deep, restorative sleep.</p>
           </div>
         </div>
 
