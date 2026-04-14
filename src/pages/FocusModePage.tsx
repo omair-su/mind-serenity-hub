@@ -1,15 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import AppLayout from "@/components/AppLayout";
-import { Brain, Play, Pause, RotateCcw, Clock, Target, Coffee, Zap, Check, Settings, Sparkles, Volume2, Music, TrendingUp, Award, BookOpen, Heart, AlertCircle, ChevronRight } from "lucide-react";
+import { Brain, Play, Pause, RotateCcw, Clock, Target, Coffee, Zap, Check, Settings, Sparkles, Volume2, Music, TrendingUp, Award, BookOpen, Heart, AlertCircle, ChevronRight, X, Info, ExternalLink } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import focusmodeHero from "@/assets/focusmode-hero.jpg";
-import { startBinaural, stopBinaural, FREQUENCY_PRESETS, FrequencyPreset } from "@/lib/binauralBeats";
+import { startBinaural, stopBinaural, setBinauralVolume, FREQUENCY_PRESETS, FrequencyPreset, isBinauralPlaying } from "@/lib/binauralBeats";
+import { saveTimerSession, getTimerSessions, getEarnedAchievements } from "@/lib/userStore";
 
 type Phase = "idle" | "focus" | "break" | "longBreak" | "done";
 
-// Premium Focus Profiles with science-backed parameters
+// Premium Focus Profiles
 const PREMIUM_PROFILES = [
   { 
     id: "classic", 
@@ -82,7 +85,6 @@ const BREAK_ACTIVITIES = [
   { icon: "🙏", title: "Gratitude Pause", desc: "Think of 3 things going well in your work today. Let the feeling of progress fill you." },
 ];
 
-// Premium Science-Backed Content
 const FOCUS_SCIENCE = [
   {
     title: "Single-Tasking Advantage",
@@ -114,29 +116,6 @@ const FOCUS_SCIENCE = [
   },
 ];
 
-const PREMIUM_FEATURES = [
-  {
-    icon: Music,
-    title: "Binaural Beats",
-    description: "Scientifically-tuned audio frequencies to enhance focus and reduce anxiety during work sessions."
-  },
-  {
-    icon: TrendingUp,
-    title: "Focus Analytics",
-    description: "Track your focus patterns, identify peak productivity hours, and optimize your schedule."
-  },
-  {
-    icon: Award,
-    title: "Achievement Tracking",
-    description: "Earn badges, maintain streaks, and celebrate milestones in your focus journey."
-  },
-  {
-    icon: BookOpen,
-    title: "Expert Guidance",
-    description: "Learn from neuroscience research and productivity experts on maximizing your focus potential."
-  },
-];
-
 export default function FocusModePage() {
   const [preset, setPreset] = useState(PREMIUM_PROFILES[0]);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -148,11 +127,22 @@ export default function FocusModePage() {
   const [breakActivity, setBreakActivity] = useState(BREAK_ACTIVITIES[0]);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedFrequency, setSelectedFrequency] = useState<FrequencyPreset | null>(FREQUENCY_PRESETS[3]); // Beta waves for focus
-  const [binauralVolume, setBinauralVolume] = useState(0.3);
+  const [binauralVolume, setBinauralVolumeState] = useState(0.3);
   const [useBinaural, setUseBinaural] = useState(false);
   const [focusIntensity, setFocusIntensity] = useState(50);
   const [activeTab, setActiveTab] = useState<"timer" | "science" | "features">("timer");
+  
+  // Feature Dialog States
+  const [activeDialog, setActiveDialog] = useState<string | null>(null);
+  
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Sync volume with audio engine
+  useEffect(() => {
+    if (isBinauralPlaying()) {
+      setBinauralVolume(binauralVolume);
+    }
+  }, [binauralVolume]);
 
   const startFocusRound = useCallback(() => {
     setPhase("focus");
@@ -186,7 +176,7 @@ export default function FocusModePage() {
               startBreak(next);
               return next;
             });
-            setTotalFocusSeconds(t => t + 1);
+            setTotalFocusSeconds(t => t + preset.focusMin * 60);
           } else {
             setCurrentRound(r => {
               const next = r + 1;
@@ -194,6 +184,12 @@ export default function FocusModePage() {
                 setPhase("done");
                 setRunning(false);
                 stopBinaural();
+                // Save session to store
+                saveTimerSession({
+                  date: new Date().toISOString(),
+                  duration: totalFocusSeconds + preset.focusMin * 60,
+                  type: "Focus Mode"
+                });
               } else {
                 startFocusRound();
               }
@@ -202,14 +198,20 @@ export default function FocusModePage() {
           }
           return 0;
         }
-        if (phase === "focus") setTotalFocusSeconds(t => t + 1);
         return prev - 1;
       });
     }, 1000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [running, phase, preset, startBreak, startFocusRound]);
+  }, [running, phase, preset, startBreak, startFocusRound, totalFocusSeconds]);
 
-  const togglePause = () => setRunning(!running);
+  const togglePause = () => {
+    setRunning(!running);
+    if (running) {
+      stopBinaural();
+    } else if (phase === "focus" && useBinaural && selectedFrequency) {
+      startBinaural(selectedFrequency, binauralVolume);
+    }
+  };
 
   const reset = () => {
     setPhase("idle");
@@ -241,6 +243,133 @@ export default function FocusModePage() {
     done: "text-gold",
   };
 
+  // Feature Dialog Content
+  const renderDialogContent = () => {
+    switch (activeDialog) {
+      case 'binaural':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              {FREQUENCY_PRESETS.map((freq) => (
+                <button
+                  key={freq.id}
+                  onClick={() => {
+                    setSelectedFrequency(freq);
+                    if (running && phase === "focus") {
+                      startBinaural(freq, binauralVolume);
+                    }
+                  }}
+                  className={`p-4 rounded-xl text-left transition-all border ${
+                    selectedFrequency?.id === freq.id
+                      ? "bg-primary/10 border-primary shadow-sm"
+                      : "bg-card border-border hover:border-primary/50"
+                  }`}
+                >
+                  <div className="text-2xl mb-2">{freq.icon}</div>
+                  <div className="font-semibold text-sm">{freq.name}</div>
+                  <div className="text-[10px] text-muted-foreground mt-1">{freq.description}</div>
+                </button>
+              ))}
+            </div>
+            <div className="p-4 bg-secondary/30 rounded-xl border border-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-medium">Master Volume</span>
+                <span className="text-xs text-muted-foreground">{Math.round(binauralVolume * 100)}%</span>
+              </div>
+              <Slider
+                value={[binauralVolume]}
+                onValueChange={([v]) => setBinauralVolumeState(v)}
+                min={0}
+                max={1}
+                step={0.05}
+              />
+            </div>
+          </div>
+        );
+      case 'tracking':
+        const sessions = getTimerSessions().filter(s => s.type === "Focus Mode");
+        const totalMin = sessions.reduce((acc, s) => acc + s.duration / 60, 0);
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-primary/5 p-4 rounded-2xl border border-primary/20 text-center">
+                <p className="text-2xl font-bold text-primary">{sessions.length}</p>
+                <p className="text-xs text-muted-foreground">Total Sessions</p>
+              </div>
+              <div className="bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/20 text-center">
+                <p className="text-2xl font-bold text-emerald-500">{Math.round(totalMin)}</p>
+                <p className="text-xs text-muted-foreground">Focus Minutes</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h4 className="text-sm font-semibold">Recent Activity</h4>
+              {sessions.slice(-3).reverse().map((s, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-card flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-primary" />
+                    </div>
+                    <span>{new Date(s.date).toLocaleDateString()}</span>
+                  </div>
+                  <span className="font-medium">{Math.round(s.duration / 60)} min</span>
+                </div>
+              ))}
+              {sessions.length === 0 && <p className="text-xs text-center text-muted-foreground py-4">No sessions recorded yet. Start your first focus session!</p>}
+            </div>
+          </div>
+        );
+      case 'achievements':
+        const earned = getEarnedAchievements().filter(a => a.progress >= a.target);
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Your Progress</span>
+              <span className="text-xs text-primary font-bold">{earned.length} Unlocked</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {getEarnedAchievements().slice(0, 4).map((a) => (
+                <div key={a.id} className={`flex items-center gap-4 p-3 rounded-xl border ${a.progress >= a.target ? "bg-gold/5 border-gold/30" : "bg-secondary/20 border-border/50 opacity-60"}`}>
+                  <div className="text-2xl">{a.icon}</div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold">{a.name}</span>
+                      {a.progress >= a.target && <Check className="w-4 h-4 text-gold" />}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">{a.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Button variant="outline" className="w-full text-xs" onClick={() => window.location.href = '/achievements'}>View All Achievements</Button>
+          </div>
+        );
+      case 'guidance':
+        return (
+          <div className="space-y-4">
+            {[
+              { title: "The 90-Minute Rule", desc: "Human brains operate in 90-minute ultradian cycles. Try to align your deep work with these natural peaks." },
+              { title: "Environment Design", desc: "Your brain associates spaces with activities. Dedicate a specific spot only for deep focus." },
+              { title: "Digital Minimalism", desc: "Every notification costs 23 minutes of focus. Use 'Do Not Disturb' as a default for focus sessions." }
+            ].map((tip, i) => (
+              <div key={i} className="p-4 bg-card border border-border/50 rounded-xl">
+                <h4 className="text-sm font-bold text-primary mb-1">{tip.title}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{tip.desc}</p>
+              </div>
+            ))}
+            <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <BookOpen className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium">Full Focus Guide</span>
+              </div>
+              <ExternalLink className="w-4 h-4 text-muted-foreground" />
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
@@ -258,10 +387,6 @@ export default function FocusModePage() {
                   <h1 className="font-display text-3xl font-bold text-white">Focus Mode</h1>
                   <p className="text-sm text-white/80 mt-1">Science-backed deep work sessions with mindful recovery</p>
                 </div>
-              </div>
-              <div className="text-right">
-                <p className="text-xs font-body text-white/60">Premium Feature</p>
-                <p className="text-lg font-display font-bold text-gold">$97/year</p>
               </div>
             </div>
           </div>
@@ -308,9 +433,9 @@ export default function FocusModePage() {
                     </div>
                     <button
                       onClick={() => setShowSettings(!showSettings)}
-                      className="p-2 rounded-lg hover:bg-secondary transition-colors"
+                      className={`p-2 rounded-lg transition-colors ${showSettings ? "bg-primary/20 text-primary" : "hover:bg-secondary text-muted-foreground"}`}
                     >
-                      <Settings className="w-5 h-5 text-muted-foreground" />
+                      <Settings className="w-5 h-5" />
                     </button>
                   </div>
 
@@ -335,28 +460,31 @@ export default function FocusModePage() {
 
                   {/* Advanced Settings */}
                   {showSettings && (
-                    <div className="bg-secondary/30 rounded-xl p-4 mb-6 space-y-4 border border-border/50">
+                    <div className="bg-secondary/30 rounded-xl p-4 mb-6 space-y-4 border border-border/50 animate-in fade-in slide-in-from-top-2">
                       <div>
                         <div className="flex items-center justify-between mb-2">
                           <label className="text-sm font-body font-medium text-foreground flex items-center gap-2">
                             <Music className="w-4 h-4 text-primary" />
                             Binaural Beats
                           </label>
-                          <input
-                            type="checkbox"
-                            checked={useBinaural}
-                            onChange={(e) => setUseBinaural(e.target.checked)}
-                            className="w-4 h-4 rounded"
-                          />
+                          <button 
+                            onClick={() => setUseBinaural(!useBinaural)}
+                            className={`w-10 h-5 rounded-full transition-colors relative ${useBinaural ? "bg-primary" : "bg-muted"}`}
+                          >
+                            <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${useBinaural ? "left-6" : "left-1"}`} />
+                          </button>
                         </div>
                         {useBinaural && selectedFrequency && (
                           <div className="space-y-3 mt-3 p-3 bg-card rounded-lg border border-border/50">
-                            <p className="text-xs text-muted-foreground">Selected: <span className="text-primary font-semibold">{selectedFrequency.name}</span></p>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-muted-foreground">Selected: <span className="text-primary font-semibold">{selectedFrequency.name}</span></p>
+                              <button onClick={() => setActiveDialog('binaural')} className="text-[10px] text-primary hover:underline">Change</button>
+                            </div>
                             <div className="flex items-center gap-2">
                               <Volume2 className="w-4 h-4 text-muted-foreground" />
                               <Slider
                                 value={[binauralVolume]}
-                                onValueChange={([v]) => setBinauralVolume(v)}
+                                onValueChange={([v]) => setBinauralVolumeState(v)}
                                 min={0}
                                 max={1}
                                 step={0.1}
@@ -533,8 +661,17 @@ export default function FocusModePage() {
           {/* ── Features Tab ── */}
           <TabsContent value="features" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {PREMIUM_FEATURES.map((feature, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-secondary/30 via-card to-secondary/10 border-border/50 p-6 hover:shadow-lg transition-all group cursor-pointer">
+              {[
+                { id: 'binaural', icon: Music, title: "Binaural Beats", desc: "Scientifically-tuned audio frequencies to enhance focus and reduce anxiety." },
+                { id: 'tracking', icon: TrendingUp, title: "Focus Tracking", desc: "Track your focus patterns, identify peak productivity hours, and optimize your schedule." },
+                { id: 'achievements', icon: Award, title: "Achievement Tracking", desc: "Earn badges, maintain streaks, and celebrate milestones in your focus journey." },
+                { id: 'guidance', icon: BookOpen, title: "Expert Guidance", desc: "Learn from neuroscience research and productivity experts on maximizing your focus potential." },
+              ].map((feature) => (
+                <Card 
+                  key={feature.id} 
+                  onClick={() => setActiveDialog(feature.id)}
+                  className="bg-gradient-to-br from-secondary/30 via-card to-secondary/10 border-border/50 p-6 hover:shadow-lg transition-all group cursor-pointer"
+                >
                   <div className="flex items-start gap-4 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                       <feature.icon className="w-6 h-6 text-primary" />
@@ -542,66 +679,62 @@ export default function FocusModePage() {
                     <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors ml-auto" />
                   </div>
                   <h4 className="font-display font-semibold text-foreground mb-2">{feature.title}</h4>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  <p className="text-sm text-muted-foreground">{feature.desc}</p>
                 </Card>
               ))}
             </div>
 
-            {/* Premium Soundscape Integration */}
-            <Card className="bg-gradient-to-br from-violet-500/10 via-card to-purple-500/5 border-border/50 p-6">
-              <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Music className="w-5 h-5 text-violet-500" />
-                Binaural Beats & Frequencies
+            {/* Quick Tips Section */}
+            <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50">
+              <h3 className="font-display text-base font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
+                Pro Tips for Maximum Focus
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {FREQUENCY_PRESETS.slice(0, 6).map((freq) => (
-                  <button
-                    key={freq.id}
-                    onClick={() => setSelectedFrequency(freq)}
-                    className={`p-3 rounded-lg text-center transition-all text-xs font-body ${
-                      selectedFrequency?.id === freq.id
-                        ? "bg-primary/20 border border-primary/50 text-foreground"
-                        : "bg-secondary/50 border border-border/50 text-muted-foreground hover:border-primary/50"
-                    }`}
-                  >
-                    <div className="text-lg mb-1">{freq.icon}</div>
-                    <div className="font-medium">{freq.name.split(" ")[0]}</div>
-                    <div className="text-[10px] opacity-70">{freq.beatFreq}Hz</div>
-                  </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { icon: "🌍", title: "Eliminate Distractions", desc: "Put your phone in another room. Close unnecessary browser tabs." },
+                  { icon: "💧", title: "Hydration Matters", desc: "Dehydration reduces cognitive performance. Keep water nearby." },
+                ].map((tip, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-card rounded-lg border border-border/50">
+                    <span className="text-xl flex-shrink-0">{tip.icon}</span>
+                    <div>
+                      <p className="text-sm font-body font-medium text-foreground">{tip.title}</p>
+                      <p className="text-xs font-body text-muted-foreground mt-0.5">{tip.desc}</p>
+                    </div>
+                  </div>
                 ))}
               </div>
-              <p className="text-xs text-muted-foreground mt-4">
-                Select a frequency to enhance your focus. Binaural beats are scientifically-tuned audio frequencies that may help synchronize brain waves with your desired mental state.
-              </p>
-            </Card>
+            </div>
           </TabsContent>
         </Tabs>
 
-        {/* ── Premium Tips Section ── */}
-        {phase === "idle" && (
-          <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50">
-            <h3 className="font-display text-base font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
-              Pro Tips for Maximum Focus
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { icon: "🌍", title: "Eliminate Distractions", desc: "Put your phone in another room. Close unnecessary browser tabs. Notify people you're in deep work mode." },
-                { icon: "💧", title: "Hydration Matters", desc: "Dehydration reduces cognitive performance. Keep water nearby and take sips during breaks." },
-                { icon: "🌞", title: "Natural Light", desc: "Position yourself near natural light. It boosts alertness and regulates circadian rhythms." },
-                { icon: "🎵", title: "Consistent Environment", desc: "Use the same location for focus sessions. Your brain learns to enter focus mode in familiar spaces." },
-              ].map((tip, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 bg-card rounded-lg border border-border/50">
-                  <span className="text-xl flex-shrink-0">{tip.icon}</span>
-                  <div>
-                    <p className="text-sm font-body font-medium text-foreground">{tip.title}</p>
-                    <p className="text-xs font-body text-muted-foreground mt-0.5">{tip.desc}</p>
-                  </div>
-                </div>
-              ))}
+        {/* ── Feature Dialogs ── */}
+        <Dialog open={activeDialog !== null} onOpenChange={(open) => !open && setActiveDialog(null)}>
+          <DialogContent className="sm:max-w-[425px] rounded-2xl">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                {activeDialog === 'binaural' && <Music className="w-5 h-5 text-primary" />}
+                {activeDialog === 'tracking' && <TrendingUp className="w-5 h-5 text-primary" />}
+                {activeDialog === 'achievements' && <Award className="w-5 h-5 text-primary" />}
+                {activeDialog === 'guidance' && <BookOpen className="w-5 h-5 text-primary" />}
+                {activeDialog === 'binaural' ? "Binaural Beats Selection" : 
+                 activeDialog === 'tracking' ? "Focus Analytics" : 
+                 activeDialog === 'achievements' ? "Focus Achievements" : "Expert Guidance"}
+              </DialogTitle>
+              <DialogDescription>
+                {activeDialog === 'binaural' ? "Choose a frequency to synchronize your brain waves." : 
+                 activeDialog === 'tracking' ? "Your personal focus performance data." : 
+                 activeDialog === 'achievements' ? "Milestones you've reached in your focus journey." : "Science-backed strategies for deep work."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              {renderDialogContent()}
             </div>
-          </div>
-        )}
+            <DialogFooter>
+              <Button onClick={() => setActiveDialog(null)} className="w-full rounded-xl">Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AppLayout>
   );
