@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Moon, Clock, Play, Pause, Loader2, Square } from "lucide-react";
+import sleepHero from "@/assets/sleep-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 const sleepGradients = [
@@ -43,13 +44,17 @@ export default function SleepPage() {
   return (
     <AppLayout>
       <div className="space-y-8">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/15 flex items-center justify-center">
-            <Moon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Sleep Meditations</h1>
-            <p className="text-sm font-body text-muted-foreground">Wind down and prepare for deep, restorative sleep.</p>
+        {/* Hero Banner */}
+        <div className="relative overflow-hidden rounded-2xl shadow-elevated">
+          <img src={sleepHero} alt="Peaceful sleep environment" className="w-full h-44 sm:h-52 object-cover" width={1280} height={576} />
+          <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-900/50 to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
+            <div className="flex items-center gap-2 mb-1">
+              <Moon className="w-5 h-5 text-indigo-300" />
+              <span className="text-xs font-body font-semibold text-indigo-300 uppercase tracking-wider">Sleep Program</span>
+            </div>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Sleep Meditations</h1>
+            <p className="text-sm font-body text-white/70 mt-1">Wind down and prepare for deep, restorative sleep.</p>
           </div>
         </div>
 

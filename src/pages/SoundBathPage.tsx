@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { FREQUENCY_PRESETS, startBinaural, stopBinaural, setBinauralVolume, isBinauralPlaying } from "@/lib/binauralBeats";
 import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info } from "lucide-react";
-
+import soundbathHero from "@/assets/soundbath-hero.jpg";
 export default function SoundBathPage() {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.3);
@@ -64,13 +64,20 @@ export default function SoundBathPage() {
   return (
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/15 flex items-center justify-center">
-            <Headphones className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Sound Bath & Healing Frequencies</h1>
-            <p className="text-sm font-body text-muted-foreground">Binaural beats & frequency therapy for deep healing</p>
+        {/* Hero Banner */}
+        <div className="relative rounded-2xl overflow-hidden h-[200px]">
+          <img src={soundbathHero} alt="Sound bath healing" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-violet-950/90 via-violet-950/50 to-transparent" />
+          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <Headphones className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-display text-2xl font-bold text-white">Sound Bath & Healing Frequencies</h1>
+                <p className="text-sm text-white/80">Binaural beats & frequency therapy for deep healing</p>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Wind, Play, Pause, RotateCcw } from "lucide-react";
+import breathingHero from "@/assets/breathing-hero.jpg";
 
 interface BreathExercise {
   id: string;
@@ -117,13 +118,17 @@ export default function BreathingPage() {
   return (
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500/20 to-cyan-500/15 flex items-center justify-center">
-            <Wind className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Breathing Exercises</h1>
-            <p className="text-sm font-body text-muted-foreground">Guided breathing techniques for any moment.</p>
+        {/* Hero Banner */}
+        <div className="relative overflow-hidden rounded-2xl shadow-elevated">
+          <img src={breathingHero} alt="Zen garden breathing practice" className="w-full h-44 sm:h-52 object-cover" width={1280} height={576} />
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-900/50 to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
+            <div className="flex items-center gap-2 mb-1">
+              <Wind className="w-5 h-5 text-emerald-300" />
+              <span className="text-xs font-body font-semibold text-emerald-300 uppercase tracking-wider">Breathwork</span>
+            </div>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Breathing Exercises</h1>
+            <p className="text-sm font-body text-white/70 mt-1">Guided breathing techniques for any moment.</p>
           </div>
         </div>
 

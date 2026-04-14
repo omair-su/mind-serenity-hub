@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Plus, Minus } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
@@ -12,8 +12,12 @@ const faqs = [
     answer: "We focus on science, not spirituality. Every practice is backed by research, and we offer unique tools like the Soundscape Builder and AI-powered recommendations that adapt to your specific stress levels."
   },
   {
-    question: "Do I need a subscription?",
-    answer: "No. We believe in one-time payments for lifetime access. Once you purchase Willow Vibes, you own it forever—including all future updates and new content."
+    question: "Why $97 instead of a monthly subscription?",
+    answer: "We believe wellness shouldn't be a recurring bill. You pay $97 once and get lifetime access — including every future update, new session, and feature we add. No upsells. No tiers."
+  },
+  {
+    question: "What if it doesn't work for me?",
+    answer: "We offer a 30-day money-back guarantee, no questions asked. Try the full program. If you don't feel a measurable difference in your stress levels, we'll refund every cent."
   },
   {
     question: "How long are the meditation sessions?",
@@ -22,7 +26,11 @@ const faqs = [
   {
     question: "Can I use it offline?",
     answer: "Yes, you can download your favorite sessions and soundscapes to use whenever you're away from an internet connection."
-  }
+  },
+  {
+    question: "Do I need a subscription after the $97 payment?",
+    answer: "No. There are zero recurring charges. One payment gives you full access to everything — forever. We fund development through new customer sales, not by charging existing customers more."
+  },
 ];
 
 export default function FAQSection() {
@@ -31,57 +39,26 @@ export default function FAQSection() {
   return (
     <section id="faq" className="py-24 md:py-32 bg-slate-50 overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16 md:mb-24"
-        >
-          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-600 mb-4">
-            Common Questions
-          </h2>
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
+          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-600 mb-4">FAQ</h2>
           <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-            Frequently Asked <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Questions</span>
+            Common <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Questions</span>
           </h3>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Everything you need to know about starting your journey with Willow Vibes.
-          </p>
         </motion.div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-            >
-              <button
-                onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-                className="w-full px-6 py-6 flex items-center justify-between text-left"
-              >
-                <span className="text-lg font-bold text-slate-900 pr-8">
-                  {faq.question}
-                </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${activeIndex === index ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
-                  {activeIndex === index ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            <motion.div key={index} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: index * 0.04 }} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              <button onClick={() => setActiveIndex(activeIndex === index ? null : index)} className="w-full px-6 py-5 flex items-center justify-between text-left">
+                <span className="text-base font-semibold text-slate-900 pr-8">{faq.question}</span>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${activeIndex === index ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                  {activeIndex === index ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                 </div>
               </button>
-              
               <AnimatePresence>
                 {activeIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  >
-                    <div className="px-6 pb-6 text-slate-600 leading-relaxed">
-                      {faq.answer}
-                    </div>
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
+                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm">{faq.answer}</div>
                   </motion.div>
                 )}
               </AnimatePresence>

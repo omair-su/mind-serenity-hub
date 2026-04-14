@@ -15,7 +15,7 @@ export default function WelcomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
           <div className="absolute bottom-0 left-0 p-6 lg:p-10">
             <span className="willow-badge mb-3 inline-block">Premium Edition</span>
-            <h1 className="font-display text-3xl lg:text-5xl font-medium text-background leading-tight">
+            <h1 className="font-display text-3xl lg:text-5xl font-bold text-background leading-tight">
               The 30-Day<br />Mindfulness &<br />Meditation Challenge
             </h1>
             <p className="font-body text-sm text-background/80 mt-3 max-w-md">
@@ -35,7 +35,7 @@ export default function WelcomePage() {
               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.gradient} border border-border/30 flex items-center justify-center mx-auto mb-3`}>
                 <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
               </div>
-              <p className="font-display text-2xl font-medium text-foreground">{stat.value}</p>
+              <p className="font-display text-2xl font-bold text-foreground">{stat.value}</p>
               <p className="text-xs font-body text-muted-foreground mt-1">{stat.label}</p>
             </div>
           ))}
@@ -44,8 +44,8 @@ export default function WelcomePage() {
         <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
 
         <div>
-          <h2 className="font-display text-3xl font-medium text-foreground mb-6">{foundationSections.welcome.title}</h2>
-          <p className="font-display text-xl text-primary/80 italic mb-6">{foundationSections.welcome.subtitle}</p>
+          <h2 className="font-display text-3xl font-bold text-foreground mb-6">{foundationSections.welcome.title}</h2>
+          <p className="font-display text-xl text-muted-foreground italic mb-6">{foundationSections.welcome.subtitle}</p>
           <div className="space-y-4">
             {foundationSections.welcome.content.map((para, i) => (
               <p key={i} className="willow-body">{para}</p>
@@ -60,7 +60,7 @@ export default function WelcomePage() {
         <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
 
         <div>
-          <h2 className="font-display text-3xl font-medium text-foreground mb-6">After 30 Days, You Will Become</h2>
+          <h2 className="font-display text-3xl font-bold text-foreground mb-6">After 30 Days, You Will Become</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { title: "A Calmer Mind", desc: "The constant mental chatter will quiet.", icon: Brain, gradient: "from-violet-500/12 to-purple-500/5", iconColor: "text-violet-500" },
@@ -78,7 +78,7 @@ export default function WelcomePage() {
                     <item.icon className={`w-4 h-4 ${item.iconColor}`} />
                   </div>
                   <div>
-                    <h3 className="font-display text-lg font-medium text-foreground">{item.title}</h3>
+                    <h3 className="font-display text-lg font-bold text-foreground">{item.title}</h3>
                     <p className="text-sm font-body text-muted-foreground mt-1">{item.desc}</p>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ export default function WelcomePage() {
         <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
 
         <div>
-          <h2 className="font-display text-3xl font-medium text-foreground mb-6">Your 4-Week Journey</h2>
+          <h2 className="font-display text-3xl font-bold text-foreground mb-6">Your 4-Week Journey</h2>
           <div className="space-y-4">
             {weeks.map((week, i) => {
               const gradients = [
@@ -108,7 +108,7 @@ export default function WelcomePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="willow-badge mb-2 inline-block">Week {week.week}</span>
-                      <h3 className="font-display text-xl font-medium text-foreground">{week.title}</h3>
+                      <h3 className="font-display text-xl font-bold text-foreground">{week.title}</h3>
                       <p className="text-sm font-body text-muted-foreground mt-1">{week.subtitle}</p>
                     </div>
                     <ArrowRight className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />

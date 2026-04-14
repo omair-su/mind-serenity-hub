@@ -15,7 +15,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "head",
     label: "Head & Crown",
     icon: "Brain",
-    color: "from-violet-500 to-purple-600",
+    color: "from-[hsl(270,20%,40%)] to-[hsl(280,18%,35%)]",
     duration: 60,
     description: "Release tension in your forehead, temples, and jaw.",
     guidanceScript:
@@ -31,7 +31,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "eyes",
     label: "Eyes & Face",
     icon: "Eye",
-    color: "from-indigo-500 to-blue-600",
+    color: "from-[hsl(230,20%,40%)] to-[hsl(220,18%,35%)]",
     duration: 45,
     description: "Soften the muscles around your eyes and cheeks.",
     guidanceScript:
@@ -47,7 +47,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "neck",
     label: "Neck & Shoulders",
     icon: "Zap",
-    color: "from-cyan-500 to-teal-600",
+    color: "from-[hsl(180,18%,38%)] to-[hsl(170,16%,33%)]",
     duration: 75,
     description: "Let go of tightness in your neck and shoulder blades.",
     guidanceScript:
@@ -63,7 +63,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "chest",
     label: "Chest & Heart",
     icon: "Heart",
-    color: "from-rose-500 to-pink-600",
+    color: "from-[hsl(350,20%,42%)] to-[hsl(340,18%,37%)]",
     duration: 60,
     description: "Feel your heartbeat and breathe into your chest.",
     guidanceScript:
@@ -79,7 +79,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "arms",
     label: "Arms & Hands",
     icon: "Hand",
-    color: "from-amber-500 to-orange-600",
+    color: "from-[hsl(30,22%,42%)] to-[hsl(25,20%,37%)]",
     duration: 60,
     description: "Release tension from shoulders through fingertips.",
     guidanceScript:
@@ -95,7 +95,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "core",
     label: "Belly & Core",
     icon: "Sparkles",
-    color: "from-emerald-500 to-green-600",
+    color: "from-[hsl(145,18%,38%)] to-[hsl(150,16%,33%)]",
     duration: 60,
     description: "Soften your abdomen and feel grounded.",
     guidanceScript:
@@ -111,7 +111,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "hips",
     label: "Hips & Lower Back",
     icon: "Zap",
-    color: "from-yellow-500 to-amber-600",
+    color: "from-[hsl(45,22%,42%)] to-[hsl(35,20%,37%)]",
     duration: 75,
     description: "Release stored stress in your hip flexors.",
     guidanceScript:
@@ -127,7 +127,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "legs",
     label: "Legs & Thighs",
     icon: "Zap",
-    color: "from-teal-500 to-cyan-600",
+    color: "from-[hsl(170,18%,38%)] to-[hsl(185,16%,33%)]",
     duration: 60,
     description: "Let heaviness drain from your legs.",
     guidanceScript:
@@ -143,7 +143,7 @@ export const bodyScanZones: BodyZoneData[] = [
     id: "feet",
     label: "Feet & Toes",
     icon: "Footprints",
-    color: "from-blue-500 to-indigo-600",
+    color: "from-[hsl(220,18%,40%)] to-[hsl(240,16%,35%)]",
     duration: 45,
     description: "Ground yourself through the soles of your feet.",
     guidanceScript:

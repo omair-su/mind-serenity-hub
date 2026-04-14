@@ -5,6 +5,7 @@ import { getAllDayStates } from "@/lib/userStore";
 import { weeks } from "@/data/courseData";
 import { BookOpen, Search, Star, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import journalHero from "@/assets/journal-hero.jpg";
 
 export default function JournalPage() {
   const [filter, setFilter] = useState<number | 'all'>('all');
@@ -38,10 +39,20 @@ export default function JournalPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Your Journal</h1>
-            <p className="text-sm font-body text-muted-foreground mt-1">{totalReflections} reflections across {Object.keys(allStates).length} days</p>
+        {/* Hero Banner */}
+        <div className="relative rounded-2xl overflow-hidden h-[180px]">
+          <img src={journalHero} alt="Mindful journaling" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/40 to-transparent" />
+          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-display text-2xl font-bold text-white">Your Journal</h1>
+                <p className="text-sm text-white/80">{totalReflections} reflections across {Object.keys(allStates).length} days</p>
+              </div>
+            </div>
           </div>
         </div>
 
