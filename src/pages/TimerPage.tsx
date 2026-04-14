@@ -64,7 +64,7 @@ export default function TimerPage() {
     <AppLayout>
       <div className="space-y-8 max-w-xl mx-auto animate-fade-in">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-gold/25 to-amber-500/15 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
             <Timer className="w-5 h-5 text-gold" />
           </div>
           <div>
