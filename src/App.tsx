@@ -42,6 +42,7 @@ import AIRecommendationsPage from "./pages/AIRecommendationsPage";
 import AdvancedAnalyticsPage from "./pages/AdvancedAnalyticsPage";
 import AboutPage from "./pages/AboutPage";
 import OfflineDownloadsPage from "./pages/OfflineDownloadsPage";
+import ExplorePage from "./pages/ExplorePage";
 import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
 
@@ -69,6 +70,7 @@ function AppInner() {
 
         {/* App (premium platform) */}
         <Route path="/app" element={<DashboardPage />} />
+        <Route path="/app/explore" element={<ExplorePage />} />
         <Route path="/app/profile" element={<ProfilePage />} />
         <Route path="/app/analytics" element={<AnalyticsPage />} />
         <Route path="/app/journal" element={<JournalPage />} />

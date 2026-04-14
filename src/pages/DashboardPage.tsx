@@ -273,33 +273,39 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* ── Explore Grid ── */}
+        {/* ── Your Tools Quick Access ── */}
         <motion.div variants={itemVariants}>
-          <h3 className="font-display text-base font-semibold text-foreground mb-3">Explore</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-display text-base font-semibold text-foreground">Your Tools</h3>
+            <Link to="/app/explore" className="flex items-center gap-1 text-xs font-body text-primary hover:underline">
+              See all <ChevronRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-2.5">
             {[
-              { label: "Library", desc: "All 30 sessions", icon: Library, path: "/app/library", grad: "from-[hsl(var(--forest))]/10 to-[hsl(var(--sage))]/6" },
-              { label: "Sleep Stories", desc: "Narrated tales", icon: BookOpen, path: "/app/sleep-stories", grad: "from-[hsl(var(--forest-deep))]/10 to-[hsl(var(--forest-mid))]/6" },
-              { label: "Achievements", desc: `${earnedCount} earned`, icon: Trophy, path: "/app/achievements", grad: "from-[hsl(var(--gold))]/10 to-[hsl(var(--gold-light))]/6" },
-              { label: "AI Coach", desc: "Personal guide", icon: MessageCircle, path: "/app/coach", grad: "from-[hsl(var(--sage-dark))]/10 to-[hsl(var(--sage))]/6" },
-            ].map((card, i) => (
+              { label: "Body Scan", icon: Heart, path: "/app/body-scan" },
+              { label: "Sound Bath", icon: Music, path: "/app/sound-bath" },
+              { label: "Challenges", icon: Flame, path: "/app/challenges" },
+              { label: "Journal", icon: BookOpen, path: "/app/journal" },
+              { label: "AI Coach", icon: MessageCircle, path: "/app/coach" },
+              { label: "Focus", icon: Zap, path: "/app/focus" },
+              { label: "Gratitude", icon: Leaf, path: "/app/gratitude" },
+              { label: "Timer", icon: Clock, path: "/app/timer" },
+            ].map((tool, i) => (
               <motion.div
-                key={card.path}
-                initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.7 + i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                className="group relative overflow-hidden rounded-2xl"
+                key={tool.path}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + i * 0.05 }}
               >
                 <Link
-                  to={card.path}
-                  className={`block bg-gradient-to-br ${card.grad} rounded-2xl p-4 border border-border/40 shadow-[var(--shadow-soft-val)] hover:shadow-[var(--shadow-card-val)] hover:-translate-y-0.5 transition-all duration-300 h-full`}
+                  to={tool.path}
+                  className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border border-border/40 hover:border-primary/30 hover:shadow-[var(--shadow-card-val)] hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full bg-gradient-to-tl from-card/10 to-transparent" />
-                  <div className="w-10 h-10 rounded-xl bg-card/70 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-sm">
-                    <card.icon className="w-5 h-5 text-primary" />
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-[hsl(var(--sage))]/10 flex items-center justify-center">
+                    <tool.icon className="w-5 h-5 text-primary" />
                   </div>
-                  <p className="font-display text-sm font-semibold text-foreground">{card.label}</p>
-                  <p className="text-[11px] font-body text-muted-foreground mt-0.5">{card.desc}</p>
+                  <span className="font-display text-[10px] font-semibold text-foreground text-center leading-tight">{tool.label}</span>
                 </Link>
               </motion.div>
             ))}
