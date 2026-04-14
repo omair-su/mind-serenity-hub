@@ -64,7 +64,7 @@ export default function TimerPage() {
     <AppLayout>
       <div className="space-y-8 max-w-xl mx-auto animate-fade-in">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-gold/25 to-amber-500/15 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
             <Timer className="w-5 h-5 text-gold" />
           </div>
           <div>
@@ -129,7 +129,7 @@ export default function TimerPage() {
         </div>
 
         {!running && (
-          <div className="bg-gradient-to-br from-emerald-500/5 to-teal-500/5 rounded-2xl border border-border/50 p-6 shadow-soft">
+          <div className="bg-gradient-to-br from-[hsl(var(--forest))]/5 to-[hsl(var(--sage))]/5 rounded-2xl border border-border/50 p-6 shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4">Duration</h3>
             <div className="flex flex-wrap gap-2 mb-4">
               {presets.map(p => (
@@ -147,7 +147,7 @@ export default function TimerPage() {
         )}
 
         {!running && (
-          <div className="bg-gradient-to-br from-violet-500/5 to-indigo-500/5 rounded-2xl border border-border/50 p-6 shadow-soft">
+          <div className="bg-gradient-to-br from-[hsl(var(--forest-deep))]/5 to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-6 shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Volume2 className="w-4 h-4 text-primary" /> Background Sound
             </h3>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { getProfile, saveProfile } from "@/lib/userStore";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -135,15 +136,15 @@ export default function OnboardingPage() {
 
       {/* Content area */}
       <div className="flex-1 flex flex-col justify-between px-6 pb-6">
-        <div
-          className={`flex-1 flex flex-col justify-center transition-all duration-250 ${
-            animating
-              ? direction === "next"
-                ? "opacity-0 translate-x-8"
-                : "opacity-0 -translate-x-8"
-              : "opacity-100 translate-x-0"
-          }`}
-        >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, x: direction === "next" ? 40 : -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction === "next" ? -40 : 40 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex-1 flex flex-col justify-center"
+          >
           {/* ── Welcome ── */}
           {currentStep === "welcome" && (
             <div className="text-center">
@@ -447,7 +448,8 @@ export default function OnboardingPage() {
               </div>
             </div>
           )}
-        </div>
+          </motion.div>
+        </AnimatePresence>
 
         {/* ── Bottom Navigation ── */}
         <div className="pt-4 space-y-3">
