@@ -102,19 +102,11 @@ export default function Sidebar() {
 
   return (
     <>
-      <button
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2.5 rounded-xl bg-card shadow-soft border border-border"
-        aria-label="Toggle menu"
-      >
-        {mobileOpen ? <X className="w-5 h-5 text-foreground" /> : <Menu className="w-5 h-5 text-foreground" />}
-      </button>
+      {/* Hamburger hidden — mobile uses BottomNav */}
 
-      {mobileOpen && (
-        <div className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-30 lg:hidden" onClick={() => setMobileOpen(false)} />
-      )}
+      {/* Overlay removed — mobile uses BottomNav */}
 
-      <aside className={`fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-card via-card to-card/95 border-r border-border/70 z-40 overflow-y-auto transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+      <aside className="fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-card via-card to-card/95 border-r border-border/70 z-40 overflow-y-auto transition-transform duration-300 -translate-x-full lg:translate-x-0">
         <div className="p-5 border-b border-border/70">
           <div className="cursor-pointer group" onClick={() => handleNav("/")}>
             <WillowLogo variant="horizontal" size="sm" className="group-hover:opacity-90 transition-opacity" />

@@ -5,14 +5,14 @@ import sleepHero from "@/assets/sleep-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 const sleepGradients = [
-  "from-indigo-100/70 via-blue-50/50 to-violet-50/40",
-  "from-amber-100/60 via-yellow-50/40 to-orange-50/30",
-  "from-rose-100/60 via-pink-50/40 to-fuchsia-50/30",
-  "from-violet-100/60 via-purple-50/40 to-indigo-50/30",
-  "from-cyan-100/60 via-sky-50/40 to-blue-50/30",
-  "from-emerald-100/60 via-teal-50/40 to-green-50/30",
-  "from-pink-100/60 via-rose-50/40 to-red-50/30",
-  "from-teal-100/60 via-cyan-50/40 to-sky-50/30",
+  "from-[hsl(var(--forest-deep))]/15 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/8 to-[hsl(var(--cream-dark))]/5",
+  "from-[hsl(var(--sage-dark))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--forest-mid))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage))]/5",
+  "from-[hsl(var(--forest))]/12 via-[hsl(var(--sage-dark))]/8 to-[hsl(var(--sage-light))]/5",
+  "from-[hsl(var(--gold-dark))]/12 via-[hsl(var(--gold))]/8 to-[hsl(var(--cream))]/5",
+  "from-[hsl(var(--sage))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--forest-deep))]/5",
+  "from-[hsl(var(--forest))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--gold-light))]/5",
 ];
 
 const sleepMeditations = [
@@ -47,22 +47,22 @@ export default function SleepPage() {
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl shadow-elevated">
           <img src={sleepHero} alt="Peaceful sleep environment" className="w-full h-44 sm:h-52 object-cover" width={1280} height={576} />
-          <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-900/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/90 via-[hsl(var(--forest-deep))]/50 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-1">
-              <Moon className="w-5 h-5 text-indigo-300" />
-              <span className="text-xs font-body font-semibold text-indigo-300 uppercase tracking-wider">Sleep Program</span>
+              <Moon className="w-5 h-5 text-[hsl(var(--sage))]" />
+              <span className="text-xs font-body font-semibold text-[hsl(var(--sage))] uppercase tracking-wider">Sleep Program</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Sleep Meditations</h1>
-            <p className="text-sm font-body text-white/70 mt-1">Wind down and prepare for deep, restorative sleep.</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground">Sleep Meditations</h1>
+            <p className="text-sm font-body text-primary-foreground/70 mt-1">Wind down and prepare for deep, restorative sleep.</p>
           </div>
         </div>
 
         {/* Active session */}
         {activeSession && (
-          <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/60 via-violet-50/40 to-purple-50/30 dark:from-indigo-900/30 dark:via-violet-900/20 dark:to-purple-900/10 rounded-2xl border border-indigo-500/15 p-8 shadow-elevated">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-indigo-200/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-violet-200/20 to-transparent rounded-tr-full" />
+          <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest))]/10 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5 dark:from-[hsl(var(--forest-deep))]/30 dark:via-[hsl(var(--forest-mid))]/20 dark:to-[hsl(var(--forest))]/10 rounded-2xl border border-primary/15 p-8 shadow-elevated">
+            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-[hsl(var(--sage))]/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-[hsl(var(--forest))]/15 to-transparent rounded-tr-full" />
             <div className="relative z-10">
               <div className="text-center mb-6">
                 <span className="text-4xl">{activeSession.icon}</span>
@@ -77,7 +77,7 @@ export default function SleepPage() {
                   <button
                     onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(activeSession.script[stepIndex])}
                     disabled={tts.isLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500/15 to-violet-500/10 text-indigo-700 dark:text-indigo-300 text-sm font-body hover:from-indigo-500/25 hover:to-violet-500/20 transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary/15 to-[hsl(var(--sage))]/10 text-primary dark:text-[hsl(var(--sage))] text-sm font-body hover:from-primary/25 hover:to-[hsl(var(--sage))]/20 transition-all disabled:opacity-50"
                   >
                     {tts.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tts.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     {tts.isLoading ? "Generating..." : tts.isPlaying ? "Pause" : "Listen"}
@@ -92,7 +92,7 @@ export default function SleepPage() {
 
               <div className="flex items-center justify-center gap-1.5 mb-4">
                 {activeSession.script.map((_, i) => (
-                  <div key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i <= stepIndex ? "bg-indigo-500 shadow-sm" : "bg-secondary"}`} />
+                  <div key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i <= stepIndex ? "bg-primary shadow-sm" : "bg-secondary"}`} />
                 ))}
               </div>
 
@@ -110,7 +110,7 @@ export default function SleepPage() {
                 <button
                   onClick={() => { const fullScript = activeSession.script.join("\n\n"); tts.generateAndPlay(fullScript); }}
                   disabled={tts.isLoading}
-                  className="px-4 py-2.5 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 rounded-xl text-sm font-body text-indigo-600 dark:text-indigo-400 hover:from-indigo-500/20 hover:to-violet-500/20 disabled:opacity-50 transition-all"
+                  className="px-4 py-2.5 bg-gradient-to-r from-primary/10 to-[hsl(var(--sage))]/10 rounded-xl text-sm font-body text-primary dark:text-[hsl(var(--sage))] hover:from-primary/20 hover:to-[hsl(var(--sage))]/20 disabled:opacity-50 transition-all"
                 >
                   {tts.isLoading ? "..." : "▶ Play All"}
                 </button>
@@ -127,7 +127,7 @@ export default function SleepPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {sleepMeditations.map((s, i) => (
               <button key={s.id} onClick={() => { setActive(s.id); setStepIndex(0); }}
-                className={`group text-left relative overflow-hidden bg-gradient-to-br ${sleepGradients[i % sleepGradients.length]} dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-300`}>
+                className={`group text-left relative overflow-hidden bg-gradient-to-br ${sleepGradients[i % sleepGradients.length]} dark:from-[hsl(var(--forest-deep))]/20 dark:via-[hsl(var(--forest-mid))]/10 dark:to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-300`}>
                 <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-card/30 to-transparent" />
                 <div className="relative z-10 flex items-start gap-3">
                   <span className="text-3xl group-hover:scale-110 transition-transform">{s.icon}</span>
@@ -145,8 +145,8 @@ export default function SleepPage() {
         )}
 
         {/* Bedtime routine */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl p-6 border border-indigo-500/15 shadow-soft">
-          <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-violet-200/20 to-transparent" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest))]/8 via-[hsl(var(--sage))]/6 to-[hsl(var(--sage-light))]/4 dark:from-[hsl(var(--forest-deep))]/20 dark:via-[hsl(var(--forest-mid))]/10 dark:to-[hsl(var(--forest))]/5 rounded-2xl p-6 border border-primary/15 shadow-soft">
+          <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-[hsl(var(--sage))]/15 to-transparent" />
           <h3 className="font-display text-lg font-semibold text-foreground mb-3">Suggested Bedtime Routine</h3>
           <div className="space-y-2">
             {[
@@ -157,7 +157,7 @@ export default function SleepPage() {
               { time: "9:35 PM", action: "Lights out — let sleep come" },
             ].map(step => (
               <div key={step.time} className="flex items-center gap-3 p-2 rounded-lg hover:bg-card/40 transition-colors">
-                <span className="text-xs font-body font-bold text-indigo-600 dark:text-indigo-400 w-16">{step.time}</span>
+                <span className="text-xs font-body font-bold text-primary dark:text-[hsl(var(--sage))] w-16">{step.time}</span>
                 <span className="text-sm font-body text-foreground">{step.action}</span>
               </div>
             ))}
