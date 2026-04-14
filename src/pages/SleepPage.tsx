@@ -60,9 +60,9 @@ export default function SleepPage() {
 
         {/* Active session */}
         {activeSession && (
-          <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/60 via-violet-50/40 to-purple-50/30 dark:from-indigo-900/30 dark:via-violet-900/20 dark:to-purple-900/10 rounded-2xl border border-indigo-500/15 p-8 shadow-elevated">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-indigo-200/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-violet-200/20 to-transparent rounded-tr-full" />
+          <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest))]/10 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5 dark:from-[hsl(var(--forest-deep))]/30 dark:via-[hsl(var(--forest-mid))]/20 dark:to-[hsl(var(--forest))]/10 rounded-2xl border border-primary/15 p-8 shadow-elevated">
+            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-[hsl(var(--sage))]/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-[hsl(var(--forest))]/15 to-transparent rounded-tr-full" />
             <div className="relative z-10">
               <div className="text-center mb-6">
                 <span className="text-4xl">{activeSession.icon}</span>
@@ -77,7 +77,7 @@ export default function SleepPage() {
                   <button
                     onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(activeSession.script[stepIndex])}
                     disabled={tts.isLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500/15 to-violet-500/10 text-indigo-700 dark:text-indigo-300 text-sm font-body hover:from-indigo-500/25 hover:to-violet-500/20 transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary/15 to-[hsl(var(--sage))]/10 text-primary dark:text-[hsl(var(--sage))] text-sm font-body hover:from-primary/25 hover:to-[hsl(var(--sage))]/20 transition-all disabled:opacity-50"
                   >
                     {tts.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tts.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     {tts.isLoading ? "Generating..." : tts.isPlaying ? "Pause" : "Listen"}
@@ -92,7 +92,7 @@ export default function SleepPage() {
 
               <div className="flex items-center justify-center gap-1.5 mb-4">
                 {activeSession.script.map((_, i) => (
-                  <div key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i <= stepIndex ? "bg-indigo-500 shadow-sm" : "bg-secondary"}`} />
+                  <div key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i <= stepIndex ? "bg-primary shadow-sm" : "bg-secondary"}`} />
                 ))}
               </div>
 
@@ -110,7 +110,7 @@ export default function SleepPage() {
                 <button
                   onClick={() => { const fullScript = activeSession.script.join("\n\n"); tts.generateAndPlay(fullScript); }}
                   disabled={tts.isLoading}
-                  className="px-4 py-2.5 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 rounded-xl text-sm font-body text-indigo-600 dark:text-indigo-400 hover:from-indigo-500/20 hover:to-violet-500/20 disabled:opacity-50 transition-all"
+                  className="px-4 py-2.5 bg-gradient-to-r from-primary/10 to-[hsl(var(--sage))]/10 rounded-xl text-sm font-body text-primary dark:text-[hsl(var(--sage))] hover:from-primary/20 hover:to-[hsl(var(--sage))]/20 disabled:opacity-50 transition-all"
                 >
                   {tts.isLoading ? "..." : "▶ Play All"}
                 </button>
@@ -127,7 +127,7 @@ export default function SleepPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {sleepMeditations.map((s, i) => (
               <button key={s.id} onClick={() => { setActive(s.id); setStepIndex(0); }}
-                className={`group text-left relative overflow-hidden bg-gradient-to-br ${sleepGradients[i % sleepGradients.length]} dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-300`}>
+                className={`group text-left relative overflow-hidden bg-gradient-to-br ${sleepGradients[i % sleepGradients.length]} dark:from-[hsl(var(--forest-deep))]/20 dark:via-[hsl(var(--forest-mid))]/10 dark:to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all duration-300`}>
                 <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-card/30 to-transparent" />
                 <div className="relative z-10 flex items-start gap-3">
                   <span className="text-3xl group-hover:scale-110 transition-transform">{s.icon}</span>
@@ -145,8 +145,8 @@ export default function SleepPage() {
         )}
 
         {/* Bedtime routine */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl p-6 border border-indigo-500/15 shadow-soft">
-          <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-violet-200/20 to-transparent" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest))]/8 via-[hsl(var(--sage))]/6 to-[hsl(var(--sage-light))]/4 dark:from-[hsl(var(--forest-deep))]/20 dark:via-[hsl(var(--forest-mid))]/10 dark:to-[hsl(var(--forest))]/5 rounded-2xl p-6 border border-primary/15 shadow-soft">
+          <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-[hsl(var(--sage))]/15 to-transparent" />
           <h3 className="font-display text-lg font-semibold text-foreground mb-3">Suggested Bedtime Routine</h3>
           <div className="space-y-2">
             {[
@@ -157,7 +157,7 @@ export default function SleepPage() {
               { time: "9:35 PM", action: "Lights out — let sleep come" },
             ].map(step => (
               <div key={step.time} className="flex items-center gap-3 p-2 rounded-lg hover:bg-card/40 transition-colors">
-                <span className="text-xs font-body font-bold text-indigo-600 dark:text-indigo-400 w-16">{step.time}</span>
+                <span className="text-xs font-body font-bold text-primary dark:text-[hsl(var(--sage))] w-16">{step.time}</span>
                 <span className="text-sm font-body text-foreground">{step.action}</span>
               </div>
             ))}
