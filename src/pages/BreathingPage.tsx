@@ -17,12 +17,12 @@ interface BreathExercise {
 }
 
 const exercises: BreathExercise[] = [
-  { id: "box", name: "Box Breathing", desc: "Military stress reduction technique", inhale: 4, hold1: 4, exhale: 4, hold2: 4, icon: "🔲", benefit: "Reduces anxiety, improves focus", gradient: "from-sky-500/12 via-blue-500/8 to-indigo-500/5" },
-  { id: "478", name: "4-7-8 Breath", desc: "Dr. Weil's natural tranquilizer", inhale: 4, hold1: 7, exhale: 8, hold2: 0, icon: "🌙", benefit: "Instant calm, better sleep", gradient: "from-indigo-500/12 via-violet-500/8 to-purple-500/5" },
-  { id: "coherent", name: "Coherent Breathing", desc: "Optimal heart rate variability", inhale: 5, hold1: 0, exhale: 5, hold2: 0, icon: "💓", benefit: "Balances nervous system", gradient: "from-rose-500/12 via-pink-500/8 to-red-500/5" },
-  { id: "energizing", name: "Energizing Breath", desc: "Quick wake-up technique", inhale: 2, hold1: 0, exhale: 2, hold2: 0, icon: "⚡", benefit: "Increases alertness, boosts energy", gradient: "from-amber-500/12 via-yellow-500/8 to-orange-500/5" },
-  { id: "extended", name: "Extended Exhale", desc: "Activate parasympathetic response", inhale: 4, hold1: 0, exhale: 8, hold2: 0, icon: "🌊", benefit: "Deep relaxation, slows heart rate", gradient: "from-cyan-500/12 via-teal-500/8 to-emerald-500/5" },
-  { id: "counting", name: "Breath Counting", desc: "Focus training meditation", inhale: 4, hold1: 0, exhale: 4, hold2: 2, icon: "🔢", benefit: "Strengthens concentration", gradient: "from-emerald-500/12 via-green-500/8 to-lime-500/5" },
+  { id: "box", name: "Box Breathing", desc: "Military stress reduction technique", inhale: 4, hold1: 4, exhale: 4, hold2: 4, icon: "🔲", benefit: "Reduces anxiety, improves focus", gradient: "from-[hsl(var(--forest))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5" },
+  { id: "478", name: "4-7-8 Breath", desc: "Dr. Weil's natural tranquilizer", inhale: 4, hold1: 7, exhale: 8, hold2: 0, icon: "🌙", benefit: "Instant calm, better sleep", gradient: "from-[hsl(var(--forest-deep))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--forest-mid))]/5" },
+  { id: "coherent", name: "Coherent Breathing", desc: "Optimal heart rate variability", inhale: 5, hold1: 0, exhale: 5, hold2: 0, icon: "💓", benefit: "Balances nervous system", gradient: "from-[hsl(var(--gold))]/12 via-[hsl(var(--gold-light))]/8 to-[hsl(var(--cream-dark))]/5" },
+  { id: "energizing", name: "Energizing Breath", desc: "Quick wake-up technique", inhale: 2, hold1: 0, exhale: 2, hold2: 0, icon: "⚡", benefit: "Increases alertness, boosts energy", gradient: "from-[hsl(var(--gold-dark))]/12 via-[hsl(var(--gold))]/8 to-[hsl(var(--gold-light))]/5" },
+  { id: "extended", name: "Extended Exhale", desc: "Activate parasympathetic response", inhale: 4, hold1: 0, exhale: 8, hold2: 0, icon: "🌊", benefit: "Deep relaxation, slows heart rate", gradient: "from-[hsl(var(--sage-dark))]/12 via-[hsl(var(--sage))]/8 to-[hsl(var(--forest))]/5" },
+  { id: "counting", name: "Breath Counting", desc: "Focus training meditation", inhale: 4, hold1: 0, exhale: 4, hold2: 2, icon: "🔢", benefit: "Strengthens concentration", gradient: "from-[hsl(var(--forest-mid))]/12 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage))]/5" },
 ];
 
 type Phase = 'inhale' | 'hold1' | 'exhale' | 'hold2' | 'idle';
@@ -113,7 +113,7 @@ export default function BreathingPage() {
     return phase === 'hold1' ? 1 : 0.6;
   };
 
-  const phaseColor = phase === 'inhale' ? 'text-emerald-600' : phase === 'exhale' ? 'text-blue-500' : 'text-amber-500';
+  const phaseColor = phase === 'inhale' ? 'text-primary' : phase === 'exhale' ? 'text-[hsl(var(--sage-dark))]' : 'text-[hsl(var(--gold-dark))]';
 
   return (
     <AppLayout>
@@ -121,14 +121,14 @@ export default function BreathingPage() {
         {/* Hero Banner */}
         <div className="relative overflow-hidden rounded-2xl shadow-elevated">
           <img src={breathingHero} alt="Zen garden breathing practice" className="w-full h-44 sm:h-52 object-cover" width={1280} height={576} />
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-900/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/90 via-[hsl(var(--forest-deep))]/50 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-1">
-              <Wind className="w-5 h-5 text-emerald-300" />
-              <span className="text-xs font-body font-semibold text-emerald-300 uppercase tracking-wider">Breathwork</span>
+              <Wind className="w-5 h-5 text-[hsl(var(--sage))]" />
+              <span className="text-xs font-body font-semibold text-[hsl(var(--sage))] uppercase tracking-wider">Breathwork</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Breathing Exercises</h1>
-            <p className="text-sm font-body text-white/70 mt-1">Guided breathing techniques for any moment.</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground">Breathing Exercises</h1>
+            <p className="text-sm font-body text-primary-foreground/70 mt-1">Guided breathing techniques for any moment.</p>
           </div>
         </div>
 
