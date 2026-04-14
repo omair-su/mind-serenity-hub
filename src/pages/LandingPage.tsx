@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroImg from "@/assets/premium-hero.jpg";
+import lifestyleImg from "@/assets/premium-lifestyle.jpg";
 import AboutSection from "@/components/AboutSection";
 import ScienceSection from "@/components/ScienceSection";
 import CurriculumSection from "@/components/CurriculumSection";
@@ -17,9 +19,7 @@ export default function LandingPage() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-
-      // Update active section based on scroll position
-      const sections = ["home", "about", "science", "curriculum", "testimonials", "faq"];
+      const sections = ["home", "about", "science", "curriculum", "testimonials", "pricing", "faq"];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -31,7 +31,6 @@ export default function LandingPage() {
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -45,219 +44,221 @@ export default function LandingPage() {
   };
 
   const navLinks = [
-    { label: "About", id: "about", isExternal: true },
+    { label: "About", id: "about" },
     { label: "Science", id: "science" },
     { label: "Curriculum", id: "curriculum" },
     { label: "Testimonials", id: "testimonials" },
+    { label: "Pricing", id: "pricing" },
     { label: "FAQ", id: "faq" },
+  ];
+
+  const valueStack = [
+    { label: "30 Guided Meditation Sessions", value: "$120" },
+    { label: "AI-Powered Personal Coach", value: "$80" },
+    { label: "Soundscape Builder + Sound Bath", value: "$40" },
+    { label: "Body Scan & Walking Meditation", value: "$35" },
+    { label: "Focus Mode & Gratitude Garden", value: "$30" },
+    { label: "Sleep Stories & SOS Relief", value: "$25" },
+    { label: "Progress Tracking & Analytics", value: "$20" },
+    { label: "Lifetime Updates — Forever", value: "Priceless" },
   ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-xl shadow-lg"
-            : "bg-white/80 backdrop-blur-sm"
-        }`}
-      >
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-lg" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <button
-            onClick={() => scrollToSection("home")}
-            className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent"
-          >
+          <button onClick={() => scrollToSection("home")} className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
             Willow Vibes™
           </button>
-
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.isExternal ? (
-                <Link
-                  key={link.id}
-                  to="/about"
-                  className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className={`text-sm font-medium transition-colors ${
-                    activeSection === link.id
-                      ? "text-emerald-600"
-                      : "text-slate-600 hover:text-emerald-600"
-                  }`}
-                >
-                  {link.label}
-                </button>
-              )
+              <button key={link.id} onClick={() => scrollToSection(link.id)} className={`text-sm font-medium transition-colors ${scrolled ? (activeSection === link.id ? "text-emerald-600" : "text-slate-600 hover:text-emerald-600") : (activeSection === link.id ? "text-emerald-300" : "text-white/80 hover:text-white")}`}>
+                {link.label}
+              </button>
             ))}
           </div>
-
-          {/* CTA Button */}
-          <div className="hidden md:flex gap-4">
+          <div className="hidden md:flex gap-3">
             <Link to="/sign-in">
-              <Button variant="outline" className="rounded-full">
-                Log In
-              </Button>
+              <Button variant="outline" className={`rounded-full ${scrolled ? "" : "border-white/30 text-white hover:bg-white/10"}`}>Log In</Button>
             </Link>
             <Link to="/app">
-              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full">
-                Try for Free
-              </Button>
+              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full">Get Access — $97</Button>
             </Link>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? (
-              <X className="w-6 h-6 text-slate-900" />
-            ) : (
-              <Menu className="w-6 h-6 text-slate-900" />
-            )}
+          <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            {menuOpen ? <X className={`w-6 h-6 ${scrolled ? "text-slate-900" : "text-white"}`} /> : <Menu className={`w-6 h-6 ${scrolled ? "text-slate-900" : "text-white"}`} />}
           </button>
         </div>
-
-        {/* Mobile Menu */}
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden bg-white border-t border-slate-200 p-4"
-          >
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="md:hidden bg-white border-t border-slate-200 p-4">
             <div className="space-y-4">
               {navLinks.map((link) => (
-                link.isExternal ? (
-                  <Link
-                    key={link.id}
-                    to="/about"
-                    className="block w-full text-left px-4 py-2 text-slate-600 hover:text-emerald-600 font-medium"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <button
-                    key={link.id}
-                    onClick={() => scrollToSection(link.id)}
-                    className="block w-full text-left px-4 py-2 text-slate-600 hover:text-emerald-600 font-medium"
-                  >
-                    {link.label}
-                  </button>
-                )
+                <button key={link.id} onClick={() => scrollToSection(link.id)} className="block w-full text-left px-4 py-2 text-slate-600 hover:text-emerald-600 font-medium">{link.label}</button>
               ))}
               <div className="pt-4 space-y-2 border-t border-slate-200">
-                <Link to="/sign-in" className="block w-full">
-                  <Button variant="outline" className="w-full rounded-full">
-                    Log In
-                  </Button>
-                </Link>
-                <Link to="/app" className="block w-full">
-                  <Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full">
-                    Try for Free
-                  </Button>
-                </Link>
+                <Link to="/sign-in" className="block w-full"><Button variant="outline" className="w-full rounded-full">Log In</Button></Link>
+                <Link to="/app" className="block w-full"><Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full">Get Access — $97</Button></Link>
               </div>
             </div>
           </motion.div>
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-24 md:pt-32 pb-20 md:pb-28 bg-gradient-to-b from-slate-50 via-white to-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-              Meditation for<br />
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Real People
-              </span>
+      {/* Hero — Full-Bleed Image */}
+      <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <img src={heroImg} alt="Woman meditating at sunrise in a luxurious room overlooking mountains" className="absolute inset-0 w-full h-full object-cover" width={1920} height={1080} />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        
+        <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-6 text-center py-32">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm mb-8">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span>Limited Time — Save 67%</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1]">
+              Master Your Mind<br />
+              <span className="bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent">in 30 Days</span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Transform your relationship with stress in 30 days. No spiritual fluff. Just science-backed practices that work.
+            
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
+              The science-backed meditation system that actually works for stressed, busy people. No spiritual fluff. Just proven techniques from neuroscience research.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Link to="/app">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-8 py-6 text-lg rounded-full"
-                >
-                  Start Free Trial
+                <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-10 py-7 text-lg rounded-full shadow-2xl shadow-emerald-500/30">
+                  Start Now — $97
                 </Button>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-8 py-6 text-lg rounded-full"
-                onClick={() => scrollToSection("science")}
-              >
-                Learn More
+              <Button size="lg" variant="outline" className="px-8 py-7 text-lg rounded-full border-white/30 text-white hover:bg-white/10 backdrop-blur-sm" onClick={() => scrollToSection("curriculum")}>
+                See What's Inside
               </Button>
             </div>
-            <p className="text-sm text-slate-500 mt-6">
-              30-day money-back guarantee • No credit card required
-            </p>
-          </motion.div>
 
-          {/* Hero Visual */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-16 md:mt-24"
-          >
-            <div className="bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 rounded-3xl aspect-video flex items-center justify-center shadow-2xl">
-              <div className="text-center">
-                <div className="text-8xl mb-4">🧘‍♀️</div>
-                <p className="text-slate-600 font-medium">Your meditation journey starts here</p>
-              </div>
+            <div className="flex items-center gap-2 justify-center text-white/60 text-sm">
+              <span className="line-through">$297</span>
+              <span className="text-white font-bold text-lg">$97</span>
+              <span>one-time payment · lifetime access</span>
             </div>
           </motion.div>
+        </div>
 
-          {/* Scroll Indicator */}
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex justify-center mt-12"
-          >
-            <button
-              onClick={() => scrollToSection("about")}
-              className="text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <ChevronDown className="w-6 h-6" />
-            </button>
+        {/* Trust Strip */}
+        <div className="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-md border-t border-white/10">
+          <div className="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-6 md:gap-10 text-white/70 text-sm">
+            <div className="flex items-center gap-2"><Shield className="w-4 h-4 text-emerald-400" /> 30-Day Guarantee</div>
+            <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-emerald-400" /> Lifetime Access</div>
+            <div className="flex items-center gap-2"><Users className="w-4 h-4 text-emerald-400" /> 10,000+ Students</div>
+            <div className="flex items-center gap-2"><Star className="w-4 h-4 text-amber-400 fill-amber-400" /> 4.9/5 Rating</div>
+          </div>
+        </div>
+
+        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="absolute bottom-20 left-1/2 -translate-x-1/2">
+          <button onClick={() => scrollToSection("about")} className="text-white/40 hover:text-white/70 transition-colors">
+            <ChevronDown className="w-6 h-6" />
+          </button>
+        </motion.div>
+      </section>
+
+      <AboutSection />
+      <ScienceSection />
+      <CurriculumSection />
+      <TestimonialsSection />
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-slate-900 to-slate-800 overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 md:px-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
+            <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-400 mb-4">One-Time Investment</h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Everything You Need.<br />
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">One Price. Forever.</span>
+            </h3>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Value Stack */}
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <h4 className="text-lg font-semibold text-white mb-6">What's included:</h4>
+              <div className="space-y-3">
+                {valueStack.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between py-2 border-b border-white/10">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      <span className="text-white/80 text-sm">{item.label}</span>
+                    </div>
+                    <span className="text-white/40 text-sm line-through">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-between pt-4 mt-2 border-t border-emerald-500/30">
+                <span className="text-white font-semibold">Total Value</span>
+                <span className="text-white/60 line-through text-lg">$350+</span>
+              </div>
+            </motion.div>
+
+            {/* Pricing Card */}
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-10">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-full shadow-lg">
+                  Save 67%
+                </div>
+
+                <div className="text-center mb-8">
+                  <div className="text-white/50 text-lg line-through mb-1">$297</div>
+                  <div className="text-6xl md:text-7xl font-bold text-white mb-2">
+                    $97
+                  </div>
+                  <div className="text-emerald-300 font-medium">One-time payment · Lifetime access</div>
+                </div>
+
+                <Link to="/app" className="block mb-6">
+                  <Button size="lg" className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-7 text-lg rounded-xl shadow-2xl shadow-emerald-500/20 font-semibold">
+                    <Zap className="w-5 h-5 mr-2" />
+                    Get Instant Access
+                  </Button>
+                </Link>
+
+                <div className="flex flex-col items-center gap-3 text-white/50 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    <span>30-day money-back guarantee</span>
+                  </div>
+                  <span>No subscriptions. No hidden fees. Ever.</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Lifestyle Image */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="mt-16">
+            <div className="rounded-2xl overflow-hidden shadow-2xl">
+              <img src={lifestyleImg} alt="Premium meditation lifestyle setup" className="w-full aspect-[3/1] object-cover" width={1200} height={800} loading="lazy" />
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* About Section */}
-      <AboutSection />
-
-      {/* Science Section */}
-      <ScienceSection />
-
-      {/* Curriculum Section */}
-      <CurriculumSection />
-
-      {/* Testimonials Section */}
-      <TestimonialsSection />
-
-      {/* FAQ Section */}
       <FAQSection />
+
+      {/* Final CTA */}
+      <section className="py-20 md:py-28 bg-gradient-to-r from-emerald-600 to-teal-600">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Your Mind Is Worth $97</h2>
+            <p className="text-lg text-emerald-50 mb-8 max-w-xl mx-auto">
+              Join 10,000+ people who stopped scrolling and started transforming. 30-day guarantee.
+            </p>
+            <Link to="/app">
+              <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 px-10 py-7 text-lg rounded-full font-semibold shadow-xl">
+                Start Your 30-Day Journey — $97
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12 md:py-16">
@@ -265,25 +266,20 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="text-lg font-bold mb-4">Willow Vibes™</h3>
-              <p className="text-slate-400 text-sm">
-                Meditation backed by science. Designed for real life.
-              </p>
+              <p className="text-slate-400 text-sm">Meditation backed by science. Designed for real life.</p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><button onClick={() => scrollToSection("curriculum")} className="hover:text-white transition-colors text-left">Curriculum</button></li>
                 <li><button onClick={() => scrollToSection("science")} className="hover:text-white transition-colors text-left">Science</button></li>
-                <li><button onClick={() => scrollToSection("testimonials")} className="hover:text-white transition-colors text-left">Testimonials</button></li>
-                <li><button onClick={() => scrollToSection("faq")} className="hover:text-white transition-colors text-left">FAQ</button></li>
+                <li><button onClick={() => scrollToSection("pricing")} className="hover:text-white transition-colors text-left">Pricing</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>

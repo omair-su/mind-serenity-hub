@@ -31,56 +31,52 @@ export default function ActiveZonePanel({
   const progressPercent = (zoneTimer / zone.duration) * 100;
 
   return (
-    <div className={`rounded-2xl bg-gradient-to-br ${zone.color} p-5 text-white relative overflow-hidden`}>
-      <div className="absolute top-2 right-2 w-24 h-24 rounded-full bg-white/10 blur-xl" />
-      <div className="absolute bottom-2 left-2 w-16 h-16 rounded-full bg-white/5 blur-lg" />
+    <div className="rounded-2xl bg-card border border-primary/20 p-5 relative overflow-hidden shadow-soft">
+      <div className="absolute top-2 right-2 w-24 h-24 rounded-full bg-primary/5 blur-xl" />
+      <div className="absolute bottom-2 left-2 w-16 h-16 rounded-full bg-gold/5 blur-lg" />
 
       <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2.5 rounded-xl bg-white/20 backdrop-blur-sm">
-            <Icon className="w-6 h-6" />
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2.5 rounded-xl bg-primary/10 backdrop-blur-sm">
+            <Icon className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1">
-            <h3 className="font-bold text-lg">{zone.label}</h3>
-            <p className="text-xs text-white/80">{zone.description}</p>
+            <h3 className="font-display font-bold text-lg text-foreground">{zone.label}</h3>
+            <p className="text-xs font-body text-muted-foreground">{zone.description}</p>
           </div>
         </div>
 
-        {/* Breathing Orb */}
-        <BreathingOrb isActive={isScanning} color={zone.color} />
+        <div className="rounded-2xl bg-secondary/25 border border-border p-4 mb-4">
+          <BreathingOrb isActive={isScanning} color={zone.color} />
+        </div>
 
-        {/* Tips */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 mb-3">
-          <p className="text-[10px] uppercase tracking-widest text-white/60 font-semibold mb-2">Focus Tips</p>
-          <ul className="space-y-1">
+        <div className="bg-secondary/35 rounded-xl border border-border p-3 mb-3">
+          <p className="text-[10px] uppercase tracking-widest text-primary/70 font-body font-semibold mb-2">Focus Tips</p>
+          <ul className="space-y-1.5">
             {zone.tips.map((tip, i) => (
-              <li key={i} className="text-xs text-white/90 flex items-start gap-2">
-                <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-white/50 flex-shrink-0" />
+              <li key={i} className="text-xs font-body text-foreground flex items-start gap-2">
+                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary/40 flex-shrink-0" />
                 {tip}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Sensations */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {zone.sensations.map((s) => (
-            <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-white/15 text-white/90 backdrop-blur-sm">
+            <span key={s} className="text-[10px] font-body px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
               {s}
             </span>
           ))}
         </div>
 
-        {/* Controls */}
         <div className="flex items-center gap-3">
-          <Button size="sm" variant="ghost" className="text-white hover:bg-white/20" onClick={onToggle}>
+          <Button size="sm" variant="outline" onClick={onToggle}>
             {isScanning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>
           <Button
             size="sm"
-            variant="ghost"
-            className="text-white hover:bg-white/20"
+            variant="outline"
             onClick={onPlayAudio}
             disabled={isAudioLoading}
           >
@@ -89,12 +85,12 @@ export default function ActiveZonePanel({
             ) : (
               <Volume2 className={`w-4 h-4 ${isAudioPlaying ? "animate-pulse" : ""}`} />
             )}
-            <span className="ml-1 text-xs">{isAudioPlaying ? "Playing" : "Narrate"}</span>
+            <span className="ml-1 text-xs font-body">{isAudioPlaying ? "Playing" : "Narrate"}</span>
           </Button>
           <div className="flex-1">
-            <Progress value={progressPercent} className="h-2 bg-white/20" />
+            <Progress value={progressPercent} className="h-2" />
           </div>
-          <span className="text-sm font-mono">{zoneTimer}s/{zone.duration}s</span>
+          <span className="text-xs font-body text-muted-foreground">{zoneTimer}s/{zone.duration}s</span>
         </div>
       </div>
     </div>

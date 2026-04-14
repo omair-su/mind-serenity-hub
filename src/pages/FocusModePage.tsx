@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Brain, Play, Pause, RotateCcw, Clock, Target, Coffee, Zap, Check, Settings } from "lucide-react";
+import focusmodeHero from "@/assets/focusmode-hero.jpg";
 
 type Phase = "idle" | "focus" | "break" | "longBreak" | "done";
 
@@ -117,13 +118,20 @@ export default function FocusModePage() {
   return (
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Brain className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Focus Mode</h1>
-            <p className="text-sm font-body text-muted-foreground">Deep work sessions with mindful breaks</p>
+        {/* Hero Banner */}
+        <div className="relative rounded-2xl overflow-hidden h-[200px]">
+          <img src={focusmodeHero} alt="Deep focus workspace" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent" />
+          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-display text-2xl font-bold text-white">Focus Mode</h1>
+                <p className="text-sm text-white/80">Deep work sessions with mindful breaks</p>
+              </div>
+            </div>
           </div>
         </div>
 

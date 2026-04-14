@@ -6,7 +6,8 @@ import {
   ChevronDown, ChevronRight, Menu, X, Leaf, BookOpen, FlaskConical, Brain, Heart, Home,
   LayoutDashboard, Library, BarChart3, Trophy, Smile, Zap, Wind, Moon, Timer,
   Settings, HelpCircle, FolderOpen, Award, Sparkles, MessageCircle,
-  Headphones, Target, Sun, Footprints, Flower2, Users, GraduationCap, ScanEye
+  Headphones, Target, Sun, Footprints, Flower2, ScanEye,
+  Download
 } from "lucide-react";
 import WillowLogo from "@/components/WillowLogo";
 
@@ -40,9 +41,8 @@ const premiumItems = [
   { label: "Focus Mode", path: "/app/focus", icon: Brain },
   { label: "Body Scan", path: "/app/body-scan", icon: ScanEye },
   { label: "Gratitude Garden", path: "/app/gratitude", icon: Flower2 },
-  { label: "Masterclass", path: "/app/masterclass", icon: GraduationCap },
-  { label: "Community", path: "/app/community", icon: Users },
   { label: "Walking Meditation", path: "/app/walking", icon: Footprints },
+  { label: "Offline Downloads", path: "/app/offline-downloads", icon: Download },
 ];
 
 const utilityItems = [
