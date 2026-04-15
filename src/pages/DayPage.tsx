@@ -4,7 +4,8 @@ import { weeks } from "@/data/courseData";
 import {
   ChevronLeft, ChevronRight, Clock, Gauge, Sun, Target, Sparkles,
   Heart, FlaskConical, Play, Pause, Volume2, Download, SkipBack, SkipForward,
-  Check, Bookmark, BookmarkCheck, Printer, LayoutDashboard, Timer, Leaf, Loader2, Square
+  Check, Bookmark, BookmarkCheck, Printer, LayoutDashboard, Timer, Leaf, Loader2, Square,
+  Music, Zap, Brain, Lightbulb, TrendingUp, Award, Wand2, Eye, Ear, Wind, X
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,6 +26,24 @@ const dayEmojis: Record<number, string> = {
   15: "🌄", 16: "🦴", 17: "💚", 18: "🎯", 19: "🤝", 20: "🧘", 21: "🌟",
   22: "☁️", 23: "🪞", 24: "🕊️", 25: "🔥", 26: "🌍", 27: "💝", 28: "🤫", 29: "🛤️", 30: "🎉",
 };
+
+/* ─── Premium Wisdom Cards ─── */
+const WISDOM_CARDS = [
+  { title: "The Power of Presence", insight: "Your mind can only be in one place at a time. When you're here, you're not there.", icon: "🎯" },
+  { title: "Breath = Life", insight: "Every breath connects you to the present moment. The breath is always now.", icon: "🌬️" },
+  { title: "Consistency Over Perfection", insight: "A imperfect practice done daily beats a perfect practice done rarely.", icon: "🔥" },
+  { title: "The Observer Effect", insight: "Simply noticing your thoughts changes them. Awareness is the first step to freedom.", icon: "👁️" },
+  { title: "Neuroplasticity", insight: "Every meditation rewires your brain. You're literally building new neural pathways for peace.", icon: "🧠" },
+];
+
+/* ─── Binaural Frequency Presets ─── */
+const BINAURAL_PRESETS = [
+  { name: "Delta (Sleep)", freq: 2, color: "from-indigo-600 to-blue-600", description: "Deep sleep & restoration" },
+  { name: "Theta (Deep Meditation)", freq: 5, color: "from-purple-600 to-violet-600", description: "Subconscious access & creativity" },
+  { name: "Alpha (Relaxation)", freq: 10, color: "from-emerald-600 to-teal-600", description: "Calm awareness & flow" },
+  { name: "Beta (Focus)", freq: 20, color: "from-amber-600 to-orange-600", description: "Concentration & alertness" },
+  { name: "Gamma (Peak Performance)", freq: 40, color: "from-rose-600 to-pink-600", description: "Insight & cognitive enhancement" },
+];
 
 /* ─── localStorage helpers ─── */
 function loadState(dayNum: number) {
@@ -80,11 +99,21 @@ export default function DayPage() {
   const saved = loadState(dayNumber);
   const [reflection, setReflection] = useState(saved?.reflection || "");
   const [calmRating, setCalmRating] = useState<number[]>([saved?.calmRating || 5]);
+  const [moodBefore, setMoodBefore] = useState<number[]>([saved?.moodBefore || 5]);
+  const [moodAfter, setMoodAfter] = useState<number[]>([saved?.moodAfter || 7]);
   const [challengeText, setChallengeText] = useState(saved?.challengeText || "");
   const [rememberText, setRememberText] = useState(saved?.rememberText || "");
   const [checklist, setChecklist] = useState<boolean[]>(saved?.checklist || [false, false, false, false]);
   const [bookmarked, setBookmarked] = useState(saved?.bookmarked || false);
   const [scrolled, setScrolled] = useState(false);
+  const [showWisdomDialog, setShowWisdomDialog] = useState(false);
+  const [selectedWisdom, setSelectedWisdom] = useState(WISDOM_CARDS[dayNumber % WISDOM_CARDS.length]);
+  const [showBinauralPanel, setShowBinauralPanel] = useState(false);
+  const [selectedFrequency, setSelectedFrequency] = useState(BINAURAL_PRESETS[2]); // Alpha by default
+  const [binauralActive, setBinauralActive] = useState(false);
+  const [binauralVolume, setBinauralVolume] = useState(0.3);
+  const [showCheckInDialog, setShowCheckInDialog] = useState(false);
+  const [sessionStarted, setSessionStarted] = useState(false);
   const tts = useTextToSpeech();
 
   // Reset TTS when navigating to a different day
@@ -97,8 +126,17 @@ export default function DayPage() {
 
   // Auto-save
   const autoSave = useCallback(() => {
-    saveState(dayNumber, { reflection, calmRating: calmRating[0], challengeText, rememberText, checklist, bookmarked });
-  }, [dayNumber, reflection, calmRating, challengeText, rememberText, checklist, bookmarked]);
+    saveState(dayNumber, {
+      reflection,
+      calmRating: calmRating[0],
+      moodBefore: moodBefore[0],
+      moodAfter: moodAfter[0],
+      challengeText,
+      rememberText,
+      checklist,
+      bookmarked
+    });
+  }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked]);
 
   useEffect(() => {
     const t = setTimeout(autoSave, 2000);
@@ -147,6 +185,17 @@ export default function DayPage() {
     setChecklist(next);
   };
 
+  const startSession = () => {
+    setShowCheckInDialog(true);
+    setSessionStarted(true);
+  };
+
+  const completeSession = () => {
+    setMoodAfter(calmRating);
+    timer.reset(durationMins);
+    toggleCheck(0); // Mark meditation as complete
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* ─── STICKY NAVBAR ─── */}
@@ -175,8 +224,10 @@ export default function DayPage() {
         </div>
       </nav>
 
-      {/* ─── HERO SECTION ─── */}
-      <section className="relative w-full h-[400px] md:h-[480px] overflow-hidden">
+      {/* ─── HERO SECTION WITH ZEN FLOW ─── */}
+      <section className={`relative w-full h-[400px] md:h-[480px] overflow-hidden transition-all duration-1000 ${
+        sessionStarted ? "bg-gradient-to-br from-emerald-600/80 via-teal-600/70 to-cyan-600/60" : "bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50"
+      }`}>
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50" />
         <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40" width={1920} height={800} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -209,28 +260,43 @@ export default function DayPage() {
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
           <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="relative z-10">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider">Your Progress</span>
-            <span className="text-xs font-body text-muted-foreground">Day {dayNumber} of 30 ({percentage}% Complete)</span>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider">Your Progress</span>
+              <span className="text-xs font-body text-muted-foreground">Day {dayNumber} of 30 ({percentage}% Complete)</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {Array.from({ length: 30 }, (_, i) => {
+                const num = i + 1;
+                const isComplete = completedDays[i];
+                const isCurrent = num === dayNumber;
+                return (
+                  <button
+                    key={num}
+                    onClick={() => navigate(`/day/${num}`)}
+                    className={`w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
+                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
+                    title={`Day ${num}`}
+                  >
+                    {isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {Array.from({ length: 30 }, (_, i) => {
-              const num = i + 1;
-              const isComplete = completedDays[i];
-              const isCurrent = num === dayNumber;
-              return (
-                <button
-                  key={num}
-                  onClick={() => navigate(`/day/${num}`)}
-                  className={`w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                    ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
-                  title={`Day ${num}`}
-                >
-                  {isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
-                </button>
-              );
-            })}
-          </div>
+        </div>
+
+        {/* ─── PREMIUM WISDOM CARD ─── */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/60 via-purple-50/40 to-indigo-50/30 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl border border-violet-500/20 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
+          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
+          <div className="relative z-10">
+            <div className="flex items-start justify-between mb-3">
+              <span className="text-3xl">{selectedWisdom.icon}</span>
+              <Lightbulb className="w-5 h-5 text-violet-500/60" />
+            </div>
+            <p className="text-xs font-body font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2">Daily Wisdom</p>
+            <h3 className="font-display text-xl font-semibold text-foreground mb-2">{selectedWisdom.title}</h3>
+            <p className="font-body text-base text-foreground/80 italic leading-relaxed">{selectedWisdom.insight}</p>
+            <p className="text-xs font-body text-muted-foreground mt-4 pt-4 border-t border-violet-500/10">✨ Click to explore more wisdom</p>
           </div>
         </div>
 
@@ -245,25 +311,77 @@ export default function DayPage() {
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/15 to-transparent rounded-tr-full" />
           <div className="relative z-10">
-          <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
-          <span className="text-xs font-body font-semibold tracking-widest uppercase text-gold">Today's Focus</span>
-          <h2 className="font-display text-2xl font-semibold text-foreground mt-2 mb-3">{day.focus}</h2>
-          <p className="text-base font-body text-muted-foreground leading-relaxed">{day.benefits}</p>
-          <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {[
-              { icon: Target, label: "Practice", value: day.practice },
-              { icon: Clock, label: "Duration", value: day.duration },
-              { icon: Gauge, label: "Level", value: day.difficulty },
-              { icon: Sun, label: "Best Time", value: day.bestTime },
-              { icon: Sparkles, label: "Focus", value: day.focus },
-            ].map(item => (
-              <div key={item.label} className="p-3 rounded-xl bg-card/60 backdrop-blur-sm border border-border/30 shadow-sm">
-                <item.icon className="w-3.5 h-3.5 text-gold mb-1" />
-                <p className="text-[10px] font-body font-semibold text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                <p className="text-xs font-body text-foreground mt-0.5 line-clamp-2">{item.value}</p>
-              </div>
-            ))}
+            <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
+            <span className="text-xs font-body font-semibold tracking-widest uppercase text-gold">Today's Focus</span>
+            <h2 className="font-display text-2xl font-semibold text-foreground mt-2 mb-3">{day.focus}</h2>
+            <p className="text-base font-body text-muted-foreground leading-relaxed">{day.benefits}</p>
+            <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {[
+                { icon: Target, label: "Practice", value: day.practice },
+                { icon: Clock, label: "Duration", value: day.duration },
+                { icon: Gauge, label: "Level", value: day.difficulty },
+                { icon: Sun, label: "Best Time", value: day.bestTime },
+                { icon: Sparkles, label: "Focus", value: day.focus },
+              ].map(item => (
+                <div key={item.label} className="p-3 rounded-xl bg-card/60 backdrop-blur-sm border border-border/30 shadow-sm">
+                  <item.icon className="w-3.5 h-3.5 text-gold mb-1" />
+                  <p className="text-[10px] font-body font-semibold text-muted-foreground uppercase tracking-wider">{item.label}</p>
+                  <p className="text-xs font-body text-foreground mt-0.5 line-clamp-2">{item.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* ─── PREMIUM BINAURAL BEATS PANEL ─── */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-rose-500/15 p-8 shadow-soft">
+          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-rose-200/20 to-transparent" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2.5 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-500/20 to-pink-500/20 flex items-center justify-center">
+                <Music className="w-5 h-5 text-rose-600" />
+              </div>
+              <div>
+                <p className="text-xs font-body font-bold tracking-widest uppercase text-rose-600">Premium Feature</p>
+                <h3 className="font-display text-lg font-semibold text-foreground">Binaural Beats for Deep Focus</h3>
+              </div>
+            </div>
+            <p className="text-sm font-body text-foreground/80 mb-6 leading-relaxed">Enhance your meditation with scientifically-tuned binaural frequencies. Each frequency targets different brainwave states for optimal results.</p>
+            
+            <div className="space-y-4">
+              {BINAURAL_PRESETS.map((preset, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedFrequency(preset)}
+                  className={`w-full p-4 rounded-xl transition-all border-2 text-left ${
+                    selectedFrequency.name === preset.name
+                      ? `border-rose-500 bg-gradient-to-r ${preset.color} text-white shadow-lg`
+                      : "border-border/30 bg-card/40 hover:bg-card/60 text-foreground"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-body font-semibold text-sm">{preset.name}</p>
+                      <p className={`text-xs font-body ${selectedFrequency.name === preset.name ? "text-white/80" : "text-muted-foreground"}`}>{preset.description}</p>
+                    </div>
+                    <span className={`text-xs font-body font-bold px-2 py-1 rounded-full ${selectedFrequency.name === preset.name ? "bg-white/20" : "bg-secondary"}`}>{preset.freq} Hz</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-6 space-y-3">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" checked={binauralActive} onChange={(e) => setBinauralActive(e.target.checked)} className="w-4 h-4 rounded" />
+                <span className="text-sm font-body text-foreground">Enable binaural beats during meditation</span>
+              </label>
+              {binauralActive && (
+                <div className="space-y-2">
+                  <label className="text-xs font-body font-semibold text-muted-foreground">Volume</label>
+                  <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -272,17 +390,17 @@ export default function DayPage() {
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/20 to-transparent rounded-tr-full" />
           <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/25 to-amber-500/20 flex items-center justify-center">
-              <FlaskConical className="w-4 h-4 text-gold" />
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/25 to-amber-500/20 flex items-center justify-center">
+                <FlaskConical className="w-4 h-4 text-gold" />
+              </div>
+              <div>
+                <span className="text-xs font-body font-bold tracking-widest uppercase text-gold">The Science</span>
+                <p className="text-sm font-display font-semibold text-foreground">Why This Works</p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-body font-bold tracking-widest uppercase text-gold">The Science</span>
-              <p className="text-sm font-display font-semibold text-foreground">Why This Works</p>
-            </div>
-          </div>
-          <p className="text-base font-body leading-[2] text-foreground/85">{day.scienceText}</p>
-          <p className="text-xs font-body text-muted-foreground mt-4 italic border-t border-gold/15 pt-3">📚 {day.scienceSource}</p>
+            <p className="text-base font-body leading-[2] text-foreground/85">{day.scienceText}</p>
+            <p className="text-xs font-body text-muted-foreground mt-4 italic border-t border-gold/15 pt-3">📚 {day.scienceSource}</p>
           </div>
         </div>
 
@@ -292,17 +410,17 @@ export default function DayPage() {
         <div className="relative overflow-hidden bg-gradient-to-br from-cyan-100/50 via-sky-50/30 to-blue-50/20 dark:from-cyan-900/15 dark:via-sky-900/10 dark:to-blue-900/5 rounded-2xl p-8 border border-cyan-500/15 shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-sky-200/20 to-transparent" />
           <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-4">
-            <span className="text-2xl">🧘‍♀️</span>
-            <h2 className="font-display text-xl font-semibold text-foreground">Before You Begin</h2>
-          </div>
-          <p className="font-body text-base leading-[2] text-foreground/80">{day.preparation}</p>
-          <ul className="mt-4 space-y-2 font-body text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
-            <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
-            <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Turn off notifications</li>
-            <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Have your journal nearby</li>
-          </ul>
+            <div className="flex items-center gap-2.5 mb-4">
+              <span className="text-2xl">🧘‍♀️</span>
+              <h2 className="font-display text-xl font-semibold text-foreground">Before You Begin</h2>
+            </div>
+            <p className="font-body text-base leading-[2] text-foreground/80">{day.preparation}</p>
+            <ul className="mt-4 space-y-2 font-body text-sm text-muted-foreground">
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Turn off notifications</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Have your journal nearby</li>
+            </ul>
           </div>
         </div>
 
@@ -386,36 +504,39 @@ export default function DayPage() {
         <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-gold/20 p-8 text-center shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-gold/10 to-transparent" />
           <div className="relative z-10">
-          <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
-          <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer</p>
-          <p className="font-display text-5xl font-bold text-foreground mb-6">{timer.display}</p>
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => timer.reset(durationMins)}
-              className="px-4 py-2.5 rounded-xl text-sm font-body font-medium bg-card/70 backdrop-blur-sm text-muted-foreground hover:bg-card/90 transition-colors border border-border/30"
-            >
-              Reset
-            </button>
-            <button
-              onClick={timer.toggle}
-              className={`px-8 py-3 rounded-xl text-sm font-body font-semibold transition-all shadow-md ${
-                timer.running
-                  ? "bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground hover:from-destructive/90"
-                  : "bg-gradient-to-r from-gold to-gold-dark text-white hover:shadow-gold shadow-gold"
-              }`}
-            >
-              {timer.running ? "Pause" : timer.seconds === durationMins * 60 ? "Begin Timer" : "Resume"}
-            </button>
-            <button
-              onClick={timer.extend}
-              className="px-4 py-2.5 rounded-xl text-sm font-body font-medium bg-card/70 backdrop-blur-sm text-muted-foreground hover:bg-card/90 transition-colors border border-border/30"
-            >
-              +5 min
-            </button>
-          </div>
-          {timer.seconds === 0 && (
-            <p className="mt-4 text-sm font-body text-primary font-medium animate-fade-in">✨ Timer complete! Well done.</p>
-          )}
+            <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
+            <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer</p>
+            <p className="font-display text-5xl font-bold text-foreground mb-6">{timer.display}</p>
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => timer.reset(durationMins)}
+                className="px-4 py-2.5 rounded-xl text-sm font-body font-medium bg-card/70 backdrop-blur-sm text-muted-foreground hover:bg-card/90 transition-colors border border-border/30"
+              >
+                Reset
+              </button>
+              <button
+                onClick={() => {
+                  if (!sessionStarted) startSession();
+                  timer.toggle();
+                }}
+                className={`px-8 py-3 rounded-xl text-sm font-body font-semibold transition-all shadow-md ${
+                  timer.running
+                    ? "bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground hover:from-destructive/90"
+                    : "bg-gradient-to-r from-gold to-gold-dark text-white hover:shadow-gold shadow-gold"
+                }`}
+              >
+                {timer.running ? "Pause" : timer.seconds === durationMins * 60 ? "Begin Timer" : "Resume"}
+              </button>
+              <button
+                onClick={timer.extend}
+                className="px-4 py-2.5 rounded-xl text-sm font-body font-medium bg-card/70 backdrop-blur-sm text-muted-foreground hover:bg-card/90 transition-colors border border-border/30"
+              >
+                +5 min
+              </button>
+            </div>
+            {timer.seconds === 0 && (
+              <p className="mt-4 text-sm font-body text-primary font-medium animate-fade-in">✨ Timer complete! Well done.</p>
+            )}
           </div>
         </div>
 
@@ -426,14 +547,14 @@ export default function DayPage() {
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-sage/10 to-transparent rounded-tr-full" />
           <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-sage/30 flex items-center justify-center">
-              <Heart className="w-4 h-4 text-primary" />
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary/20 to-sage/30 flex items-center justify-center">
+                <Heart className="w-4 h-4 text-primary" />
+              </div>
+              <span className="text-xs font-body font-bold tracking-widest uppercase text-primary">Coach's Note</span>
             </div>
-            <span className="text-xs font-body font-bold tracking-widest uppercase text-primary">Coach's Note</span>
-          </div>
-          <p className="font-body text-base leading-[2] text-foreground/80 italic">{day.coachNote}</p>
-          <p className="text-sm font-body text-primary mt-4 font-medium">— Your Willow Vibes Coach 💚</p>
+            <p className="font-body text-base leading-[2] text-foreground/80 italic">{day.coachNote}</p>
+            <p className="text-sm font-body text-primary mt-4 font-medium">— Your Willow Vibes Coach 💚</p>
           </div>
         </div>
 
@@ -442,70 +563,70 @@ export default function DayPage() {
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-purple-200/15 to-transparent rounded-tr-full" />
           <div className="relative z-10">
-          <h2 className="font-display text-2xl font-semibold text-foreground mb-6">Today's Reflection</h2>
-          <p className="text-xs font-body text-muted-foreground mb-6">🔒 Your reflections are private and saved locally.</p>
+            <h2 className="font-display text-2xl font-semibold text-foreground mb-6">Today's Reflection</h2>
+            <p className="text-xs font-body text-muted-foreground mb-6">🔒 Your reflections are private and saved locally.</p>
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-base font-display font-semibold text-foreground mb-2">
-                {day.reflectionPrompt}
-              </label>
-              <textarea
-                value={reflection}
-                onChange={(e) => setReflection(e.target.value)}
-                placeholder="Write your thoughts here..."
-                className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
-              />
-            </div>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-base font-display font-semibold text-foreground mb-2">
+                  {day.reflectionPrompt}
+                </label>
+                <textarea
+                  value={reflection}
+                  onChange={(e) => setReflection(e.target.value)}
+                  placeholder="Write your thoughts here..."
+                  className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                />
+              </div>
 
-            <div>
-              <label className="block text-base font-display font-semibold text-foreground mb-3">
-                On a scale of 1-10, how calm do you feel now compared to before?
-              </label>
-              <div className="px-2">
-                <Slider value={calmRating} onValueChange={setCalmRating} min={1} max={10} step={1} className="mb-2" />
-                <div className="flex justify-between text-xs font-body text-muted-foreground">
-                  <span>1 — Restless</span>
-                  <span className="text-lg font-display font-bold text-primary">{calmRating[0]}</span>
-                  <span>10 — Deeply Calm</span>
+              <div>
+                <label className="block text-base font-display font-semibold text-foreground mb-3">
+                  On a scale of 1-10, how calm do you feel now compared to before?
+                </label>
+                <div className="px-2">
+                  <Slider value={calmRating} onValueChange={setCalmRating} min={1} max={10} step={1} className="mb-2" />
+                  <div className="flex justify-between text-xs font-body text-muted-foreground">
+                    <span>1 — Restless</span>
+                    <span className="text-lg font-display font-bold text-primary">{calmRating[0]}</span>
+                    <span>10 — Deeply Calm</span>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-base font-display font-semibold text-foreground mb-2">
+                  What was the biggest challenge you faced today?
+                </label>
+                <textarea
+                  value={challengeText}
+                  onChange={(e) => setChallengeText(e.target.value)}
+                  placeholder="Describe any challenges..."
+                  className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                />
+              </div>
+
+              <div>
+                <label className="block text-base font-display font-semibold text-foreground mb-2">
+                  What's one thing you want to remember from today?
+                </label>
+                <textarea
+                  value={rememberText}
+                  onChange={(e) => setRememberText(e.target.value)}
+                  placeholder="One key takeaway..."
+                  className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                />
               </div>
             </div>
 
-            <div>
-              <label className="block text-base font-display font-semibold text-foreground mb-2">
-                What was the biggest challenge you faced today?
-              </label>
-              <textarea
-                value={challengeText}
-                onChange={(e) => setChallengeText(e.target.value)}
-                placeholder="Describe any challenges..."
-                className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
-              />
-            </div>
-
-            <div>
-              <label className="block text-base font-display font-semibold text-foreground mb-2">
-                What's one thing you want to remember from today?
-              </label>
-              <textarea
-                value={rememberText}
-                onChange={(e) => setRememberText(e.target.value)}
-                placeholder="One key takeaway..."
-                className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
-              />
-            </div>
-          </div>
-
-          <button
-            onClick={autoSave}
-            className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold text-base shadow-gold hover:shadow-lg transition-all"
-          >
-            Save Reflections
-          </button>
-          {(reflection || challengeText || rememberText) && (
-            <p className="text-center text-xs font-body text-primary mt-2">💾 Auto-saved</p>
-          )}
+            <button
+              onClick={autoSave}
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold text-base shadow-gold hover:shadow-lg transition-all"
+            >
+              Save Reflections
+            </button>
+            {(reflection || challengeText || rememberText) && (
+              <p className="text-center text-xs font-body text-primary mt-2">💾 Auto-saved</p>
+            )}
           </div>
         </div>
 
@@ -513,43 +634,43 @@ export default function DayPage() {
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-green-50/20 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-green-900/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="relative z-10">
-          <h3 className="font-display text-xl font-semibold text-foreground mb-6">Mark Your Progress</h3>
-          <div className="space-y-4">
-            {[
-              "I completed today's guided meditation",
-              "I listened to the audio OR read the script",
-              "I reflected on my experience",
-              "I'm ready for tomorrow's practice",
-            ].map((label, idx) => (
-              <label key={idx} className="flex items-center gap-4 cursor-pointer group p-2 rounded-xl hover:bg-card/40 transition-colors">
-                <div className="relative">
-                  <Checkbox
-                    checked={checklist[idx]}
-                    onCheckedChange={() => toggleCheck(idx)}
-                    className="w-7 h-7 rounded-lg border-2 border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all"
-                  />
-                </div>
-                <span className={`font-body text-base transition-colors ${checklist[idx] ? "text-primary font-medium line-through" : "text-foreground"}`}>
-                  {label}
-                </span>
-              </label>
-            ))}
-          </div>
-
-          {allComplete && (
-            <div className="mt-6 p-4 rounded-xl bg-primary/10 text-center animate-fade-in">
-              <p className="text-lg font-display font-semibold text-primary">🌟 Day {dayNumber} Complete!</p>
-              <p className="text-sm font-body text-foreground/70 mt-1">
-                You're building something powerful. {nextDay ? `See you tomorrow for Day ${nextDay}.` : "You completed the entire challenge! 🎉"}
-              </p>
+            <h3 className="font-display text-xl font-semibold text-foreground mb-6">Mark Your Progress</h3>
+            <div className="space-y-4">
+              {[
+                "I completed today's guided meditation",
+                "I listened to the audio OR read the script",
+                "I reflected on my experience",
+                "I'm ready for tomorrow's practice",
+              ].map((label, idx) => (
+                <label key={idx} className="flex items-center gap-4 cursor-pointer group p-2 rounded-xl hover:bg-card/40 transition-colors">
+                  <div className="relative">
+                    <Checkbox
+                      checked={checklist[idx]}
+                      onCheckedChange={() => toggleCheck(idx)}
+                      className="w-7 h-7 rounded-lg border-2 border-primary/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all"
+                    />
+                  </div>
+                  <span className={`font-body text-base transition-colors ${checklist[idx] ? "text-primary font-medium line-through" : "text-foreground"}`}>
+                    {label}
+                  </span>
+                </label>
+              ))}
             </div>
-          )}
 
-          <div className="mt-4 pt-4 border-t border-border flex items-center justify-center gap-4 text-sm font-body text-muted-foreground">
-            <span>🔥 Current streak: {completedDays.filter(Boolean).length} day{completedDays.filter(Boolean).length !== 1 ? "s" : ""}</span>
-            <span className="w-1 h-1 rounded-full bg-border" />
-            <span>Total: {completedDays.filter(Boolean).length}/30</span>
-          </div>
+            {allComplete && (
+              <div className="mt-6 p-4 rounded-xl bg-primary/10 text-center animate-fade-in">
+                <p className="text-lg font-display font-semibold text-primary">🌟 Day {dayNumber} Complete!</p>
+                <p className="text-sm font-body text-foreground/70 mt-1">
+                  You're building something powerful. {nextDay ? `See you tomorrow for Day ${nextDay}.` : "You completed the entire challenge! 🎉"}
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 pt-4 border-t border-border flex items-center justify-center gap-4 text-sm font-body text-muted-foreground">
+              <span>🔥 Current streak: {completedDays.filter(Boolean).length} day{completedDays.filter(Boolean).length !== 1 ? "s" : ""}</span>
+              <span className="w-1 h-1 rounded-full bg-border" />
+              <span>Total: {completedDays.filter(Boolean).length}/30</span>
+            </div>
           </div>
         </div>
 
@@ -620,37 +741,36 @@ export default function DayPage() {
             </button>
           )}
         </div>
-
-        {/* Day 30 completion screen */}
-        {dayNumber === 30 && allComplete && (
-          <div className="relative overflow-hidden bg-gradient-to-br from-amber-100/60 via-gold/20 to-rose-100/40 dark:from-amber-900/20 dark:via-gold/10 dark:to-rose-900/15 rounded-2xl p-10 text-center border border-gold/25 animate-fade-in shadow-elevated">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
-            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-rose-200/20 to-transparent rounded-tr-full" />
-            <div className="relative z-10">
-            <p className="text-5xl mb-4">🎉</p>
-            <h2 className="font-display text-3xl font-bold text-foreground mb-3">YOU COMPLETED THE 30-DAY JOURNEY!</h2>
-            <p className="font-body text-lg text-muted-foreground mb-6 max-w-md mx-auto">
-              You did something most people never do. Your brain has physically changed. Your practice has just begun.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-sm font-body text-foreground">
-              <div><span className="text-2xl font-display font-bold text-primary">30</span><br/>Days Completed</div>
-              <div><span className="text-2xl font-display font-bold text-gold">🔥 {completedDays.filter(Boolean).length}</span><br/>Day Streak</div>
-            </div>
-            <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold shadow-gold hover:shadow-lg transition-all">
-              Download Completion Certificate
-            </button>
-            </div>
-          </div>
-        )}
       </main>
 
-      {/* ─── FOOTER ─── */}
-      <footer className="bg-foreground text-card/70 py-8">
-        <div className="max-w-[800px] mx-auto px-6 text-center">
-          <p className="font-display text-sm text-card/50">Willow Vibes™ · Mind • Body • Discipline</p>
-          <p className="text-xs font-body mt-1 text-card/30">© 2026 Willow Vibes™ · hello@willowvibes.com</p>
+      {/* ─── WISDOM DIALOG ─── */}
+      {showWisdomDialog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl max-w-md w-full p-8 shadow-2xl border border-border/50">
+            <div className="flex items-start justify-between mb-4">
+              <span className="text-4xl">{selectedWisdom.icon}</span>
+              <button onClick={() => setShowWisdomDialog(false)} className="text-muted-foreground hover:text-foreground">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <h2 className="font-display text-2xl font-semibold text-foreground mb-3">{selectedWisdom.title}</h2>
+            <p className="font-body text-lg text-foreground/80 leading-relaxed mb-6 italic">{selectedWisdom.insight}</p>
+            <div className="space-y-2">
+              {WISDOM_CARDS.map((card, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedWisdom(card)}
+                  className={`w-full text-left p-3 rounded-lg transition-colors ${
+                    selectedWisdom.title === card.title ? "bg-primary/20 border border-primary/30" : "hover:bg-secondary/60"
+                  }`}
+                >
+                  <p className="text-sm font-body font-semibold text-foreground">{card.icon} {card.title}</p>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
     </div>
   );
 }
