@@ -19,7 +19,7 @@ const sosSessions = [
     desc: "Ultra-quick anxiety reset using 4-7-8 breathing.", 
     gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
     luxuryColor: "emerald",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Close your eyes. Place one hand on your chest, one on your belly.",
       "Inhale through your nose for 4 counts... 1... 2... 3... 4.",
@@ -38,7 +38,7 @@ const sosSessions = [
     desc: "5-4-3-2-1 grounding for acute anxiety.", 
     gradient: "from-rose-500/20 via-pink-500/10 to-transparent",
     luxuryColor: "rose",
-    image: "https://images.unsplash.com/photo-1499209974431-9ddd3e2f01f3?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "You are safe right now. This feeling is temporary. Let's ground you.",
       "Name 5 things you can SEE. Look around slowly. A wall. A light. Your hand.",
@@ -58,7 +58,7 @@ const sosSessions = [
     desc: "When everything feels like too much.", 
     gradient: "from-blue-500/20 via-indigo-500/10 to-transparent",
     luxuryColor: "blue",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Stop. Whatever you were doing — pause it.",
       "Take 5 deep breaths. In through nose... out through mouth.",
@@ -78,7 +78,7 @@ const sosSessions = [
     desc: "Can't sleep? This will help.", 
     gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
     luxuryColor: "indigo",
-    image: "https://images.unsplash.com/photo-1511295742364-917e703b5ca0?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1511295742364-917e703b5ca0?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Lie on your back. Close your eyes. Don't try to sleep — just rest.",
       "Starting at your toes, deliberately relax each body part.",
@@ -99,7 +99,7 @@ const sosSessions = [
     desc: "High-performance focus before important events.", 
     gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
     luxuryColor: "amber",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Sit upright. Feet flat on floor. Hands on thighs.",
       "Take 3 deep breaths to center yourself.",
@@ -118,7 +118,7 @@ const sosSessions = [
     desc: "Hold difficult emotions with deep compassion.", 
     gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
     luxuryColor: "purple",
-    image: "https://images.unsplash.com/photo-1516589174184-c685266e430c?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1516589174184-c685266e430c?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Find a quiet space. This is your time to feel whatever comes.",
       "Place both hands on your heart. Feel its rhythm.",
@@ -183,22 +183,22 @@ export default function SOSPage() {
     <AppLayout>
       <motion.div className="max-w-4xl mx-auto space-y-10 pb-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         
-        {/* ─── PREMIUM HEADER ─── */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-10 text-white shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl -ml-10 -mb-10" />
+        {/* ─── REFINED PREMIUM HEADER ─── */}
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 md:p-10 text-white shadow-2xl border border-white/5">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-[80px] -ml-10 -mb-10" />
           
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-gold">
-              <Zap className="w-10 h-10 text-white" />
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-gold via-gold-dark to-amber-700 flex items-center justify-center shadow-2xl shadow-gold/20 border border-white/10">
+              <Zap className="w-8 h-8 md:w-10 md:h-10 text-white" />
             </div>
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                <Star className="w-4 h-4 text-gold fill-gold" />
-                <span className="text-xs font-body font-bold tracking-widest uppercase text-gold">Premium SOS Relief</span>
+                <Star className="w-3.5 h-3.5 text-gold fill-gold" />
+                <span className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-gold/80">Elite SOS Protocol</span>
               </div>
-              <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">Instant Serenity</h1>
-              <p className="text-lg font-body text-slate-300 mt-2 max-w-lg">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
+              <h1 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tight">Instant Serenity</h1>
+              <p className="text-base md:text-lg font-body text-slate-400 mt-2 max-w-lg leading-relaxed">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
             </div>
           </div>
         </div>
@@ -207,99 +207,105 @@ export default function SOSPage() {
           {activeSession && (
             <motion.div
               key="active"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative overflow-hidden rounded-3xl bg-card border border-border/50 shadow-2xl"
+              initial={{ opacity: 0, scale: 0.98, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: -10 }}
+              className="relative overflow-hidden rounded-[2.5rem] bg-card border border-border/40 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)]"
             >
-              {/* Session Hero Image */}
-              <div className="h-64 relative">
-                <img src={activeSession.image} alt="" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+              {/* Session Hero Image with Premium Framing */}
+              <div className="h-72 md:h-80 relative overflow-hidden">
+                <img src={activeSession.image} alt="" className="w-full h-full object-cover scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2.5rem]" />
+                
                 <button 
                   onClick={() => { setActive(null); setRunning(false); }}
-                  className="absolute top-6 right-6 p-2 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-black/40 transition-all"
+                  className="absolute top-6 right-6 p-2.5 rounded-full bg-black/30 backdrop-blur-xl text-white border border-white/10 hover:bg-black/50 transition-all z-20"
                 >
                   <X className="w-5 h-5" />
                 </button>
-                <div className="absolute bottom-6 left-8">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20`}>
+                
+                <div className="absolute bottom-8 left-10 z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl">
                       {activeSession.icon}
                     </div>
                     <div>
-                      <h2 className="font-display text-3xl font-bold text-foreground">{activeSession.title}</h2>
-                      <p className="text-sm font-body text-muted-foreground">{fmtTime(timerSecs)} elapsed · {activeSession.duration}m protocol</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground tracking-tight">{activeSession.title}</h2>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <p className="text-sm font-body font-medium text-muted-foreground/80">{fmtTime(timerSecs)} elapsed · {activeSession.duration}m protocol</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-8 md:p-12">
+              <div className="p-10 md:p-16">
                 <motion.div
                   key={stepIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="min-h-[160px] flex flex-col justify-center"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="min-h-[180px] flex flex-col justify-center"
                 >
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-body font-bold uppercase tracking-tighter">Step {stepIndex + 1} of {activeSession.steps.length}</span>
-                    <div className="h-px flex-1 bg-border/50" />
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="px-4 py-1.5 rounded-full bg-primary/5 text-primary text-[10px] font-body font-bold uppercase tracking-[0.2em] border border-primary/10">Step {stepIndex + 1} of {activeSession.steps.length}</span>
+                    <div className="h-px flex-1 bg-gradient-to-r from-border/60 to-transparent" />
                   </div>
-                  <p className="font-display text-2xl md:text-3xl text-foreground leading-relaxed font-medium italic">
+                  <p className="font-display text-2xl md:text-4xl text-foreground leading-[1.4] font-medium italic tracking-tight">
                     "{activeSession.steps[stepIndex]}"
                   </p>
                 </motion.div>
 
                 {/* Premium Controls */}
-                <div className="mt-12 space-y-8">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
+                <div className="mt-14 space-y-10">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-center gap-5">
                       <button 
                         onClick={() => setRunning(!running)} 
-                        className="w-16 h-16 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-xl hover:scale-105 transition-all"
+                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-slate-950 text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
                       >
-                        {running ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-1" />}
+                        {running ? <Pause className="w-7 h-7 md:w-8 md:h-8" /> : <Play className="w-7 h-7 md:w-8 md:h-8 ml-1.5" />}
                       </button>
                       <button 
                         onClick={nextStep} 
-                        className="px-10 py-4 bg-gradient-to-r from-gold to-gold-dark text-white rounded-2xl text-base font-body font-bold shadow-gold hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                        className="px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white rounded-[1.25rem] text-base md:text-lg font-body font-bold shadow-[0_20px_40px_-12px_rgba(212,175,55,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(212,175,55,0.4)] hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border border-white/10"
                       >
                         {stepIndex < activeSession.steps.length - 1 ? "Continue Protocol" : "I Am Restored"}
-                        <ChevronRight className="w-5 h-5" />
+                        <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-6 p-4 rounded-2xl bg-secondary/30 border border-border/50">
+                    <div className="flex items-center gap-6 p-5 rounded-[1.5rem] bg-secondary/20 border border-border/40 backdrop-blur-sm">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${binauralActive ? 'bg-rose-500/20 text-rose-600' : 'bg-slate-200 text-slate-400'}`}>
+                        <div className={`p-2.5 rounded-xl transition-colors ${binauralActive ? 'bg-rose-500/20 text-rose-600 shadow-inner' : 'bg-slate-200/50 text-slate-400'}`}>
                           <Ear className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-body font-bold uppercase tracking-widest text-muted-foreground">Binaural Calm</p>
+                          <p className="text-[9px] font-body font-bold uppercase tracking-[0.2em] text-muted-foreground/70">Binaural Calm</p>
                           <button 
                             onClick={() => setBinauralActive(!binauralActive)}
-                            className={`text-xs font-body font-bold ${binauralActive ? 'text-rose-600' : 'text-slate-500'}`}
+                            className={`text-xs font-body font-bold transition-colors ${binauralActive ? 'text-rose-600' : 'text-slate-500 hover:text-slate-700'}`}
                           >
                             {binauralActive ? 'Active' : 'Disabled'}
                           </button>
                         </div>
                       </div>
                       {binauralActive && (
-                        <div className="w-32">
-                          <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} />
+                        <div className="w-32 md:w-40">
+                          <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} className="cursor-pointer" />
                         </div>
                       )}
                     </div>
                   </div>
 
                   {/* Progress Dots */}
-                  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-3">
                     {activeSession.steps.map((_, i) => (
                       <div 
                         key={i} 
-                        className={`h-1.5 rounded-full transition-all duration-500 ${
-                          i === stepIndex ? "w-8 bg-gold" : i < stepIndex ? "w-4 bg-primary/40" : "w-4 bg-secondary"
+                        className={`h-1.5 rounded-full transition-all duration-700 ${
+                          i === stepIndex ? "w-12 bg-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]" : i < stepIndex ? "w-6 bg-primary/30" : "w-6 bg-secondary/60"
                         }`} 
                       />
                     ))}
@@ -311,16 +317,16 @@ export default function SOSPage() {
         </AnimatePresence>
 
         {!active && (
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl font-bold text-foreground">Select Your Relief Kit</h2>
-              <div className="flex items-center gap-2 text-xs font-body font-bold text-gold uppercase tracking-widest">
-                <Award className="w-4 h-4" />
+          <div className="space-y-10">
+            <div className="flex items-center justify-between px-2">
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground tracking-tight">Select Your Relief Kit</h2>
+              <div className="flex items-center gap-2.5 text-[10px] font-body font-bold text-gold uppercase tracking-[0.3em] bg-gold/5 px-4 py-2 rounded-full border border-gold/10">
+                <Award className="w-3.5 h-3.5" />
                 Luxury Collection
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {sosSessions.map((s, i) => (
                 <motion.button
                   key={s.id}
@@ -328,23 +334,24 @@ export default function SOSPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => startSession(s.id)}
-                  className="group relative overflow-hidden rounded-3xl bg-card border border-border/50 text-left hover:shadow-2xl hover:-translate-y-1 transition-all duration-500"
+                  className="group relative overflow-hidden rounded-[2rem] bg-card border border-border/40 text-left hover:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-500"
                 >
-                  <div className="h-48 overflow-hidden">
-                    <img src={s.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-60`} />
+                  <div className="h-52 overflow-hidden relative">
+                    <img src={s.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-40 group-hover:opacity-20 transition-opacity`} />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-white/5 rounded-t-[2rem]" />
                   </div>
-                  <div className="p-6 relative">
-                    <div className="absolute -top-10 right-6 w-16 h-16 rounded-2xl bg-white shadow-xl flex items-center justify-center group-hover:rotate-6 transition-transform">
+                  <div className="p-7 relative">
+                    <div className="absolute -top-10 right-8 w-16 h-16 rounded-2xl bg-card shadow-2xl flex items-center justify-center group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 border border-border/50">
                       {s.icon}
                     </div>
-                    <h3 className="font-display text-xl font-bold text-foreground">{s.title}</h3>
-                    <p className="text-sm font-body text-muted-foreground mt-2 line-clamp-2">{s.desc}</p>
-                    <div className="flex items-center gap-4 mt-4">
-                      <span className="flex items-center gap-1.5 text-xs font-body font-bold text-primary">
+                    <h3 className="font-display text-xl md:text-2xl font-bold text-foreground tracking-tight">{s.title}</h3>
+                    <p className="text-sm font-body text-muted-foreground mt-2.5 line-clamp-2 leading-relaxed">{s.desc}</p>
+                    <div className="flex items-center gap-5 mt-5">
+                      <span className="flex items-center gap-2 text-[10px] font-body font-bold text-primary tracking-widest uppercase">
                         <Clock className="w-3.5 h-3.5" /> {s.duration} MIN
                       </span>
-                      <span className="flex items-center gap-1.5 text-xs font-body font-bold text-gold">
+                      <span className="flex items-center gap-2 text-[10px] font-body font-bold text-gold tracking-widest uppercase">
                         <Sparkles className="w-3.5 h-3.5" /> PREMIUM
                       </span>
                     </div>
@@ -355,22 +362,22 @@ export default function SOSPage() {
           </div>
         )}
 
-        {/* ─── CRISIS SUPPORT ─── */}
-        <div className="relative overflow-hidden rounded-3xl bg-rose-50 border border-rose-100 p-8 dark:bg-rose-950/20 dark:border-rose-900/30">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="w-14 h-14 rounded-2xl bg-rose-500 flex items-center justify-center shadow-lg shadow-rose-500/20 flex-shrink-0">
-              <AlertTriangle className="w-7 h-7 text-white" />
+        {/* ─── REFINED CRISIS SUPPORT ─── */}
+        <div className="relative overflow-hidden rounded-[2rem] bg-rose-50/50 border border-rose-100 p-8 md:p-10 dark:bg-rose-950/10 dark:border-rose-900/20 backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
+            <div className="w-16 h-16 rounded-2xl bg-rose-500 flex items-center justify-center shadow-2xl shadow-rose-500/20 flex-shrink-0 border border-white/10">
+              <AlertTriangle className="w-8 h-8 text-white" />
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-lg font-bold text-rose-900 dark:text-rose-100">Immediate Crisis Support</h3>
-              <p className="text-sm font-body text-rose-700 dark:text-rose-300 mt-1">
+              <h3 className="font-display text-xl font-bold text-rose-900 dark:text-rose-100 tracking-tight">Immediate Crisis Support</h3>
+              <p className="text-base font-body text-rose-700/80 dark:text-rose-300/70 mt-1.5 leading-relaxed">
                 If you are in immediate danger or experiencing a medical emergency, please contact professional services immediately.
               </p>
-              <div className="flex flex-wrap gap-4 mt-4">
-                <div className="px-4 py-2 rounded-xl bg-white/50 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100">
+              <div className="flex flex-wrap gap-4 mt-5">
+                <div className="px-5 py-2.5 rounded-xl bg-white shadow-sm dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100 tracking-wide">
                   US: 988 (Suicide & Crisis)
                 </div>
-                <div className="px-4 py-2 rounded-xl bg-white/50 dark:bg-rose-900/40 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100">
+                <div className="px-5 py-2.5 rounded-xl bg-white shadow-sm dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100 tracking-wide">
                   Text HOME to 741741
                 </div>
               </div>
@@ -379,13 +386,13 @@ export default function SOSPage() {
         </div>
 
         {/* ─── LUXURY FOOTER ─── */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-2">
-            <div className="h-px w-12 bg-border" />
-            <Fingerprint className="w-5 h-5 text-muted-foreground" />
-            <div className="h-px w-12 bg-border" />
+        <div className="text-center space-y-5 pt-10">
+          <div className="flex items-center justify-center gap-3">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-border" />
+            <Fingerprint className="w-6 h-6 text-muted-foreground/40" />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-border" />
           </div>
-          <p className="text-xs font-body text-muted-foreground uppercase tracking-[0.2em]">Mind Serenity Hub · Elite Wellness Protocol</p>
+          <p className="text-[10px] font-body text-muted-foreground/60 uppercase tracking-[0.4em] font-bold">Mind Serenity Hub · Elite Wellness Protocol</p>
         </div>
 
       </motion.div>
