@@ -78,7 +78,7 @@ const sosSessions = [
     desc: "Can't sleep? This will help.", 
     gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
     luxuryColor: "indigo",
-    image: "https://images.unsplash.com/photo-1511295742364-917e703b5ca0?auto=format&fit=crop&q=80&w=1200",
+    image: "https://images.unsplash.com/photo-1516589174184-c685266e430c?auto=format&fit=crop&q=80&w=1200&h=800",
     steps: [
       "Lie on your back. Close your eyes. Don't try to sleep — just rest.",
       "Starting at your toes, deliberately relax each body part.",
@@ -99,7 +99,7 @@ const sosSessions = [
     desc: "High-performance focus before important events.", 
     gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
     luxuryColor: "amber",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200",
+    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200&h=800",
     steps: [
       "Sit upright. Feet flat on floor. Hands on thighs.",
       "Take 3 deep breaths to center yourself.",
@@ -118,7 +118,7 @@ const sosSessions = [
     desc: "Hold difficult emotions with deep compassion.", 
     gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
     luxuryColor: "purple",
-    image: "https://images.unsplash.com/photo-1516589174184-c685266e430c?auto=format&fit=crop&q=80&w=1200",
+    image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80&w=1200&h=800",
     steps: [
       "Find a quiet space. This is your time to feel whatever comes.",
       "Place both hands on your heart. Feel its rhythm.",
