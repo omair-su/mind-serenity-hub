@@ -129,7 +129,11 @@ export default function DayPage() {
   const [intentionWord, setIntentionWord] = useState<string>(saved?.intentionWord || "");
   const [showIntention, setShowIntention] = useState(false);
   const [showPractice, setShowPractice] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState<VoiceKey>("sarah");
+  const [premiumGate, setPremiumGate] = useState<{ feature: string; description?: string } | null>(null);
   const tts = useTextToSpeech();
+  const { isPremium } = useIsPremium();
+  const isLockedDay = dayNumber >= 8 && !isPremium;
 
   // Reset TTS when navigating to a different day
   useEffect(() => {
