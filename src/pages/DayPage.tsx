@@ -367,15 +367,25 @@ export default function DayPage() {
                 const num = i + 1;
                 const isComplete = completedDays[i];
                 const isCurrent = num === dayNumber;
+                const locked = num >= 8 && !isPremium;
                 return (
                   <button
                     key={num}
-                    onClick={() => navigate(`/day/${num}`)}
-                    className={`w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
-                    title={`Day ${num}`}
+                    onClick={() => {
+                      if (locked) {
+                        setPremiumGate({
+                          feature: `Day ${num} is a Plus chapter`,
+                          description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
+                        });
+                        return;
+                      }
+                      navigate(`/day/${num}`);
+                    }}
+                    className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
+                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : locked ? "bg-card/40 text-muted-foreground/50" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
+                    title={locked ? `Day ${num} · Plus` : `Day ${num}`}
                   >
-                    {isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
+                    {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
                   </button>
                 );
               })}
