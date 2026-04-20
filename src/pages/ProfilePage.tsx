@@ -4,8 +4,10 @@ import { getProfile, saveProfile, UserProfile, getAllDayStates, getMoods, getTim
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Check, User, Bell, Palette, Database, Download, Trash2, Sparkles } from "lucide-react";
+import { Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { useIsPremium } from "@/hooks/useIsPremium";
+import { Link } from "react-router-dom";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
@@ -13,6 +15,14 @@ const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "�
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile>(getProfile());
   const [saved, setSaved] = useState(false);
+  const { isPremium } = useIsPremium();
+
+  const handleCancelSubscription = () => {
+    if (!window.confirm("Cancel Willow Plus? You'll keep access until the end of your current billing period.")) return;
+    // Paddle customer portal — opens billing management where users can cancel
+    window.open("https://customer-portal.paddle.com/", "_blank", "noopener,noreferrer");
+    toast.info("Opening Paddle billing portal in a new tab…");
+  };
 
   const update = (partial: Partial<UserProfile>) => {
     const next = { ...profile, ...partial };
@@ -178,10 +188,40 @@ export default function ProfilePage() {
         </Section>
 
         <Section icon={Sparkles} title="Subscription" gradient="from-gold/12 to-amber-500/5" iconColor="text-gold">
-          <div className="bg-gradient-to-r from-gold/8 to-amber-500/5 rounded-xl p-4 border border-gold/15">
-            <p className="font-body text-sm font-medium text-foreground">Complete Program — $147 (One-Time)</p>
-            <p className="text-xs font-body text-muted-foreground mt-1">Lifetime Access · Joined {new Date(profile.joinDate).toLocaleDateString()}</p>
-          </div>
+          {isPremium ? (
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25 flex items-start gap-3">
+                <Crown className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="font-body text-sm font-semibold text-foreground">Willow Plus — Active</p>
+                  <p className="text-xs font-body text-muted-foreground mt-1">Member since {new Date(profile.joinDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleCancelSubscription}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all"
+              >
+                <ExternalLink className="w-4 h-4" /> Manage or Cancel Subscription
+              </button>
+              <p className="text-[11px] font-body text-muted-foreground text-center leading-relaxed">
+                One-click cancellation via Paddle. You'll keep Plus access until the end of your billing period — no questions asked. Refund requests are honored within 14 days per our{" "}
+                <Link to="/legal/refund" className="underline hover:text-foreground">Refund Policy</Link>.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="bg-secondary/50 rounded-xl p-4 border border-border">
+                <p className="font-body text-sm font-medium text-foreground">Free Plan</p>
+                <p className="text-xs font-body text-muted-foreground mt-1">Days 1–7 unlocked · Member since {new Date(profile.joinDate).toLocaleDateString()}</p>
+              </div>
+              <Link to="/pricing" className="block">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white text-sm font-body font-bold shadow-lg hover:-translate-y-0.5 transition-all">
+                  <Crown className="w-4 h-4" /> Upgrade to Willow Plus
+                </button>
+              </Link>
+            </div>
+          )}
         </Section>
       </div>
     </AppLayout>

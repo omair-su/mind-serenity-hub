@@ -82,8 +82,8 @@ export default function LandingPage() {
             <Link to="/sign-in">
               <Button variant="outline" className={`rounded-full ${scrolled ? "" : "border-white/30 text-white hover:bg-white/10"}`}>Log In</Button>
             </Link>
-            <Link to="/app">
-              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full">Get Access — $97</Button>
+            <Link to="/pricing">
+              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-full">Start Free Trial</Button>
             </Link>
           </div>
           <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
@@ -98,7 +98,7 @@ export default function LandingPage() {
               ))}
               <div className="pt-4 space-y-2 border-t border-slate-200">
                 <Link to="/sign-in" className="block w-full"><Button variant="outline" className="w-full rounded-full">Log In</Button></Link>
-                <Link to="/app" className="block w-full"><Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full">Get Access — $97</Button></Link>
+                <Link to="/pricing" className="block w-full"><Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full">Start Free Trial</Button></Link>
               </div>
             </div>
           </motion.div>
@@ -167,75 +167,84 @@ export default function LandingPage() {
       <CurriculumSection />
       <TestimonialsSection />
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-slate-900 to-slate-800 overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 md:px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
-            <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-400 mb-4">One-Time Investment</h2>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Everything You Need.<br />
-              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">One Price. Forever.</span>
+      {/* Pricing Section — 3 tiers + Lifetime banner */}
+      <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-14">
+            <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-400 mb-4">Pricing</h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Find your calm.<br />
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">Choose your path.</span>
             </h3>
+            <p className="text-white/70 max-w-xl mx-auto">Every plan starts with a 7-day free trial of Plus. Cancel anytime.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Value Stack */}
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <h4 className="text-lg font-semibold text-white mb-6">What's included:</h4>
-              <div className="space-y-3">
-                {valueStack.map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between py-2 border-b border-white/10">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                      <span className="text-white/80 text-sm">{item.label}</span>
-                    </div>
-                    <span className="text-white/40 text-sm line-through">{item.value}</span>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6 items-stretch">
+            {/* Free */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-3xl bg-white/5 border border-white/10 p-7 flex flex-col">
+              <h4 className="text-xl font-bold text-white">Free</h4>
+              <p className="text-sm text-white/60 mt-1">Start your journey</p>
+              <div className="my-5"><span className="text-5xl font-bold text-white">$0</span><span className="text-white/60 ml-2">forever</span></div>
+              <ul className="space-y-2.5 flex-1">
+                {["Days 1–7 of the 30-Day Program","Basic narration voices","Mood tracker & gratitude","SOS protocols (3 free)"].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/85"><CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />{f}</li>
                 ))}
-              </div>
-              <div className="flex items-center justify-between pt-4 mt-2 border-t border-emerald-500/30">
-                <span className="text-white font-semibold">Total Value</span>
-                <span className="text-white/60 line-through text-lg">$350+</span>
-              </div>
+              </ul>
+              <Link to="/sign-in" className="mt-6"><Button variant="outline" className="w-full rounded-xl border-white/20 text-white hover:bg-white/10">Start free</Button></Link>
             </motion.div>
 
-            {/* Pricing Card */}
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-10">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold rounded-full shadow-lg">
-                  Save 67%
-                </div>
+            {/* Plus Yearly — featured */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="relative rounded-3xl bg-gradient-to-br from-emerald-600/30 via-teal-600/20 to-amber-500/10 border-2 border-amber-400 p-7 flex flex-col shadow-[0_25px_60px_-15px_rgba(245,158,11,0.4)] md:scale-105 md:-translate-y-2">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold uppercase tracking-widest shadow-lg">★ Most Popular</div>
+              <h4 className="text-xl font-bold text-white">Plus Yearly</h4>
+              <p className="text-sm text-amber-300 mt-1">Best value — save 50%</p>
+              <div className="mt-5"><span className="text-5xl font-bold text-white">$59.99</span><span className="text-white/70 ml-2">/year</span></div>
+              <p className="text-xs text-amber-300 mb-4">Just $4.99/month, billed yearly</p>
+              <ul className="space-y-2.5 flex-1">
+                {["All 30 days of the program","Premium ElevenLabs voices","AI Daily Insight & AI Coach","Sound Bed Designer + binaurals","Sleep stories, sound baths","Advanced analytics & PDF reports"].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white"><CheckCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />{f}</li>
+                ))}
+              </ul>
+              <Link to="/pricing" className="mt-6"><Button className="w-full rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 text-white font-bold py-6 shadow-lg">Start 7-day free trial</Button></Link>
+              <p className="text-[10px] text-white/60 mt-2 text-center">Then $59.99/year. Cancel anytime.</p>
+            </motion.div>
 
-                <div className="text-center mb-8">
-                  <div className="text-white/50 text-lg line-through mb-1">$297</div>
-                  <div className="text-6xl md:text-7xl font-bold text-white mb-2">
-                    $97
-                  </div>
-                  <div className="text-emerald-300 font-medium">One-time payment · Lifetime access</div>
-                </div>
-
-                <Link to="/app" className="block mb-6">
-                  <Button size="lg" className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-7 text-lg rounded-xl shadow-2xl shadow-emerald-500/20 font-semibold">
-                    <Zap className="w-5 h-5 mr-2" />
-                    Get Instant Access
-                  </Button>
-                </Link>
-
-                <div className="flex flex-col items-center gap-3 text-white/50 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" />
-                    <span>30-day money-back guarantee</span>
-                  </div>
-                  <span>No subscriptions. No hidden fees. Ever.</span>
-                </div>
-              </div>
+            {/* Plus Monthly */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="rounded-3xl bg-white/5 border border-white/10 p-7 flex flex-col">
+              <h4 className="text-xl font-bold text-white">Plus Monthly</h4>
+              <p className="text-sm text-white/60 mt-1">Flexible, no commitment</p>
+              <div className="my-5"><span className="text-5xl font-bold text-white">$9.99</span><span className="text-white/60 ml-2">/month</span></div>
+              <ul className="space-y-2.5 flex-1">
+                {["All 30 days of the program","Premium ElevenLabs voices","AI Daily Insight & AI Coach","Sound Bed Designer","Sleep stories, sound baths","Cancel anytime"].map(f => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-white/85"><CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />{f}</li>
+                ))}
+              </ul>
+              <Link to="/pricing" className="mt-6"><Button className="w-full rounded-xl bg-white text-slate-900 hover:bg-white/90 font-bold py-6">Start 7-day free trial</Button></Link>
+              <p className="text-[10px] text-white/60 mt-2 text-center">Then $9.99/month. Cancel anytime.</p>
             </motion.div>
           </div>
 
-          {/* Lifestyle Image */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="mt-16">
-            <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <img src={lifestyleImg} alt="Premium meditation lifestyle setup" className="w-full aspect-[3/1] object-cover" width={1200} height={800} loading="lazy" />
+          {/* Lifetime banner */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-10 rounded-3xl overflow-hidden relative bg-gradient-to-r from-slate-800 via-emerald-900/40 to-slate-800 border border-amber-400/40 p-6 sm:p-10">
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-amber-400/10 blur-3xl" />
+            <div className="relative grid md:grid-cols-[1fr_auto] gap-6 items-center">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/40 mb-3">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Founders Lifetime — Limited</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Pay once. Use forever.</h3>
+                <p className="text-sm sm:text-base text-white/70 max-w-xl leading-relaxed">
+                  Get every feature of Willow Plus — including all future content and AI upgrades — for a single payment. Available to the first 1,000 founders only.
+                </p>
+              </div>
+              <div className="md:text-right">
+                <div className="mb-3">
+                  <span className="text-4xl sm:text-5xl font-bold text-white">$199</span>
+                  <span className="text-sm text-white/60 ml-2 line-through">$599</span>
+                </div>
+                <Link to="/pricing"><Button className="w-full md:w-auto px-8 py-6 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 text-white font-bold shadow-lg">Claim Lifetime Access</Button></Link>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -247,13 +256,13 @@ export default function LandingPage() {
       <section className="py-20 md:py-28 bg-gradient-to-r from-emerald-600 to-teal-600">
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Your Mind Is Worth $97</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Find your calm. Start today.</h2>
             <p className="text-lg text-emerald-50 mb-8 max-w-xl mx-auto">
-              Join 10,000+ people who stopped scrolling and started transforming. 30-day guarantee.
+              Join thousands transforming their minds with Willow Plus. 7-day free trial. Cancel anytime.
             </p>
-            <Link to="/app">
+            <Link to="/pricing">
               <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 px-10 py-7 text-lg rounded-full font-semibold shadow-xl">
-                Start Your 30-Day Journey — $97
+                Start Your Free Trial
               </Button>
             </Link>
           </motion.div>
@@ -266,32 +275,36 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="text-lg font-bold mb-4">Willow Vibes™</h3>
-              <p className="text-slate-400 text-sm">Meditation backed by science. Designed for real life.</p>
+              <p className="text-slate-400 text-sm mb-3">Meditation backed by science. Designed for real life.</p>
+              <a href="mailto:support@willowvibes.com" className="text-emerald-400 hover:text-emerald-300 text-sm transition-colors">support@willowvibes.com</a>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><button onClick={() => scrollToSection("curriculum")} className="hover:text-white transition-colors text-left">Curriculum</button></li>
                 <li><button onClick={() => scrollToSection("science")} className="hover:text-white transition-colors text-left">Science</button></li>
-                <li><button onClick={() => scrollToSection("pricing")} className="hover:text-white transition-colors text-left">Pricing</button></li>
+                <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+                <li><a href="mailto:support@willowvibes.com" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+                <li><Link to="/legal/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/legal/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/legal/refund" className="hover:text-white transition-colors">Refund Policy</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 pt-8 text-center text-sm text-slate-400">
+          <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row gap-3 justify-between items-center text-sm text-slate-400">
             <p>&copy; 2026 Willow Vibes™. All rights reserved.</p>
+            <p className="text-xs">Secure payments by Paddle · Merchant of Record</p>
           </div>
         </div>
       </footer>
