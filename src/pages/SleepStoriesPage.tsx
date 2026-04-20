@@ -2,6 +2,8 @@ import { useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import { sleepStories, sleepStoryCategories } from "@/data/sleepStories";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
+import NarrationBar from "@/components/NarrationBar";
 import { Moon, Clock, Play, Pause, Loader2, Square, ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
 
 const storyGradients = [
@@ -20,6 +22,7 @@ export default function SleepStoriesPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [paragraphIndex, setParagraphIndex] = useState(0);
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("rain", 40);
 
   const story = sleepStories.find(s => s.id === activeStory);
   const filtered = activeCategory === "all" ? sleepStories : sleepStories.filter(s => s.category === activeCategory);
@@ -27,7 +30,15 @@ export default function SleepStoriesPage() {
   const playFullStory = () => {
     if (!story) return;
     const fullText = story.paragraphs.join("\n\n");
-    tts.generateAndPlay(fullText);
+    tts.generateAndPlay(fullText, {
+      trackKey: `sleep-story-${story.id}`,
+      category: "sleep_story",
+      title: story.title,
+      description: story.description,
+      voice: "george",
+      ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+      isPremium: true,
+    });
   };
 
   return (

@@ -3,6 +3,8 @@ import AppLayout from "@/components/AppLayout";
 import { Moon, Clock, Play, Pause, Loader2, Square } from "lucide-react";
 import sleepHero from "@/assets/sleep-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
+import NarrationBar from "@/components/NarrationBar";
 
 const sleepGradients = [
   "from-[hsl(var(--forest-deep))]/15 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/5",
@@ -38,8 +40,34 @@ export default function SleepPage() {
   const [active, setActive] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("ocean", 35);
 
   const activeSession = sleepMeditations.find(s => s.id === active);
+
+  const playStep = (idx: number) => {
+    if (!activeSession) return;
+    tts.generateAndPlay(activeSession.script[idx], {
+      trackKey: `sleep-${activeSession.id}-step-${idx}`,
+      category: "sleep_story",
+      title: `${activeSession.title} — Step ${idx + 1}`,
+      voice: "george",
+      ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+    });
+  };
+
+  const playFull = () => {
+    if (!activeSession) return;
+    const fullScript = activeSession.script.join("\n\n");
+    tts.generateAndPlay(fullScript, {
+      trackKey: `sleep-${activeSession.id}-full`,
+      category: "sleep_story",
+      title: activeSession.title,
+      description: activeSession.desc,
+      voice: "george",
+      ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+      isPremium: true,
+    });
+  };
 
   return (
     <AppLayout>
@@ -75,7 +103,7 @@ export default function SleepPage() {
                 </p>
                 <div className="flex justify-center mt-4">
                   <button
-                    onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(activeSession.script[stepIndex])}
+                    onClick={() => tts.hasAudio ? tts.togglePlayPause() : playStep(stepIndex)}
                     disabled={tts.isLoading}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary/15 to-[hsl(var(--sage))]/10 text-primary dark:text-[hsl(var(--sage))] text-sm font-body hover:from-primary/25 hover:to-[hsl(var(--sage))]/20 transition-all disabled:opacity-50"
                   >
@@ -108,7 +136,7 @@ export default function SleepPage() {
                   </button>
                 )}
                 <button
-                  onClick={() => { const fullScript = activeSession.script.join("\n\n"); tts.generateAndPlay(fullScript); }}
+                  onClick={playFull}
                   disabled={tts.isLoading}
                   className="px-4 py-2.5 bg-gradient-to-r from-primary/10 to-[hsl(var(--sage))]/10 rounded-xl text-sm font-body text-primary dark:text-[hsl(var(--sage))] hover:from-primary/20 hover:to-[hsl(var(--sage))]/20 disabled:opacity-50 transition-all"
                 >
@@ -164,6 +192,24 @@ export default function SleepPage() {
           </div>
         </div>
       </div>
+
+      {(tts.isPlaying || tts.isLoading || tts.hasAudio) && activeSession && (
+        <NarrationBar
+          title={activeSession.title}
+          subtitle={`Step ${stepIndex + 1} of ${activeSession.script.length}`}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={tts.togglePlayPause}
+          onClose={() => tts.stop()}
+          bed={ambient.bed}
+          bedVolume={ambient.volume}
+          onBedChange={ambient.setBed}
+          onBedVolumeChange={ambient.setVolume}
+        />
+      )}
     </AppLayout>
   );
 }

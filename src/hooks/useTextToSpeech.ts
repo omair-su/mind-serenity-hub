@@ -1,14 +1,23 @@
+// Premium narration hook — calls the generate-narration edge function,
+// which uses ElevenLabs studio voices and caches every track in storage.
+// Same script = instant cached playback (no re-billing).
 import { useState, useRef, useCallback, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const audioCache = new Map<string, string>();
+type VoiceKey = "sarah" | "george" | "matilda" | "charlie";
 
-async function getCacheKey(text: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 40);
+interface GenerateOptions {
+  trackKey: string;
+  category: "body_scan" | "sleep_story" | "daily_meditation" | "sound_bath" | "affirmation" | "walking";
+  title: string;
+  description?: string;
+  voice?: VoiceKey;
+  ambientBed?: "rain" | "ocean" | "forest" | "fire" | "wind" | "creek" | "birds" | "night" | "bowls" | null;
+  isPremium?: boolean;
 }
+
+// Lightweight in-memory URL cache so re-playing in the same session is instant
+const sessionCache = new Map<string, string>();
 
 export function useTextToSpeech() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,88 +43,105 @@ export function useTextToSpeech() {
   useEffect(() => {
     return () => {
       cleanup();
-      audioCache.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [cleanup]);
 
-  const generateAndPlay = useCallback(async (text: string, voiceId?: string) => {
-    if (!text) return;
+  /**
+   * Generate (or fetch from cache) and immediately play narration.
+   *
+   * Backward-compatible: pass just (text) for legacy calls — we'll auto-derive
+   * a stable trackKey from the text so cache works without disruption.
+   * For premium pages, pass full options for proper cataloging.
+   */
+  const generateAndPlay = useCallback(
+    async (text: string, optionsOrVoiceId?: string | GenerateOptions) => {
+      if (!text) return;
+      setError(null);
 
-    setError(null);
-    const cacheKey = await getCacheKey(text + (voiceId || ""));
-
-    let audioUrl = audioCache.get(cacheKey);
-
-    if (!audioUrl) {
-      setIsLoading(true);
-      try {
-        const response = await fetch("/api/trpc/textToSpeech.generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ json: { text, voiceId } }),
-        });
-
-        if (!response.ok) {
-          const err = await response.text();
-          throw new Error(`TTS failed: ${err}`);
-        }
-
-        const data = await response.json();
-        const result = data?.result?.data?.json;
-        if (!result?.audio) throw new Error("No audio returned from server");
-
-        const binary = atob(result.audio);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        const blob = new Blob([bytes], { type: result.contentType || "audio/mpeg" });
-        audioUrl = URL.createObjectURL(blob);
-        audioCache.set(cacheKey, audioUrl);
-      } catch (e: unknown) {
-        const msg = e instanceof Error ? e.message : "Audio generation failed";
-        setError(msg);
-        setIsLoading(false);
-        return;
+      // Build options — support legacy (text only) and premium (full opts) calls
+      let opts: GenerateOptions;
+      if (!optionsOrVoiceId || typeof optionsOrVoiceId === "string") {
+        // Legacy mode: derive a stable key from the text
+        const hash = await sha1(text);
+        opts = {
+          trackKey: `legacy-${hash.slice(0, 16)}`,
+          category: "daily_meditation",
+          title: text.slice(0, 60),
+        };
+      } else {
+        opts = optionsOrVoiceId;
       }
-      setIsLoading(false);
-    }
 
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+      const cacheKey = `${opts.trackKey}::${opts.voice || "default"}`;
+      let audioUrl = sessionCache.get(cacheKey);
 
-    const audio = new Audio(audioUrl);
-    audioRef.current = audio;
+      if (!audioUrl) {
+        setIsLoading(true);
+        try {
+          const { data, error: invokeError } = await supabase.functions.invoke(
+            "generate-narration",
+            {
+              body: {
+                trackKey: opts.trackKey,
+                category: opts.category,
+                title: opts.title,
+                description: opts.description,
+                script: text,
+                voice: opts.voice,
+                ambientBed: opts.ambientBed ?? null,
+                isPremium: opts.isPremium ?? false,
+              },
+            }
+          );
 
-    audio.addEventListener("loadedmetadata", () => {
-      setDuration(audio.duration);
-    });
+          if (invokeError) throw new Error(invokeError.message);
+          if (!data?.track?.public_url) throw new Error("No audio URL returned");
 
-    audio.addEventListener("ended", () => {
-      setIsPlaying(false);
-      setProgress(100);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    });
-
-    audio.addEventListener("error", () => {
-      setError("Audio playback failed");
-      setIsPlaying(false);
-    });
-
-    try {
-      await audio.play();
-      setIsPlaying(true);
-
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = setInterval(() => {
-        if (audio.duration > 0) {
-          setCurrentTime(audio.currentTime);
-          setProgress((audio.currentTime / audio.duration) * 100);
+          audioUrl = data.track.public_url;
+          sessionCache.set(cacheKey, audioUrl);
+        } catch (e: unknown) {
+          const msg = e instanceof Error ? e.message : "Audio generation failed";
+          setError(msg);
+          setIsLoading(false);
+          return;
         }
-      }, 250);
-    } catch {
-      setError("Could not play audio. Try clicking play again.");
-    }
-  }, []);
+        setIsLoading(false);
+      }
+
+      if (audioRef.current) audioRef.current.pause();
+
+      const audio = new Audio(audioUrl);
+      audio.preload = "auto";
+      audioRef.current = audio;
+
+      audio.addEventListener("loadedmetadata", () => setDuration(audio.duration));
+      audio.addEventListener("ended", () => {
+        setIsPlaying(false);
+        setProgress(100);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      });
+      audio.addEventListener("error", () => {
+        setError("Audio playback failed");
+        setIsPlaying(false);
+      });
+
+      try {
+        await audio.play();
+        setIsPlaying(true);
+
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+          if (audio.duration > 0) {
+            setCurrentTime(audio.currentTime);
+            setProgress((audio.currentTime / audio.duration) * 100);
+          }
+        }, 250);
+      } catch {
+        setError("Tap play again to start audio");
+      }
+    },
+    []
+  );
 
   const togglePlayPause = useCallback(() => {
     if (!audioRef.current) return;
@@ -137,9 +163,7 @@ export function useTextToSpeech() {
     }
   }, [isPlaying]);
 
-  const stop = useCallback(() => {
-    cleanup();
-  }, [cleanup]);
+  const stop = useCallback(() => cleanup(), [cleanup]);
 
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60);
@@ -160,4 +184,11 @@ export function useTextToSpeech() {
     formatTime,
     hasAudio: !!audioRef.current,
   };
+}
+
+async function sha1(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }

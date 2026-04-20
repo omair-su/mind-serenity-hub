@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Sparkles, Heart, Play, Pause, Loader2, RotateCcw, Star } from "lucide-react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
+import NarrationBar from "@/components/NarrationBar";
 
 const categories = [
   { id: "morning", label: "Morning", icon: "🌅" },
@@ -98,6 +100,7 @@ export default function AffirmationPage() {
   });
   const [bgIdx, setBgIdx] = useState(0);
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("silence", 30);
 
   const currentList = affirmations[selectedCategory] || affirmations.morning;
   const currentAffirmation = currentList[currentIndex];
@@ -126,7 +129,13 @@ export default function AffirmationPage() {
     if (tts.hasAudio) {
       tts.togglePlayPause();
     } else {
-      tts.generateAndPlay(currentAffirmation);
+      tts.generateAndPlay(currentAffirmation, {
+        trackKey: `affirmation-${selectedCategory}-${currentIndex}`,
+        category: "affirmation",
+        title: `${selectedCategory} affirmation`,
+        voice: "matilda",
+        ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+      });
     }
   };
 
@@ -267,6 +276,24 @@ export default function AffirmationPage() {
           </p>
         </div>
       </div>
+
+      {(tts.isPlaying || tts.isLoading || tts.hasAudio) && (
+        <NarrationBar
+          title="Affirmation"
+          subtitle={selectedCategory}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={tts.togglePlayPause}
+          onClose={() => tts.stop()}
+          bed={ambient.bed}
+          bedVolume={ambient.volume}
+          onBedChange={ambient.setBed}
+          onBedVolumeChange={ambient.setVolume}
+        />
+      )}
     </AppLayout>
   );
 }

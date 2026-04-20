@@ -2,12 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Play, Pause, RotateCcw, Sparkles, Volume2, Loader2 } from "lucide-react";
+import { Play, RotateCcw, Sparkles, Loader2 } from "lucide-react";
 import bodyscanHero from "@/assets/bodyscan-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
 import { bodyScanZones, bodyScanIntroScript, bodyScanOutroScript } from "@/data/bodyScanScripts";
 import ActiveZonePanel from "@/components/bodyscan/ActiveZonePanel";
 import ZoneCard from "@/components/bodyscan/ZoneCard";
+import NarrationBar from "@/components/NarrationBar";
 
 export default function BodyScanPage() {
   const [activeZone, setActiveZone] = useState<string | null>(null);
@@ -19,6 +21,20 @@ export default function BodyScanPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("forest", 30);
+
+  const playZone = (id: string) => {
+    const z = bodyScanZones.find((zz) => zz.id === id);
+    if (!z) return;
+    tts.generateAndPlay(z.guidanceScript, {
+      trackKey: `body-scan-${id}`,
+      category: "body_scan",
+      title: z.label,
+      description: z.description,
+      voice: "sarah",
+      isPremium: false,
+    });
+  };
 
   const currentZone = bodyScanZones.find((z) => z.id === activeZone);
   const totalDuration = bodyScanZones.reduce((sum, z) => sum + z.duration, 0);
@@ -39,12 +55,17 @@ export default function BodyScanPage() {
               const nextZone = bodyScanZones[idx + 1];
               setActiveZone(nextZone.id);
               tts.stop();
-              setTimeout(() => tts.generateAndPlay(nextZone.guidanceScript), 500);
+              setTimeout(() => playZone(nextZone.id), 500);
               return 0;
             } else {
               setIsScanning(false);
               tts.stop();
-              setTimeout(() => tts.generateAndPlay(bodyScanOutroScript), 500);
+              setTimeout(() => tts.generateAndPlay(bodyScanOutroScript, {
+                trackKey: "body-scan-outro",
+                category: "body_scan",
+                title: "Closing Reflection",
+                voice: "sarah",
+              }), 500);
             }
           } else {
             setIsScanning(false);
@@ -71,7 +92,14 @@ export default function BodyScanPage() {
     setActiveZone(bodyScanZones[0].id);
     setZoneTimer(0);
     setIsScanning(true);
-    tts.generateAndPlay(bodyScanIntroScript + " " + bodyScanZones[0].guidanceScript);
+    tts.generateAndPlay(bodyScanIntroScript + " " + bodyScanZones[0].guidanceScript, {
+      trackKey: `body-scan-full-intro-${bodyScanZones[0].id}`,
+      category: "body_scan",
+      title: "Full Body Scan",
+      description: "Guided journey from crown to toes",
+      voice: "sarah",
+      isPremium: false,
+    });
   };
 
   const toggleZone = (id: string) => {
@@ -84,8 +112,7 @@ export default function BodyScanPage() {
       setActiveZone(id);
       setZoneTimer(0);
       setIsScanning(true);
-      const zone = bodyScanZones.find((z) => z.id === id);
-      if (zone) tts.generateAndPlay(zone.guidanceScript);
+      playZone(id);
     }
   };
 
@@ -94,7 +121,7 @@ export default function BodyScanPage() {
     if (tts.isPlaying || tts.hasAudio) {
       tts.togglePlayPause();
     } else {
-      tts.generateAndPlay(currentZone.guidanceScript);
+      playZone(currentZone.id);
     }
   };
 
@@ -156,26 +183,7 @@ export default function BodyScanPage() {
           </div>
         )}
 
-        {(tts.isPlaying || tts.isLoading) && (
-          <div className="rounded-xl bg-card border border-primary/20 p-3 flex items-center gap-3 shadow-soft">
-            {tts.isLoading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <Volume2 className="w-4 h-4 text-primary animate-pulse" />}
-            <div className="flex-1">
-              <p className="text-xs font-body font-semibold text-foreground">
-                {tts.isLoading ? "Generating narration..." : "Playing guided narration"}
-              </p>
-              {tts.duration > 0 && (
-                <p className="text-[10px] font-body text-muted-foreground">
-                  {tts.formatTime(tts.currentTime)} / {tts.formatTime(tts.duration)}
-                </p>
-              )}
-            </div>
-            {tts.isPlaying && (
-              <Button size="sm" variant="ghost" onClick={() => tts.togglePlayPause()} className="h-7 px-2">
-                <Pause className="w-3 h-3" />
-              </Button>
-            )}
-          </div>
-        )}
+        {/* Premium narration bar fades in here once playback starts (rendered at end of file) */}
 
         {currentZone && (
           <ActiveZonePanel
@@ -206,12 +214,40 @@ export default function BodyScanPage() {
             <div className="text-4xl mb-2">🧘✨</div>
             <h3 className="font-display text-xl font-bold text-foreground mb-1">Full Body Scan Complete</h3>
             <p className="text-sm font-body text-muted-foreground">You've released tension from every zone. Your body thanks you.</p>
-            <Button onClick={() => tts.generateAndPlay(bodyScanOutroScript)} variant="outline" className="mt-3" disabled={tts.isLoading}>
-              <Volume2 className="w-4 h-4 mr-2" /> Play Closing Narration
+            <Button
+              onClick={() => tts.generateAndPlay(bodyScanOutroScript, {
+                trackKey: "body-scan-outro",
+                category: "body_scan",
+                title: "Closing Reflection",
+                voice: "sarah",
+              })}
+              variant="outline"
+              className="mt-3"
+              disabled={tts.isLoading}
+            >
+              <Sparkles className="w-4 h-4 mr-2" /> Play Closing Narration
             </Button>
           </div>
         )}
       </div>
+
+      {(tts.isPlaying || tts.isLoading || tts.hasAudio) && (
+        <NarrationBar
+          title={currentZone?.label ?? "Body Scan"}
+          subtitle={currentZone ? `Zone ${bodyScanZones.findIndex(z => z.id === currentZone.id) + 1} of ${bodyScanZones.length}` : "Guided audio"}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={tts.togglePlayPause}
+          onClose={() => tts.stop()}
+          bed={ambient.bed}
+          bedVolume={ambient.volume}
+          onBedChange={ambient.setBed}
+          onBedVolumeChange={ambient.setVolume}
+        />
+      )}
     </AppLayout>
   );
 }
