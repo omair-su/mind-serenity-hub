@@ -79,7 +79,8 @@ export default function AmbientMusicPlayer({ defaultTrack, allowSwitch = true, c
         <button
           onClick={toggle}
           className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-md hover:scale-105 transition-transform flex-shrink-0"
-          aria-label={playing ? "Pause ambient music" : "Play ambient music"}
+          aria-label={playing ? "Stop ambient music" : "Play ambient music"}
+          title={playing ? "Stop" : "Play"}
         >
           {playing ? <Pause className="w-5 h-5 text-white" /> : <Play className="w-5 h-5 text-white ml-0.5" />}
         </button>
