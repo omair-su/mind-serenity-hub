@@ -21,6 +21,20 @@ export default function BodyScanPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("forest", 30);
+
+  const playZone = (id: string) => {
+    const z = bodyScanZones.find((zz) => zz.id === id);
+    if (!z) return;
+    tts.generateAndPlay(z.guidanceScript, {
+      trackKey: `body-scan-${id}`,
+      category: "body_scan",
+      title: z.label,
+      description: z.description,
+      voice: "sarah",
+      isPremium: false,
+    });
+  };
 
   const currentZone = bodyScanZones.find((z) => z.id === activeZone);
   const totalDuration = bodyScanZones.reduce((sum, z) => sum + z.duration, 0);
@@ -41,12 +55,17 @@ export default function BodyScanPage() {
               const nextZone = bodyScanZones[idx + 1];
               setActiveZone(nextZone.id);
               tts.stop();
-              setTimeout(() => tts.generateAndPlay(nextZone.guidanceScript), 500);
+              setTimeout(() => playZone(nextZone.id), 500);
               return 0;
             } else {
               setIsScanning(false);
               tts.stop();
-              setTimeout(() => tts.generateAndPlay(bodyScanOutroScript), 500);
+              setTimeout(() => tts.generateAndPlay(bodyScanOutroScript, {
+                trackKey: "body-scan-outro",
+                category: "body_scan",
+                title: "Closing Reflection",
+                voice: "sarah",
+              }), 500);
             }
           } else {
             setIsScanning(false);
