@@ -865,13 +865,22 @@ export default function DayPage() {
         title={day.title}
         paragraphs={day.guidedPractice}
         tts={tts}
+        voice={selectedVoice}
+        isPremium={isPremium && !FREE_VOICES.includes(selectedVoice)}
         onClose={() => {
           setShowPractice(false);
           tts.stop();
-          // Capture mood-after via the calmRating slider state
           setMoodAfter(calmRating);
           toggleCheck(0);
         }}
+      />
+
+      {/* ─── PREMIUM LOCK MODAL ─── */}
+      <PremiumLockModal
+        open={!!premiumGate}
+        onClose={() => setPremiumGate(null)}
+        feature={premiumGate?.feature ?? ""}
+        description={premiumGate?.description}
       />
     </div>
   );
