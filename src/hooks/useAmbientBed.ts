@@ -2,7 +2,7 @@
 // Uses HTMLAudioElement with synthetic streams from the existing soundEngine
 // where possible, but defaults to high-quality CDN-hosted nature loops.
 import { useEffect, useRef, useState, useCallback } from "react";
-import { startSound, stopSound, setSoundVolume } from "@/lib/soundEngine";
+import { startSound, stopSound, setVolume as setSoundVolume } from "@/lib/soundEngine";
 
 export type AmbientBedId =
   | "silence"
