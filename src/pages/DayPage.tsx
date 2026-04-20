@@ -324,7 +324,35 @@ export default function DayPage() {
       <main className="max-w-[800px] mx-auto px-6 py-12 space-y-12">
 
         {/* ─── AI DAILY INSIGHT (personalized framing) ─── */}
-        <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
+        {isPremium ? (
+          <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
+        ) : (
+          <button
+            onClick={() => setPremiumGate({
+              feature: "AI Daily Insight",
+              description: "A personalized AI-crafted framing for today's practice — written for your week, your streak, and your patterns. Plus members get a fresh insight every day.",
+            })}
+            className="relative w-full overflow-hidden rounded-2xl text-left bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--charcoal))] p-6 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.4)] border border-[hsl(var(--gold))]/25 hover:scale-[1.01] transition-transform"
+          >
+            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[hsl(var(--gold))]/15 blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0">
+                <Lock className="w-4 h-4 text-[hsl(var(--gold))]" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))] mb-1.5">
+                  Today, for you · Plus
+                </p>
+                <p className="font-display text-base text-white/90 leading-relaxed italic">
+                  "Unlock a personalized AI reflection written for your week and your patterns…"
+                </p>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-body font-semibold text-[hsl(var(--gold))]">
+                  <Crown className="w-3 h-3" /> Unlock with Willow Plus
+                </span>
+              </div>
+            </div>
+          </button>
+        )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
