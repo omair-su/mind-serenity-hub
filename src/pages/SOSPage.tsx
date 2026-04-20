@@ -261,7 +261,7 @@ export default function SOSPage() {
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2.5rem]" />
                 
                 <button 
-                  onClick={() => { setActive(null); setRunning(false); }}
+                  onClick={closeSession}
                   className="absolute top-6 right-6 p-2.5 rounded-full bg-black/30 backdrop-blur-xl text-white border border-white/10 hover:bg-black/50 transition-all z-20"
                 >
                   <X className="w-5 h-5" />
@@ -297,6 +297,12 @@ export default function SOSPage() {
                   <p className="font-display text-2xl md:text-4xl text-foreground leading-[1.4] font-medium italic tracking-tight">
                     "{activeSession.steps[stepIndex]}"
                   </p>
+
+                  {/* Animated breathing orb synced with the step */}
+                  <BreathingOrb
+                    isActive={running}
+                    color={orbColorMap[(activeSession as any).luxuryColor] ?? "from-primary/60 to-gold/60"}
+                  />
                 </motion.div>
 
                 {/* Premium Controls */}
@@ -358,6 +364,36 @@ export default function SOSPage() {
           )}
         </AnimatePresence>
 
+        {/* ─── POST-SESSION COMPANION CHECK-IN ─── */}
+        <AnimatePresence>
+          {completed && !active && (
+            <motion.div
+              key="completed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-5"
+            >
+              <div className="flex items-center gap-3 px-2">
+                <div className="p-2 rounded-xl bg-emerald-500/15">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-foreground tracking-tight">Protocol complete</h3>
+                  <p className="text-xs font-body text-muted-foreground">Take a moment to land. Your companion is here.</p>
+                </div>
+                <button
+                  onClick={() => setCompleted(null)}
+                  className="ml-auto text-xs font-body text-muted-foreground hover:text-foreground"
+                >
+                  Dismiss
+                </button>
+              </div>
+              <AICompanionChat protocolTitle={completed.title} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {!active && (
           <div className="space-y-10">
             <div className="flex items-center justify-between px-2">
@@ -369,7 +405,7 @@ export default function SOSPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {sosSessions.map((s, i) => (
+              {allSessions.map((s, i) => (
                 <motion.button
                   key={s.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -404,28 +440,8 @@ export default function SOSPage() {
           </div>
         )}
 
-        {/* ─── REFINED CRISIS SUPPORT ─── */}
-        <div className="relative overflow-hidden rounded-[2rem] bg-rose-50/50 border border-rose-100 p-8 md:p-10 dark:bg-rose-950/10 dark:border-rose-900/20 backdrop-blur-sm">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
-            <div className="w-16 h-16 rounded-2xl bg-rose-500 flex items-center justify-center shadow-2xl shadow-rose-500/20 flex-shrink-0 border border-white/10">
-              <AlertTriangle className="w-8 h-8 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-rose-900 dark:text-rose-100 tracking-tight">Immediate Crisis Support</h3>
-              <p className="text-base font-body text-rose-700/80 dark:text-rose-300/70 mt-1.5 leading-relaxed">
-                If you are in immediate danger or experiencing a medical emergency, please contact professional services immediately.
-              </p>
-              <div className="flex flex-wrap gap-4 mt-5">
-                <div className="px-5 py-2.5 rounded-xl bg-white shadow-sm dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100 tracking-wide">
-                  US: 988 (Suicide & Crisis)
-                </div>
-                <div className="px-5 py-2.5 rounded-xl bg-white shadow-sm dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800 text-xs font-body font-bold text-rose-900 dark:text-rose-100 tracking-wide">
-                  Text HOME to 741741
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* ─── REGION-AWARE EMERGENCY CONTACTS ─── */}
+        <EmergencyContacts />
 
         {/* ─── LUXURY FOOTER ─── */}
         <div className="text-center space-y-5 pt-10">
