@@ -276,6 +276,24 @@ export default function AffirmationPage() {
           </p>
         </div>
       </div>
+
+      {(tts.isPlaying || tts.isLoading || tts.hasAudio) && (
+        <NarrationBar
+          title="Affirmation"
+          subtitle={selectedCategory}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={tts.togglePlayPause}
+          onClose={() => tts.stop()}
+          bed={ambient.bed}
+          bedVolume={ambient.volume}
+          onBedChange={ambient.setBed}
+          onBedVolumeChange={ambient.setVolume}
+        />
+      )}
     </AppLayout>
   );
 }

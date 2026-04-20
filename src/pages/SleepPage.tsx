@@ -192,6 +192,24 @@ export default function SleepPage() {
           </div>
         </div>
       </div>
+
+      {(tts.isPlaying || tts.isLoading || tts.hasAudio) && activeSession && (
+        <NarrationBar
+          title={activeSession.title}
+          subtitle={`Step ${stepIndex + 1} of ${activeSession.script.length}`}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={tts.togglePlayPause}
+          onClose={() => tts.stop()}
+          bed={ambient.bed}
+          bedVolume={ambient.volume}
+          onBedChange={ambient.setBed}
+          onBedVolumeChange={ambient.setVolume}
+        />
+      )}
     </AppLayout>
   );
 }
