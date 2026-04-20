@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { FREQUENCY_PRESETS, startBinaural, stopBinaural, setBinauralVolume, isBinauralPlaying } from "@/lib/binauralBeats";
-import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info } from "lucide-react";
+import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info, Music } from "lucide-react";
 import soundbathHero from "@/assets/soundbath-hero.jpg";
+import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
+import { pickTrackByMood } from "@/lib/realAmbientTracks";
 export default function SoundBathPage() {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.3);

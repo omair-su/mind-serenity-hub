@@ -212,7 +212,7 @@ export default function HomeFeed() {
         </div>
       </div>
 
-      {/* AI-driven recommendations */}
+      {/* AI-driven recommendations (smart, local heuristics) */}
       {recommendations.length > 0 && (
         <div>
           <h3 className="font-display text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -241,6 +241,46 @@ export default function HomeFeed() {
               </motion.div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* AI-powered: "Because you..." section */}
+      {(aiLoading || aiRecs.length > 0) && (
+        <div>
+          <h3 className="font-display text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+            <Wand2 className="w-4 h-4 text-[hsl(var(--gold))]" />
+            Hand-picked by your AI coach
+          </h3>
+          {aiLoading && aiRecs.length === 0 ? (
+            <div className="space-y-2">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="h-14 rounded-xl bg-secondary/40 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {aiRecs.map((rec, i) => (
+                <motion.div
+                  key={rec.path + rec.label + i}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.08 }}
+                >
+                  <Link
+                    to={rec.path}
+                    className="group flex items-center gap-3 p-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))]/8 via-card to-transparent border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:shadow-[var(--shadow-soft-val)] transition-all"
+                  >
+                    <span className="text-xl">{rec.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-body text-sm font-semibold text-foreground truncate">{rec.label}</p>
+                      <p className="font-body text-[11px] text-muted-foreground italic">{rec.reason}</p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-[hsl(var(--gold))] group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

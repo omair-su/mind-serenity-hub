@@ -10,6 +10,8 @@ import { bodyScanZones, bodyScanIntroScript, bodyScanOutroScript } from "@/data/
 import ActiveZonePanel from "@/components/bodyscan/ActiveZonePanel";
 import ZoneCard from "@/components/bodyscan/ZoneCard";
 import NarrationBar from "@/components/NarrationBar";
+import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
+import { pickTrackByMood } from "@/lib/realAmbientTracks";
 
 export default function BodyScanPage() {
   const [activeZone, setActiveZone] = useState<string | null>(null);

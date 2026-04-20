@@ -5,6 +5,8 @@ import sleepHero from "@/assets/sleep-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
 import NarrationBar from "@/components/NarrationBar";
+import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
+import { pickTrackByMood } from "@/lib/realAmbientTracks";
 
 const sleepGradients = [
   "from-[hsl(var(--forest-deep))]/15 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/5",
