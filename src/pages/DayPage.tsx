@@ -355,57 +355,8 @@ export default function DayPage() {
           </div>
         </div>
 
-        {/* ─── PREMIUM BINAURAL BEATS PANEL ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-rose-500/15 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-rose-200/20 to-transparent" />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2.5 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-500/20 to-pink-500/20 flex items-center justify-center">
-                <Music className="w-5 h-5 text-rose-600" />
-              </div>
-              <div>
-                <p className="text-xs font-body font-bold tracking-widest uppercase text-rose-600">Premium Feature</p>
-                <h3 className="font-display text-lg font-semibold text-foreground">Binaural Beats for Deep Focus</h3>
-              </div>
-            </div>
-            <p className="text-sm font-body text-foreground/80 mb-6 leading-relaxed">Enhance your meditation with scientifically-tuned binaural frequencies. Each frequency targets different brainwave states for optimal results.</p>
-            
-            <div className="space-y-4">
-              {BINAURAL_PRESETS.map((preset, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedFrequency(preset)}
-                  className={`w-full p-4 rounded-xl transition-all border-2 text-left ${
-                    selectedFrequency.name === preset.name
-                      ? `border-rose-500 bg-gradient-to-r ${preset.color} text-white shadow-lg`
-                      : "border-border/30 bg-card/40 hover:bg-card/60 text-foreground"
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-body font-semibold text-sm">{preset.name}</p>
-                      <p className={`text-xs font-body ${selectedFrequency.name === preset.name ? "text-white/80" : "text-muted-foreground"}`}>{preset.description}</p>
-                    </div>
-                    <span className={`text-xs font-body font-bold px-2 py-1 rounded-full ${selectedFrequency.name === preset.name ? "bg-white/20" : "bg-secondary"}`}>{preset.freq} Hz</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-6 space-y-3">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={binauralActive} onChange={(e) => setBinauralActive(e.target.checked)} className="w-4 h-4 rounded" />
-                <span className="text-sm font-body text-foreground">Enable binaural beats during meditation</span>
-              </label>
-              {binauralActive && (
-                <div className="space-y-2">
-                  <label className="text-xs font-body font-semibold text-muted-foreground">Volume</label>
-                  <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        {/* ─── SOUND BED DESIGNER (ambient + binaural + bowls) ─── */}
+        <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
 
         {/* ─── SCIENCE BOX ─── */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-100/70 via-orange-50/50 to-yellow-50/40 dark:from-amber-900/20 dark:via-orange-900/15 dark:to-gold/10 border border-gold/25 p-8 shadow-soft">
