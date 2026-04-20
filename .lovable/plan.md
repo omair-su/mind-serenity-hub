@@ -1,106 +1,181 @@
 
 
-# Walking Meditation — Premium Upgrade Plan
+# 30-Day Program — "Day Page" Premium Upgrade Plan
 
-Goal: Transform the Walking page from a static text-based timer into a **luxury, sensory-rich, GPS-aware mindful movement experience** rivaling Calm Daily Move and Headspace Walking.
+Goal: Transform the Day page into the **flagship experience of Willow Vibes** — a cinematic, immersive daily ritual that rivals Calm's "Daily Calm" and Headspace's "Today" — with unique imagery for every single day, narrated guidance, ambient world-building, and intelligent progress that follows the user across devices.
 
 ---
 
-## 1. Hero & Visual Identity
+## 1. Cinematic Hero — Per-Day, Not Per-Week
 
-- **New high-quality hero image** — sourced from Unsplash (sunlit forest path with golden light shafts, 1600w optimized). Replace the local `walking-hero.jpg` asset with a fresh CDN URL.
-- **Parallax scroll** on the hero with subtle gold blur orbs floating across.
-- **Mood-aware tint** — hero gradient subtly shifts color based on the selected environment (forest = green, mountain = slate, beach = gold-coral, garden = warm amber).
-- **Today's weather widget** in the hero corner — uses browser geolocation + Open-Meteo API (no key) to show "Perfect for an outdoor walk · 18°C · clear skies" or suggest indoor mode if raining.
+Today every week shares **one** of four hero images. We will give **each of the 30 days its own dedicated hero photograph** chosen to visually teach the practice.
 
-## 2. Four Premium Environments with Real Imagery & Ambient Beds
+- **30 curated Unsplash images** (1600w, optimized) — one per day, hand-mapped to the technique:
+  - Day 1 Breath Awareness → close-up of soft sunrise breath/mist
+  - Day 2 Body Scan → person reclining on linen sheets, golden hour
+  - Day 5 Loving-Kindness → warm hands over heart
+  - Day 6 Walking Meditation → bare feet on a mossy forest path
+  - Day 10 Mantra → sunrise over still lake
+  - Day 16 Mountain Meditation → snow-capped peak at dawn
+  - Day 24 Forgiveness → dove in soft light
+  - Day 30 Graduation → golden sun cresting horizon
+  - …and so on for all 30 days
+- **Cinematic Ken Burns zoom** (slow 20s pan/zoom) on the hero image
+- **Mood-aware gradient overlay** — week 1 = forest-green tint, week 2 = warm gold, week 3 = deep indigo, week 4 = sunrise rose
+- **Floating particle layer** (gold dust + petals) drifting across hero
+- **Scroll-driven parallax** with subtle blur as you scroll into content
+- **Day-specific weather-mood**: misty mornings for sleep-related days, golden-hour light for gratitude days
+- **Hero CTA stack**: "Begin Practice" (primary gold), "Listen Only" (secondary), "Read First" — instead of one ambiguous timer button
 
-Each environment becomes a **full sensory scene**, not just an icon card:
-- **Forest Path** — birdsong + leaves rustling ambient bed, deep-green hero
-- **Mountain Trail** — wind + distant eagle calls, slate-blue hero
-- **Ocean Shore** — waves + seagulls, gold-coral hero
-- **Zen Garden** — bamboo wind chimes + raked gravel, warm amber hero
+## 2. Immersive "Practice Mode" — Full-Screen Cinema
 
-Each tile shows a real photo background, name, ambient track preview, and a "Stop Sound" button (following the new audio control standard).
+A new full-screen, distraction-free **Practice Mode** that takes over when the user taps "Begin Practice":
+- Hero image expands edge-to-edge with darkened cinematic vignette
+- Floating breathing orb pulses at the practice's ideal cadence
+- Current narration line appears one at a time, fading in/out softly
+- All chrome (nav, sidebar) hidden — only Stop, Pause, and progress ring visible
+- Auto-dim screen brightness suggestion via CSS filter
+- Exit by tapping anywhere or pressing Esc
 
-## 3. ElevenLabs Narrated Guidance (Replace Text Steps)
+## 3. ElevenLabs Narrated Guided Practice (Premium Voice)
 
-- Wire `useTextToSpeech` to narrate each technique step — Sarah voice for gentle techniques, George for grounding ones.
-- **NarrationBar** at the bottom of the active session with play/pause/skip and a clear **Stop** button.
-- Steps advance automatically when narration ends (instead of arbitrary 20s timer).
+The current TTS is bolted on at the bottom. We elevate it:
+- **Per-paragraph narration** — each line of `guidedPractice` becomes its own narration clip; auto-advances visually as the audio plays
+- **Pause markers honored** — `[Pause — 10 seconds]` lines actually wait silently with a visible breath orb
+- **Voice selector** — Sarah (gentle), George (grounding), Aria (luminous) — saved to `profiles.preferred_voice`
+- **NarrationBar** at bottom (reuse existing component) — Stop, Skip, Replay last
+- **Server-side caching** via existing `audio_tracks` table + `generate-narration` edge function — second visit plays instantly with signed URL
 
-## 4. Real Step Counting (Not Random)
+## 4. Layered Soundscape — "Sound Bed Designer"
 
-Replace the fake `Math.random()` step generator with a **real pedometer** using `DeviceMotionEvent` accelerometer:
-- Requests motion permission on iOS (Safari) gracefully.
-- Falls back to a steady pace estimator (110 steps/min default) for desktop/permission-denied.
-- Live BPM cadence indicator: "Your pace: 112 steps/min · ideal walking range".
+Not just one ambient track — a **mix**:
+- **Ambient bed** (forest, ocean, rain, monastery, silence)
+- **Binaural layer** (already built — wire actually working with Web Audio API stereo oscillators, currently fake)
+- **Singing bowl interval** — soft bowl chime every 3/5/10 minutes as a presence cue
+- **Master volume + per-layer volume sliders**
+- All audio respects the new audio-hygiene standard: silence by default, hard-stop on unmount
 
-## 5. Two New Premium Techniques (6 total)
+## 5. Real Breathing & Pacing Visuals
 
-- **Loving-Kindness Walk** (12 min) — radiate metta to passersby with each step
-- **Forest Bathing (Shinrin-yoku)** (20 min) — Japanese 5-senses immersion protocol, premium-gated
+- **Live breathing orb** (reuse `BreathingOrb`) — paced to the technique (4-7-8 for breath days, box breathing for focus days, natural for body scan)
+- **Heart-coherence ring** — animated SVG ring around the practice timer pulsing at 6 BPM (the proven coherence frequency)
+- **Posture reminder gentle nudge** at minute 5/10 — subtle bottom-right bubble: "Soften your jaw"
 
-## 6. Animated Pace Orb & Footstep Visualizer
+## 6. Pre-Session "Intention" Ritual + Post-Session Reflection
 
-- A **breathing/pacing orb** (reuse `BreathingOrb`) that pulses at the user's current cadence — visual metronome.
-- A subtle **footstep ripple animation** on each detected step (left/right alternating).
-- A **distance estimator** ("≈ 0.4 km · 6 minutes of presence").
+Replace the current single check-in dialog with a **3-step ritual flow**:
 
-## 7. AI Walk Reflection (Post-Session)
+**Pre-session (60 seconds):**
+1. **Intention word** — single word input ("calm", "patience", "release")
+2. **Mood-before slider** — emoji wheel 1-10
+3. **Three settling breaths** — guided orb
 
-After completion, the **AI Companion** (reusing `ai-companion-chat` edge function) asks:
-- "What did you notice on your walk today?"
-- Summarizes into a 2-line reflection saved to `ritual_completions` with type='walk'.
+**Post-session:**
+1. **Mood-after** captured automatically and **delta** displayed as a celebratory chart
+2. **AI Coach Reflection** — uses `ai-companion-chat` edge function to generate a personalized 2-sentence insight based on the intention, the practice, and the mood delta
+3. **Voice journal option** — record a 30-second voice reflection (uploads to private storage, transcribed via existing infra)
 
-## 8. Luxury Stats & Streak Ring
+## 7. AI Daily Insights Card
 
-- Apple-Fitness-style **animated SVG streak ring** around the session count.
-- Stats: Total minutes, total steps, longest walk, streak days.
-- **Milestone certificates** at 10/50/100 walks (PDF download, premium-gated).
+A new card above the practice that shows **personalized daily framing**:
+- "Yesterday you felt unfocused (4/10) and wrote about work stress. Today's body scan is well-timed — it's been shown to reduce work-related rumination by 23%. Suggested intention: *release*."
+- Generated by a new tiny edge function `daily-day-framing` that reads the last 3 days of `mood_entries` + `ritual_completions` and returns a 2-sentence frame
+- Cached per-day so it doesn't regenerate on every visit
 
-## 9. Cloud Sync & Premium Gates
+## 8. Cloud Sync — Replace localStorage
 
-- Persist every walk to `ritual_completions` (type='walk', technique, duration, steps, environment) — table already exists from previous sprint.
-- `PremiumLockModal` on Forest Bathing (20-min) and milestone PDF export.
+Currently every day's reflection, mood, checklist lives only in `localStorage` — they vanish on logout/device switch.
+- New `day_completions` table mirroring the structure (reuse `ritual_completions` with `ritual_id = 'day-N'` to avoid migrations) + a small JSONB column for the rich state
+- Migration: one new column `day_state JSONB` on `ritual_completions` for the textarea/slider data
+- Helpers in `cloudSync.ts`: `loadDayState(dayNum)`, `saveDayState(dayNum, state)` with localStorage as offline cache
+- Sync indicator in the navbar ("✓ Synced" / "Saving...")
 
-## 10. Audio Hygiene (Following New Standard)
+## 9. Premium Visual Components
 
-- Ambient bed defaults to `"silence"` — only plays when user taps "Play Sound".
-- All audio (ambient + narration) hard-stops on session end, reset, and route unmount.
-- Clear "Stop Sound" button visible whenever any audio is playing.
+New small components that elevate every day:
+- **`DayHeroCinema.tsx`** — Ken Burns hero + parallax + particle layer + mood gradient
+- **`PracticeStepCard.tsx`** — current narration paragraph with elegant typography, large breathable spacing
+- **`HeartCoherenceRing.tsx`** — animated SVG breathing ring around the timer
+- **`MoodDeltaChart.tsx`** — animated before/after mood arc with sparkle on improvement
+- **`IntentionRitual.tsx`** — 3-step onboarding modal with breath orb
+- **`AIDailyInsight.tsx`** — personalized framing card at top
+
+## 10. Streak Ring + Day Carousel Polish
+
+- Replace the flat 30-dot row with a **horizontal day carousel** showing each day's hero thumbnail + completion ring
+- Apple-Watch-style **animated SVG streak ring** wrapping the current day card
+- **Completion celebration**: confetti + sound on hitting Day 30 + auto-generate certificate (reuse existing `CertificatePage`)
+
+## 11. Daily Affirmation + Quote Pairing
+
+- Each day's quote becomes a **shareable vertical card** (Instagram-story aspect ratio) with the day's hero image as backdrop — one-tap share/download
+- "Listen to quote" button — narrates the quote in the user's chosen voice
+
+## 12. Premium Gates
+
+Free users get Days 1-7 in full; Days 8-30 show a soft preview with a `PremiumLockModal` CTA on:
+- Premium voices (Aria/George)
+- Practice Mode (full-screen cinema)
+- Voice journal recording
+- AI Daily Insight
+- Certificate PDF export
+
+## 13. Audio Hygiene (App-Wide Standard)
+
+- Ambient bed defaults to `"silence"`; only plays when user enables it
+- Narration, ambient, binaural, singing bowls — all hard-stop on route unmount, on Stop button, on session reset
+- Visible Stop button whenever any audio plays
 
 ---
 
 ## Technical Section
 
-**New files:**
-- `src/components/walking/PaceOrb.tsx` — animated cadence orb
-- `src/components/walking/FootstepVisualizer.tsx` — left/right ripple animation
-- `src/components/walking/WalkEnvironmentCard.tsx` — image-led environment tile
-- `src/components/walking/WalkReflection.tsx` — post-session AI reflection card
-- `src/hooks/usePedometer.ts` — DeviceMotion-based step counter with fallback
-- `src/hooks/useWeather.ts` — geolocation + Open-Meteo lookup
-- `src/data/walkingTechniques.ts` — extracted + extended to 6 techniques
+**New components:**
+- `src/components/day/DayHeroCinema.tsx`
+- `src/components/day/PracticeMode.tsx`
+- `src/components/day/PracticeStepCard.tsx`
+- `src/components/day/HeartCoherenceRing.tsx`
+- `src/components/day/MoodDeltaChart.tsx`
+- `src/components/day/IntentionRitual.tsx`
+- `src/components/day/AIDailyInsight.tsx`
+- `src/components/day/QuoteShareCard.tsx`
+- `src/components/day/SoundBedDesigner.tsx`
+
+**New data:**
+- `src/data/dayHeroImages.ts` — mapping of all 30 days to curated Unsplash URLs + suggested ambient bed + breath cadence
+- `src/data/dayBreathPatterns.ts` — per-day breathing pattern (4-7-8, box, natural, etc.)
 
 **Edited files:**
-- `src/pages/WalkingMeditationPage.tsx` — full rewrite using new components
-- Reuse `useAmbientBed`, `useTextToSpeech`, `NarrationBar`, `BreathingOrb`, `cloudSync`, `PremiumLockModal`
+- `src/pages/DayPage.tsx` — full rewrite using new components
+- `src/lib/cloudSync.ts` — add `loadDayState`/`saveDayState`
+- `src/lib/binauralBeats.ts` — wire to actual Web Audio stereo oscillator (currently stub)
+- `src/data/courseData.ts` — extend `DayData` with `breathPattern`, `ambientBed`, `affirmation` fields
 
-**No new edge functions, tables, or migrations required** — everything reuses Sprint 4 infrastructure (`ai-companion-chat`, `ritual_completions`).
+**New edge function:**
+- `supabase/functions/daily-day-framing/index.ts` — pulls last 3 mood entries + completions and returns a 2-sentence personalized frame (uses Lovable AI: `google/gemini-2.5-flash`)
 
-**No new API keys** — Open-Meteo is free + keyless.
+**Migration:**
+- Add `day_state JSONB DEFAULT '{}'::jsonb` column to `ritual_completions`
+- No new tables needed
+
+**Reused infrastructure:**
+- `useTextToSpeech`, `useAmbientBed`, `NarrationBar`, `BreathingOrb`, `PremiumLockModal`, `ai-companion-chat`, `generate-narration`, `audio_tracks`, `ritual_completions`, `mood_entries`, `cloudSync`
+
+**No new API keys** — Unsplash is free, ElevenLabs already wired, Lovable AI already wired.
 
 ---
 
 ## Suggested execution order
 
-1. New hero image + environment images + parallax tint
-2. `usePedometer` + `useWeather` hooks
-3. Extract data, add 2 new techniques
-4. PaceOrb + FootstepVisualizer components
-5. ElevenLabs narration wiring + NarrationBar
-6. AI walk reflection on completion
-7. Streak ring + milestone certificates
-8. Audio hygiene QA on mobile
+1. `dayHeroImages.ts` with all 30 curated images + extend `DayData`
+2. `DayHeroCinema` (Ken Burns + parallax + particles + mood gradient)
+3. `IntentionRitual` pre-session flow + cloud-synced state
+4. `PracticeMode` full-screen cinema with `PracticeStepCard` auto-advance
+5. ElevenLabs per-paragraph narration wiring
+6. `SoundBedDesigner` (ambient + working binaural + singing bowls)
+7. `HeartCoherenceRing` + breath-pattern aware orb
+8. `AIDailyInsight` edge function + card
+9. `MoodDeltaChart` post-session + AI coach reflection
+10. Day carousel + streak ring + quote share card
+11. Premium gates + audio-hygiene QA on mobile
 
