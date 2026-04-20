@@ -206,51 +206,86 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-cream overflow-hidden selection:bg-primary/20">
+    <div className="min-h-screen flex flex-col md:flex-row overflow-hidden selection:bg-gold/30 relative bg-[hsl(var(--forest-deep))]">
       <style dangerouslySetInnerHTML={{
         __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Lora:wght@400;500;600;700&display=swap');
-          .font-luxury-display { font-family: 'Cormorant Garamond', serif; }
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&display=swap');
+          .font-luxury-display { font-family: 'Cormorant Garamond', serif; letter-spacing: -0.01em; }
           .font-luxury-body { font-family: 'Lora', serif; }
-          @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+          @keyframes float-orb {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(30px,-20px) scale(1.05); }
           }
-          .animate-shake { animation: shake 0.4s ease-in-out; }
+          .animate-float-orb { animation: float-orb 14s ease-in-out infinite; }
+          @keyframes shimmer-gold {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+          }
+          .gold-shimmer-text {
+            background: linear-gradient(90deg, hsl(var(--gold-light)), hsl(var(--gold)), hsl(var(--gold-dark)), hsl(var(--gold)), hsl(var(--gold-light)));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer-gold 6s linear infinite;
+          }
         `,
       }} />
 
-      {/* ─── LEFT: BRAND SHOWCASE ─── */}
-      <div className="relative hidden md:flex md:w-1/2 h-screen overflow-hidden bg-gradient-to-br from-cream via-cream-dark to-sage/20 items-center justify-center p-12 lg:p-20">
+      {/* ─── AMBIENT BACKGROUND ─── */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-90"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c-5 15-15 25-30 30 15 5 25 15 30 30 5-15 15-25 30-30-15-5-25-15-30-30z' fill='%235A7556' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-            backgroundSize: "120px 120px",
+            background:
+              "radial-gradient(ellipse at 15% 20%, hsl(var(--forest-mid)) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, hsl(var(--gold) / 0.18) 0%, transparent 55%), radial-gradient(ellipse at 50% 50%, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 70%)",
           }}
         />
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c-5 15-15 25-30 30 15 5 25 15 30 30 5-15 15-25 30-30-15-5-25-15-30-30z' fill='%23D4A574' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+            backgroundSize: "140px 140px",
+          }}
+        />
+        <div className="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full bg-gold/10 blur-[120px] animate-float-orb" />
+        <div className="absolute -bottom-40 -right-32 w-[520px] h-[520px] rounded-full bg-sage/15 blur-[140px] animate-float-orb" style={{ animationDelay: "3s" }} />
+      </div>
 
-        <div className="relative z-10 max-w-lg">
+      {/* ─── LEFT: BRAND SHOWCASE ─── */}
+      <div className="relative hidden md:flex md:w-1/2 h-screen items-center justify-center p-12 lg:p-20 z-10">
+        <div className="relative max-w-lg text-cream">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="mb-12"
           >
-            <WillowLogo variant="vertical" size="lg" colorScheme="mono-navy" className="scale-125 origin-left" />
+            <WillowLogo variant="vertical" size="lg" colorScheme="mono-white" className="scale-125 origin-left" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-gold/40 bg-gold/10 backdrop-blur-sm"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+            <span className="font-luxury-body text-[11px] uppercase tracking-[0.25em] text-gold-light">
+              Premium Practice
+            </span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="font-luxury-display text-5xl lg:text-6xl font-normal text-foreground leading-[1.1] tracking-tight mb-6"
+            className="font-luxury-display text-5xl lg:text-6xl font-light text-cream leading-[1.05] mb-6"
           >
             {mode === "signup" ? (
-              <>Begin Your <br />Mindful Journey</>
+              <>Begin Your <br /><span className="gold-shimmer-text font-medium italic">Mindful Journey</span></>
             ) : (
-              <>Welcome Back to <br />Your Practice</>
+              <>Welcome Back to <br /><span className="gold-shimmer-text font-medium italic">Your Practice</span></>
             )}
           </motion.h1>
 
@@ -258,35 +293,35 @@ export default function SignInPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="font-luxury-body text-xl text-muted-foreground leading-relaxed mb-12"
+            className="font-luxury-body text-xl text-cream/75 leading-relaxed mb-12"
           >
             {mode === "signup"
               ? "Join thousands cultivating calm, focus, and discipline through science-backed daily practice."
-              : "Your journey to calm continues here. Reconnect with your inner peace and elevate your daily mindfulness."}
+              : "Your sanctuary of stillness awaits. Reconnect with your inner peace and elevate your daily mindfulness."}
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="flex flex-wrap gap-8 pt-8 border-t border-foreground/10"
+            className="flex flex-wrap gap-8 pt-8 border-t border-gold/20"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Star className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                <Star className="w-5 h-5 text-gold-light" />
               </div>
               <div>
-                <p className="font-luxury-body text-sm font-bold text-foreground">10,000+</p>
-                <p className="font-luxury-body text-[11px] uppercase tracking-widest text-muted-foreground">Students</p>
+                <p className="font-luxury-body text-sm font-bold text-cream">10,000+</p>
+                <p className="font-luxury-body text-[10px] uppercase tracking-[0.2em] text-cream/55">Students</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5 text-gold-dark" />
+              <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-gold-light" />
               </div>
               <div>
-                <p className="font-luxury-body text-sm font-bold text-foreground">Science-Backed</p>
-                <p className="font-luxury-body text-[11px] uppercase tracking-widest text-muted-foreground">Practices</p>
+                <p className="font-luxury-body text-sm font-bold text-cream">Science-Backed</p>
+                <p className="font-luxury-body text-[10px] uppercase tracking-[0.2em] text-cream/55">Practices</p>
               </div>
             </div>
           </motion.div>
@@ -294,18 +329,19 @@ export default function SignInPage() {
       </div>
 
       {/* ─── RIGHT: AUTH FORM ─── */}
-      <div className="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-20 bg-cream">
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-20 z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="w-full max-w-[440px]"
         >
-          <div className="md:hidden mb-10 text-center">
-            <WillowLogo variant="vertical" size="md" colorScheme="mono-navy" className="mx-auto" />
+          <div className="md:hidden mb-8 text-center">
+            <WillowLogo variant="vertical" size="md" colorScheme="mono-white" className="mx-auto" />
           </div>
 
-          <div className="bg-card rounded-[2rem] p-8 md:p-12 shadow-[var(--shadow-card-val)] border border-border relative overflow-hidden">
+          <div className="bg-cream/95 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 shadow-[0_20px_80px_-20px_hsl(0_0%_0%/0.5)] border border-gold/20 relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent opacity-70" />
             <div className="relative z-10">
               <motion.div variants={itemVariants} className="mb-8">
                 <h2 className="font-luxury-display text-4xl font-semibold text-foreground mb-3">
