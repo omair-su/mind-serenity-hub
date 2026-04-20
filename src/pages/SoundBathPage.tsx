@@ -83,6 +83,9 @@ export default function SoundBathPage() {
           </div>
         </div>
 
+        {/* Real spiritual ambient music to layer with binaural beats */}
+        <AmbientMusicPlayer defaultTrack={pickTrackByMood("spiritual")} />
+
         <div className="relative overflow-hidden bg-gradient-to-r from-violet-100/50 via-purple-50/30 to-indigo-50/20 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl p-4 border border-violet-500/15 shadow-soft">
           <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-bl from-violet-200/30 to-transparent" />
           <div className="flex items-start gap-3 relative z-10">

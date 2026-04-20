@@ -88,6 +88,9 @@ export default function SleepPage() {
           </div>
         </div>
 
+        {/* Real ambient music for sleep */}
+        <AmbientMusicPlayer defaultTrack={pickTrackByMood("sleep")} />
+
         {/* Active session */}
         {activeSession && (
           <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest))]/10 via-[hsl(var(--sage))]/8 to-[hsl(var(--sage-light))]/5 dark:from-[hsl(var(--forest-deep))]/30 dark:via-[hsl(var(--forest-mid))]/20 dark:to-[hsl(var(--forest))]/10 rounded-2xl border border-primary/15 p-8 shadow-elevated">

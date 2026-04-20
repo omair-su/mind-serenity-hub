@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getProfile, saveProfile } from "@/lib/userStore";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight,
   ArrowLeft,
@@ -91,11 +92,37 @@ export default function OnboardingPage() {
     }, 250);
   };
 
+  const syncToCloud = async (finalProfile: typeof profile) => {
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth?.user) return; // Not signed in yet — local only is fine
+      await supabase
+        .from("profiles")
+        .update({
+          display_name: finalProfile.name || null,
+          experience_level: finalProfile.experience,
+          goals: finalProfile.goals,
+          onboarding_answers: {
+            stressLevel: finalProfile.stressLevel,
+            stressManagement: finalProfile.stressManagement,
+            desiredFeeling: finalProfile.desiredFeeling,
+            preferredTime: finalProfile.preferredTime,
+            dailyMinutes: finalProfile.dailyMinutes,
+          },
+        })
+        .eq("user_id", auth.user.id);
+    } catch (e) {
+      console.warn("Onboarding cloud sync failed (non-blocking)", e);
+    }
+  };
+
   const next = () => {
     if (step < steps.length - 1) {
       animateStep(step + 1, "next");
     } else {
+      const finished = { ...profile, onboardingComplete: true };
       update({ onboardingComplete: true });
+      void syncToCloud(finished);
       navigate("/app");
     }
   };
@@ -105,7 +132,9 @@ export default function OnboardingPage() {
   };
 
   const skip = () => {
+    const finished = { ...profile, onboardingComplete: true };
     update({ onboardingComplete: true });
+    void syncToCloud(finished);
     navigate("/app");
   };
 

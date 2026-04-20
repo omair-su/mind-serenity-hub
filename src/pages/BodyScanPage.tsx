@@ -159,6 +159,9 @@ export default function BodyScanPage() {
           </div>
         </div>
 
+        {/* Real ambient nature music underneath the body scan */}
+        <AmbientMusicPlayer defaultTrack={pickTrackByMood("nature")} />
+
         <div className="rounded-xl bg-card border border-border p-4 shadow-soft">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-body font-semibold text-foreground">
