@@ -47,15 +47,12 @@ const BINAURAL_PRESETS = [
   { name: "Gamma (Peak Performance)", freq: 40, color: "from-rose-600 to-pink-600", description: "Insight & cognitive enhancement" },
 ];
 
-/* ─── localStorage helpers ─── */
+/* ─── localStorage helpers (sync mirror — async cloud sync below) ─── */
 function loadState(dayNum: number) {
   try {
     const raw = localStorage.getItem(`wv-day-${dayNum}`);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
-}
-function saveState(dayNum: number, state: any) {
-  localStorage.setItem(`wv-day-${dayNum}`, JSON.stringify(state));
 }
 
 /* ─── Timer Hook ─── */
