@@ -155,8 +155,15 @@ Deno.serve(async (req) => {
     if (!ttsResponse.ok) {
       const err = await ttsResponse.text();
       console.error('[narration] ElevenLabs error:', err);
-      return new Response(JSON.stringify({ error: `TTS failed: ${err}` }), {
-        status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      // Detect free-tier abuse block / quota — signal client to use browser TTS fallback (return 200 so UI doesn't crash)
+      const isAbuseBlock = err.includes('detected_unusual_activity') || err.includes('Free Tier usage disabled');
+      const isQuota = ttsResponse.status === 401 || ttsResponse.status === 429 || err.includes('quota');
+      return new Response(JSON.stringify({
+        fallback: true,
+        reason: isAbuseBlock ? 'TTS_UNUSABLE' : isQuota ? 'TTS_QUOTA' : 'TTS_ERROR',
+        message: 'Premium narration temporarily unavailable. Using browser voice instead.',
+      }), {
+        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 

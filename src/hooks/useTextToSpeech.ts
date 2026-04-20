@@ -95,6 +95,12 @@ export function useTextToSpeech() {
           );
 
           if (invokeError) throw new Error(invokeError.message);
+
+          // Edge function signaled a fallback (ElevenLabs blocked / quota) — use browser TTS
+          if (data?.fallback) {
+            setIsLoading(false);
+            return playWithBrowserTTS(text, () => setIsPlaying(true), () => setIsPlaying(false));
+          }
           if (!data?.track?.public_url) throw new Error("No audio URL returned");
 
           audioUrl = data.track.public_url;
@@ -103,7 +109,8 @@ export function useTextToSpeech() {
           const msg = e instanceof Error ? e.message : "Audio generation failed";
           setError(msg);
           setIsLoading(false);
-          return;
+          // Last-resort fallback so the user still hears narration
+          return playWithBrowserTTS(text, () => setIsPlaying(true), () => setIsPlaying(false));
         }
         setIsLoading(false);
       }
@@ -191,4 +198,22 @@ async function sha1(text: string): Promise<string> {
   return Array.from(new Uint8Array(buf))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
+}
+
+// Browser SpeechSynthesis fallback when ElevenLabs is unavailable
+function playWithBrowserTTS(text: string, onStart: () => void, onEnd: () => void) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = 0.92;
+    u.pitch = 1;
+    u.onstart = onStart;
+    u.onend = onEnd;
+    u.onerror = onEnd;
+    window.speechSynthesis.speak(u);
+  } catch {
+    onEnd();
+  }
 }
