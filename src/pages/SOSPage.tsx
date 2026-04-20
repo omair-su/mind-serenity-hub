@@ -4,10 +4,14 @@ import AppLayout from "@/components/AppLayout";
 import { 
   Zap, Play, Pause, Clock, AlertTriangle, Shield, Wind, Heart, 
   Moon, Briefcase, Activity, Sparkles, ChevronRight, X, Volume2, 
-  Ear, Eye, Fingerprint, Info, Award, Star
+  Ear, Eye, Fingerprint, Info, Award, Star, Flame, Users, Gem, CheckCircle2
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { startBinaural, stopBinaural, FREQUENCY_PRESETS } from "@/lib/binauralBeats";
+import BreathingOrb from "@/components/bodyscan/BreathingOrb";
+import AICompanionChat from "@/components/sos/AICompanionChat";
+import EmergencyContacts from "@/components/sos/EmergencyContacts";
+import { extraSOSSessions } from "@/data/extraSOS";
 
 const sosSessions = [
   { 
