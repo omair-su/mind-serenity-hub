@@ -136,7 +136,7 @@ export default function SleepPage() {
                   </button>
                 )}
                 <button
-                  onClick={() => { const fullScript = activeSession.script.join("\n\n"); tts.generateAndPlay(fullScript); }}
+                  onClick={playFull}
                   disabled={tts.isLoading}
                   className="px-4 py-2.5 bg-gradient-to-r from-primary/10 to-[hsl(var(--sage))]/10 rounded-xl text-sm font-body text-primary dark:text-[hsl(var(--sage))] hover:from-primary/20 hover:to-[hsl(var(--sage))]/20 disabled:opacity-50 transition-all"
                 >
