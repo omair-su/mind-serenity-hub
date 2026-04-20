@@ -410,7 +410,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── GUIDED PRACTICE ─── */}
-        <div>
+        <div id="guided-practice">
           <h2 className="font-display text-3xl font-semibold text-foreground mb-6">Your Guided Practice</h2>
           <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/40 via-teal-50/25 to-sage-light/15 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-6 md:p-10 space-y-5 shadow-soft">
             <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/8 to-transparent" />
