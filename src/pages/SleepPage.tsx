@@ -40,8 +40,34 @@ export default function SleepPage() {
   const [active, setActive] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("ocean", 35);
 
   const activeSession = sleepMeditations.find(s => s.id === active);
+
+  const playStep = (idx: number) => {
+    if (!activeSession) return;
+    tts.generateAndPlay(activeSession.script[idx], {
+      trackKey: `sleep-${activeSession.id}-step-${idx}`,
+      category: "sleep_story",
+      title: `${activeSession.title} — Step ${idx + 1}`,
+      voice: "george",
+      ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+    });
+  };
+
+  const playFull = () => {
+    if (!activeSession) return;
+    const fullScript = activeSession.script.join("\n\n");
+    tts.generateAndPlay(fullScript, {
+      trackKey: `sleep-${activeSession.id}-full`,
+      category: "sleep_story",
+      title: activeSession.title,
+      description: activeSession.desc,
+      voice: "george",
+      ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+      isPremium: true,
+    });
+  };
 
   return (
     <AppLayout>
