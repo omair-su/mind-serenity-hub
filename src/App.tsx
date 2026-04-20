@@ -50,11 +50,13 @@ import PrivacyPage from "./pages/legal/PrivacyPage";
 import RefundPage from "./pages/legal/RefundPage";
 import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
+import PaymentTestModeBanner from "./components/PaymentTestModeBanner";
 
 function AppInner() {
   useApplySettings();
   return (
     <BrowserRouter>
+      <PaymentTestModeBanner />
       <Routes>
         {/* Public */}
         <Route path="/" element={<LandingPage />} />
