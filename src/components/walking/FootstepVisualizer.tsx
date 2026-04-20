@@ -1,12 +1,12 @@
 // Alternating left/right ripple animation triggered on each step count change.
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface FootstepVisualizerProps {
   steps: number;
 }
 
-export default function FootstepVisualizer({ steps }: FootstepVisualizerProps) {
+const FootstepVisualizer = forwardRef<HTMLDivElement, FootstepVisualizerProps>(({ steps }, ref) => {
   const [pulse, setPulse] = useState<{ side: "L" | "R"; key: number } | null>(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function FootstepVisualizer({ steps }: FootstepVisualizerProps) {
   }, [steps]);
 
   return (
-    <div className="flex items-center justify-center gap-12 h-16 my-2">
+    <div ref={ref} className="flex items-center justify-center gap-12 h-16 my-2">
       {(["L", "R"] as const).map((side) => (
         <div key={side} className="relative w-12 h-12 flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-primary/5" />
@@ -43,4 +43,7 @@ export default function FootstepVisualizer({ steps }: FootstepVisualizerProps) {
       ))}
     </div>
   );
-}
+});
+
+FootstepVisualizer.displayName = "FootstepVisualizer";
+export default FootstepVisualizer;

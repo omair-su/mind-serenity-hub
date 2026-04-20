@@ -30,7 +30,7 @@ export default function WalkingMeditationPage() {
   const [scrollY, setScrollY] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { weather } = useWeather();
+  const { weather, loading: weatherLoading, error: weatherError, retry: retryWeather } = useWeather();
   const tts = useTextToSpeech();
   const ambient = useAmbientBed("silence", 35);
   const pedometer = usePedometer({ active: isActive });
@@ -191,14 +191,29 @@ export default function WalkingMeditationPage() {
             className="absolute bottom-20 left-8 w-16 h-16 rounded-full bg-white/20 blur-xl"
           />
 
-          {/* Weather widget */}
-          {weather && (
-            <div className="absolute top-3 right-3 px-2.5 py-1.5 rounded-full bg-black/30 backdrop-blur-md border border-white/10 flex items-center gap-1.5">
-              <span className="text-sm">{weather.emoji}</span>
-              <span className="text-[10px] font-body font-semibold text-white tabular-nums">{weather.tempC}°C</span>
-              <span className="text-[9px] font-body text-white/70 hidden sm:inline">{weather.description}</span>
-            </div>
-          )}
+          {/* Weather widget — always visible */}
+          <button
+            onClick={() => weatherError && retryWeather()}
+            className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/35 backdrop-blur-md border border-white/15 flex items-center gap-2 z-10 transition-all hover:bg-black/45"
+          >
+            {weatherLoading ? (
+              <>
+                <span className="text-sm animate-pulse">🌍</span>
+                <span className="text-[10px] font-body font-semibold text-white/80">Loading…</span>
+              </>
+            ) : weather ? (
+              <>
+                <span className="text-sm">{weather.emoji}</span>
+                <span className="text-[11px] font-body font-bold text-white tabular-nums">{weather.tempC}°C</span>
+                <span className="text-[10px] font-body text-white/75 hidden sm:inline">· {weather.description}</span>
+              </>
+            ) : (
+              <>
+                <span className="text-sm">📍</span>
+                <span className="text-[10px] font-body font-semibold text-white/80">Tap for weather</span>
+              </>
+            )}
+          </button>
 
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <div className="flex items-center gap-3 mb-2">
