@@ -21,6 +21,18 @@ import MoodDeltaChart from "@/components/day/MoodDeltaChart";
 import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
 import { getDayHero } from "@/data/dayHeroImages";
 import { loadDayState, saveDayState, type DayState } from "@/lib/cloudSync";
+import { useIsPremium } from "@/hooks/useIsPremium";
+import PremiumLockModal from "@/components/PremiumLockModal";
+import { Crown, Lock } from "lucide-react";
+
+type VoiceKey = "sarah" | "george" | "matilda" | "charlie";
+const FREE_VOICES: VoiceKey[] = ["sarah", "matilda"];
+const PREMIUM_VOICES: { key: VoiceKey; label: string; tier: "free" | "premium" }[] = [
+  { key: "sarah", label: "Sarah · Warm", tier: "free" },
+  { key: "matilda", label: "Matilda · Soft", tier: "free" },
+  { key: "george", label: "George · Deep", tier: "premium" },
+  { key: "charlie", label: "Aria · Ethereal", tier: "premium" },
+];
 
 /* ─── Day emoji mapping ─── */
 const dayEmojis: Record<number, string> = {
@@ -117,7 +129,11 @@ export default function DayPage() {
   const [intentionWord, setIntentionWord] = useState<string>(saved?.intentionWord || "");
   const [showIntention, setShowIntention] = useState(false);
   const [showPractice, setShowPractice] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState<VoiceKey>("sarah");
+  const [premiumGate, setPremiumGate] = useState<{ feature: string; description?: string } | null>(null);
   const tts = useTextToSpeech();
+  const { isPremium } = useIsPremium();
+  const isLockedDay = dayNumber >= 8 && !isPremium;
 
   // Reset TTS when navigating to a different day
   useEffect(() => {
@@ -210,7 +226,25 @@ export default function DayPage() {
   };
 
   const startSession = () => {
+    if (isLockedDay) {
+      setPremiumGate({
+        feature: `Day ${dayNumber} is a Plus chapter`,
+        description: "The first 7 days are free. Days 8–30 unlock with Willow Plus — the full 30-day transformation, premium voices, and AI Daily Insight.",
+      });
+      return;
+    }
     setShowIntention(true);
+  };
+
+  const requestPremiumVoice = (key: VoiceKey) => {
+    if (FREE_VOICES.includes(key) || isPremium) {
+      setSelectedVoice(key);
+      return;
+    }
+    setPremiumGate({
+      feature: "Premium narration voices",
+      description: "Aria & George are studio-mastered ElevenLabs voices reserved for Willow Plus. Sarah and Matilda stay free for everyone.",
+    });
   };
 
   const handleIntentionComplete = (data: { intention: string; moodBefore: number }) => {
@@ -264,8 +298,22 @@ export default function DayPage() {
         difficulty={day.difficulty}
         onBegin={startSession}
         onListenOnly={() => {
+          if (isLockedDay) {
+            setPremiumGate({
+              feature: `Day ${dayNumber} is a Plus chapter`,
+              description: "Unlock Days 8–30 with Willow Plus to listen to the full guided narration.",
+            });
+            return;
+          }
           if (tts.hasAudio) tts.togglePlayPause();
-          else tts.generateAndPlay(day.guidedPractice.join("\n\n"));
+          else tts.generateAndPlay(day.guidedPractice.join("\n\n"), {
+            trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
+            category: "daily_meditation",
+            title: `Day ${dayNumber} · ${day.title}`,
+            voice: selectedVoice,
+            ambientBed: null,
+            isPremium: !FREE_VOICES.includes(selectedVoice),
+          });
         }}
         onReadFirst={() => {
           document.getElementById("guided-practice")?.scrollIntoView({ behavior: "smooth" });
@@ -276,7 +324,35 @@ export default function DayPage() {
       <main className="max-w-[800px] mx-auto px-6 py-12 space-y-12">
 
         {/* ─── AI DAILY INSIGHT (personalized framing) ─── */}
-        <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
+        {isPremium ? (
+          <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
+        ) : (
+          <button
+            onClick={() => setPremiumGate({
+              feature: "AI Daily Insight",
+              description: "A personalized AI-crafted framing for today's practice — written for your week, your streak, and your patterns. Plus members get a fresh insight every day.",
+            })}
+            className="relative w-full overflow-hidden rounded-2xl text-left bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--charcoal))] p-6 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.4)] border border-[hsl(var(--gold))]/25 hover:scale-[1.01] transition-transform"
+          >
+            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[hsl(var(--gold))]/15 blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0">
+                <Lock className="w-4 h-4 text-[hsl(var(--gold))]" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))] mb-1.5">
+                  Today, for you · Plus
+                </p>
+                <p className="font-display text-base text-white/90 leading-relaxed italic">
+                  "Unlock a personalized AI reflection written for your week and your patterns…"
+                </p>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-body font-semibold text-[hsl(var(--gold))]">
+                  <Crown className="w-3 h-3" /> Unlock with Willow Plus
+                </span>
+              </div>
+            </div>
+          </button>
+        )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
@@ -291,15 +367,25 @@ export default function DayPage() {
                 const num = i + 1;
                 const isComplete = completedDays[i];
                 const isCurrent = num === dayNumber;
+                const locked = num >= 8 && !isPremium;
                 return (
                   <button
                     key={num}
-                    onClick={() => navigate(`/day/${num}`)}
-                    className={`w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
-                    title={`Day ${num}`}
+                    onClick={() => {
+                      if (locked) {
+                        setPremiumGate({
+                          feature: `Day ${num} is a Plus chapter`,
+                          description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
+                        });
+                        return;
+                      }
+                      navigate(`/day/${num}`);
+                    }}
+                    className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
+                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : locked ? "bg-card/40 text-muted-foreground/50" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
+                    title={locked ? `Day ${num} · Plus` : `Day ${num}`}
                   >
-                    {isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
+                    {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
                   </button>
                 );
               })}
@@ -428,6 +514,44 @@ export default function DayPage() {
                 >
                   {para}
                 </p>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ─── VOICE PICKER (Aria/George gated to Plus) ─── */}
+        <div className="rounded-2xl border border-border/50 bg-card/60 p-4 shadow-soft">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-xs font-body font-semibold uppercase tracking-wider text-muted-foreground">Narration voice</p>
+              <p className="text-[11px] font-body text-muted-foreground/70 mt-0.5">Choose who guides today's practice</p>
+            </div>
+            {!isPremium && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-body font-bold text-gold uppercase tracking-widest">
+                <Crown className="w-3 h-3" /> Plus
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {PREMIUM_VOICES.map((v) => {
+              const locked = v.tier === "premium" && !isPremium;
+              const active = selectedVoice === v.key;
+              return (
+                <button
+                  key={v.key}
+                  onClick={() => requestPremiumVoice(v.key)}
+                  className={`relative px-3 py-2.5 rounded-xl text-xs font-body font-medium transition-all border
+                    ${active
+                      ? "bg-gradient-to-r from-gold to-gold-dark text-card border-gold shadow-gold"
+                      : locked
+                        ? "bg-card/40 text-muted-foreground/70 border-border/40 hover:border-gold/40"
+                        : "bg-card text-foreground border-border hover:border-primary/40"}`}
+                >
+                  <span className="block truncate">{v.label}</span>
+                  {locked && (
+                    <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-gold" />
+                  )}
+                </button>
               );
             })}
           </div>
@@ -779,13 +903,22 @@ export default function DayPage() {
         title={day.title}
         paragraphs={day.guidedPractice}
         tts={tts}
+        voice={selectedVoice}
+        isPremium={isPremium && !FREE_VOICES.includes(selectedVoice)}
         onClose={() => {
           setShowPractice(false);
           tts.stop();
-          // Capture mood-after via the calmRating slider state
           setMoodAfter(calmRating);
           toggleCheck(0);
         }}
+      />
+
+      {/* ─── PREMIUM LOCK MODAL ─── */}
+      <PremiumLockModal
+        open={!!premiumGate}
+        onClose={() => setPremiumGate(null)}
+        feature={premiumGate?.feature ?? ""}
+        description={premiumGate?.description}
       />
     </div>
   );
