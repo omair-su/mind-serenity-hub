@@ -22,7 +22,7 @@ export default function SleepStoriesPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [paragraphIndex, setParagraphIndex] = useState(0);
   const tts = useTextToSpeech();
-  const ambient = useAmbientBed("rain", 40);
+  const ambient = useAmbientBed("silence", 40);
 
   const story = sleepStories.find(s => s.id === activeStory);
   const filtered = activeCategory === "all" ? sleepStories : sleepStories.filter(s => s.category === activeCategory);
