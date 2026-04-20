@@ -23,7 +23,7 @@ export default function BodyScanPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const tts = useTextToSpeech();
-  const ambient = useAmbientBed("forest", 30);
+  const ambient = useAmbientBed("silence", 30);
 
   const playZone = (id: string) => {
     const z = bodyScanZones.find((zz) => zz.id === id);

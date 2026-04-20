@@ -61,6 +61,7 @@ export default function AmbientMusicPlayer({ defaultTrack, allowSwitch = true, c
     if (!audioRef.current) return;
     if (playing) {
       audioRef.current.pause();
+      audioRef.current.currentTime = 0; // hard stop, not just pause
       setPlaying(false);
     } else {
       try {
