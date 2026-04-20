@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LandingPage from "./pages/LandingPage";
 import SignInPage from "./pages/SignInPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import WelcomePage from "./pages/WelcomePage";
 import HowToUsePage from "./pages/HowToUsePage";
 import SciencePage from "./pages/SciencePage";
@@ -54,6 +55,7 @@ function AppInner() {
         {/* Public */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
 
