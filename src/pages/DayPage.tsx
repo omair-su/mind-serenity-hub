@@ -226,7 +226,25 @@ export default function DayPage() {
   };
 
   const startSession = () => {
+    if (isLockedDay) {
+      setPremiumGate({
+        feature: `Day ${dayNumber} is a Plus chapter`,
+        description: "The first 7 days are free. Days 8–30 unlock with Willow Plus — the full 30-day transformation, premium voices, and AI Daily Insight.",
+      });
+      return;
+    }
     setShowIntention(true);
+  };
+
+  const requestPremiumVoice = (key: VoiceKey) => {
+    if (FREE_VOICES.includes(key) || isPremium) {
+      setSelectedVoice(key);
+      return;
+    }
+    setPremiumGate({
+      feature: "Premium narration voices",
+      description: "Aria & George are studio-mastered ElevenLabs voices reserved for Willow Plus. Sarah and Matilda stay free for everyone.",
+    });
   };
 
   const handleIntentionComplete = (data: { intention: string; moodBefore: number }) => {
