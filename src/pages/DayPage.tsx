@@ -137,7 +137,7 @@ export default function DayPage() {
       if (typeof s.rememberText === "string") setRememberText(s.rememberText);
       if (Array.isArray(s.checklist)) setChecklist(s.checklist);
       if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
-      if (typeof s.intentionWord === "string") setIntentionWord(s.intentionWord);
+      if (typeof s.intention === "string") setIntentionWord(s.intention);
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [dayNumber]);
