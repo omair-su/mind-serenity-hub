@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Sparkles, Check, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface PremiumLockModalProps {
   open: boolean;
@@ -9,6 +10,8 @@ interface PremiumLockModalProps {
 }
 
 export default function PremiumLockModal({ open, onClose, feature, description }: PremiumLockModalProps) {
+  const navigate = useNavigate();
+  const goToPricing = () => { onClose(); navigate("/pricing"); };
   return (
     <AnimatePresence>
       {open && (
@@ -71,13 +74,13 @@ export default function PremiumLockModal({ open, onClose, feature, description }
               </ul>
 
               <button
-                onClick={onClose}
+                onClick={goToPricing}
                 className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 transition-all"
               >
-                Coming Soon — Join Waitlist
+                See Plus Plans
               </button>
               <p className="text-[10px] font-body text-center text-muted-foreground">
-                Premium tier launches with Sprint 2
+                7-day free trial · Cancel anytime
               </p>
             </div>
           </motion.div>

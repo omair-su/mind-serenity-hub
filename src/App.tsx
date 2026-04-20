@@ -44,6 +44,10 @@ import AdvancedAnalyticsPage from "./pages/AdvancedAnalyticsPage";
 import AboutPage from "./pages/AboutPage";
 import OfflineDownloadsPage from "./pages/OfflineDownloadsPage";
 import ExplorePage from "./pages/ExplorePage";
+import PricingPage from "./pages/PricingPage";
+import TermsPage from "./pages/legal/TermsPage";
+import PrivacyPage from "./pages/legal/PrivacyPage";
+import RefundPage from "./pages/legal/RefundPage";
 import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
 
@@ -57,6 +61,10 @@ function AppInner() {
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/legal/terms" element={<TermsPage />} />
+        <Route path="/legal/privacy" element={<PrivacyPage />} />
+        <Route path="/legal/refund" element={<RefundPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
 
         {/* Course foundation */}
