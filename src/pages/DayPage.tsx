@@ -762,6 +762,31 @@ export default function DayPage() {
           </div>
         </div>
       )}
+
+      {/* ─── INTENTION RITUAL (pre-session 3-step flow) ─── */}
+      <IntentionRitual
+        open={showIntention}
+        initialIntention={intentionWord}
+        initialMoodBefore={moodBefore[0]}
+        onClose={() => setShowIntention(false)}
+        onComplete={handleIntentionComplete}
+      />
+
+      {/* ─── PRACTICE MODE (full-screen cinema) ─── */}
+      <PracticeMode
+        open={showPractice}
+        dayNumber={dayNumber}
+        title={day.title}
+        paragraphs={day.guidedPractice}
+        tts={tts}
+        onClose={() => {
+          setShowPractice(false);
+          tts.stop();
+          // Capture mood-after via the calmRating slider state
+          setMoodAfter(calmRating);
+          toggleCheck(0);
+        }}
+      />
     </div>
   );
 }
