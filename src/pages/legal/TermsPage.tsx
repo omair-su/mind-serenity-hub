@@ -4,7 +4,7 @@ export default function TermsPage() {
   return (
     <LegalLayout title="Terms of Service" updated="April 20, 2026">
       <p>
-        Welcome to Willow Vibes ("Willow", "we", "our", "us"). These Terms of Service ("Terms") govern your use of the Willow Vibes website, mobile experience, and related services (collectively, the "Service"). By creating an account or using the Service, you agree to these Terms.
+        Welcome to Willow Vibes ("Willow", "we", "our", "us"). Willow Vibes is a limited liability company organized under the laws of Delaware, United States ("Willow Vibes LLC"). These Terms of Service ("Terms") govern your use of the Willow Vibes website, mobile experience, and related services (collectively, the "Service"). By creating an account or using the Service, you agree to these Terms.
       </p>
 
       <h2>1. Eligibility</h2>
@@ -63,7 +63,7 @@ export default function TermsPage() {
       <p>We may update these Terms from time to time. Material changes will be communicated by email or in-app notice at least 14 days before they take effect.</p>
 
       <h2>13. Governing Law</h2>
-      <p>These Terms are governed by the laws of the jurisdiction in which Willow Vibes is established, without regard to conflict-of-law principles.</p>
+      <p>These Terms are governed by the laws of the State of Delaware, United States, without regard to conflict-of-law principles. Any disputes arising under these Terms shall be resolved in the state or federal courts located in Delaware.</p>
 
       <h2>14. Contact</h2>
       <p>Questions about these Terms? Email us at <a href="mailto:support@willowvibes.com">support@willowvibes.com</a>.</p>
