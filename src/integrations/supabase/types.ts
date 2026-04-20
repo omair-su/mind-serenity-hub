@@ -14,15 +14,106 @@ export type Database = {
   }
   public: {
     Tables: {
+      audio_history: {
+        Row: {
+          completed: boolean
+          created_at: string
+          id: string
+          liked: boolean | null
+          played_seconds: number
+          track_key: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          liked?: boolean | null
+          played_seconds?: number
+          track_key: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          liked?: boolean | null
+          played_seconds?: number
+          track_key?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      audio_tracks: {
+        Row: {
+          ambient_bed: string | null
+          category: string
+          created_at: string
+          description: string | null
+          duration_seconds: number
+          id: string
+          is_premium: boolean
+          public_url: string
+          script_hash: string
+          storage_path: string
+          title: string
+          track_key: string
+          updated_at: string
+          voice_id: string
+          voice_name: string
+        }
+        Insert: {
+          ambient_bed?: string | null
+          category: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number
+          id?: string
+          is_premium?: boolean
+          public_url: string
+          script_hash: string
+          storage_path: string
+          title: string
+          track_key: string
+          updated_at?: string
+          voice_id: string
+          voice_name: string
+        }
+        Update: {
+          ambient_bed?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number
+          id?: string
+          is_premium?: boolean
+          public_url?: string
+          script_hash?: string
+          storage_path?: string
+          title?: string
+          track_key?: string
+          updated_at?: string
+          voice_id?: string
+          voice_name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string
           display_name: string | null
           email: string | null
+          experience_level: string | null
+          goals: Json | null
           id: string
           is_premium: boolean
+          notification_preferences: Json | null
           onboarding_answers: Json | null
+          preferred_voice: string | null
           timezone: string | null
           updated_at: string
           user_id: string
@@ -32,9 +123,13 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          experience_level?: string | null
+          goals?: Json | null
           id?: string
           is_premium?: boolean
+          notification_preferences?: Json | null
           onboarding_answers?: Json | null
+          preferred_voice?: string | null
           timezone?: string | null
           updated_at?: string
           user_id: string
@@ -44,9 +139,13 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          experience_level?: string | null
+          goals?: Json | null
           id?: string
           is_premium?: boolean
+          notification_preferences?: Json | null
           onboarding_answers?: Json | null
+          preferred_voice?: string | null
           timezone?: string | null
           updated_at?: string
           user_id?: string
