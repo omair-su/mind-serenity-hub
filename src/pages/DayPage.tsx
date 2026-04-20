@@ -18,8 +18,9 @@ import PracticeMode from "@/components/day/PracticeMode";
 import SoundBedDesigner from "@/components/day/SoundBedDesigner";
 import AIDailyInsight from "@/components/day/AIDailyInsight";
 import MoodDeltaChart from "@/components/day/MoodDeltaChart";
+import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
 import { getDayHero } from "@/data/dayHeroImages";
-import { loadDayState, saveDayState, fetchAllDayCompletions, type DayState } from "@/lib/cloudSync";
+import { loadDayState, saveDayState, type DayState } from "@/lib/cloudSync";
 
 /* ─── Day emoji mapping ─── */
 const dayEmojis: Record<number, string> = {
