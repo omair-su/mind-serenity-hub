@@ -18,8 +18,9 @@ import PracticeMode from "@/components/day/PracticeMode";
 import SoundBedDesigner from "@/components/day/SoundBedDesigner";
 import AIDailyInsight from "@/components/day/AIDailyInsight";
 import MoodDeltaChart from "@/components/day/MoodDeltaChart";
+import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
 import { getDayHero } from "@/data/dayHeroImages";
-import { loadDayState, saveDayState, fetchAllDayCompletions, type DayState } from "@/lib/cloudSync";
+import { loadDayState, saveDayState, type DayState } from "@/lib/cloudSync";
 
 /* ─── Day emoji mapping ─── */
 const dayEmojis: Record<number, string> = {
@@ -113,6 +114,9 @@ export default function DayPage() {
   const [binauralVolume, setBinauralVolume] = useState(0.3);
   const [showCheckInDialog, setShowCheckInDialog] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [intentionWord, setIntentionWord] = useState<string>(saved?.intentionWord || "");
+  const [showIntention, setShowIntention] = useState(false);
+  const [showPractice, setShowPractice] = useState(false);
   const tts = useTextToSpeech();
 
   // Reset TTS when navigating to a different day
@@ -120,12 +124,30 @@ export default function DayPage() {
     tts.stop();
   }, [dayNumber]);
 
+  // Hydrate from cloud on mount / day change
+  useEffect(() => {
+    let cancelled = false;
+    loadDayState(dayNumber).then((s) => {
+      if (cancelled || !s) return;
+      if (typeof s.reflection === "string") setReflection(s.reflection);
+      if (typeof s.calmRating === "number") setCalmRating([s.calmRating]);
+      if (typeof s.moodBefore === "number") setMoodBefore([s.moodBefore]);
+      if (typeof s.moodAfter === "number") setMoodAfter([s.moodAfter]);
+      if (typeof s.challengeText === "string") setChallengeText(s.challengeText);
+      if (typeof s.rememberText === "string") setRememberText(s.rememberText);
+      if (Array.isArray(s.checklist)) setChecklist(s.checklist);
+      if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
+      if (typeof s.intention === "string") setIntentionWord(s.intention);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [dayNumber]);
+
   const durationMins = day ? parseDuration(day.duration) : 15;
   const timer = useTimer(durationMins);
 
   // Auto-save
   const autoSave = useCallback(() => {
-    const state = {
+    const state: DayState = {
       reflection,
       calmRating: calmRating[0],
       moodBefore: moodBefore[0],
@@ -134,10 +156,11 @@ export default function DayPage() {
       rememberText,
       checklist,
       bookmarked,
+      intention: intentionWord,
     };
     try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
-    saveDayState(dayNumber, state as DayState).catch(() => {});
-  }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked]);
+    saveDayState(dayNumber, state).catch(() => {});
+  }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked, intentionWord]);
 
   useEffect(() => {
     const t = setTimeout(autoSave, 2000);
@@ -187,8 +210,15 @@ export default function DayPage() {
   };
 
   const startSession = () => {
-    setShowCheckInDialog(true);
+    setShowIntention(true);
+  };
+
+  const handleIntentionComplete = (data: { intention: string; moodBefore: number }) => {
+    setIntentionWord(data.intention);
+    setMoodBefore([data.moodBefore]);
+    setShowIntention(false);
     setSessionStarted(true);
+    setShowPractice(true);
   };
 
   const completeSession = () => {
@@ -225,37 +255,28 @@ export default function DayPage() {
         </div>
       </nav>
 
-      {/* ─── HERO SECTION WITH ZEN FLOW ─── */}
-      <section className={`relative w-full h-[400px] md:h-[480px] overflow-hidden transition-all duration-1000 ${
-        sessionStarted ? "bg-gradient-to-br from-emerald-600/80 via-teal-600/70 to-cyan-600/60" : "bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50"
-      }`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50" />
-        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40" width={1920} height={800} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-        {/* Floating botanicals */}
-        <div className="absolute top-12 right-12 w-32 h-32 rounded-full bg-card/5 blur-3xl animate-float" />
-        <div className="absolute bottom-20 left-8 w-24 h-24 rounded-full bg-card/5 blur-2xl animate-float" style={{ animationDelay: "2s" }} />
-
-        <div className="relative z-10 max-w-[800px] mx-auto px-6 h-full flex flex-col items-center justify-center text-center pt-[72px]">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/90 text-card text-xs font-body font-semibold tracking-wider uppercase mb-4">
-            WEEK {weekData.week}
-          </span>
-          <h1 className="font-display text-5xl md:text-7xl font-bold text-card leading-tight mb-3">
-            DAY {dayNumber}
-          </h1>
-          <p className="font-display text-2xl md:text-4xl text-card/95 font-semibold leading-snug mb-6">
-            {day.title}
-          </p>
-          <div className="flex items-center gap-4 text-card/80 text-sm font-body">
-            <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {day.duration}</span>
-            <span className="w-1 h-1 rounded-full bg-card/40" />
-            <span className="flex items-center gap-1.5"><Gauge className="w-4 h-4" /> {day.difficulty}</span>
-          </div>
-        </div>
-      </section>
+      {/* ─── CINEMATIC HERO (Ken Burns + parallax + particles) ─── */}
+      <DayHeroCinema
+        dayNumber={dayNumber}
+        weekNumber={weekData.week}
+        title={day.title}
+        duration={day.duration}
+        difficulty={day.difficulty}
+        onBegin={startSession}
+        onListenOnly={() => {
+          if (tts.hasAudio) tts.togglePlayPause();
+          else tts.generateAndPlay(day.guidedPractice.join("\n\n"));
+        }}
+        onReadFirst={() => {
+          document.getElementById("guided-practice")?.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
 
       {/* ─── MAIN CONTENT ─── */}
       <main className="max-w-[800px] mx-auto px-6 py-12 space-y-12">
+
+        {/* ─── AI DAILY INSIGHT (personalized framing) ─── */}
+        <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
 
         {/* ─── PROGRESS INDICATOR ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
@@ -334,57 +355,8 @@ export default function DayPage() {
           </div>
         </div>
 
-        {/* ─── PREMIUM BINAURAL BEATS PANEL ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-rose-500/15 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-rose-200/20 to-transparent" />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2.5 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-rose-500/20 to-pink-500/20 flex items-center justify-center">
-                <Music className="w-5 h-5 text-rose-600" />
-              </div>
-              <div>
-                <p className="text-xs font-body font-bold tracking-widest uppercase text-rose-600">Premium Feature</p>
-                <h3 className="font-display text-lg font-semibold text-foreground">Binaural Beats for Deep Focus</h3>
-              </div>
-            </div>
-            <p className="text-sm font-body text-foreground/80 mb-6 leading-relaxed">Enhance your meditation with scientifically-tuned binaural frequencies. Each frequency targets different brainwave states for optimal results.</p>
-            
-            <div className="space-y-4">
-              {BINAURAL_PRESETS.map((preset, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedFrequency(preset)}
-                  className={`w-full p-4 rounded-xl transition-all border-2 text-left ${
-                    selectedFrequency.name === preset.name
-                      ? `border-rose-500 bg-gradient-to-r ${preset.color} text-white shadow-lg`
-                      : "border-border/30 bg-card/40 hover:bg-card/60 text-foreground"
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-body font-semibold text-sm">{preset.name}</p>
-                      <p className={`text-xs font-body ${selectedFrequency.name === preset.name ? "text-white/80" : "text-muted-foreground"}`}>{preset.description}</p>
-                    </div>
-                    <span className={`text-xs font-body font-bold px-2 py-1 rounded-full ${selectedFrequency.name === preset.name ? "bg-white/20" : "bg-secondary"}`}>{preset.freq} Hz</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-6 space-y-3">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={binauralActive} onChange={(e) => setBinauralActive(e.target.checked)} className="w-4 h-4 rounded" />
-                <span className="text-sm font-body text-foreground">Enable binaural beats during meditation</span>
-              </label>
-              {binauralActive && (
-                <div className="space-y-2">
-                  <label className="text-xs font-body font-semibold text-muted-foreground">Volume</label>
-                  <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        {/* ─── SOUND BED DESIGNER (ambient + binaural + bowls) ─── */}
+        <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
 
         {/* ─── SCIENCE BOX ─── */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-100/70 via-orange-50/50 to-yellow-50/40 dark:from-amber-900/20 dark:via-orange-900/15 dark:to-gold/10 border border-gold/25 p-8 shadow-soft">
@@ -438,7 +410,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── GUIDED PRACTICE ─── */}
-        <div>
+        <div id="guided-practice">
           <h2 className="font-display text-3xl font-semibold text-foreground mb-6">Your Guided Practice</h2>
           <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/40 via-teal-50/25 to-sage-light/15 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-6 md:p-10 space-y-5 shadow-soft">
             <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/8 to-transparent" />
@@ -516,10 +488,13 @@ export default function DayPage() {
         {/* ─── TIMER ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-gold/20 p-8 text-center shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-gold/10 to-transparent" />
-          <div className="relative z-10">
+          <div className="relative z-10 flex flex-col items-center">
             <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
-            <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer</p>
-            <p className="font-display text-5xl font-bold text-foreground mb-6">{timer.display}</p>
+            <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer · 6 BPM Coherence</p>
+            <HeartCoherenceRing size={220} bpm={6}>
+              <p className="font-display text-5xl font-bold text-foreground">{timer.display}</p>
+            </HeartCoherenceRing>
+            <div className="h-6" />
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => timer.reset(durationMins)}
@@ -642,6 +617,9 @@ export default function DayPage() {
             )}
           </div>
         </div>
+
+        {/* ─── MOOD DELTA (before vs after) ─── */}
+        <MoodDeltaChart moodBefore={moodBefore[0]} moodAfter={moodAfter[0]} />
 
         {/* ─── DAILY TRACKER ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-green-50/20 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-green-900/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
@@ -784,6 +762,31 @@ export default function DayPage() {
           </div>
         </div>
       )}
+
+      {/* ─── INTENTION RITUAL (pre-session 3-step flow) ─── */}
+      <IntentionRitual
+        open={showIntention}
+        initialIntention={intentionWord}
+        initialMoodBefore={moodBefore[0]}
+        onClose={() => setShowIntention(false)}
+        onComplete={handleIntentionComplete}
+      />
+
+      {/* ─── PRACTICE MODE (full-screen cinema) ─── */}
+      <PracticeMode
+        open={showPractice}
+        dayNumber={dayNumber}
+        title={day.title}
+        paragraphs={day.guidedPractice}
+        tts={tts}
+        onClose={() => {
+          setShowPractice(false);
+          tts.stop();
+          // Capture mood-after via the calmRating slider state
+          setMoodAfter(calmRating);
+          toggleCheck(0);
+        }}
+      />
     </div>
   );
 }
