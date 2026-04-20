@@ -298,8 +298,22 @@ export default function DayPage() {
         difficulty={day.difficulty}
         onBegin={startSession}
         onListenOnly={() => {
+          if (isLockedDay) {
+            setPremiumGate({
+              feature: `Day ${dayNumber} is a Plus chapter`,
+              description: "Unlock Days 8–30 with Willow Plus to listen to the full guided narration.",
+            });
+            return;
+          }
           if (tts.hasAudio) tts.togglePlayPause();
-          else tts.generateAndPlay(day.guidedPractice.join("\n\n"));
+          else tts.generateAndPlay(day.guidedPractice.join("\n\n"), {
+            trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
+            category: "daily_meditation",
+            title: `Day ${dayNumber} · ${day.title}`,
+            voice: selectedVoice,
+            ambientBed: null,
+            isPremium: !FREE_VOICES.includes(selectedVoice),
+          });
         }}
         onReadFirst={() => {
           document.getElementById("guided-practice")?.scrollIntoView({ behavior: "smooth" });
