@@ -488,10 +488,13 @@ export default function DayPage() {
         {/* ─── TIMER ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-gold/20 p-8 text-center shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-gold/10 to-transparent" />
-          <div className="relative z-10">
+          <div className="relative z-10 flex flex-col items-center">
             <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
-            <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer</p>
-            <p className="font-display text-5xl font-bold text-foreground mb-6">{timer.display}</p>
+            <p className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider mb-3">Practice Timer · 6 BPM Coherence</p>
+            <HeartCoherenceRing size={220} bpm={6}>
+              <p className="font-display text-5xl font-bold text-foreground">{timer.display}</p>
+            </HeartCoherenceRing>
+            <div className="h-6" />
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => timer.reset(durationMins)}
