@@ -173,7 +173,7 @@ export default function DayPage() {
   const allComplete = completedCount === 4;
   const prevDay = dayNumber > 1 ? dayNumber - 1 : null;
   const nextDay = dayNumber < 30 ? dayNumber + 1 : null;
-  const heroImage = heroImages[weekIndex % heroImages.length];
+  const heroImage = getDayHero(dayNumber).image;
   const completedDays = Array.from({ length: 30 }, (_, i) => {
     const s = loadState(i + 1);
     return s?.checklist?.every(Boolean) || false;
