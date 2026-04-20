@@ -519,6 +519,44 @@ export default function DayPage() {
           </div>
         </div>
 
+        {/* ─── VOICE PICKER (Aria/George gated to Plus) ─── */}
+        <div className="rounded-2xl border border-border/50 bg-card/60 p-4 shadow-soft">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-xs font-body font-semibold uppercase tracking-wider text-muted-foreground">Narration voice</p>
+              <p className="text-[11px] font-body text-muted-foreground/70 mt-0.5">Choose who guides today's practice</p>
+            </div>
+            {!isPremium && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-body font-bold text-gold uppercase tracking-widest">
+                <Crown className="w-3 h-3" /> Plus
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {PREMIUM_VOICES.map((v) => {
+              const locked = v.tier === "premium" && !isPremium;
+              const active = selectedVoice === v.key;
+              return (
+                <button
+                  key={v.key}
+                  onClick={() => requestPremiumVoice(v.key)}
+                  className={`relative px-3 py-2.5 rounded-xl text-xs font-body font-medium transition-all border
+                    ${active
+                      ? "bg-gradient-to-r from-gold to-gold-dark text-card border-gold shadow-gold"
+                      : locked
+                        ? "bg-card/40 text-muted-foreground/70 border-border/40 hover:border-gold/40"
+                        : "bg-card text-foreground border-border hover:border-primary/40"}`}
+                >
+                  <span className="block truncate">{v.label}</span>
+                  {locked && (
+                    <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-gold" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* ─── AUDIO PLAYER ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/15 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-indigo-500/15 p-6 shadow-soft">
           <div className="text-center mb-4">
