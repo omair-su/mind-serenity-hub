@@ -21,6 +21,18 @@ import MoodDeltaChart from "@/components/day/MoodDeltaChart";
 import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
 import { getDayHero } from "@/data/dayHeroImages";
 import { loadDayState, saveDayState, type DayState } from "@/lib/cloudSync";
+import { useIsPremium } from "@/hooks/useIsPremium";
+import PremiumLockModal from "@/components/PremiumLockModal";
+import { Crown, Lock } from "lucide-react";
+
+type VoiceKey = "sarah" | "george" | "matilda" | "charlie";
+const FREE_VOICES: VoiceKey[] = ["sarah", "matilda"];
+const PREMIUM_VOICES: { key: VoiceKey; label: string; tier: "free" | "premium" }[] = [
+  { key: "sarah", label: "Sarah · Warm", tier: "free" },
+  { key: "matilda", label: "Matilda · Soft", tier: "free" },
+  { key: "george", label: "George · Deep", tier: "premium" },
+  { key: "charlie", label: "Aria · Ethereal", tier: "premium" },
+];
 
 /* ─── Day emoji mapping ─── */
 const dayEmojis: Record<number, string> = {
