@@ -275,6 +275,9 @@ export default function DayPage() {
       {/* ─── MAIN CONTENT ─── */}
       <main className="max-w-[800px] mx-auto px-6 py-12 space-y-12">
 
+        {/* ─── AI DAILY INSIGHT (personalized framing) ─── */}
+        <AIDailyInsight dayNumber={dayNumber} practice={day.practice} focus={day.focus} />
+
         {/* ─── PROGRESS INDICATOR ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
           <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
