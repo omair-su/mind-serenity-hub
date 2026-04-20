@@ -125,7 +125,7 @@ export default function DayPage() {
 
   // Auto-save
   const autoSave = useCallback(() => {
-    saveState(dayNumber, {
+    const state = {
       reflection,
       calmRating: calmRating[0],
       moodBefore: moodBefore[0],
@@ -133,8 +133,10 @@ export default function DayPage() {
       challengeText,
       rememberText,
       checklist,
-      bookmarked
-    });
+      bookmarked,
+    };
+    try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
+    saveDayState(dayNumber, state as DayState).catch(() => {});
   }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked]);
 
   useEffect(() => {
