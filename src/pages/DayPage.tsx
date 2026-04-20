@@ -255,34 +255,22 @@ export default function DayPage() {
         </div>
       </nav>
 
-      {/* ─── HERO SECTION WITH ZEN FLOW ─── */}
-      <section className={`relative w-full h-[400px] md:h-[480px] overflow-hidden transition-all duration-1000 ${
-        sessionStarted ? "bg-gradient-to-br from-emerald-600/80 via-teal-600/70 to-cyan-600/60" : "bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50"
-      }`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-primary/50" />
-        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40" width={1920} height={800} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-        {/* Floating botanicals */}
-        <div className="absolute top-12 right-12 w-32 h-32 rounded-full bg-card/5 blur-3xl animate-float" />
-        <div className="absolute bottom-20 left-8 w-24 h-24 rounded-full bg-card/5 blur-2xl animate-float" style={{ animationDelay: "2s" }} />
-
-        <div className="relative z-10 max-w-[800px] mx-auto px-6 h-full flex flex-col items-center justify-center text-center pt-[72px]">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/90 text-card text-xs font-body font-semibold tracking-wider uppercase mb-4">
-            WEEK {weekData.week}
-          </span>
-          <h1 className="font-display text-5xl md:text-7xl font-bold text-card leading-tight mb-3">
-            DAY {dayNumber}
-          </h1>
-          <p className="font-display text-2xl md:text-4xl text-card/95 font-semibold leading-snug mb-6">
-            {day.title}
-          </p>
-          <div className="flex items-center gap-4 text-card/80 text-sm font-body">
-            <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {day.duration}</span>
-            <span className="w-1 h-1 rounded-full bg-card/40" />
-            <span className="flex items-center gap-1.5"><Gauge className="w-4 h-4" /> {day.difficulty}</span>
-          </div>
-        </div>
-      </section>
+      {/* ─── CINEMATIC HERO (Ken Burns + parallax + particles) ─── */}
+      <DayHeroCinema
+        dayNumber={dayNumber}
+        weekNumber={weekData.week}
+        title={day.title}
+        duration={day.duration}
+        difficulty={day.difficulty}
+        onBegin={startSession}
+        onListenOnly={() => {
+          if (tts.hasAudio) tts.togglePlayPause();
+          else tts.generateAndPlay(day.guidedPractice.join("\n\n"));
+        }}
+        onReadFirst={() => {
+          document.getElementById("guided-practice")?.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
 
       {/* ─── MAIN CONTENT ─── */}
       <main className="max-w-[800px] mx-auto px-6 py-12 space-y-12">
