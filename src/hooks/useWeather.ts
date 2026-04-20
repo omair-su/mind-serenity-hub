@@ -1,5 +1,5 @@
 // Geolocation + Open-Meteo lookup. No API key required.
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export interface Weather {
   tempC: number;
@@ -29,54 +29,87 @@ const codeMap: Record<number, { desc: string; good: boolean; emoji: string }> = 
   95: { desc: "Thunderstorm", good: false, emoji: "⛈️" },
 };
 
+async function fetchWeatherForCoords(lat: number, lon: number): Promise<Weather> {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const code = data?.current?.weather_code ?? 0;
+  const tempC = data?.current?.temperature_2m ?? 0;
+  const meta = codeMap[code] ?? { desc: "Mild", good: true, emoji: "🌍" };
+  return {
+    tempC: Math.round(tempC),
+    code,
+    description: meta.desc,
+    isGoodForWalking: meta.good && tempC > 0 && tempC < 35,
+    emoji: meta.emoji,
+  };
+}
+
+// IP-based fallback (no permission needed). Used when geolocation is denied/unavailable.
+async function fetchWeatherByIP(): Promise<Weather | null> {
+  try {
+    // Open-Meteo doesn't do IP lookup; use ipapi.co (free, no key) for coords.
+    const ip = await fetch("https://ipapi.co/json/").then((r) => r.json()).catch(() => null);
+    if (!ip?.latitude || !ip?.longitude) return null;
+    return await fetchWeatherForCoords(ip.latitude, ip.longitude);
+  } catch {
+    return null;
+  }
+}
+
 export function useWeather() {
   const [weather, setWeather] = useState<Weather | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
     let cancelled = false;
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
+
+    const tryIPFallback = async () => {
+      const w = await fetchWeatherByIP();
+      if (cancelled) return;
+      if (w) {
+        setWeather(w);
+        setError(null);
+      } else {
+        setError("Weather unavailable");
+      }
       setLoading(false);
-      setError("Geolocation unavailable");
-      return;
+    };
+
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      tryIPFallback();
+      return () => { cancelled = true; };
     }
+
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
-          const { latitude, longitude } = pos.coords;
-          const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`;
-          const res = await fetch(url);
-          const data = await res.json();
+          const w = await fetchWeatherForCoords(pos.coords.latitude, pos.coords.longitude);
           if (cancelled) return;
-          const code = data?.current?.weather_code ?? 0;
-          const tempC = data?.current?.temperature_2m ?? 0;
-          const meta = codeMap[code] ?? { desc: "Mild", good: true, emoji: "🌍" };
-          setWeather({
-            tempC: Math.round(tempC),
-            code,
-            description: meta.desc,
-            isGoodForWalking: meta.good && tempC > 0 && tempC < 35,
-            emoji: meta.emoji,
-          });
-        } catch (e) {
-          if (!cancelled) setError("Weather fetch failed");
+          setWeather(w);
+        } catch {
+          if (!cancelled) await tryIPFallback();
         } finally {
           if (!cancelled) setLoading(false);
         }
       },
-      () => {
-        if (!cancelled) {
-          setLoading(false);
-          setError("Location denied");
-        }
+      async () => {
+        // Permission denied or timeout — fall back to IP lookup so widget still shows.
+        if (!cancelled) await tryIPFallback();
       },
-      { timeout: 8000, maximumAge: 600000 }
+      { timeout: 6000, maximumAge: 600000 }
     );
-    return () => {
-      cancelled = true;
-    };
+
+    return () => { cancelled = true; };
   }, []);
 
-  return { weather, loading, error };
+  useEffect(() => {
+    const cleanup = load();
+    return cleanup;
+  }, [load]);
+
+  return { weather, loading, error, retry: load };
 }
