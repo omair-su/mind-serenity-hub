@@ -29,14 +29,14 @@ export default function SignInPage() {
   };
 
   // Animation variants
-  const containerVariants = {
+  const containerVariants: import("framer-motion").Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
       y: 0,
       transition: { 
         duration: 0.6, 
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         staggerChildren: 0.08
       }
     }
@@ -71,7 +71,7 @@ export default function SignInPage() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="mb-12"
           >
-            <WillowLogo variant="vertical" size="lg" colorScheme="mono-black" className="scale-125 origin-left" />
+            <WillowLogo variant="vertical" size="lg" colorScheme="mono-navy" className="scale-125 origin-left" />
           </motion.div>
 
           <motion.h1 
@@ -133,7 +133,7 @@ export default function SignInPage() {
         >
           {/* Mobile Logo */}
           <div className="md:hidden mb-10 text-center">
-            <WillowLogo variant="vertical" size="md" colorScheme="mono-black" className="mx-auto" />
+            <WillowLogo variant="vertical" size="md" colorScheme="mono-navy" className="mx-auto" />
           </div>
 
           <div className="bg-[#FDFDFB] rounded-[2rem] p-8 md:p-12 shadow-[0_8px_32px_rgba(44,62,80,0.06),0_16px_48px_rgba(44,62,80,0.04)] border border-[#E8E8E0]/50 relative overflow-hidden">
