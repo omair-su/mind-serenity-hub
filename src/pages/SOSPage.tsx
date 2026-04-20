@@ -82,7 +82,7 @@ const sosSessions = [
     desc: "Can't sleep? This will help.", 
     gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
     luxuryColor: "indigo",
-    image: "https://images.unsplash.com/photo-1532978879514-6cae1cb02ddb?auto=format&fit=crop&q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&q=80&w=1600",
     steps: [
       "Lie on your back. Close your eyes. Don't try to sleep — just rest.",
       "Starting at your toes, deliberately relax each body part.",
@@ -103,7 +103,7 @@ const sosSessions = [
     desc: "High-performance focus before important events.", 
     gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
     luxuryColor: "amber",
-    image: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?auto=format&fit=crop&q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=1600",
     steps: [
       "Sit upright. Feet flat on floor. Hands on thighs.",
       "Take 3 deep breaths to center yourself.",
