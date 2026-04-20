@@ -135,6 +135,22 @@ const sosSessions = [
   }
 ];
 
+// Map extra sessions to full session shape with icons + luxuryColor
+const extraIconMap: Record<string, { icon: JSX.Element; luxuryColor: string }> = {
+  "anger-defuse": { icon: <Flame className="w-6 h-6 text-red-500" />, luxuryColor: "red" },
+  "social-anxiety": { icon: <Users className="w-6 h-6 text-cyan-500" />, luxuryColor: "cyan" },
+  "pain-acceptance": { icon: <Gem className="w-6 h-6 text-violet-500" />, luxuryColor: "violet" },
+};
+
+const allSessions = [
+  ...sosSessions,
+  ...extraSOSSessions.map((s) => ({
+    ...s,
+    icon: extraIconMap[s.id]?.icon ?? <Sparkles className="w-6 h-6 text-primary" />,
+    luxuryColor: extraIconMap[s.id]?.luxuryColor ?? "primary",
+  })),
+];
+
 export default function SOSPage() {
   const [active, setActive] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
@@ -142,9 +158,10 @@ export default function SOSPage() {
   const [running, setRunning] = useState(false);
   const [binauralActive, setBinauralActive] = useState(false);
   const [binauralVolume, setBinauralVolume] = useState(0.2);
+  const [completed, setCompleted] = useState<{ id: string; title: string } | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const activeSession = sosSessions.find(s => s.id === active);
+  const activeSession = allSessions.find(s => s.id === active);
 
   useEffect(() => {
     if (running) {
@@ -170,18 +187,39 @@ export default function SOSPage() {
     setTimerSecs(0); 
     setRunning(true); 
     setBinauralActive(true);
+    setCompleted(null);
+  };
+
+  const closeSession = () => {
+    setActive(null);
+    setRunning(false);
+    setBinauralActive(false);
   };
 
   const nextStep = () => {
-    if (activeSession && stepIndex < activeSession.steps.length - 1) setStepIndex(s => s + 1);
-    else { 
-      setRunning(false); 
-      setActive(null); 
-      setBinauralActive(false);
+    if (activeSession && stepIndex < activeSession.steps.length - 1) {
+      setStepIndex(s => s + 1);
+    } else if (activeSession) {
+      setCompleted({ id: activeSession.id, title: activeSession.title });
+      closeSession();
     }
   };
 
   const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+
+  // Map luxuryColor → tailwind gradient class for breathing orb
+  const orbColorMap: Record<string, string> = {
+    emerald: "from-emerald-400 to-teal-500",
+    rose: "from-rose-400 to-pink-500",
+    blue: "from-blue-400 to-indigo-500",
+    indigo: "from-indigo-400 to-purple-500",
+    amber: "from-amber-400 to-orange-500",
+    purple: "from-purple-400 to-violet-500",
+    red: "from-red-400 to-orange-500",
+    cyan: "from-cyan-400 to-blue-500",
+    violet: "from-violet-400 to-purple-500",
+  };
+
 
   return (
     <AppLayout>
