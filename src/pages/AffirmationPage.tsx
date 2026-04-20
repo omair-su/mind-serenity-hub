@@ -100,6 +100,7 @@ export default function AffirmationPage() {
   });
   const [bgIdx, setBgIdx] = useState(0);
   const tts = useTextToSpeech();
+  const ambient = useAmbientBed("silence", 30);
 
   const currentList = affirmations[selectedCategory] || affirmations.morning;
   const currentAffirmation = currentList[currentIndex];
@@ -128,7 +129,13 @@ export default function AffirmationPage() {
     if (tts.hasAudio) {
       tts.togglePlayPause();
     } else {
-      tts.generateAndPlay(currentAffirmation);
+      tts.generateAndPlay(currentAffirmation, {
+        trackKey: `affirmation-${selectedCategory}-${currentIndex}`,
+        category: "affirmation",
+        title: `${selectedCategory} affirmation`,
+        voice: "matilda",
+        ambientBed: ambient.bed === "silence" ? null : ambient.bed,
+      });
     }
   };
 

@@ -103,7 +103,7 @@ export default function SleepPage() {
                 </p>
                 <div className="flex justify-center mt-4">
                   <button
-                    onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(activeSession.script[stepIndex])}
+                    onClick={() => tts.hasAudio ? tts.togglePlayPause() : playStep(stepIndex)}
                     disabled={tts.isLoading}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-primary/15 to-[hsl(var(--sage))]/10 text-primary dark:text-[hsl(var(--sage))] text-sm font-body hover:from-primary/25 hover:to-[hsl(var(--sage))]/20 transition-all disabled:opacity-50"
                   >
