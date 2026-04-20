@@ -210,8 +210,15 @@ export default function DayPage() {
   };
 
   const startSession = () => {
-    setShowCheckInDialog(true);
+    setShowIntention(true);
+  };
+
+  const handleIntentionComplete = (data: { intention: string; moodBefore: number }) => {
+    setIntentionWord(data.intention);
+    setMoodBefore([data.moodBefore]);
+    setShowIntention(false);
     setSessionStarted(true);
+    setShowPractice(true);
   };
 
   const completeSession = () => {
