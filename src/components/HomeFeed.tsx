@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   Sun, Moon, Cloud, Wind, Heart, Brain, Headphones, BookOpen, Leaf,
-  Sparkles, ArrowRight, Music, Zap, Play, Coffee
+  Sparkles, ArrowRight, Music, Zap, Play, Coffee, Wand2
 } from "lucide-react";
 import { getProfile, getCurrentStreak, getCompletedDays, getNextDay, getMoods } from "@/lib/userStore";
+import { supabase } from "@/integrations/supabase/client";
+
+interface AIRec {
+  label: string;
+  reason: string;
+  path: string;
+  emoji: string;
+  category: string;
+}
 
 type TimeOfDay = "morning" | "afternoon" | "evening" | "night";
 
@@ -75,6 +85,54 @@ export default function HomeFeed() {
   const nextDay = getNextDay();
   const moods = getMoods();
   const TimeIcon = config.icon;
+
+  // AI personalized recommendations from edge function
+  const [aiRecs, setAiRecs] = useState<AIRec[]>([]);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const cacheKey = `wv-ai-recs-${tod}-${completed.length}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        setAiRecs(JSON.parse(cached));
+        return;
+      } catch {}
+    }
+
+    setAiLoading(true);
+    const recentMood = moods.length > 0 ? moods[moods.length - 1].after : undefined;
+    supabase.functions
+      .invoke("personalize-feed", {
+        body: {
+          goals: profile.goals ?? [],
+          experience: profile.experience,
+          completedDays: completed.length,
+          recentMood,
+          timeOfDay: tod,
+          recentTracks: [],
+        },
+      })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error || !data?.recommendations) {
+          setAiRecs([]);
+        } else {
+          setAiRecs(data.recommendations);
+          try {
+            sessionStorage.setItem(cacheKey, JSON.stringify(data.recommendations));
+          } catch {}
+        }
+      })
+      .catch(() => setAiRecs([]))
+      .finally(() => !cancelled && setAiLoading(false));
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tod, completed.length]);
 
   // Smart recommendations based on user data
   const recommendations: { label: string; reason: string; path: string; emoji: string }[] = [];
