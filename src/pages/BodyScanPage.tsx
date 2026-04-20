@@ -2,12 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Play, Pause, RotateCcw, Sparkles, Volume2, Loader2 } from "lucide-react";
+import { Play, RotateCcw, Sparkles, Loader2 } from "lucide-react";
 import bodyscanHero from "@/assets/bodyscan-hero.jpg";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
 import { bodyScanZones, bodyScanIntroScript, bodyScanOutroScript } from "@/data/bodyScanScripts";
 import ActiveZonePanel from "@/components/bodyscan/ActiveZonePanel";
 import ZoneCard from "@/components/bodyscan/ZoneCard";
+import NarrationBar from "@/components/NarrationBar";
 
 export default function BodyScanPage() {
   const [activeZone, setActiveZone] = useState<string | null>(null);
