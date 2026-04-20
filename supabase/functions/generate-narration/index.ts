@@ -56,8 +56,16 @@ Deno.serve(async (req) => {
     if (!ELEVENLABS_API_KEY) throw new Error('ELEVENLABS_API_KEY missing');
 
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+    const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+
+    // Verify caller — premium tracks require an authenticated user with active subscription
+    const authHeader = req.headers.get('Authorization') ?? '';
+    const userClient = createClient(SUPABASE_URL, ANON_KEY, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: { user } } = await userClient.auth.getUser();
 
     const body: GenerateRequest = await req.json();
     const {
@@ -71,9 +79,37 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Premium-content gate
+    if (isPremium) {
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'Sign in required for premium content' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const { data: profile } = await admin
+        .from('profiles')
+        .select('is_premium')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (!profile?.is_premium) {
+        return new Response(JSON.stringify({ error: 'Premium subscription required' }), {
+          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     const voiceKey: VoiceKey = voice ?? defaultVoiceFor(category);
     const voiceMeta = VOICE_LIBRARY[voiceKey];
     const scriptHash = await sha256(script + voiceKey);
+
+    // Helper: build a fresh signed URL (1 hour) for a given storage path
+    const signUrl = async (storagePath: string): Promise<string> => {
+      const { data, error } = await admin.storage
+        .from('meditation-audio')
+        .createSignedUrl(storagePath, 60 * 60);
+      if (error || !data?.signedUrl) throw new Error('Failed to sign URL');
+      return data.signedUrl;
+    };
 
     // 1. Check cache
     const { data: existing } = await admin
@@ -83,7 +119,11 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (existing && existing.script_hash === scriptHash) {
-      return new Response(JSON.stringify({ cached: true, track: existing }), {
+      const signed = await signUrl(existing.storage_path);
+      return new Response(JSON.stringify({
+        cached: true,
+        track: { ...existing, public_url: signed },
+      }), {
         status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -102,11 +142,11 @@ Deno.serve(async (req) => {
           text: script,
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
-            stability: 0.65,        // smooth, consistent meditation tone
+            stability: 0.65,
             similarity_boost: 0.8,
-            style: 0.3,             // subtle expression
+            style: 0.3,
             use_speaker_boost: true,
-            speed: 0.92,            // slightly slower for meditation pacing
+            speed: 0.92,
           },
         }),
       }
@@ -123,26 +163,22 @@ Deno.serve(async (req) => {
     const audioBuffer = await ttsResponse.arrayBuffer();
     const storagePath = `${category}/${trackKey}.mp3`;
 
-    // 3. Upload to storage (overwrite if existed)
+    // 3. Upload to private storage (overwrite if existed)
     const { error: uploadError } = await admin.storage
       .from('meditation-audio')
       .upload(storagePath, audioBuffer, {
         contentType: 'audio/mpeg',
         upsert: true,
-        cacheControl: '31536000', // 1 year — content is immutable per script_hash
+        cacheControl: '31536000',
       });
 
     if (uploadError) throw uploadError;
 
-    const { data: { publicUrl } } = admin.storage
-      .from('meditation-audio')
-      .getPublicUrl(storagePath);
-
-    // Estimate duration: ~150 words/min at speed 0.92 → ~138 wpm effective
+    // Estimate duration
     const wordCount = script.split(/\s+/).length;
     const durationSeconds = Math.round((wordCount / 138) * 60);
 
-    // 4. Upsert catalog row
+    // 4. Upsert catalog row — store empty public_url (legacy column kept for compatibility)
     const { data: track, error: upsertError } = await admin
       .from('audio_tracks')
       .upsert({
@@ -154,7 +190,7 @@ Deno.serve(async (req) => {
         voice_id: voiceMeta.id,
         voice_name: voiceMeta.name,
         storage_path: storagePath,
-        public_url: publicUrl,
+        public_url: '', // no longer used — signed URLs returned per-request
         ambient_bed: ambientBed,
         is_premium: isPremium,
         script_hash: scriptHash,
@@ -164,7 +200,12 @@ Deno.serve(async (req) => {
 
     if (upsertError) throw upsertError;
 
-    return new Response(JSON.stringify({ cached: false, track }), {
+    const signed = await signUrl(storagePath);
+
+    return new Response(JSON.stringify({
+      cached: false,
+      track: { ...track, public_url: signed },
+    }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
