@@ -199,3 +199,21 @@ async function sha1(text: string): Promise<string> {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
+
+// Browser SpeechSynthesis fallback when ElevenLabs is unavailable
+function playWithBrowserTTS(text: string, onStart: () => void, onEnd: () => void) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = 0.92;
+    u.pitch = 1;
+    u.onstart = onStart;
+    u.onend = onEnd;
+    u.onerror = onEnd;
+    window.speechSynthesis.speak(u);
+  } catch {
+    onEnd();
+  }
+}
