@@ -10,6 +10,8 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
+import { pickTrackForDay } from "@/lib/realAmbientTracks";
 import logoImg from "@/assets/willow-logo.png";
 import heroBreath from "@/assets/day-hero-breath.jpg";
 import heroBody from "@/assets/day-hero-body.jpg";
@@ -422,6 +424,18 @@ export default function DayPage() {
               <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Have your journal nearby</li>
             </ul>
           </div>
+        </div>
+
+        {/* ─── REAL AMBIENT MUSIC (curated per day) ─── */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Music className="w-4 h-4 text-[hsl(var(--gold))]" />
+            <h3 className="font-display text-sm font-semibold text-foreground">Today's ambient soundscape</h3>
+          </div>
+          <AmbientMusicPlayer defaultTrack={pickTrackForDay(day.day)} />
+          <p className="text-[11px] font-body text-muted-foreground mt-2 text-center">
+            Press play, then start your guided practice below for the full experience.
+          </p>
         </div>
 
         {/* ─── GUIDED PRACTICE ─── */}

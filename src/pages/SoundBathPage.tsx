@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { FREQUENCY_PRESETS, startBinaural, stopBinaural, setBinauralVolume, isBinauralPlaying } from "@/lib/binauralBeats";
-import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info } from "lucide-react";
+import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info, Music } from "lucide-react";
 import soundbathHero from "@/assets/soundbath-hero.jpg";
+import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
+import { pickTrackByMood } from "@/lib/realAmbientTracks";
 export default function SoundBathPage() {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.3);
@@ -80,6 +82,9 @@ export default function SoundBathPage() {
             </div>
           </div>
         </div>
+
+        {/* Real spiritual ambient music to layer with binaural beats */}
+        <AmbientMusicPlayer defaultTrack={pickTrackByMood("spiritual")} />
 
         <div className="relative overflow-hidden bg-gradient-to-r from-violet-100/50 via-purple-50/30 to-indigo-50/20 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl p-4 border border-violet-500/15 shadow-soft">
           <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-bl from-violet-200/30 to-transparent" />
