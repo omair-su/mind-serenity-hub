@@ -190,4 +190,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
       </motion.div>
     </>
   );
-}
+});
+
+NarrationBar.displayName = "NarrationBar";
+export default NarrationBar;
