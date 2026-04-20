@@ -37,7 +37,7 @@ export const extraSOSSessions: ExtraSOSSession[] = [
     duration: 4,
     emoji: "🫂",
     desc: "Calm the racing pre-event mind in 4 minutes.",
-    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&q=80&w=1600",
     gradient: "from-blue-500/25 via-cyan-500/10 to-transparent",
     steps: [
       "You are safe. Your body is reacting to imagined danger, not real danger.",
@@ -54,7 +54,7 @@ export const extraSOSSessions: ExtraSOSSession[] = [
     duration: 12,
     emoji: "💎",
     desc: "Mindful relief for chronic or acute physical pain.",
-    image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&q=80&w=1600",
+    image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&q=80&w=1600",
     gradient: "from-purple-500/25 via-violet-500/10 to-transparent",
     steps: [
       "Lie down or sit in your most comfortable position. Close your eyes.",
