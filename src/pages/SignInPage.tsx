@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import WillowLogo from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
 
 type Mode = "signin" | "signup";
@@ -63,17 +64,19 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     resetMessages();
     setGoogleLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/app`,
-      },
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: `${window.location.origin}/app`,
     });
-    if (error) {
+    if (result.error) {
       setGoogleLoading(false);
-      setErrorMsg(error.message);
+      setErrorMsg(result.error.message ?? "Google sign-in failed.");
+      return;
     }
-    // On success the browser redirects to Google.
+    if (result.redirected) {
+      // Browser is redirecting to Google — leave loader on.
+      return;
+    }
+    // Tokens received; auth listener will redirect to /app.
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
