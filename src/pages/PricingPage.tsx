@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Check, Crown, Sparkles, ArrowLeft, Infinity as InfinityIcon } from "lucide-react";
+import { Check, Crown, Sparkles, ArrowLeft, Infinity as InfinityIcon, Loader2 } from "lucide-react";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 
 const FREE_FEATURES = [
   "Days 1–7 of the 30-Day Program",
@@ -23,6 +24,7 @@ const PLUS_FEATURES = [
 ];
 
 export default function PricingPage() {
+  const { openCheckout, loading } = usePaddleCheckout();
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-[hsl(var(--forest-deep))]/10">
       {/* Launch banner */}
@@ -124,8 +126,11 @@ export default function PricingPage() {
               </ul>
             </div>
             <button
-              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all"
+              onClick={() => openCheckout({ priceId: "willow_plus_yearly" })}
+              disabled={loading}
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
             >
+              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Start 7-day free trial
             </button>
             <p className="text-[10px] font-body text-center text-white/60 mt-2">
@@ -158,8 +163,11 @@ export default function PricingPage() {
               </ul>
             </div>
             <button
-              className="mt-6 w-full py-3 rounded-xl bg-foreground text-background font-body font-semibold text-sm hover:opacity-90 transition-opacity"
+              onClick={() => openCheckout({ priceId: "willow_plus_monthly" })}
+              disabled={loading}
+              className="mt-6 w-full py-3 rounded-xl bg-foreground text-background font-body font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
             >
+              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Start 7-day free trial
             </button>
             <p className="text-[10px] font-body text-center text-muted-foreground mt-2">
@@ -194,7 +202,12 @@ export default function PricingPage() {
                 <span className="font-display text-4xl sm:text-5xl font-bold text-white">$199</span>
                 <span className="text-sm font-body text-white/60 ml-2 line-through">$599</span>
               </div>
-              <button className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all">
+              <button
+                onClick={() => openCheckout({ priceId: "willow_lifetime_onetime" })}
+                disabled={loading}
+                className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 inline-flex items-center justify-center gap-2"
+              >
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Claim Lifetime Access
               </button>
             </div>

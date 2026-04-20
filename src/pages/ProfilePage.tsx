@@ -4,10 +4,11 @@ import { getProfile, saveProfile, UserProfile, getAllDayStates, getMoods, getTim
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown, ExternalLink } from "lucide-react";
+import { Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown, ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
@@ -15,13 +16,24 @@ const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "�
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile>(getProfile());
   const [saved, setSaved] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
   const { isPremium } = useIsPremium();
 
-  const handleCancelSubscription = () => {
-    if (!window.confirm("Cancel Willow Plus? You'll keep access until the end of your current billing period.")) return;
-    // Paddle customer portal — opens billing management where users can cancel
-    window.open("https://customer-portal.paddle.com/", "_blank", "noopener,noreferrer");
-    toast.info("Opening Paddle billing portal in a new tab…");
+  const handleCancelSubscription = async () => {
+    if (!window.confirm("Open the billing portal to cancel? You'll keep Plus access until the end of your billing period.")) return;
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("paddle-customer-portal");
+      if (error || !data?.url) {
+        toast.error("Couldn't open billing portal. Please email support@willowvibes.com");
+        return;
+      }
+      window.open(data.url, "_blank", "noopener,noreferrer");
+    } catch {
+      toast.error("Couldn't open billing portal. Please try again.");
+    } finally {
+      setPortalLoading(false);
+    }
   };
 
   const update = (partial: Partial<UserProfile>) => {
@@ -200,9 +212,11 @@ export default function ProfilePage() {
 
               <button
                 onClick={handleCancelSubscription}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all"
+                disabled={portalLoading}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all disabled:opacity-60"
               >
-                <ExternalLink className="w-4 h-4" /> Manage or Cancel Subscription
+                {portalLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
+                Manage or Cancel Subscription
               </button>
               <p className="text-[11px] font-body text-muted-foreground text-center leading-relaxed">
                 One-click cancellation via Paddle. You'll keep Plus access until the end of your billing period — no questions asked. Refund requests are honored within 14 days per our{" "}

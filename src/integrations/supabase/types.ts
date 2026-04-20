@@ -134,6 +134,45 @@ export type Database = {
         }
         Relationships: []
       }
+      lifetime_purchases: {
+        Row: {
+          amount_cents: number
+          currency: string
+          environment: string
+          id: string
+          paddle_customer_id: string
+          paddle_transaction_id: string
+          price_id: string
+          product_id: string
+          purchased_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          currency?: string
+          environment?: string
+          id?: string
+          paddle_customer_id: string
+          paddle_transaction_id: string
+          price_id: string
+          product_id: string
+          purchased_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          currency?: string
+          environment?: string
+          id?: string
+          paddle_customer_id?: string
+          paddle_transaction_id?: string
+          price_id?: string
+          product_id?: string
+          purchased_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       mood_entries: {
         Row: {
           ai_insight: string | null
@@ -254,6 +293,54 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          environment: string
+          id: string
+          paddle_customer_id: string
+          paddle_subscription_id: string
+          price_id: string
+          product_id: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment?: string
+          id?: string
+          paddle_customer_id: string
+          paddle_subscription_id: string
+          price_id: string
+          product_id: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment?: string
+          id?: string
+          paddle_customer_id?: string
+          paddle_subscription_id?: string
+          price_id?: string
+          product_id?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_progress: {
         Row: {
           achievements: Json
@@ -310,7 +397,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_active_subscription: {
+        Args: { check_env?: string; user_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
