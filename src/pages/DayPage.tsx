@@ -3,9 +3,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { weeks } from "@/data/courseData";
 import {
   ChevronLeft, ChevronRight, Clock, Gauge, Sun, Target, Sparkles,
-  Heart, FlaskConical, Play, Pause, Volume2, Download, SkipBack, SkipForward,
-  Check, Bookmark, BookmarkCheck, Printer, LayoutDashboard, Timer, Leaf, Loader2, Square,
-  Music, Zap, Brain, Lightbulb, TrendingUp, Award, Wand2, Eye, Ear, Wind, X
+  Heart, FlaskConical, Play, Pause, Volume2, Check, Bookmark, BookmarkCheck,
+  LayoutDashboard, Timer, Leaf, Loader2, Square, Music, Lightbulb, X
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,13 +12,14 @@ import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackForDay } from "@/lib/realAmbientTracks";
 import logoImg from "@/assets/willow-logo.png";
-import heroBreath from "@/assets/day-hero-breath.jpg";
-import heroBody from "@/assets/day-hero-body.jpg";
-import heroNature from "@/assets/day-hero-nature.jpg";
-import heroHeart from "@/assets/day-hero-heart.jpg";
-
-/* ─── Hero image mapping by week ─── */
-const heroImages = [heroBreath, heroBody, heroNature, heroHeart];
+import DayHeroCinema from "@/components/day/DayHeroCinema";
+import IntentionRitual from "@/components/day/IntentionRitual";
+import PracticeMode from "@/components/day/PracticeMode";
+import SoundBedDesigner from "@/components/day/SoundBedDesigner";
+import AIDailyInsight from "@/components/day/AIDailyInsight";
+import MoodDeltaChart from "@/components/day/MoodDeltaChart";
+import { getDayHero } from "@/data/dayHeroImages";
+import { loadDayState, saveDayState, fetchAllDayCompletions, type DayState } from "@/lib/cloudSync";
 
 /* ─── Day emoji mapping ─── */
 const dayEmojis: Record<number, string> = {
