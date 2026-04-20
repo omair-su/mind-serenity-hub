@@ -1,175 +1,153 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
-import { getMoods, saveMood, MoodEntry } from "@/lib/userStore";
-import { Calendar, Heart } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
+import { Heart, Lock } from "lucide-react";
+import MoodWheel, { EMOTION_WHEEL } from "@/components/mood/MoodWheel";
+import MoodTrendChart from "@/components/mood/MoodTrendChart";
+import MoodInsightsCard from "@/components/mood/MoodInsightsCard";
+import PremiumLockModal from "@/components/PremiumLockModal";
+import { fetchMoodEntries, saveMoodEntry, type CloudMoodEntry } from "@/lib/cloudSync";
 
-const moodEmojis = [
-  { emoji: "😰", label: "Very Stressed", value: 1 },
-  { emoji: "😟", label: "Stressed", value: 2 },
-  { emoji: "😐", label: "Neutral", value: 3 },
-  { emoji: "🙂", label: "Calm", value: 4 },
-  { emoji: "😌", label: "Very Calm", value: 5 },
-];
-
-const statGradients = [
-  "from-[hsl(var(--forest-deep))]/12 to-[hsl(var(--forest))]/5",
-  "from-[hsl(var(--sage))]/12 to-[hsl(var(--sage-light))]/5",
-  "from-[hsl(var(--gold))]/12 to-[hsl(var(--gold-light))]/5",
-];
+const HERO = "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&q=80&w=1600";
 
 export default function MoodTrackerPage() {
-  const [moods] = useState<MoodEntry[]>(getMoods());
+  const [entries, setEntries] = useState<CloudMoodEntry[]>([]);
   const [showCheckIn, setShowCheckIn] = useState(false);
-  const [before, setBefore] = useState(3);
-  const [after, setAfter] = useState(3);
+  const [primary, setPrimary] = useState<string | null>(null);
+  const [secondary, setSecondary] = useState<string | null>(null);
   const [energy, setEnergy] = useState([5]);
   const [focus, setFocus] = useState([5]);
   const [note, setNote] = useState("");
+  const [premiumOpen, setPremiumOpen] = useState(false);
 
-  const submitMood = () => {
-    saveMood({ date: new Date().toISOString(), dayNum: 0, before, after, energy: energy[0], focus: focus[0], note });
-    setShowCheckIn(false); setBefore(3); setAfter(3); setNote("");
-    window.location.reload();
+  useEffect(() => {
+    fetchMoodEntries().then(setEntries);
+  }, []);
+
+  const submitMood = async () => {
+    if (!primary) return;
+    const saved = await saveMoodEntry({
+      emotion_primary: primary,
+      emotion_secondary: secondary ?? undefined,
+      energy: energy[0],
+      focus: focus[0],
+      note: note.trim() || undefined,
+    });
+    if (saved) setEntries([saved as CloudMoodEntry, ...entries]);
+    setShowCheckIn(false);
+    setPrimary(null); setSecondary(null); setEnergy([5]); setFocus([5]); setNote("");
   };
 
-  const now = new Date();
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const firstDayOfWeek = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-
-  const moodsByDate: Record<string, MoodEntry> = {};
-  moods.forEach(m => { moodsByDate[m.date.split('T')[0]] = m; });
-
-  const avgMood = moods.length > 0 ? (moods.reduce((s, m) => s + m.after, 0) / moods.length).toFixed(1) : "—";
-  const avgImprovement = moods.length > 0 ? (moods.reduce((s, m) => s + (m.after - m.before), 0) / moods.length).toFixed(1) : "—";
+  const recentAvg = entries.slice(0, 7).length;
 
   return (
     <AppLayout>
-      <motion.div className="space-y-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
-              <Heart className="w-5 h-5 text-[hsl(var(--gold))]" />
+      <PremiumLockModal
+        open={premiumOpen}
+        onClose={() => setPremiumOpen(false)}
+        feature="Emotional Health Report"
+        description="Monthly PDF report with charts, AI narrative, and personalized recommendations from your coach."
+      />
+      <motion.div className="space-y-6 pb-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        {/* Hero */}
+        <div className="relative rounded-3xl overflow-hidden h-44 shadow-elevated">
+          <img src={HERO} alt="Aurora dawn" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute bottom-4 left-5 right-5 text-white">
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-md"><Heart className="w-4 h-4" /></div>
+              <span className="text-[10px] font-body font-bold uppercase tracking-widest text-white/80">Emotional Intelligence</span>
             </div>
-            <div>
-              <h1 className="font-display text-3xl font-bold text-foreground">Mood Tracker</h1>
-              <p className="text-sm font-body text-muted-foreground">{moods.length} check-ins recorded</p>
-            </div>
+            <h1 className="font-display text-2xl font-bold drop-shadow-lg">Mood Tracker</h1>
+            <p className="text-xs font-body text-white/80 mt-0.5">{entries.length} check-ins · {recentAvg} this week</p>
           </div>
-          <button onClick={() => setShowCheckIn(true)} className="px-5 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white rounded-xl text-sm font-body font-semibold shadow-[var(--shadow-gold-val)] hover:shadow-lg transition-all">
+          <button
+            onClick={() => setShowCheckIn(true)}
+            className="absolute top-4 right-4 px-4 py-2 bg-gold text-white rounded-xl text-xs font-body font-bold shadow-lg hover:bg-gold-dark"
+          >
             + Check In
           </button>
         </div>
 
+        {/* Check-in form */}
         {showCheckIn && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-[hsl(var(--gold))]/5 via-card to-[hsl(var(--sage))]/5 rounded-2xl border-2 border-[hsl(var(--gold))]/25 p-6 shadow-elevated">
-            <h2 className="font-display text-xl font-semibold text-foreground mb-6">How do you feel?</h2>
-            <div className="space-y-6">
-              <div>
-                <p className="text-sm font-body font-medium text-foreground mb-3">Before meditation</p>
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-                  {moodEmojis.map(m => (
-                    <button key={m.value} onClick={() => setBefore(m.value)}
-                      className={`p-2 sm:p-3 rounded-xl text-center transition-all min-w-0 ${
-                        before === m.value ? "bg-gradient-to-br from-primary/15 to-[hsl(var(--sage))]/20 ring-2 ring-primary scale-105 shadow-sm" : "bg-secondary/60 hover:bg-secondary"
-                      }`}>
-                      <span className="text-xl sm:text-2xl">{m.emoji}</span>
-                      <p className="text-[9px] sm:text-[10px] font-body text-muted-foreground mt-1 truncate">{m.label}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-body font-medium text-foreground mb-3">After meditation</p>
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-                  {moodEmojis.map(m => (
-                    <button key={m.value} onClick={() => setAfter(m.value)}
-                      className={`p-2 sm:p-3 rounded-xl text-center transition-all min-w-0 ${
-                        after === m.value ? "bg-gradient-to-br from-primary/15 to-[hsl(var(--sage))]/20 ring-2 ring-primary scale-105 shadow-sm" : "bg-secondary/60 hover:bg-secondary"
-                      }`}>
-                      <span className="text-xl sm:text-2xl">{m.emoji}</span>
-                      <p className="text-[9px] sm:text-[10px] font-body text-muted-foreground mt-1 truncate">{m.label}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-body font-medium text-foreground mb-2">Energy Level: {energy[0]}/10</p>
-                <Slider value={energy} onValueChange={setEnergy} min={1} max={10} />
-              </div>
-              <div>
-                <p className="text-sm font-body font-medium text-foreground mb-2">Focus Level: {focus[0]}/10</p>
-                <Slider value={focus} onValueChange={setFocus} min={1} max={10} />
-              </div>
-              <div>
-                <p className="text-sm font-body font-medium text-foreground mb-2">Notes (optional)</p>
-                <Textarea value={note} onChange={e => setNote(e.target.value)} placeholder="How are you feeling today?" className="font-body" />
-              </div>
-              <div className="flex gap-3">
-                <button onClick={submitMood} className="flex-1 py-3 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white rounded-xl text-sm font-body font-semibold shadow-[var(--shadow-gold-val)] hover:shadow-lg transition-all">Save Check-In</button>
-                <button onClick={() => setShowCheckIn(false)} className="px-4 py-3 bg-secondary rounded-xl text-sm font-body text-muted-foreground hover:bg-secondary/80 transition-all">Cancel</button>
-              </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-card rounded-2xl border-2 border-gold/25 p-5 shadow-elevated space-y-5"
+          >
+            <h2 className="font-display text-lg font-bold text-foreground">How do you feel right now?</h2>
+
+            <MoodWheel primary={primary} secondary={secondary} onPrimary={setPrimary} onSecondary={setSecondary} />
+
+            <div>
+              <p className="text-xs font-body font-semibold text-foreground/80 mb-2 uppercase tracking-wider">Energy: {energy[0]}/10</p>
+              <Slider value={energy} onValueChange={setEnergy} min={1} max={10} />
+            </div>
+            <div>
+              <p className="text-xs font-body font-semibold text-foreground/80 mb-2 uppercase tracking-wider">Focus: {focus[0]}/10</p>
+              <Slider value={focus} onValueChange={setFocus} min={1} max={10} />
+            </div>
+            <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anything on your mind?" className="font-body text-sm" />
+
+            <div className="flex gap-2">
+              <button
+                onClick={submitMood}
+                disabled={!primary}
+                className="flex-1 py-3 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold disabled:opacity-50"
+              >
+                Save Check-In
+              </button>
+              <button onClick={() => setShowCheckIn(false)} className="px-4 py-3 bg-secondary rounded-xl text-sm font-body text-muted-foreground">
+                Cancel
+              </button>
             </div>
           </motion.div>
         )}
 
-        <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: "Avg Mood (After)", value: avgMood, icon: "😌" },
-            { label: "Avg Improvement", value: `+${avgImprovement}`, icon: "📈" },
-            { label: "Total Check-Ins", value: moods.length.toString(), icon: "📊" },
-          ].map((stat, i) => (
-            <motion.div key={stat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.08 }}
-              className={`relative overflow-hidden bg-gradient-to-br ${statGradients[i]} rounded-2xl p-5 border border-border/50 shadow-[var(--shadow-soft-val)] text-center`}>
-              <div className="absolute -top-2 -right-2 w-12 h-12 rounded-full bg-gradient-to-bl from-card/20 to-transparent" />
-              <span className="text-2xl">{stat.icon}</span>
-              <p className="font-display text-2xl font-bold text-foreground mt-1">{stat.value}</p>
-              <p className="text-xs font-body text-muted-foreground">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
+        {/* AI Insights */}
+        <MoodInsightsCard entries={entries} />
 
-        <div className="bg-gradient-to-br from-[hsl(var(--forest-deep))]/5 to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-6 shadow-[var(--shadow-soft-val)]">
-          <h2 className="font-display text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-primary" />
-            {now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-          </h2>
-          <div className="grid grid-cols-7 gap-2">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-              <div key={i} className="text-center text-xs font-body text-muted-foreground font-medium py-1">{d}</div>
-            ))}
-            {Array.from({ length: firstDayOfWeek }, (_, i) => <div key={`empty-${i}`} />)}
-            {Array.from({ length: daysInMonth }, (_, i) => {
-              const day = i + 1;
-              const dateStr = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-              const mood = moodsByDate[dateStr];
-              return (
-                <div key={day} className={`aspect-square rounded-lg flex items-center justify-center text-sm transition-all ${
-                  mood ? "bg-gradient-to-br from-primary/15 to-[hsl(var(--sage))]/20 shadow-sm" : day === now.getDate() ? "bg-gradient-to-br from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/10 ring-1 ring-[hsl(var(--gold))]/30" : "bg-secondary/40"
-                }`} title={mood ? `Mood: ${mood.after}/5` : ''}>
-                  {mood ? moodEmojis.find(m => m.value === mood.after)?.emoji || day : day}
-                </div>
-              );
-            })}
+        {/* Trend chart */}
+        <MoodTrendChart entries={entries} />
+
+        {/* Premium hook */}
+        <button
+          onClick={() => setPremiumOpen(true)}
+          className="w-full text-left rounded-2xl p-4 bg-gradient-to-br from-gold/10 via-card to-primary/5 border border-gold/30 flex items-center gap-3 hover:shadow-soft transition-all"
+        >
+          <div className="p-2.5 rounded-xl bg-gold/15"><Lock className="w-4 h-4 text-gold" /></div>
+          <div className="flex-1">
+            <p className="font-display text-sm font-bold text-foreground">Monthly Emotional Health Report</p>
+            <p className="text-[10px] font-body text-muted-foreground">PDF with charts, AI narrative & recommendations</p>
           </div>
-        </div>
+          <span className="text-[10px] font-body font-bold text-gold uppercase tracking-widest">Plus</span>
+        </button>
 
-        {moods.length > 0 && (
-          <div className="bg-gradient-to-br from-[hsl(var(--sage))]/5 to-[hsl(var(--sage-light))]/5 rounded-2xl border border-border/50 p-6 shadow-[var(--shadow-soft-val)]">
-            <h2 className="font-display text-xl font-semibold text-foreground mb-4">Recent Check-Ins</h2>
-            <div className="space-y-3">
-              {moods.slice(-5).reverse().map((m, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-card/60 border border-border/30 hover:shadow-sm transition-all">
-                  <span className="text-2xl">{moodEmojis.find(e => e.value === m.after)?.emoji || "😐"}</span>
-                  <div className="flex-1">
-                    <p className="text-sm font-body text-foreground">{moodEmojis.find(e => e.value === m.before)?.label} → {moodEmojis.find(e => e.value === m.after)?.label}</p>
-                    <p className="text-xs font-body text-muted-foreground">{new Date(m.date).toLocaleDateString()}</p>
+        {/* Recent */}
+        {entries.length > 0 && (
+          <div className="rounded-2xl bg-card border border-border p-5 shadow-soft">
+            <h3 className="font-display text-base font-bold text-foreground mb-3">Recent Check-Ins</h3>
+            <div className="space-y-2">
+              {entries.slice(0, 6).map((m) => {
+                const slice = EMOTION_WHEEL.find((s) => s.primary === m.emotion_primary);
+                return (
+                  <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30">
+                    <span className="text-2xl">{slice?.emoji ?? "💭"}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-body font-semibold text-foreground capitalize">
+                        {m.emotion_primary}{m.emotion_secondary ? ` · ${m.emotion_secondary}` : ""}
+                      </p>
+                      <p className="text-[10px] font-body text-muted-foreground">
+                        {new Date(m.created_at).toLocaleDateString()} · ⚡{m.energy ?? "—"} · 🎯{m.focus ?? "—"}
+                      </p>
+                    </div>
+                    {m.note && <p className="text-[10px] font-body text-muted-foreground max-w-[120px] truncate italic">"{m.note}"</p>}
                   </div>
-                  {m.note && <p className="text-xs font-body text-muted-foreground max-w-[200px] truncate">{m.note}</p>}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

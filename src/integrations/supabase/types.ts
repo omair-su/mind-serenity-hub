@@ -101,6 +101,78 @@ export type Database = {
         }
         Relationships: []
       }
+      gratitude_entries: {
+        Row: {
+          ai_reflection: string | null
+          category: string | null
+          created_at: string
+          id: string
+          text: string
+          updated_at: string
+          user_id: string
+          voice_url: string | null
+        }
+        Insert: {
+          ai_reflection?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          text: string
+          updated_at?: string
+          user_id: string
+          voice_url?: string | null
+        }
+        Update: {
+          ai_reflection?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          text?: string
+          updated_at?: string
+          user_id?: string
+          voice_url?: string | null
+        }
+        Relationships: []
+      }
+      mood_entries: {
+        Row: {
+          ai_insight: string | null
+          created_at: string
+          emotion_primary: string
+          emotion_secondary: string | null
+          energy: number | null
+          focus: number | null
+          id: string
+          note: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_insight?: string | null
+          created_at?: string
+          emotion_primary: string
+          emotion_secondary?: string | null
+          energy?: number | null
+          focus?: number | null
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_insight?: string | null
+          created_at?: string
+          emotion_primary?: string
+          emotion_secondary?: string | null
+          energy?: number | null
+          focus?: number | null
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -148,6 +220,33 @@ export type Database = {
           preferred_voice?: string | null
           timezone?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ritual_completions: {
+        Row: {
+          completed_at: string
+          created_at: string
+          id: string
+          intention_word: string | null
+          ritual_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          intention_word?: string | null
+          ritual_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          id?: string
+          intention_word?: string | null
+          ritual_id?: string
           user_id?: string
         }
         Relationships: []
