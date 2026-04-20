@@ -12,7 +12,7 @@ interface GenerateOptions {
   title: string;
   description?: string;
   voice?: VoiceKey;
-  ambientBed?: "rain" | "ocean" | "forest" | "fire" | null;
+  ambientBed?: "rain" | "ocean" | "forest" | "fire" | "wind" | "creek" | "birds" | "night" | "bowls" | null;
   isPremium?: boolean;
 }
 
