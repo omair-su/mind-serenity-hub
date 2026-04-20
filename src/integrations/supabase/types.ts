@@ -228,6 +228,7 @@ export type Database = {
         Row: {
           completed_at: string
           created_at: string
+          day_state: Json
           id: string
           intention_word: string | null
           ritual_id: string
@@ -236,6 +237,7 @@ export type Database = {
         Insert: {
           completed_at?: string
           created_at?: string
+          day_state?: Json
           id?: string
           intention_word?: string | null
           ritual_id: string
@@ -244,6 +246,7 @@ export type Database = {
         Update: {
           completed_at?: string
           created_at?: string
+          day_state?: Json
           id?: string
           intention_word?: string | null
           ritual_id?: string

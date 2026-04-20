@@ -91,6 +91,123 @@ export async function fetchRitualCompletions(limit = 100) {
   return data ?? [];
 }
 
+// ============ Day State (30-day program) ============
+export interface DayState {
+  intention?: string;
+  moodBefore?: number;
+  moodAfter?: number;
+  reflection?: string;
+  challengeText?: string;
+  rememberText?: string;
+  checklist?: boolean[];
+  bookmarked?: boolean;
+  calmRating?: number;
+  completedAt?: string;
+}
+
+const dayLocalKey = (n: number) => `wv-day-${n}`;
+
+export async function loadDayState(dayNum: number): Promise<DayState> {
+  // Always read local cache first for instant UI
+  let local: DayState = {};
+  try {
+    const raw = localStorage.getItem(dayLocalKey(dayNum));
+    if (raw) local = JSON.parse(raw);
+  } catch {}
+
+  const uid = await getUserId();
+  if (!uid) return local;
+
+  const { data } = await supabase
+    .from("ritual_completions")
+    .select("day_state, completed_at, intention_word")
+    .eq("user_id", uid)
+    .eq("ritual_id", `day-${dayNum}`)
+    .order("completed_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (data) {
+    const merged: DayState = {
+      ...local,
+      ...((data.day_state as DayState | null) ?? {}),
+      intention: ((data.day_state as DayState | null)?.intention) ?? data.intention_word ?? local.intention,
+      completedAt: data.completed_at ?? local.completedAt,
+    };
+    try { localStorage.setItem(dayLocalKey(dayNum), JSON.stringify(merged)); } catch {}
+    return merged;
+  }
+  return local;
+}
+
+export async function saveDayState(dayNum: number, state: DayState) {
+  // Local first (offline cache)
+  try { localStorage.setItem(dayLocalKey(dayNum), JSON.stringify(state)); } catch {}
+
+  const uid = await getUserId();
+  if (!uid) return;
+
+  // Upsert by (user_id, ritual_id) — latest row wins
+  const { data: existing } = await supabase
+    .from("ritual_completions")
+    .select("id")
+    .eq("user_id", uid)
+    .eq("ritual_id", `day-${dayNum}`)
+    .order("completed_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existing?.id) {
+    await supabase
+      .from("ritual_completions")
+      .update({
+        day_state: state as any,
+        intention_word: state.intention ?? null,
+      })
+      .eq("id", existing.id);
+  } else {
+    await supabase.from("ritual_completions").insert({
+      user_id: uid,
+      ritual_id: `day-${dayNum}`,
+      intention_word: state.intention ?? null,
+      day_state: state as any,
+    });
+  }
+}
+
+export async function fetchAllDayCompletions(): Promise<Record<number, DayState>> {
+  const uid = await getUserId();
+  const out: Record<number, DayState> = {};
+  if (!uid) {
+    // Local only
+    for (let i = 1; i <= 30; i++) {
+      try {
+        const raw = localStorage.getItem(dayLocalKey(i));
+        if (raw) out[i] = JSON.parse(raw);
+      } catch {}
+    }
+    return out;
+  }
+  const { data } = await supabase
+    .from("ritual_completions")
+    .select("ritual_id, day_state, completed_at, intention_word")
+    .eq("user_id", uid)
+    .like("ritual_id", "day-%")
+    .order("completed_at", { ascending: false });
+  for (const row of data ?? []) {
+    const m = String(row.ritual_id).match(/^day-(\d+)$/);
+    if (!m) continue;
+    const n = parseInt(m[1], 10);
+    if (out[n]) continue;
+    out[n] = {
+      ...((row.day_state as DayState | null) ?? {}),
+      intention: ((row.day_state as DayState | null)?.intention) ?? row.intention_word ?? undefined,
+      completedAt: row.completed_at,
+    };
+  }
+  return out;
+}
+
 // ============ Mood ============
 export interface CloudMoodEntry {
   id: string;
