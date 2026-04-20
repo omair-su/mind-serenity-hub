@@ -95,6 +95,12 @@ export function useTextToSpeech() {
           );
 
           if (invokeError) throw new Error(invokeError.message);
+
+          // Edge function signaled a fallback (ElevenLabs blocked / quota) — use browser TTS
+          if (data?.fallback) {
+            setIsLoading(false);
+            return playWithBrowserTTS(text, () => setIsPlaying(true), () => setIsPlaying(false));
+          }
           if (!data?.track?.public_url) throw new Error("No audio URL returned");
 
           audioUrl = data.track.public_url;
@@ -103,7 +109,8 @@ export function useTextToSpeech() {
           const msg = e instanceof Error ? e.message : "Audio generation failed";
           setError(msg);
           setIsLoading(false);
-          return;
+          // Last-resort fallback so the user still hears narration
+          return playWithBrowserTTS(text, () => setIsPlaying(true), () => setIsPlaying(false));
         }
         setIsLoading(false);
       }
