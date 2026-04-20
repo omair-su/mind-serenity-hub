@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import logoImg from "@/assets/logo/willow-logo-premium.png";
 
@@ -16,67 +17,60 @@ const sizeMap = {
   xl: { icon: 72, text: "text-3xl", gap: "gap-4", tracking: "tracking-[0.18em]" },
 };
 
-function LogoIcon({
-  size = 40,
-  className,
-}: {
-  size?: number;
-  className?: string;
-}) {
-  return (
-    <img
-      src={logoImg}
-      alt="Willow Vibes Logo"
-      width={size}
-      height={size}
-      className={cn("flex-shrink-0 object-contain", className)}
-    />
-  );
-}
+const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: string }>(
+  function LogoIcon({ size = 40, className }, ref) {
+    return (
+      <img
+        ref={ref}
+        src={logoImg}
+        alt="Willow Vibes Logo"
+        width={size}
+        height={size}
+        className={cn("flex-shrink-0 object-contain", className)}
+      />
+    );
+  }
+);
 
-function LogoWordmark({
-  textClass,
-  tracking,
-  willowColor,
-  vibesColor,
-  tmColor,
-}: {
+interface LogoWordmarkProps {
   textClass: string;
   tracking: string;
   willowColor: string;
   vibesColor: string;
   tmColor: string;
-}) {
-  return (
-    <span
-      className={cn(
-        "font-display font-light leading-none select-none",
-        textClass,
-        tracking
-      )}
-    >
-      <span className={willowColor}>Willow</span>{" "}
-      <span className={vibesColor}>Vibes</span>
-      <sup className={cn("text-[0.45em] font-body font-normal ml-0.5 align-super", tmColor)}>
-        ™
-      </sup>
-    </span>
-  );
 }
 
-export default function WillowLogo({
-  variant = "horizontal",
-  colorScheme = "default",
-  size = "md",
-  className,
-}: WillowLogoProps) {
+const LogoWordmark = forwardRef<HTMLSpanElement, LogoWordmarkProps>(
+  function LogoWordmark({ textClass, tracking, willowColor, vibesColor, tmColor }, ref) {
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          "font-display font-light leading-none select-none",
+          textClass,
+          tracking
+        )}
+      >
+        <span className={willowColor}>Willow</span>{" "}
+        <span className={vibesColor}>Vibes</span>
+        <sup className={cn("text-[0.45em] font-body font-normal ml-0.5 align-super", tmColor)}>
+          ™
+        </sup>
+      </span>
+    );
+  }
+);
+
+const WillowLogo = forwardRef<HTMLDivElement, WillowLogoProps>(function WillowLogo(
+  { variant = "horizontal", colorScheme = "default", size = "md", className },
+  ref
+) {
   const s = sizeMap[size];
 
-  // Colour schemes
   const colors = {
     default: {
-      willow: "text-foreground",        // Navy/charcoal
-      vibes: "text-primary",            // Forest green
+      willow: "text-foreground",
+      vibes: "text-primary",
       tm: "text-muted-foreground/60",
     },
     light: {
@@ -100,7 +94,7 @@ export default function WillowLogo({
 
   if (variant === "icon") {
     return (
-      <div className={className}>
+      <div ref={ref} className={className}>
         <LogoIcon size={s.icon} />
       </div>
     );
@@ -108,7 +102,7 @@ export default function WillowLogo({
 
   if (variant === "wordmark") {
     return (
-      <div className={className}>
+      <div ref={ref} className={className}>
         <LogoWordmark
           textClass={s.text}
           tracking={s.tracking}
@@ -122,7 +116,7 @@ export default function WillowLogo({
 
   if (variant === "vertical") {
     return (
-      <div className={cn("flex flex-col items-center gap-2", className)}>
+      <div ref={ref} className={cn("flex flex-col items-center gap-2", className)}>
         <LogoIcon size={s.icon} />
         <LogoWordmark
           textClass={s.text}
@@ -135,9 +129,8 @@ export default function WillowLogo({
     );
   }
 
-  // horizontal (default / "full")
   return (
-    <div className={cn("flex items-center", s.gap, className)}>
+    <div ref={ref} className={cn("flex items-center", s.gap, className)}>
       <LogoIcon size={s.icon} />
       <div className="flex flex-col">
         <LogoWordmark
@@ -153,6 +146,7 @@ export default function WillowLogo({
       </div>
     </div>
   );
-}
+});
 
+export default WillowLogo;
 export { LogoIcon };
