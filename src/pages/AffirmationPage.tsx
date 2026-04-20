@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Sparkles, Heart, Play, Pause, Loader2, RotateCcw, Star } from "lucide-react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
+import NarrationBar from "@/components/NarrationBar";
 
 const categories = [
   { id: "morning", label: "Morning", icon: "🌅" },
