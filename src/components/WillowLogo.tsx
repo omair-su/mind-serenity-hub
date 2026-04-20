@@ -70,7 +70,7 @@ export default function WillowLogo({
   size = "md",
   className,
 }: WillowLogoProps) {
-  const s = sizeMap[size] || sizeMap.md;
+  const s = sizeMap[size];
 
   // Colour schemes
   const colors = {
@@ -96,7 +96,7 @@ export default function WillowLogo({
     },
   };
 
-  const c = colors[colorScheme] || colors.default;
+  const c = colors[colorScheme];
 
   if (variant === "icon") {
     return (
