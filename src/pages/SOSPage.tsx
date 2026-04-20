@@ -325,23 +325,28 @@ export default function SOSPage() {
                       </button>
                     </div>
 
-                    <div className="flex items-center gap-6 p-5 rounded-[1.5rem] bg-secondary/20 border border-border/40 backdrop-blur-sm">
+                    <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-secondary/20 border border-border/40 backdrop-blur-sm">
                       <div className="flex items-center gap-3">
                         <div className={`p-2.5 rounded-xl transition-colors ${binauralActive ? 'bg-rose-500/20 text-rose-600 shadow-inner' : 'bg-slate-200/50 text-slate-400'}`}>
                           <Ear className="w-5 h-5" />
                         </div>
                         <div>
                           <p className="text-[9px] font-body font-bold uppercase tracking-[0.2em] text-muted-foreground/70">Binaural Calm</p>
-                          <button 
-                            onClick={() => setBinauralActive(!binauralActive)}
-                            className={`text-xs font-body font-bold transition-colors ${binauralActive ? 'text-rose-600' : 'text-slate-500 hover:text-slate-700'}`}
-                          >
-                            {binauralActive ? 'Active' : 'Disabled'}
-                          </button>
+                          <p className="text-xs font-body font-semibold text-foreground/80">{binauralActive ? 'Playing' : 'Off'}</p>
                         </div>
                       </div>
+                      <button
+                        onClick={() => setBinauralActive(!binauralActive)}
+                        className={`px-4 py-2 rounded-full text-xs font-body font-bold uppercase tracking-wider transition-all border ${
+                          binauralActive
+                            ? 'bg-rose-600 text-white border-rose-600 shadow-md hover:bg-rose-700'
+                            : 'bg-card text-foreground border-border hover:border-primary/40'
+                        }`}
+                      >
+                        {binauralActive ? 'Stop Sound' : 'Play Sound'}
+                      </button>
                       {binauralActive && (
-                        <div className="w-32 md:w-40">
+                        <div className="w-28 md:w-36">
                           <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVolume(v[0])} min={0} max={1} step={0.1} className="cursor-pointer" />
                         </div>
                       )}
