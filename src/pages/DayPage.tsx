@@ -618,6 +618,9 @@ export default function DayPage() {
           </div>
         </div>
 
+        {/* ─── MOOD DELTA (before vs after) ─── */}
+        <MoodDeltaChart moodBefore={moodBefore[0]} moodAfter={moodAfter[0]} />
+
         {/* ─── DAILY TRACKER ─── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-green-50/20 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-green-900/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
