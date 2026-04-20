@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Loader2, Volume2, VolumeX, X, Music2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { AMBIENT_BEDS, type AmbientBedId } from "@/hooks/useAmbientBed";
 
 interface NarrationBarProps {
@@ -23,10 +23,10 @@ interface NarrationBarProps {
   onBedVolumeChange: (v: number) => void;
 }
 
-export default function NarrationBar({
+const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
   title, subtitle, isLoading, isPlaying, currentTime, duration, formatTime,
   onTogglePlay, onClose, bed, bedVolume, onBedChange, onBedVolumeChange,
-}: NarrationBarProps) {
+}, _ref) => {
   const [showMixer, setShowMixer] = useState(false);
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const activeBed = AMBIENT_BEDS.find((b) => b.id === bed) ?? AMBIENT_BEDS[0];
