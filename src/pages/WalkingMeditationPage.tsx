@@ -30,7 +30,7 @@ export default function WalkingMeditationPage() {
   const [scrollY, setScrollY] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { weather } = useWeather();
+  const { weather, loading: weatherLoading, error: weatherError, retry: retryWeather } = useWeather();
   const tts = useTextToSpeech();
   const ambient = useAmbientBed("silence", 35);
   const pedometer = usePedometer({ active: isActive });
