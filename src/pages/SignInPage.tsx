@@ -513,13 +513,13 @@ export default function SignInPage() {
 
           <motion.div
             variants={itemVariants}
-            className="mt-10 flex justify-center gap-8 opacity-50"
+            className="mt-8 flex justify-center gap-8"
           >
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-cream/55">
               <Globe className="w-4 h-4" />
               <span className="text-[10px] font-luxury-body uppercase tracking-[0.2em]">Global Community</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-cream/55">
               <ShieldCheck className="w-4 h-4" />
               <span className="text-[10px] font-luxury-body uppercase tracking-[0.2em]">Secure Access</span>
             </div>
