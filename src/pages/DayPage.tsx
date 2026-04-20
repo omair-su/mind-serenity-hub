@@ -114,11 +114,32 @@ export default function DayPage() {
   const [binauralVolume, setBinauralVolume] = useState(0.3);
   const [showCheckInDialog, setShowCheckInDialog] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [intentionWord, setIntentionWord] = useState<string>(saved?.intentionWord || "");
+  const [showIntention, setShowIntention] = useState(false);
+  const [showPractice, setShowPractice] = useState(false);
   const tts = useTextToSpeech();
 
   // Reset TTS when navigating to a different day
   useEffect(() => {
     tts.stop();
+  }, [dayNumber]);
+
+  // Hydrate from cloud on mount / day change
+  useEffect(() => {
+    let cancelled = false;
+    loadDayState(dayNumber).then((s) => {
+      if (cancelled || !s) return;
+      if (typeof s.reflection === "string") setReflection(s.reflection);
+      if (typeof s.calmRating === "number") setCalmRating([s.calmRating]);
+      if (typeof s.moodBefore === "number") setMoodBefore([s.moodBefore]);
+      if (typeof s.moodAfter === "number") setMoodAfter([s.moodAfter]);
+      if (typeof s.challengeText === "string") setChallengeText(s.challengeText);
+      if (typeof s.rememberText === "string") setRememberText(s.rememberText);
+      if (Array.isArray(s.checklist)) setChecklist(s.checklist);
+      if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
+      if (typeof s.intentionWord === "string") setIntentionWord(s.intentionWord);
+    }).catch(() => {});
+    return () => { cancelled = true; };
   }, [dayNumber]);
 
   const durationMins = day ? parseDuration(day.duration) : 15;
