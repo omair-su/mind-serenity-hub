@@ -1,137 +1,106 @@
 
 
-# Premium Refinement Plan — Gratitude · Rituals · SOS · Mood Tracker
+# Walking Meditation — Premium Upgrade Plan
 
-Goal: Take these four pages from "nice" to **Calm/Headspace-tier luxury** with real hero imagery, premium feature additions, AI moments, audio, and high-ticket retention hooks.
-
----
-
-## 1. Gratitude Garden — "Living Garden" Premium Upgrade
-
-**Current state:** Flat emoji grid, gradient hero, localStorage only.
-
-**New look & features:**
-- **Real hero image** — sunlit Japanese-style garden / cherry blossom / golden-hour wildflower meadow (Unsplash CDN), with soft parallax + gold blur orbs.
-- **"Living Garden" SVG visualization** — replace flat emoji grid with a layered illustrated garden where each entry blooms a flower at a unique position. Garden grows visually denser as entries accumulate (sapling → grove → forest tiers at 7/30/100 entries).
-- **AI Gratitude Coach** — new "Reflect with AI" button. Sends entry to Lovable AI (Gemini Flash) → returns a 2-sentence personalized affirmation. Stored alongside entry.
-- **Voice memo gratitude** — record button using MediaRecorder → upload to Supabase storage → ElevenLabs auto-transcribe optional.
-- **Ambient bed** — toggleable "rain on leaves" or "morning birds" track from `realAmbientTracks.ts` while writing.
-- **Weekly Gratitude Letter** — every 7 entries, AI composes a beautiful letter summarizing the week's gratitude into a shareable card (download as PNG).
-- **Cloud sync** — migrate from localStorage to a new `gratitude_entries` table with RLS.
-- **High-ticket hook:** "Gratitude Streak Certificate" auto-generated PDF at 21/100/365 days.
+Goal: Transform the Walking page from a static text-based timer into a **luxury, sensory-rich, GPS-aware mindful movement experience** rivaling Calm Daily Move and Headspace Walking.
 
 ---
 
-## 2. Daily Rituals — "Sacred Ceremony" Upgrade
+## 1. Hero & Visual Identity
 
-**Current state:** Two static ritual cards (morning/evening), text steps, gold gradient.
+- **New high-quality hero image** — sourced from Unsplash (sunlit forest path with golden light shafts, 1600w optimized). Replace the local `walking-hero.jpg` asset with a fresh CDN URL.
+- **Parallax scroll** on the hero with subtle gold blur orbs floating across.
+- **Mood-aware tint** — hero gradient subtly shifts color based on the selected environment (forest = green, mountain = slate, beach = gold-coral, garden = warm amber).
+- **Today's weather widget** in the hero corner — uses browser geolocation + Open-Meteo API (no key) to show "Perfect for an outdoor walk · 18°C · clear skies" or suggest indoor mode if raining.
 
-**New look & features:**
-- **Real hero imagery per ritual** — sunrise mountain (morning) / candle-lit bedroom (evening) full-bleed cards.
-- **Add 4 new rituals** = 6 total: Pre-Work Focus, Midday Reset, Creative Flow, Sunday Reflection.
-- **Real ElevenLabs narration** for every step (using existing `useTextToSpeech` hook + `NarrationBar`) — Sarah voice for morning, George for evening.
-- **Ambient bed per ritual** — birdsong (morning), crackling fire (evening), white noise (focus).
-- **Ritual streak ring** — animated SVG ring like Apple Fitness around the streak number.
-- **Today's intention card** — gold-foil-style intention word becomes the day's home screen banner.
-- **AI Reflection** — at end of evening ritual, AI generates a 3-sentence "you today" reflection from journal+mood+gratitude data.
-- **Cloud sync** — `ritual_completions` table.
-- **High-ticket hook:** Premium "Sunrise Series" — 7-day audio-led morning ritual programs by category (Confidence Week, Calm Week, Focus Week).
+## 2. Four Premium Environments with Real Imagery & Ambient Beds
 
----
+Each environment becomes a **full sensory scene**, not just an icon card:
+- **Forest Path** — birdsong + leaves rustling ambient bed, deep-green hero
+- **Mountain Trail** — wind + distant eagle calls, slate-blue hero
+- **Ocean Shore** — waves + seagulls, gold-coral hero
+- **Zen Garden** — bamboo wind chimes + raked gravel, warm amber hero
 
-## 3. SOS Relief — "Crisis-Grade Concierge" Upgrade
+Each tile shows a real photo background, name, ambient track preview, and a "Stop Sound" button (following the new audio control standard).
 
-**Current state:** Already premium-styled (slate hero, real images, binaural beats, 6 protocols).
+## 3. ElevenLabs Narrated Guidance (Replace Text Steps)
 
-**Refinements + new features:**
-- **Replace hero images** with higher-impact medical/calm imagery: storm-clearing skies, deep water, soft candlelight (current ones are partially repeated).
-- **Add 3 protocols**: *Anger Defuse* (8 min), *Social Anxiety Reset* (4 min), *Pain Acceptance* (12 min).
-- **Real narrated voice guidance** — replace silent text steps with ElevenLabs narration, so user closes eyes and listens.
-- **Animated breathing orb** sync'd to step timing (already exists in `BreathingOrb.tsx` — reuse here).
-- **"Send for help" emergency card** — at the bottom: tappable hotline buttons (configurable in profile). Region-aware via timezone.
-- **Heart-rate biofeedback (optional camera)** — request camera permission, use PPG via fingertip on lens to estimate BPM and adjust pacing. Premium-only feature.
-- **AI Companion Chat** — after protocol, "How are you feeling now?" mini-chat with Lovable AI for follow-through.
-- **Session log** — record every SOS use to `audio_history` so we can show a "Times you got through it" counter (powerful retention).
-- **High-ticket hook:** "Crisis Concierge" tier — instant access to 30-min recorded therapist-led extended protocols.
+- Wire `useTextToSpeech` to narrate each technique step — Sarah voice for gentle techniques, George for grounding ones.
+- **NarrationBar** at the bottom of the active session with play/pause/skip and a clear **Stop** button.
+- Steps advance automatically when narration ends (instead of arbitrary 20s timer).
 
----
+## 4. Real Step Counting (Not Random)
 
-## 4. Mood Tracker — "Emotional Intelligence Dashboard" Upgrade
+Replace the fake `Math.random()` step generator with a **real pedometer** using `DeviceMotionEvent` accelerometer:
+- Requests motion permission on iOS (Safari) gracefully.
+- Falls back to a steady pace estimator (110 steps/min default) for desktop/permission-denied.
+- Live BPM cadence indicator: "Your pace: 112 steps/min · ideal walking range".
 
-**Current state:** Basic emoji slider, calendar grid, list of recent.
+## 5. Two New Premium Techniques (6 total)
 
-**New look & features:**
-- **Premium hero** — real image of soft sunrise / abstract aurora with mood-color gradient that shifts based on user's recent average.
-- **Mood Wheel input** — replace 5 emojis with a beautiful Plutchik-style emotion wheel (32 nuanced emotions: anxious, hopeful, grateful, restless...) → richer data.
-- **AI Mood Insights card** — Lovable AI reads last 14 entries and produces: "Your week pattern", "Likely triggers", "What's helping". Updates daily.
-- **Trend chart** — replace flat calendar with a beautiful smooth-curve line chart (recharts) showing mood/energy/focus over 30 days, with gold dots for meditation days.
-- **Mood ↔ Activity correlation** — auto-link mood entries to meditations done that day. Show "Days with Body Scan = +1.4 mood lift".
-- **Voice journal** — speak feelings, ElevenLabs STT, AI summarizes into structured entry.
-- **Push reminder** — daily 8pm "How was today?" via web push (Phase 4 hookup-ready).
-- **Cloud sync** — already in `user_progress.mood_logs`, refactor to dedicated `mood_entries` table for queryability.
-- **High-ticket hook:** Monthly "Emotional Health Report" — auto-generated PDF with charts, AI narrative, recommendations. Premium-gated.
+- **Loving-Kindness Walk** (12 min) — radiate metta to passersby with each step
+- **Forest Bathing (Shinrin-yoku)** (20 min) — Japanese 5-senses immersion protocol, premium-gated
 
----
+## 6. Animated Pace Orb & Footstep Visualizer
 
-## Cross-cutting improvements (all 4 pages)
+- A **breathing/pacing orb** (reuse `BreathingOrb`) that pulses at the user's current cadence — visual metronome.
+- A subtle **footstep ripple animation** on each detected step (left/right alternating).
+- A **distance estimator** ("≈ 0.4 km · 6 minutes of presence").
 
-- **Real Unsplash hero photography** sourced fresh — no repeats, all 1600w optimized.
-- **Subtle motion** — Framer Motion entry animations + parallax hero.
-- **Premium typography rhythm** — Plus Jakarta display 32–48px, Inter body 14–16px, generous line-height.
-- **Locked premium features** show a beautiful "Unlock Willow Plus" modal (preps Sprint 2 paywall).
-- **Cloud sync layer** — new helper `src/lib/cloudSync.ts` to mirror local writes to Supabase when authenticated.
+## 7. AI Walk Reflection (Post-Session)
+
+After completion, the **AI Companion** (reusing `ai-companion-chat` edge function) asks:
+- "What did you notice on your walk today?"
+- Summarizes into a 2-line reflection saved to `ritual_completions` with type='walk'.
+
+## 8. Luxury Stats & Streak Ring
+
+- Apple-Fitness-style **animated SVG streak ring** around the session count.
+- Stats: Total minutes, total steps, longest walk, streak days.
+- **Milestone certificates** at 10/50/100 walks (PDF download, premium-gated).
+
+## 9. Cloud Sync & Premium Gates
+
+- Persist every walk to `ritual_completions` (type='walk', technique, duration, steps, environment) — table already exists from previous sprint.
+- `PremiumLockModal` on Forest Bathing (20-min) and milestone PDF export.
+
+## 10. Audio Hygiene (Following New Standard)
+
+- Ambient bed defaults to `"silence"` — only plays when user taps "Play Sound".
+- All audio (ambient + narration) hard-stops on session end, reset, and route unmount.
+- Clear "Stop Sound" button visible whenever any audio is playing.
 
 ---
 
 ## Technical Section
 
 **New files:**
-- `src/components/gratitude/LivingGarden.tsx` — SVG garden visualization
-- `src/components/gratitude/GratitudeLetter.tsx` — AI weekly letter card
-- `src/components/rituals/RitualHeroCard.tsx` — image-led ritual card
-- `src/components/sos/EmergencyContacts.tsx` — region-aware hotlines
-- `src/components/sos/AICompanionChat.tsx` — post-protocol mini-chat
-- `src/components/mood/MoodWheel.tsx` — Plutchik 32-emotion picker
-- `src/components/mood/MoodTrendChart.tsx` — recharts smooth line chart
-- `src/components/mood/MoodInsightsCard.tsx` — AI insights panel
-- `src/components/PremiumLockModal.tsx` — reusable upgrade modal
-- `src/lib/cloudSync.ts` — local↔cloud sync helper
-- `src/data/extraRituals.ts` — 4 new rituals
-- `src/data/extraSOS.ts` — 3 new protocols + region hotlines
+- `src/components/walking/PaceOrb.tsx` — animated cadence orb
+- `src/components/walking/FootstepVisualizer.tsx` — left/right ripple animation
+- `src/components/walking/WalkEnvironmentCard.tsx` — image-led environment tile
+- `src/components/walking/WalkReflection.tsx` — post-session AI reflection card
+- `src/hooks/usePedometer.ts` — DeviceMotion-based step counter with fallback
+- `src/hooks/useWeather.ts` — geolocation + Open-Meteo lookup
+- `src/data/walkingTechniques.ts` — extracted + extended to 6 techniques
 
 **Edited files:**
-- `src/pages/GratitudePage.tsx`, `RitualsPage.tsx`, `SOSPage.tsx`, `MoodTrackerPage.tsx`
-- `src/data/rituals.ts` (extend with new rituals + audio script fields)
+- `src/pages/WalkingMeditationPage.tsx` — full rewrite using new components
+- Reuse `useAmbientBed`, `useTextToSpeech`, `NarrationBar`, `BreathingOrb`, `cloudSync`, `PremiumLockModal`
 
-**New edge functions:**
-- `supabase/functions/ai-gratitude-reflect/index.ts` — Lovable AI affirmation
-- `supabase/functions/ai-mood-insights/index.ts` — 14-day pattern analysis
-- `supabase/functions/ai-companion-chat/index.ts` — SOS follow-up chat
-- `supabase/functions/generate-gratitude-letter/index.ts` — weekly letter
+**No new edge functions, tables, or migrations required** — everything reuses Sprint 4 infrastructure (`ai-companion-chat`, `ritual_completions`).
 
-**New tables (one migration):**
-- `gratitude_entries` (id, user_id, text, category, ai_reflection, voice_url, created_at) + RLS
-- `ritual_completions` (id, user_id, ritual_id, completed_at, intention_word) + RLS
-- `mood_entries` (id, user_id, emotion_primary, emotion_secondary, energy, focus, ai_insight, note, created_at) + RLS
-
-**Reused infrastructure (no new cost):**
-- Existing `useTextToSpeech` + `NarrationBar` for ritual/SOS narration (ElevenLabs)
-- Existing `realAmbientTracks` for ambient beds
-- Existing Lovable AI gateway (Gemini Flash) for all AI features — no extra API key
+**No new API keys** — Open-Meteo is free + keyless.
 
 ---
 
 ## Suggested execution order
 
-1. Cloud sync helper + 3 new tables (foundation)
-2. Gratitude Garden — Living Garden + AI reflect + hero
-3. Rituals — hero imagery + 4 new + narration + AI reflection
-4. SOS Relief — narration + 3 new protocols + AI companion + emergency contacts
-5. Mood Tracker — wheel + trend chart + AI insights + correlation
-6. PremiumLockModal wired across all locked features
-7. End-to-end QA on mobile viewport
-
----
-
-This is a **large sprint** (~12–15 file creations, 4 page rewrites, 4 edge functions, 1 migration). I recommend approving in one go so the cloud sync + AI infrastructure is shared cleanly across all four pages.
+1. New hero image + environment images + parallax tint
+2. `usePedometer` + `useWeather` hooks
+3. Extract data, add 2 new techniques
+4. PaceOrb + FootstepVisualizer components
+5. ElevenLabs narration wiring + NarrationBar
+6. AI walk reflection on completion
+7. Streak ring + milestone certificates
+8. Audio hygiene QA on mobile
 
