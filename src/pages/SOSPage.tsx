@@ -186,7 +186,7 @@ export default function SOSPage() {
     setStepIndex(0); 
     setTimerSecs(0); 
     setRunning(true); 
-    setBinauralActive(true);
+    setBinauralActive(false); // opt-in only — user must explicitly enable
     setCompleted(null);
   };
 
@@ -194,6 +194,7 @@ export default function SOSPage() {
     setActive(null);
     setRunning(false);
     setBinauralActive(false);
+    stopBinaural(); // hard-stop any audio immediately
   };
 
   const nextStep = () => {
