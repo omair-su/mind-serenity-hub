@@ -26,7 +26,7 @@ export const challenges: Challenge[] = [
     description: "Release accumulated stress and rebuild your calm foundation with daily targeted practices.",
     duration: 7,
     category: "Wellness",
-    color: "from-blue-500/20 to-cyan-500/20",
+    color: "from-[hsl(var(--sage-light))] to-[hsl(var(--sage))]/30",
     benefits: ["Lower cortisol levels", "Better sleep quality", "Reduced muscle tension", "Clearer thinking"],
     days: [
       { day: 1, title: "Awareness", description: "Identify your stress patterns", practice: "Spend 10 minutes in body scan meditation. Notice where you hold tension — jaw, shoulders, stomach. Simply observe without trying to change anything. Write down what you notice.", duration: 10 },
@@ -45,7 +45,7 @@ export const challenges: Challenge[] = [
     description: "Cultivate deep self-acceptance and unconditional self-compassion through gentle daily practices.",
     duration: 5,
     category: "Emotional",
-    color: "from-pink-500/20 to-rose-500/20",
+    color: "from-[hsl(var(--gold-light))]/40 to-[hsl(var(--cream-dark))]",
     benefits: ["Increased self-worth", "Better emotional resilience", "Healthier boundaries", "Inner peace"],
     days: [
       { day: 1, title: "Mirror Work", description: "See yourself with love", practice: "Sit comfortably and close your eyes. Visualize yourself as a child. Send that child love and safety. Say internally: 'You are worthy. You are enough. You always have been.'", duration: 10 },
@@ -62,7 +62,7 @@ export const challenges: Challenge[] = [
     description: "Rewire your brain for positivity with daily gratitude practices that build on each other.",
     duration: 10,
     category: "Mindset",
-    color: "from-amber-500/20 to-yellow-500/20",
+    color: "from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/30",
     benefits: ["Increased happiness", "Better relationships", "Improved sleep", "Reduced anxiety"],
     days: [
       { day: 1, title: "Simple Gratitude", description: "Start with the basics", practice: "List 3 things you're grateful for today. For each one, close your eyes and spend 2 minutes really feeling the gratitude. Where in your body do you feel it?", duration: 8 },
@@ -84,7 +84,7 @@ export const challenges: Challenge[] = [
     description: "Revitalize your mind and body with energizing meditation techniques.",
     duration: 5,
     category: "Vitality",
-    color: "from-orange-500/20 to-red-500/20",
+    color: "from-[hsl(var(--gold-dark))]/20 to-[hsl(var(--gold))]/25",
     benefits: ["Natural energy boost", "Mental clarity", "Reduced fatigue", "Better motivation"],
     days: [
       { day: 1, title: "Breath of Fire", description: "Ignite your inner energy", practice: "Practice rapid, rhythmic breathing through the nose. Quick inhales and exhales, pumping the belly. Start with 30 seconds, rest, repeat 3 times. Then sit in stillness and feel the energy buzzing.", duration: 10 },
@@ -101,7 +101,7 @@ export const challenges: Challenge[] = [
     description: "Transform your relationship with sleep using proven meditation and relaxation techniques.",
     duration: 7,
     category: "Sleep",
-    color: "from-indigo-500/20 to-purple-500/20",
+    color: "from-[hsl(var(--forest-deep))]/30 to-[hsl(var(--forest))]/15",
     benefits: ["Faster sleep onset", "Deeper sleep cycles", "Less nighttime waking", "Morning freshness"],
     days: [
       { day: 1, title: "Sleep Sanctuary", description: "Create your sleep space", practice: "Guided visualization of your ideal sleep space. Every detail — the perfect temperature, the softest sheets, the most comforting darkness. Build this space in your mind to return to each night.", duration: 12 },
@@ -120,7 +120,7 @@ export const challenges: Challenge[] = [
     description: "Sharpen your concentration and mental clarity through progressive attention training.",
     duration: 7,
     category: "Performance",
-    color: "from-teal-500/20 to-emerald-500/20",
+    color: "from-[hsl(var(--forest))]/20 to-[hsl(var(--sage-dark))]/25",
     benefits: ["Longer attention span", "Reduced distractibility", "Better task completion", "Mental sharpness"],
     days: [
       { day: 1, title: "Single Point", description: "Focus on one thing", practice: "Choose a single point of focus — your breath, a candle flame, a sound. When your mind wanders (it will), gently bring it back. That 'bringing back' IS the training.", duration: 10 },
