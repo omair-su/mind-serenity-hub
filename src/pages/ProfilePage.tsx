@@ -187,18 +187,25 @@ export default function ProfilePage() {
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/15 flex items-center justify-center">
-              <User className="w-5 h-5 text-violet-500" />
+        {/* Editorial header */}
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-8 sm:px-8">
+          <div className="absolute inset-0 opacity-25 pointer-events-none" style={{
+            background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
+          }} />
+          <div className="relative flex items-center justify-between gap-3">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 text-[10px] font-body font-semibold tracking-[0.2em] uppercase text-[hsl(var(--gold-light))]">
+                <User className="w-3 h-3" /> Your Account
+              </span>
+              <h1 className="mt-3 font-display text-3xl sm:text-4xl font-bold text-[hsl(var(--cream))] leading-[1.05]">Settings & Preferences</h1>
+              <p className="mt-2 font-body text-sm text-[hsl(var(--cream))]/70">Tune Willow to your rhythm.</p>
             </div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Settings</h1>
+            {saved && (
+              <span className="flex items-center gap-1.5 text-xs font-body text-[hsl(var(--forest-deep))] bg-[hsl(var(--gold-light))] px-3 py-1.5 rounded-full font-semibold shadow-md flex-shrink-0">
+                <Check className="w-3.5 h-3.5" /> Saved
+              </span>
+            )}
           </div>
-          {saved && (
-            <span className="flex items-center gap-1.5 text-sm font-body text-primary bg-primary/10 px-3 py-1.5 rounded-full">
-              <Check className="w-4 h-4" /> Saved
-            </span>
-          )}
         </div>
 
         <Section icon={User} title="Your Profile" gradient="from-violet-500/12 to-purple-500/5" iconColor="text-violet-500">
