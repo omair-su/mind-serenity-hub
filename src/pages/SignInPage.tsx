@@ -34,18 +34,24 @@ export default function SignInPage() {
   const [infoMsg, setInfoMsg] = useState<string | null>(null);
   const [confirmationSent, setConfirmationSent] = useState(false);
 
-  // If already signed in, bounce to /app
+  // Honor ?redirect=... so landing-page CTAs can route the user back to a specific page after auth
+  const redirectParam = searchParams.get("redirect");
+  const safeRedirect = redirectParam && redirectParam.startsWith("/") && !redirectParam.startsWith("//")
+    ? redirectParam
+    : "/app";
+
+  // If already signed in, bounce to redirect target (default /app)
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate("/app", { replace: true });
+      if (data.session) navigate(safeRedirect, { replace: true });
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) navigate("/app", { replace: true });
+      if (session) navigate(safeRedirect, { replace: true });
     });
 
     return () => sub.subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, safeRedirect]);
 
   // Surface email-confirmation success/errors arriving via the redirect
   useEffect(() => {
@@ -65,7 +71,7 @@ export default function SignInPage() {
     resetMessages();
     setGoogleLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/app`,
+      redirect_uri: `${window.location.origin}${safeRedirect}`,
     });
     if (result.error) {
       setGoogleLoading(false);
@@ -113,7 +119,7 @@ export default function SignInPage() {
           description: `We sent a confirmation link to ${email}.`,
         });
       } else {
-        navigate("/app", { replace: true });
+        navigate(safeRedirect, { replace: true });
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
@@ -126,7 +132,7 @@ export default function SignInPage() {
         setErrorMsg(error.message);
         return;
       }
-      navigate("/app", { replace: true });
+      navigate(safeRedirect, { replace: true });
     }
   };
 

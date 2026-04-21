@@ -114,7 +114,7 @@ export default function LandingPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm mb-8">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Limited Time — Save 67%</span>
+              <span>7-Day Free Trial · No Card Charged Today</span>
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1]">
@@ -127,9 +127,9 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link to="/app">
+              <Link to="/sign-in?redirect=/app">
                 <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-10 py-7 text-lg rounded-full shadow-2xl shadow-emerald-500/30">
-                  Start Now — $97
+                  Start 7-Day Free Trial
                 </Button>
               </Link>
               <Button size="lg" variant="outline" className="px-8 py-7 text-lg rounded-full border-white/30 text-white hover:bg-white/10 backdrop-blur-sm" onClick={() => scrollToSection("curriculum")}>
@@ -137,10 +137,9 @@ export default function LandingPage() {
               </Button>
             </div>
 
-            <div className="flex items-center gap-2 justify-center text-white/60 text-sm">
-              <span className="line-through">$297</span>
-              <span className="text-white font-bold text-lg">$97</span>
-              <span>one-time payment · lifetime access</span>
+            <div className="flex items-center justify-center gap-2 text-white/70 text-sm">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <span>7-day free trial · Cancel anytime · No card charged today</span>
             </div>
           </motion.div>
         </div>
@@ -260,7 +259,7 @@ export default function LandingPage() {
             <p className="text-lg text-emerald-50 mb-8 max-w-xl mx-auto">
               Join thousands transforming their minds with Willow Plus. 7-day free trial. Cancel anytime.
             </p>
-            <Link to="/pricing">
+            <Link to="/sign-in?redirect=/app">
               <Button size="lg" className="bg-white text-emerald-700 hover:bg-emerald-50 px-10 py-7 text-lg rounded-full font-semibold shadow-xl">
                 Start Your Free Trial
               </Button>
