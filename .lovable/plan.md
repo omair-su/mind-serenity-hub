@@ -1,77 +1,120 @@
 
 
-## Goal
+## Comprehensive Audit & Roadmap — Willow Vibes
 
-Make the landing page CTAs match real prices, send hero/free buttons through Sign In (not straight into the app — that would give your paid product away), confirm that all paid plans correctly open the live Paddle checkout, and verify the cancellation flow on Profile works end-to-end.
+A full pass across branding, profile, settings, backend sync, payments, security, and missing features. Organized by priority so we can ship in clean batches.
 
-## What's currently wrong
+---
 
-1. **Hero "Start Now — $97"** — wrong price (you sell $9.99/$59.99/$199, not $97), and the small print says "$297 / $97 one-time / lifetime access" which doesn't match any real product.
-2. **Hero button links to `/app`** — anyone clicking it skips Sign In and Paddle entirely. Right now this is a security hole that gives away your full premium app.
-3. **Final "Start Your Free Trial" CTA** — links to `/pricing` (fine), but you asked for it to go to Sign In then app on the Free tier.
-4. **Test mode banner** — still shows in production preview because the live token hasn't been switched. Paddle approved your account so we can flip to live.
-5. **Profile "Manage Subscription" button** — needs an end-to-end check that the Paddle customer portal opens correctly for live subscribers.
+## What I found (audit summary)
 
-## Changes
+**Branding & SEO**
+- `index.html` still says "Lovable App" / "Lovable Generated Project" — no real title, description, OG image, or favicon for Willow Vibes.
+- Logo component (`WillowLogo.tsx`) exists and uses a premium PNG, but there is no favicon, no `apple-touch-icon`, no `manifest.json`, no social share image.
+- No PWA install support (no manifest, no service worker), so users can't "Add to Home Screen" as a real app.
 
-### 1. Landing page — `src/pages/LandingPage.tsx`
+**Profile & Settings (critical gaps)**
+- `ProfilePage.tsx` reads/writes ONLY to `localStorage` (`getProfile/saveProfile`). Nothing syncs to the `profiles` table in Lovable Cloud. If a user signs in on another device, none of their settings, goals, or display name follow them.
+- The signed-in user's real email (from `auth.users`) is never shown — the page has an editable email field that only writes locally.
+- No avatar upload. Only emoji picker. No camera capture, no file upload, no cropping.
+- No `avatars` storage bucket exists (only `meditation-audio`).
+- "Reset All Progress" only clears localStorage — leaves all Cloud data (mood entries, gratitude, ritual completions, audio history) intact.
+- "Download All Data" exports localStorage only — misses everything in the database.
 
-**Hero section:**
-- Replace `Start Now — $97` with **`Start 7-day Free Trial`** (no price in the button — cleanest, highest CTR).
-- Change link target from `/app` → `/sign-in?redirect=/app`. New users sign up, existing users sign in, then land in the app on the Free tier. Plus features stay locked behind Paddle.
-- Remove the bogus `$297 / $97 / one-time payment / lifetime access` line under the buttons. Replace with: **"7-day free trial · Cancel anytime · No card charged today"**.
-- Remove the "Limited Time — Save 67%" pill (it referenced the fake $97 anchor).
+**Notifications (not actually working)**
+- The "Notifications" section only stores a reminder time string. No browser Notification API permission request, no scheduling, no push, no email reminders. The `notification_preferences` JSON column on `profiles` is unused.
 
-**Final CTA section** ("Find your calm. Start today."):
-- Change `Start Your Free Trial` link from `/pricing` → `/sign-in?redirect=/app`. Same flow — sign in, land in app on Free tier, upgrade prompts route to Paddle.
+**Backend wiring**
+- `profiles` table has columns for `display_name`, `avatar_url`, `goals`, `experience_level`, `timezone`, `preferred_voice`, `notification_preferences` — none of which the Profile page reads from or writes to.
+- `handle_new_user` trigger correctly auto-creates a profile row on signup, but the app never loads or updates it.
+- `is_premium` on profiles is synced via `sync_premium_status`, but `useIsPremium` likely reads it inconsistently — needs verification.
 
-**Nav bar Sign In / Start Free Trial buttons:** keep `/sign-in` and `/pricing` respectively (already correct).
+**Auth**
+- Sign-in works (email + Google), Protected routes work, password reset page exists.
+- Missing: change password from inside the app, sign-out button on Profile, delete account flow.
 
-**Pricing cards on landing page (3-tier section):**
-- "Free" → already links to `/sign-in` ✓
-- "Plus Yearly" `Start 7-day free trial` → currently links to `/pricing`. Change to `/pricing#plus` so it scrolls to the cards (and from there opens the live Paddle overlay).
-- "Plus Monthly" → same as above.
-- "Lifetime $199" `Claim Lifetime Access` → same.
+**Payments (mostly done, minor gaps)**
+- Live Paddle wired correctly, webhook verifies signatures, RLS hardened. Cancellation via portal works.
+- Missing: subscription status row on Profile (next renewal date, plan name, price), receipt history link, invoice download.
 
-### 2. Sign-in redirect — `src/pages/SignInPage.tsx`
+**Security (recently fixed, one residual)**
+- JWT verification added to AI edge functions ✅
+- Server-side premium gating on narration ✅
+- Protected routes for `/app/*` ✅
+- Storage policy hardened ✅
+- Residual: leaked-password (HIBP) check is not enabled on auth.
 
-Verify it reads the `?redirect=` query parameter and routes there after successful sign-in. If it doesn't already, add that. (Read-only mode — will confirm in build.)
+**Missing premium features people expect from Calm/Headspace tier apps**
+- No avatar upload (covered above)
+- No daily-streak push reminder
+- No social share of milestones
+- No friend/community layer (out of scope for now — flag only)
+- No offline download UX is wired beyond the placeholder page
+- No multi-language support
 
-### 3. Switch to live Paddle — `.env.development` + `.env.production`
+---
 
-- `.env.production` already has the live token (`live_223c3b...`). Production builds (your published `willowvibes.com`) will automatically use live Paddle. ✓ No change needed.
-- `.env.development` keeps the test token so the **Lovable preview stays in test mode** — this is intentional and recommended. You don't want every preview click to charge real cards.
-- The orange "Test mode" banner only shows in preview because of this. Your published site at willowvibes.com will not show it and will use live checkout.
+## The plan — 4 phases
 
-### 4. Pricing page — `src/pages/PricingPage.tsx`
+### Phase 1 — Brand polish & PWA (small, high-impact)
 
-No code changes needed. The three buttons (`willow_plus_monthly`, `willow_plus_yearly`, `willow_lifetime_onetime`) already call `usePaddleCheckout`, which auto-detects environment from the token prefix. Live token → live Paddle overlay → real cards.
+1. Update `index.html`: title "Willow Vibes — Mind, Body, Discipline", proper meta description, OG image, Twitter card, theme-color.
+2. Add `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` generated from the existing premium logo.
+3. Add `public/manifest.webmanifest` so the app is installable as a PWA on iOS/Android home screens.
+4. Replace any leftover "Lovable" strings in the public shell.
 
-### 5. Profile cancellation — verify only
+### Phase 2 — Profile & Settings backend sync (the big one)
 
-- `ProfilePage.tsx` already invokes the `paddle-customer-portal` edge function and opens the returned URL in a new tab. After deploying, we'll click it once with a test subscriber to confirm Paddle's portal loads and Cancel works. Webhook (`subscription.canceled`) already updates the `subscriptions` table → trigger flips `profiles.is_premium` to false.
+1. **Avatar upload**
+   - Create a public `avatars` storage bucket via SQL migration with RLS (users can upload only to their own folder `{user_id}/...`, anyone can read).
+   - Add an `<AvatarUploader>` component to Profile: file picker + camera capture (`<input type="file" accept="image/*" capture="user">`), client-side resize to 512×512, upload to bucket, save public URL to `profiles.avatar_url`.
+   - Keep emoji as a fallback when no photo is uploaded.
 
-### 6. End-to-end QA after build
+2. **Cloud-backed profile**
+   - New `useProfile()` hook that loads the row from `profiles` on mount, falls back to localStorage, and writes through to both on update (debounced).
+   - Bind the Profile page to this hook so display name, avatar URL, goals, experience level, preferred time, daily minutes, timezone, and theme all persist to the database.
+   - Show the real `auth.users.email` (read-only) at the top of the profile card with a "Change email" link that triggers `supabase.auth.updateUser`.
 
-In the preview (test mode):
-- Click hero `Start 7-day Free Trial` → lands on Sign In with `?redirect=/app` → sign up → app dashboard loads on Free tier.
-- Click `/pricing` → Plus Monthly button → Paddle overlay opens showing **$9.99 · 7-day trial** (matches your screenshot 3).
-- Click Plus Yearly → Paddle overlay opens showing **$59.99/yr** (matches your screenshot 4).
-- Click Lifetime → Paddle overlay opens showing **$199 one-time**.
-- After checkout with test card `4242 4242 4242 4242`, verify `profiles.is_premium = true` via DB and that Plus features unlock.
-- On Profile, click "Manage Subscription" → Paddle portal opens in new tab → Cancel → webhook fires → `is_premium` flips to false at period end.
-- Check mobile (viewport ≤506px) for all CTAs.
+3. **Account management additions**
+   - "Sign out" button (calls `supabase.auth.signOut`).
+   - "Change password" inline form (uses `supabase.auth.updateUser({ password })`).
+   - "Delete account" button with double confirmation → calls a new `delete-account` edge function that deletes the auth user + cascades cloud rows.
+   - Make "Reset All Progress" also clear cloud rows (mood_entries, gratitude_entries, ritual_completions, audio_history) for the current user.
+   - Make "Download All Data" pull from the cloud as well, returning a single JSON bundle.
 
-## What you should NOT confuse
+### Phase 3 — Notifications that actually work
 
-- The hero button **must not** bypass auth. If `/app` is reachable without sign-in, anyone can use your full premium app for free and Paddle becomes pointless. The flow is: **Landing → Sign In → App (Free tier) → Plus features prompt Paddle checkout**.
-- The "Test mode" banner staying in the Lovable preview is correct and expected. It will not appear on your published site `willowvibes.com`.
-- The live Paddle flow only activates on the published domain. To verify live checkout end-to-end with a real card, you'll need to publish first and test on willowvibes.com.
+1. Add a "Browser notifications" toggle that calls `Notification.requestPermission()` and stores the choice in `profiles.notification_preferences`.
+2. In-app daily reminder: when enabled, register a service worker that fires a local notification at the chosen `reminderTime` if the page is open or installed as PWA. (Real cross-device push requires a separate push service — flag as Phase 4.)
+3. Email reminders (optional toggle): a scheduled edge function (cron) that sends a daily nudge via the project's email infra to users who opted in.
+4. Notification preferences UI: "Daily streak", "Weekly recap", "New content", "Marketing" — each a switch saved to the JSON column.
 
-## Files touched
+### Phase 4 — Subscription clarity, security finish, minor refinements
 
-- `src/pages/LandingPage.tsx` — fix hero CTA text, link target, remove fake pricing copy, update final CTA link
-- `src/pages/SignInPage.tsx` — confirm/add `?redirect=` query handling
+1. **Subscription card**: read latest row from `subscriptions` and show plan name, status, next renewal date, price, and a "View invoices" button that opens the Paddle customer portal.
+2. **Security**: enable Password HIBP check via `configure_auth`, add rate-limit headers to AI edge functions, run the security scanner once more and clear remaining findings.
+3. **SEO/social**: write a real OG share image (1200×630) using the brand palette + tagline.
+4. **Polish**: replace lingering placeholder copy, ensure every page uses `WillowLogo` consistently, and make the bottom-nav Settings icon match the new Profile.
 
-No DB migrations, no edge function changes, no env changes.
+---
+
+## Technical notes (for the agent, not required reading for you)
+
+- New SQL migration: create `avatars` bucket (`public = true`), add storage policies (`(storage.foldername(name))[1] = auth.uid()::text` for INSERT/UPDATE/DELETE; SELECT open).
+- Add `notification_preferences` schema: `{ daily_streak: bool, weekly_recap: bool, browser_push: bool, email_reminders: bool, marketing: bool }`.
+- New edge function `delete-account`: uses service role to delete the user; cascades clear via existing FKs/policies.
+- Optional new edge function `daily-reminder-cron` (Phase 3 email reminders) — only if you want email nudges.
+- No breaking change to the payments flow, no DB destructive changes.
+
+---
+
+## What I recommend we ship first
+
+**Batch A (Phase 1 + Phase 2):** brand polish + cloud-synced profile + avatar upload + sign-out/change-password/delete-account. This is the most visible and most-requested set, and it unblocks "the app feels real" for end users.
+
+**Batch B (Phase 3):** real notifications.
+
+**Batch C (Phase 4):** subscription card + security finish + final polish.
+
+Reply "approve Batch A" (or whatever subset you want) and I'll switch into build mode and execute.
 
