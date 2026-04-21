@@ -21,6 +21,9 @@ import RitualTriptych from "@/components/dashboard/RitualTriptych";
 import StreakGarden from "@/components/dashboard/StreakGarden";
 import BentoTools from "@/components/dashboard/BentoTools";
 import QuoteRibbon from "@/components/dashboard/QuoteRibbon";
+import WelcomeModal from "@/components/dashboard/WelcomeModal";
+import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
+import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 const containerVariants = {
@@ -115,12 +118,22 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Streak garden */}
+        {/* Streak garden + freeze tokens */}
         {streak > 0 && (
-          <motion.div variants={itemVariants}>
-            <StreakGarden streak={streak} />
+          <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+              <StreakGarden streak={streak} />
+            </div>
+            <div>
+              <StreakFreezeCard />
+            </div>
           </motion.div>
         )}
+
+        {/* Soft push reminders prompt (day 2+) */}
+        <motion.div variants={itemVariants}>
+          <PushPrefsPrompt />
+        </motion.div>
 
         {/* Today's triptych */}
         <motion.div variants={itemVariants}>
@@ -179,6 +192,9 @@ export default function DashboardPage() {
           <QuoteRibbon />
         </motion.div>
       </motion.div>
+
+      {/* First-run welcome */}
+      <WelcomeModal />
 
       {/* Streak Celebration Modal */}
       <StreakCelebration streak={streak} show={showStreakCelebration} onClose={() => setShowStreakCelebration(false)} />
