@@ -47,7 +47,7 @@ export function useProfile() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("display_name, email, avatar_url, goals, experience_level, timezone, preferred_voice, notification_preferences, onboarding_answers")
+        .select("display_name, email, avatar_url, goals, experience_level, timezone, preferred_voice, notification_preferences, onboarding_answers, reminder_time")
         .eq("user_id", user.id)
         .maybeSingle();
 
@@ -61,6 +61,7 @@ export function useProfile() {
         avatarUrl: (data?.avatar_url as string) || null,
         goals: Array.isArray(data?.goals) ? (data!.goals as string[]) : local.goals,
         experience: ((data?.experience_level as UserProfile["experience"]) || local.experience),
+        reminderTime: (data?.reminder_time as string) || local.reminderTime || "07:00",
       };
       setProfile(merged);
       saveLocalProfile(merged);
@@ -94,7 +95,9 @@ export function useProfile() {
           avatar_url: next.avatarUrl ?? null,
           goals: next.goals,
           experience_level: next.experience,
+          reminder_time: next.reminderTime,
         }).eq("user_id", uid);
+        window.dispatchEvent(new Event("wv-settings-changed"));
       }, 600);
       return next;
     });

@@ -309,11 +309,25 @@ export default function ProfilePage() {
             <Field label="Daily Reminder Time">
               <Input type="time" value={profile.reminderTime} onChange={e => handleUpdate({ reminderTime: e.target.value })} className="font-body w-40" />
             </Field>
-            <NotifRow label="Browser notifications" hint="Send a gentle ping when it's time to practice." checked={notifPrefs.browser_push} onChange={handleBrowserPushToggle} />
+            <NotifRow label="Browser & background push" hint="Get reminders even when the app is closed." checked={notifPrefs.browser_push} onChange={handleBrowserPushToggle} />
             <NotifRow label="Daily streak reminder" hint="Don't break the chain — we'll nudge you." checked={notifPrefs.daily_streak} onChange={(v) => updateNotifPrefs({ daily_streak: v })} />
             <NotifRow label="Weekly recap" hint="A summary of your practice every Sunday." checked={notifPrefs.weekly_recap} onChange={(v) => updateNotifPrefs({ weekly_recap: v })} />
             <NotifRow label="Email reminders" hint="Occasional encouragement by email." checked={notifPrefs.email_reminders} onChange={(v) => updateNotifPrefs({ email_reminders: v })} />
             <NotifRow label="Product updates & offers" hint="New features and special pricing." checked={notifPrefs.marketing} onChange={(v) => updateNotifPrefs({ marketing: v })} />
+            {notifPrefs.browser_push && (
+              <button
+                onClick={async () => {
+                  const { data, error } = await supabase.functions.invoke("send-push", {
+                    body: { title: "Test from Willow Vibes 🌿", body: "If you can see this, background push is working." },
+                  });
+                  if (error || !data?.sent) toast.error("No devices received the push. Make sure you've enabled browser push above.");
+                  else toast.success(`Sent to ${data.sent} device${data.sent === 1 ? "" : "s"}`);
+                }}
+                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body text-foreground hover:bg-secondary/80 transition-all"
+              >
+                Send a test notification
+              </button>
+            )}
           </div>
         </Section>
 
