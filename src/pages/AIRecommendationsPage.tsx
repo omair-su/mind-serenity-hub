@@ -59,13 +59,13 @@ export default function AIRecommendationsPage() {
   const allDays = weeks.flatMap(w => w.days);
 
   const moods = [
-    { id: 'anxious', label: 'Anxious', icon: '😰', color: 'from-rose-500/20 to-pink-500/15' },
-    { id: 'stressed', label: 'Stressed', icon: '😟', color: 'from-orange-500/20 to-amber-500/15' },
-    { id: 'neutral', label: 'Neutral', icon: '😐', color: 'from-slate-500/20 to-gray-500/15' },
-    { id: 'happy', label: 'Happy', icon: '😊', color: 'from-yellow-500/20 to-gold/15' },
-    { id: 'sad', label: 'Sad', icon: '😢', color: 'from-blue-500/20 to-indigo-500/15' },
-    { id: 'focused', label: 'Focused', icon: '🧠', color: 'from-emerald-500/20 to-teal-500/15' },
-    { id: 'tired', label: 'Tired', icon: '😴', color: 'from-purple-500/20 to-violet-500/15' },
+    { id: 'anxious', label: 'Anxious', icon: '😰', color: 'from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/20' },
+    { id: 'stressed', label: 'Stressed', icon: '😟', color: 'from-[hsl(var(--gold-dark))]/15 to-[hsl(var(--gold))]/15' },
+    { id: 'neutral', label: 'Neutral', icon: '😐', color: 'from-[hsl(var(--sage))]/15 to-[hsl(var(--sage-light))]/30' },
+    { id: 'happy', label: 'Happy', icon: '😊', color: 'from-[hsl(var(--gold-light))]/25 to-[hsl(var(--gold))]/15' },
+    { id: 'sad', label: 'Sad', icon: '😢', color: 'from-[hsl(var(--forest-mid))]/15 to-[hsl(var(--forest))]/10' },
+    { id: 'focused', label: 'Focused', icon: '🧠', color: 'from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/15' },
+    { id: 'tired', label: 'Tired', icon: '😴', color: 'from-[hsl(var(--forest-deep))]/15 to-[hsl(var(--forest-mid))]/15' },
   ];
 
   const situations = [
@@ -82,22 +82,25 @@ export default function AIRecommendationsPage() {
   return (
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
-        {/* ── Hero Section ── */}
-        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-indigo-500/10 via-blue-500/5 to-violet-500/10 border border-border/50">
-          <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-indigo-500/20 to-blue-500/10 blur-3xl" />
-          <div className="relative p-8 sm:p-12">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h1 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-2">
-                  AI-Powered Recommendations
-                </h1>
-                <p className="text-sm text-muted-foreground max-w-2xl">
-                  Get personalized meditation suggestions based on your mood, goals, and practice history. Our AI learns your preferences to optimize your wellness journey.
-                </p>
-              </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-blue-500/15 flex items-center justify-center flex-shrink-0">
-                <Brain className="w-8 h-8 text-indigo-600" />
-              </div>
+        {/* ── Editorial Hero ── */}
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10">
+          <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+            background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%), radial-gradient(circle at 10% 80%, hsl(var(--sage) / 0.25) 0%, transparent 50%)"
+          }} />
+          <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 text-[10px] font-body font-semibold tracking-[0.2em] uppercase text-[hsl(var(--gold-light))]">
+                <Brain className="w-3 h-3" /> Personalized
+              </span>
+              <h1 className="mt-3 font-display text-4xl sm:text-5xl font-bold text-[hsl(var(--cream))] leading-[1.05]">
+                Sessions, chosen<br/>for this moment
+              </h1>
+              <p className="mt-3 font-body text-sm text-[hsl(var(--cream))]/70 max-w-md">
+                Your mood, goals, and history — distilled into a quiet recommendation.
+              </p>
+            </div>
+            <div className="hidden sm:flex w-20 h-20 rounded-2xl bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 items-center justify-center backdrop-blur-sm">
+              <Sparkles className="w-9 h-9 text-[hsl(var(--gold-light))]" />
             </div>
           </div>
         </div>
