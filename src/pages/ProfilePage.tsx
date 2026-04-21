@@ -208,7 +208,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <Section icon={User} title="Your Profile" gradient="from-violet-500/12 to-purple-500/5" iconColor="text-violet-500">
+        <Section icon={User} title="Your Profile" gradient="from-[hsl(var(--forest))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
           <div className="space-y-5">
             {profile.userId ? (
               <Field label="Profile Photo">
@@ -282,7 +282,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Palette} title="Display" gradient="from-amber-500/12 to-gold/5" iconColor="text-amber-500">
+        <Section icon={Palette} title="Display" gradient="from-[hsl(var(--gold))]/12 via-[hsl(var(--gold-light))]/15 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           <div className="space-y-4">
             <Field label="Theme">
               <div className="grid grid-cols-3 gap-2">
@@ -311,7 +311,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Bell} title="Notifications" gradient="from-blue-500/12 to-cyan-500/5" iconColor="text-blue-500">
+        <Section icon={Bell} title="Notifications" gradient="from-[hsl(var(--sage))]/15 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest-mid))]">
           <div className="space-y-4">
             <Field label="Daily Reminder Time">
               <Input type="time" value={profile.reminderTime} onChange={e => handleUpdate({ reminderTime: e.target.value })} className="font-body w-40" />
@@ -338,7 +338,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={KeyRound} title="Account" gradient="from-slate-500/10 to-slate-400/5" iconColor="text-slate-500">
+        <Section icon={KeyRound} title="Account" gradient="from-[hsl(var(--charcoal-soft))]/8 via-[hsl(var(--cream-dark))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--charcoal))]">
           <div className="space-y-4">
             <Field label="Change password">
               <div className="flex gap-2">
@@ -363,7 +363,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Database} title="Data Management" gradient="from-emerald-500/12 to-teal-500/5" iconColor="text-emerald-500">
+        <Section icon={Database} title="Data Management" gradient="from-[hsl(var(--forest-mid))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
           <div className="space-y-3">
             <button
               onClick={handleDownloadAll}
@@ -391,7 +391,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Sparkles} title="Subscription" gradient="from-gold/12 to-amber-500/5" iconColor="text-gold">
+        <Section icon={Sparkles} title="Subscription" gradient="from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/20 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           {isPremium ? (
             <div className="space-y-4">
               <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25">
