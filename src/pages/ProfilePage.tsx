@@ -1,23 +1,50 @@
 import { useState } from "react";
 import AppLayout from "@/components/AppLayout";
-import { getProfile, saveProfile, UserProfile, getAllDayStates, getMoods, getTimerSessions } from "@/lib/userStore";
+import { getProfile, getAllDayStates, getMoods, getTimerSessions } from "@/lib/userStore";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown, ExternalLink, Loader2 } from "lucide-react";
+import {
+  Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown,
+  ExternalLink, Loader2, LogOut, KeyRound, ShieldAlert, Mail
+} from "lucide-react";
 import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
-import { Link } from "react-router-dom";
+import { useProfile } from "@/hooks/useProfile";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import AvatarUploader from "@/components/AvatarUploader";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
 
 export default function ProfilePage() {
-  const [profile, setProfile] = useState<UserProfile>(getProfile());
+  const navigate = useNavigate();
+  const { profile, update, notifPrefs, updateNotifPrefs } = useProfile();
   const [saved, setSaved] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [pwLoading, setPwLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { isPremium } = useIsPremium();
+
+  const flashSaved = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 1500);
+  };
+
+  const handleUpdate = (partial: Parameters<typeof update>[0]) => {
+    update(partial);
+    flashSaved();
+  };
+
+  const toggleGoal = (goal: string) => {
+    const goals = profile.goals.includes(goal)
+      ? profile.goals.filter(g => g !== goal)
+      : [...profile.goals, goal];
+    handleUpdate({ goals });
+  };
 
   const handleCancelSubscription = async () => {
     if (!window.confirm("Open the billing portal to cancel? You'll keep Plus access until the end of your billing period.")) return;
@@ -36,19 +63,116 @@ export default function ProfilePage() {
     }
   };
 
-  const update = (partial: Partial<UserProfile>) => {
-    const next = { ...profile, ...partial };
-    setProfile(next);
-    saveProfile(next);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    await supabase.auth.signOut();
+    navigate("/sign-in", { replace: true });
   };
 
-  const toggleGoal = (goal: string) => {
-    const goals = profile.goals.includes(goal)
-      ? profile.goals.filter(g => g !== goal)
-      : [...profile.goals, goal];
-    update({ goals });
+  const handleChangePassword = async () => {
+    if (newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+    setPwLoading(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPwLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setNewPassword("");
+    toast.success("Password updated");
+  };
+
+  const handleBrowserPushToggle = async (on: boolean) => {
+    if (on && "Notification" in window) {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        toast.error("Browser notifications were blocked. Enable them in your browser settings.");
+        await updateNotifPrefs({ browser_push: false });
+        return;
+      }
+      try { new Notification("Willow Vibes", { body: "Notifications enabled. We'll nudge you gently." }); } catch {}
+    }
+    await updateNotifPrefs({ browser_push: on });
+    flashSaved();
+  };
+
+  const handleResetAll = async () => {
+    if (!window.confirm("This will permanently delete all your progress, journal entries, mood logs, gratitude entries, and ritual completions — both on this device and in the cloud. Continue?")) return;
+    for (let i = 1; i <= 30; i++) localStorage.removeItem(`wv-day-${i}`);
+    localStorage.removeItem("wv-moods");
+    localStorage.removeItem("wv-streak");
+    localStorage.removeItem("wv-timer-sessions");
+    if (profile.userId) {
+      await Promise.all([
+        supabase.from("mood_entries").delete().eq("user_id", profile.userId),
+        supabase.from("gratitude_entries").delete().eq("user_id", profile.userId),
+        supabase.from("ritual_completions").delete().eq("user_id", profile.userId),
+        supabase.from("audio_history").delete().eq("user_id", profile.userId),
+        supabase.from("user_progress").update({
+          completed_sessions: [], achievements: [], mood_logs: [], journal_entries: [],
+          gratitude_entries: [], favorites: [], total_minutes: 0, streak_days: 0,
+        }).eq("user_id", profile.userId),
+      ]);
+    }
+    toast.success("All progress has been reset");
+    setTimeout(() => window.location.reload(), 800);
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirm1 = window.prompt('Type "DELETE" to permanently delete your account and all data. This cannot be undone.');
+    if (confirm1 !== "DELETE") return;
+    setDeleting(true);
+    try {
+      const { error } = await supabase.functions.invoke("delete-account");
+      if (error) throw error;
+      toast.success("Account deleted");
+      await supabase.auth.signOut();
+      navigate("/", { replace: true });
+    } catch (err: any) {
+      toast.error(err?.message || "Couldn't delete account. Email support@willowvibes.com");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleDownloadAll = async () => {
+    const local = {
+      profile: getProfile(),
+      dayStates: getAllDayStates(),
+      moods: getMoods(),
+      timerSessions: getTimerSessions(),
+    };
+    let cloud: Record<string, unknown> = {};
+    if (profile.userId) {
+      const [moods, gratitude, rituals, audio, progress, profileRow] = await Promise.all([
+        supabase.from("mood_entries").select("*").eq("user_id", profile.userId),
+        supabase.from("gratitude_entries").select("*").eq("user_id", profile.userId),
+        supabase.from("ritual_completions").select("*").eq("user_id", profile.userId),
+        supabase.from("audio_history").select("*").eq("user_id", profile.userId),
+        supabase.from("user_progress").select("*").eq("user_id", profile.userId).maybeSingle(),
+        supabase.from("profiles").select("*").eq("user_id", profile.userId).maybeSingle(),
+      ]);
+      cloud = {
+        profile: profileRow.data,
+        moods: moods.data,
+        gratitude: gratitude.data,
+        rituals: rituals.data,
+        audio_history: audio.data,
+        progress: progress.data,
+      };
+    }
+    const data = { exportedAt: new Date().toISOString(), local, cloud };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `willowvibes-data-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Data downloaded");
   };
 
   return (
@@ -70,27 +194,46 @@ export default function ProfilePage() {
 
         <Section icon={User} title="Your Profile" gradient="from-violet-500/12 to-purple-500/5" iconColor="text-violet-500">
           <div className="space-y-5">
-            <div>
-              <label className="text-sm font-body font-medium text-foreground mb-2 block">Avatar</label>
+            {profile.userId ? (
+              <Field label="Profile Photo">
+                <AvatarUploader
+                  userId={profile.userId}
+                  currentUrl={profile.avatarUrl}
+                  fallbackEmoji={profile.avatarEmoji}
+                  onUploaded={(url) => handleUpdate({ avatarUrl: url })}
+                />
+              </Field>
+            ) : null}
+
+            <Field label="Avatar (fallback emoji)">
               <div className="grid grid-cols-6 sm:grid-cols-12 gap-2">
                 {avatarOptions.map(e => (
-                  <button key={e} onClick={() => update({ avatarEmoji: e })}
+                  <button key={e} onClick={() => handleUpdate({ avatarEmoji: e })}
                     className={`w-11 h-11 rounded-xl text-xl flex items-center justify-center transition-all ${
                       profile.avatarEmoji === e ? "bg-gradient-to-br from-primary/15 to-sage/20 ring-2 ring-primary scale-110 shadow-sm" : "bg-secondary hover:bg-secondary/80"
                     }`}>{e}</button>
                 ))}
               </div>
-            </div>
+            </Field>
+
             <Field label="Full Name">
-              <Input value={profile.name} onChange={e => update({ name: e.target.value })} placeholder="Your name" className="font-body" />
+              <Input value={profile.name} onChange={e => handleUpdate({ name: e.target.value })} placeholder="Your name" className="font-body" />
             </Field>
-            <Field label="Email">
-              <Input value={profile.email} onChange={e => update({ email: e.target.value })} placeholder="your@email.com" type="email" className="font-body" />
-            </Field>
+
+            {profile.authEmail && (
+              <Field label="Account Email">
+                <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-secondary/60 border border-border/50">
+                  <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                  <span className="font-body text-sm text-foreground truncate">{profile.authEmail}</span>
+                </div>
+                <p className="text-[11px] font-body text-muted-foreground mt-1.5">This is the email you signed in with. Contact support to change it.</p>
+              </Field>
+            )}
+
             <Field label="Experience Level">
               <div className="grid grid-cols-3 gap-2">
                 {(['beginner', 'intermediate', 'advanced'] as const).map(exp => (
-                  <button key={exp} onClick={() => update({ experience: exp })}
+                  <button key={exp} onClick={() => handleUpdate({ experience: exp })}
                     className={`py-2.5 rounded-xl text-sm font-body font-medium capitalize transition-all ${
                       profile.experience === exp ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{exp}</button>
@@ -110,7 +253,7 @@ export default function ProfilePage() {
             <Field label="Preferred Practice Time">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(['morning', 'afternoon', 'evening', 'flexible'] as const).map(t => (
-                  <button key={t} onClick={() => update({ preferredTime: t })}
+                  <button key={t} onClick={() => handleUpdate({ preferredTime: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
                       profile.preferredTime === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
@@ -118,7 +261,7 @@ export default function ProfilePage() {
               </div>
             </Field>
             <Field label={`Daily Time: ${profile.dailyMinutes} minutes`}>
-              <Slider value={[profile.dailyMinutes]} onValueChange={v => update({ dailyMinutes: v[0] })} min={5} max={60} step={5} />
+              <Slider value={[profile.dailyMinutes]} onValueChange={v => handleUpdate({ dailyMinutes: v[0] })} min={5} max={60} step={5} />
             </Field>
           </div>
         </Section>
@@ -128,7 +271,7 @@ export default function ProfilePage() {
             <Field label="Theme">
               <div className="grid grid-cols-3 gap-2">
                 {(['light', 'dark', 'auto'] as const).map(t => (
-                  <button key={t} onClick={() => update({ theme: t })}
+                  <button key={t} onClick={() => handleUpdate({ theme: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
                       profile.theme === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
@@ -138,7 +281,7 @@ export default function ProfilePage() {
             <Field label="Font Size">
               <div className="grid grid-cols-3 gap-2">
                 {(['small', 'medium', 'large'] as const).map(s => (
-                  <button key={s} onClick={() => update({ fontSize: s })}
+                  <button key={s} onClick={() => handleUpdate({ fontSize: s })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
                       profile.fontSize === s ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{s}</button>
@@ -147,55 +290,74 @@ export default function ProfilePage() {
             </Field>
             <div className="flex items-center justify-between py-2">
               <span className="text-sm font-body text-foreground">Reduce Motion</span>
-              <Switch checked={profile.reduceMotion} onCheckedChange={v => update({ reduceMotion: v })} />
+              <Switch checked={profile.reduceMotion} onCheckedChange={v => handleUpdate({ reduceMotion: v })} />
             </div>
           </div>
         </Section>
 
         <Section icon={Bell} title="Notifications" gradient="from-blue-500/12 to-cyan-500/5" iconColor="text-blue-500">
-          <Field label="Daily Reminder Time">
-            <Input type="time" value={profile.reminderTime} onChange={e => update({ reminderTime: e.target.value })} className="font-body w-40" />
-          </Field>
+          <div className="space-y-4">
+            <Field label="Daily Reminder Time">
+              <Input type="time" value={profile.reminderTime} onChange={e => handleUpdate({ reminderTime: e.target.value })} className="font-body w-40" />
+            </Field>
+            <NotifRow label="Browser notifications" hint="Send a gentle ping when it's time to practice." checked={notifPrefs.browser_push} onChange={handleBrowserPushToggle} />
+            <NotifRow label="Daily streak reminder" hint="Don't break the chain — we'll nudge you." checked={notifPrefs.daily_streak} onChange={(v) => updateNotifPrefs({ daily_streak: v })} />
+            <NotifRow label="Weekly recap" hint="A summary of your practice every Sunday." checked={notifPrefs.weekly_recap} onChange={(v) => updateNotifPrefs({ weekly_recap: v })} />
+            <NotifRow label="Email reminders" hint="Occasional encouragement by email." checked={notifPrefs.email_reminders} onChange={(v) => updateNotifPrefs({ email_reminders: v })} />
+            <NotifRow label="Product updates & offers" hint="New features and special pricing." checked={notifPrefs.marketing} onChange={(v) => updateNotifPrefs({ marketing: v })} />
+          </div>
+        </Section>
+
+        <Section icon={KeyRound} title="Account" gradient="from-slate-500/10 to-slate-400/5" iconColor="text-slate-500">
+          <div className="space-y-4">
+            <Field label="Change password">
+              <div className="flex gap-2">
+                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="New password (min 8 chars)" className="font-body flex-1" />
+                <button
+                  onClick={handleChangePassword}
+                  disabled={pwLoading || newPassword.length < 8}
+                  className="px-4 rounded-xl bg-gradient-to-r from-primary to-emerald-700 text-white text-sm font-body font-medium shadow-md disabled:opacity-50"
+                >
+                  {pwLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update"}
+                </button>
+              </div>
+            </Field>
+            <button
+              onClick={handleSignOut}
+              disabled={signingOut}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all disabled:opacity-60"
+            >
+              {signingOut ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut className="w-4 h-4" />}
+              Sign Out
+            </button>
+          </div>
         </Section>
 
         <Section icon={Database} title="Data Management" gradient="from-emerald-500/12 to-teal-500/5" iconColor="text-emerald-500">
           <div className="space-y-3">
             <button
-              onClick={() => {
-                const data = {
-                  profile: getProfile(),
-                  dayStates: getAllDayStates(),
-                  moods: getMoods(),
-                  timerSessions: getTimerSessions(),
-                };
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `willowvibes-data-${new Date().toISOString().split("T")[0]}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-                toast.success("Data downloaded successfully");
-              }}
+              onClick={handleDownloadAll}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500/8 to-teal-500/5 border border-border/50 text-sm font-body text-foreground hover:from-emerald-500/15 hover:to-teal-500/10 transition-all shadow-soft"
             >
               <Download className="w-4 h-4 text-emerald-500" /> Download All Data (JSON)
             </button>
             <button
-              onClick={() => {
-                if (window.confirm("Are you sure? This will permanently delete all your progress, journal entries, and mood data.")) {
-                  for (let i = 1; i <= 30; i++) localStorage.removeItem(`wv-day-${i}`);
-                  localStorage.removeItem("wv-moods");
-                  localStorage.removeItem("wv-streak");
-                  localStorage.removeItem("wv-timer-sessions");
-                  toast.success("All progress has been reset");
-                  window.location.reload();
-                }
-              }}
+              onClick={handleResetAll}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-destructive/8 border border-destructive/15 text-sm font-body text-destructive hover:bg-destructive/15 transition-all"
             >
               <Trash2 className="w-4 h-4" /> Reset All Progress
             </button>
+            <button
+              onClick={handleDeleteAccount}
+              disabled={deleting}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-destructive/15 border border-destructive/30 text-sm font-body font-semibold text-destructive hover:bg-destructive/25 transition-all disabled:opacity-60"
+            >
+              {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldAlert className="w-4 h-4" />}
+              Delete Account Permanently
+            </button>
+            <p className="text-[11px] font-body text-muted-foreground text-center leading-relaxed">
+              Account deletion removes your auth login and all associated data. This cannot be undone.
+            </p>
           </div>
         </Section>
 
@@ -261,6 +423,18 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div>
       <label className="text-sm font-body font-medium text-foreground mb-2 block">{label}</label>
       {children}
+    </div>
+  );
+}
+
+function NotifRow({ label, hint, checked, onChange }: { label: string; hint: string; checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="flex items-start justify-between gap-4 py-2">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-body font-medium text-foreground">{label}</p>
+        <p className="text-xs font-body text-muted-foreground mt-0.5">{hint}</p>
+      </div>
+      <Switch checked={checked} onCheckedChange={onChange} />
     </div>
   );
 }
