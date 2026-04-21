@@ -187,21 +187,28 @@ export default function ProfilePage() {
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/15 flex items-center justify-center">
-              <User className="w-5 h-5 text-violet-500" />
+        {/* Editorial header */}
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-8 sm:px-8">
+          <div className="absolute inset-0 opacity-25 pointer-events-none" style={{
+            background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
+          }} />
+          <div className="relative flex items-center justify-between gap-3">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 text-[10px] font-body font-semibold tracking-[0.2em] uppercase text-[hsl(var(--gold-light))]">
+                <User className="w-3 h-3" /> Your Account
+              </span>
+              <h1 className="mt-3 font-display text-3xl sm:text-4xl font-bold text-[hsl(var(--cream))] leading-[1.05]">Settings & Preferences</h1>
+              <p className="mt-2 font-body text-sm text-[hsl(var(--cream))]/70">Tune Willow to your rhythm.</p>
             </div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Settings</h1>
+            {saved && (
+              <span className="flex items-center gap-1.5 text-xs font-body text-[hsl(var(--forest-deep))] bg-[hsl(var(--gold-light))] px-3 py-1.5 rounded-full font-semibold shadow-md flex-shrink-0">
+                <Check className="w-3.5 h-3.5" /> Saved
+              </span>
+            )}
           </div>
-          {saved && (
-            <span className="flex items-center gap-1.5 text-sm font-body text-primary bg-primary/10 px-3 py-1.5 rounded-full">
-              <Check className="w-4 h-4" /> Saved
-            </span>
-          )}
         </div>
 
-        <Section icon={User} title="Your Profile" gradient="from-violet-500/12 to-purple-500/5" iconColor="text-violet-500">
+        <Section icon={User} title="Your Profile" gradient="from-[hsl(var(--forest))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
           <div className="space-y-5">
             {profile.userId ? (
               <Field label="Profile Photo">
@@ -244,7 +251,7 @@ export default function ProfilePage() {
                 {(['beginner', 'intermediate', 'advanced'] as const).map(exp => (
                   <button key={exp} onClick={() => handleUpdate({ experience: exp })}
                     className={`py-2.5 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.experience === exp ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.experience === exp ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{exp}</button>
                 ))}
               </div>
@@ -254,7 +261,7 @@ export default function ProfilePage() {
                 {goalOptions.map(g => (
                   <button key={g} onClick={() => toggleGoal(g)}
                     className={`px-3 py-1.5 rounded-full text-sm font-body transition-all ${
-                      profile.goals.includes(g) ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-sm" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.goals.includes(g) ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-sm" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{g}</button>
                 ))}
               </div>
@@ -264,7 +271,7 @@ export default function ProfilePage() {
                 {(['morning', 'afternoon', 'evening', 'flexible'] as const).map(t => (
                   <button key={t} onClick={() => handleUpdate({ preferredTime: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.preferredTime === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.preferredTime === t ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
                 ))}
               </div>
@@ -275,14 +282,14 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Palette} title="Display" gradient="from-amber-500/12 to-gold/5" iconColor="text-amber-500">
+        <Section icon={Palette} title="Display" gradient="from-[hsl(var(--gold))]/12 via-[hsl(var(--gold-light))]/15 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           <div className="space-y-4">
             <Field label="Theme">
               <div className="grid grid-cols-3 gap-2">
                 {(['light', 'dark', 'auto'] as const).map(t => (
                   <button key={t} onClick={() => handleUpdate({ theme: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.theme === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.theme === t ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
                 ))}
               </div>
@@ -292,7 +299,7 @@ export default function ProfilePage() {
                 {(['small', 'medium', 'large'] as const).map(s => (
                   <button key={s} onClick={() => handleUpdate({ fontSize: s })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.fontSize === s ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.fontSize === s ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{s}</button>
                 ))}
               </div>
@@ -304,7 +311,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Bell} title="Notifications" gradient="from-blue-500/12 to-cyan-500/5" iconColor="text-blue-500">
+        <Section icon={Bell} title="Notifications" gradient="from-[hsl(var(--sage))]/15 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest-mid))]">
           <div className="space-y-4">
             <Field label="Daily Reminder Time">
               <Input type="time" value={profile.reminderTime} onChange={e => handleUpdate({ reminderTime: e.target.value })} className="font-body w-40" />
@@ -331,7 +338,7 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={KeyRound} title="Account" gradient="from-slate-500/10 to-slate-400/5" iconColor="text-slate-500">
+        <Section icon={KeyRound} title="Account" gradient="from-[hsl(var(--charcoal-soft))]/8 via-[hsl(var(--cream-dark))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--charcoal))]">
           <div className="space-y-4">
             <Field label="Change password">
               <div className="flex gap-2">
@@ -339,7 +346,7 @@ export default function ProfilePage() {
                 <button
                   onClick={handleChangePassword}
                   disabled={pwLoading || newPassword.length < 8}
-                  className="px-4 rounded-xl bg-gradient-to-r from-primary to-emerald-700 text-white text-sm font-body font-medium shadow-md disabled:opacity-50"
+                  className="px-4 rounded-xl bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-sm font-body font-medium shadow-md disabled:opacity-50"
                 >
                   {pwLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update"}
                 </button>
@@ -356,13 +363,13 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Database} title="Data Management" gradient="from-emerald-500/12 to-teal-500/5" iconColor="text-emerald-500">
+        <Section icon={Database} title="Data Management" gradient="from-[hsl(var(--forest-mid))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
           <div className="space-y-3">
             <button
               onClick={handleDownloadAll}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500/8 to-teal-500/5 border border-border/50 text-sm font-body text-foreground hover:from-emerald-500/15 hover:to-teal-500/10 transition-all shadow-soft"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--sage-light))]/40 to-[hsl(var(--sage))]/20 border border-border/50 text-sm font-body text-foreground hover:from-[hsl(var(--sage-light))]/60 hover:to-[hsl(var(--sage))]/30 transition-all shadow-soft"
             >
-              <Download className="w-4 h-4 text-emerald-500" /> Download All Data (JSON)
+              <Download className="w-4 h-4 text-[hsl(var(--forest))]" /> Download All Data (JSON)
             </button>
             <button
               onClick={handleResetAll}
@@ -384,10 +391,10 @@ export default function ProfilePage() {
           </div>
         </Section>
 
-        <Section icon={Sparkles} title="Subscription" gradient="from-gold/12 to-amber-500/5" iconColor="text-gold">
+        <Section icon={Sparkles} title="Subscription" gradient="from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/20 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           {isPremium ? (
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25">
+              <div className="bg-gradient-to-r from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/20 rounded-xl p-4 border border-gold/25">
                 <div className="flex items-start gap-3">
                   <Crown className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
@@ -457,7 +464,7 @@ export default function ProfilePage() {
                 <p className="text-xs font-body text-muted-foreground mt-1">Days 1–7 unlocked · Member since {new Date(profile.joinDate).toLocaleDateString()}</p>
               </div>
               <Link to="/pricing" className="block">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white text-sm font-body font-bold shadow-lg hover:-translate-y-0.5 transition-all">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-dark))] to-[hsl(var(--gold-dark))] text-white text-sm font-body font-bold shadow-lg hover:-translate-y-0.5 transition-all">
                   <Crown className="w-4 h-4" /> Upgrade to Willow Plus
                 </button>
               </Link>
