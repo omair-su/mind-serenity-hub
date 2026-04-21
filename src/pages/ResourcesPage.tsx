@@ -1407,13 +1407,19 @@ export default function ResourcesPage() {
   return (
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500/20 to-gold/15 flex items-center justify-center">
-            <FolderOpen className="w-5 h-5 text-amber-500" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Resource Library</h1>
-            <p className="text-sm font-body text-muted-foreground">Click any resource to read the full guide, article, or worksheet.</p>
+        {/* Editorial hero */}
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10">
+          <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+            background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
+          }} />
+          <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 text-[10px] font-body font-semibold tracking-[0.2em] uppercase text-[hsl(var(--gold-light))]">
+                <FolderOpen className="w-3 h-3" /> Resources
+              </span>
+              <h1 className="mt-3 font-display text-4xl sm:text-5xl font-bold text-[hsl(var(--cream))] leading-[1.05]">The reading room</h1>
+              <p className="mt-2 font-body text-sm text-[hsl(var(--cream))]/70 max-w-md">Click any card to read the full guide, article, or worksheet.</p>
+            </div>
           </div>
         </div>
 
