@@ -1,0 +1,19 @@
+{
+  "name": "Willow Vibes",
+  "short_name": "Willow Vibes",
+  "description": "Mind, body, and discipline — a 30-day guided meditation and mindset journey.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a3d2e",
+  "theme_color": "#0a3d2e",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
