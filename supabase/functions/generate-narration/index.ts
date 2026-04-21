@@ -60,17 +60,22 @@ Deno.serve(async (req) => {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
-    // Verify caller — premium tracks require an authenticated user with active subscription
+    // Require authenticated caller for ALL narrations — prevents ElevenLabs credit drain.
     const authHeader = req.headers.get('Authorization') ?? '';
-    const userClient = createClient(SUPABASE_URL, ANON_KEY, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user } } = await userClient.auth.getUser();
+    const token = authHeader.replace('Bearer ', '');
+    const authClient = createClient(SUPABASE_URL, ANON_KEY);
+    const { data: claimsData, error: claimsErr } = await authClient.auth.getClaims(token);
+    if (claimsErr || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    const userId = claimsData.claims.sub as string;
 
     const body: GenerateRequest = await req.json();
     const {
       trackKey, category, title, description,
-      script, voice, ambientBed = null, isPremium = false,
+      script, voice, ambientBed = null,
     } = body;
 
     if (!trackKey || !script || !category || !title) {
@@ -79,23 +84,29 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Premium-content gate
-    if (isPremium) {
-      if (!user) {
-        return new Response(JSON.stringify({ error: 'Sign in required for premium content' }), {
-          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-      const { data: profile } = await admin
-        .from('profiles')
-        .select('is_premium')
-        .eq('user_id', user.id)
-        .maybeSingle();
-      if (!profile?.is_premium) {
-        return new Response(JSON.stringify({ error: 'Premium subscription required' }), {
-          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
+    // Determine premium status SERVER-SIDE (never trust the request body).
+    // First, look up whether the requested track is premium based on existing catalog row,
+    // and resolve the user's premium status from the profiles table.
+    const { data: existingTrackMeta } = await admin
+      .from('audio_tracks')
+      .select('is_premium')
+      .eq('track_key', trackKey)
+      .maybeSingle();
+
+    const { data: profile } = await admin
+      .from('profiles')
+      .select('is_premium')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    // If the track is registered as premium in the catalog, require an active subscription.
+    // For brand-new tracks (not yet in catalog), default to non-premium so the request body
+    // cannot escalate to free generation of premium-only content.
+    const isPremium = !!existingTrackMeta?.is_premium;
+    if (isPremium && !profile?.is_premium) {
+      return new Response(JSON.stringify({ error: 'Premium subscription required' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const voiceKey: VoiceKey = voice ?? defaultVoiceFor(category);
