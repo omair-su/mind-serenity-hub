@@ -1,120 +1,108 @@
 
 
-## Comprehensive Audit & Roadmap — Willow Vibes
+## Dashboard & Challenges — Premium Visual Overhaul
 
-A full pass across branding, profile, settings, backend sync, payments, security, and missing features. Organized by priority so we can ship in clean batches.
-
----
-
-## What I found (audit summary)
-
-**Branding & SEO**
-- `index.html` still says "Lovable App" / "Lovable Generated Project" — no real title, description, OG image, or favicon for Willow Vibes.
-- Logo component (`WillowLogo.tsx`) exists and uses a premium PNG, but there is no favicon, no `apple-touch-icon`, no `manifest.json`, no social share image.
-- No PWA install support (no manifest, no service worker), so users can't "Add to Home Screen" as a real app.
-
-**Profile & Settings (critical gaps)**
-- `ProfilePage.tsx` reads/writes ONLY to `localStorage` (`getProfile/saveProfile`). Nothing syncs to the `profiles` table in Lovable Cloud. If a user signs in on another device, none of their settings, goals, or display name follow them.
-- The signed-in user's real email (from `auth.users`) is never shown — the page has an editable email field that only writes locally.
-- No avatar upload. Only emoji picker. No camera capture, no file upload, no cropping.
-- No `avatars` storage bucket exists (only `meditation-audio`).
-- "Reset All Progress" only clears localStorage — leaves all Cloud data (mood entries, gratitude, ritual completions, audio history) intact.
-- "Download All Data" exports localStorage only — misses everything in the database.
-
-**Notifications (not actually working)**
-- The "Notifications" section only stores a reminder time string. No browser Notification API permission request, no scheduling, no push, no email reminders. The `notification_preferences` JSON column on `profiles` is unused.
-
-**Backend wiring**
-- `profiles` table has columns for `display_name`, `avatar_url`, `goals`, `experience_level`, `timezone`, `preferred_voice`, `notification_preferences` — none of which the Profile page reads from or writes to.
-- `handle_new_user` trigger correctly auto-creates a profile row on signup, but the app never loads or updates it.
-- `is_premium` on profiles is synced via `sync_premium_status`, but `useIsPremium` likely reads it inconsistently — needs verification.
-
-**Auth**
-- Sign-in works (email + Google), Protected routes work, password reset page exists.
-- Missing: change password from inside the app, sign-out button on Profile, delete account flow.
-
-**Payments (mostly done, minor gaps)**
-- Live Paddle wired correctly, webhook verifies signatures, RLS hardened. Cancellation via portal works.
-- Missing: subscription status row on Profile (next renewal date, plan name, price), receipt history link, invoice download.
-
-**Security (recently fixed, one residual)**
-- JWT verification added to AI edge functions ✅
-- Server-side premium gating on narration ✅
-- Protected routes for `/app/*` ✅
-- Storage policy hardened ✅
-- Residual: leaked-password (HIBP) check is not enabled on auth.
-
-**Missing premium features people expect from Calm/Headspace tier apps**
-- No avatar upload (covered above)
-- No daily-streak push reminder
-- No social share of milestones
-- No friend/community layer (out of scope for now — flag only)
-- No offline download UX is wired beyond the placeholder page
-- No multi-language support
+A focused upgrade to make these two pages feel like a $14.99/mo wellness app (Calm/Headspace tier), fully branded in the Willow forest-green + gold luxury palette with editorial typography, cinematic motion, and high-craft micro-details.
 
 ---
 
-## The plan — 4 phases
+## Dashboard Page
 
-### Phase 1 — Brand polish & PWA (small, high-impact)
+**Cinematic hero (replace current)**
+- Time-of-day adaptive gradient overlay (dawn rose → noon emerald → dusk gold → midnight indigo) layered over the hero image
+- Animated parallax: image drifts 4–6px on scroll; floating gold particles (canvas, ~12 dots) for "presence"
+- New micro-stat ribbon under greeting: today's local weather + sunrise/sunset hint (uses existing `useWeather` hook)
+- "Daily Affirmation" replaces hardcoded quote — pulls from a curated 30-line affirmation deck, fades through 3 lines on a 6s loop
+- Primary CTA upgraded to a glass-morphism gold button with animated shimmer sweep on hover
 
-1. Update `index.html`: title "Willow Vibes — Mind, Body, Discipline", proper meta description, OG image, Twitter card, theme-color.
-2. Add `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` generated from the existing premium logo.
-3. Add `public/manifest.webmanifest` so the app is installable as a PWA on iOS/Android home screens.
-4. Replace any leftover "Lovable" strings in the public shell.
+**Premium Wellness Ring (replace flat circle)**
+- Conic-gradient ring (forest → sage → gold) with animated dash that "breathes" subtly (12s loop, matches inhale/exhale rhythm)
+- Center swaps numeric score for a 2-line readout: large score + tier label (Cultivating, Flourishing, Radiant)
+- Tap to expand into a 4-axis radar (mind / body / sleep / heart) — uses existing wellnessScore data
 
-### Phase 2 — Profile & Settings backend sync (the big one)
+**New: "Today's Ritual Triptych"**
+- Three editorial cards in a row: Morning Intention · Midday Reset · Evening Reflection
+- Each card has its own muted color wash (cream / sage / forest-deep) and a single illustrated icon
+- Auto-highlights the card matching current time-of-day with a gold border + soft glow
 
-1. **Avatar upload**
-   - Create a public `avatars` storage bucket via SQL migration with RLS (users can upload only to their own folder `{user_id}/...`, anyone can read).
-   - Add an `<AvatarUploader>` component to Profile: file picker + camera capture (`<input type="file" accept="image/*" capture="user">`), client-side resize to 512×512, upload to bucket, save public URL to `profiles.avatar_url`.
-   - Keep emoji as a fallback when no photo is uploaded.
+**New: "Mindful Streak Garden"** (replaces plain streak progress bar)
+- Visual: a row of 7 small leaf SVGs that fill from outline → full forest-green as the week progresses
+- Past weeks collapse into stacked golden "harvest" leaves below — gamified, satisfying, on-brand
+- Replaces the current StreakProgress component for a more sensory feel
 
-2. **Cloud-backed profile**
-   - New `useProfile()` hook that loads the row from `profiles` on mount, falls back to localStorage, and writes through to both on update (debounced).
-   - Bind the Profile page to this hook so display name, avatar URL, goals, experience level, preferred time, daily minutes, timezone, and theme all persist to the database.
-   - Show the real `auth.users.email` (read-only) at the top of the profile card with a "Change email" link that triggers `supabase.auth.updateUser`.
+**Polished tools grid**
+- 8-tile bento grid (2 large featured + 6 standard) instead of uniform 4-col
+- Featured tile rotates daily (AI Coach Monday, Body Scan Tuesday, etc.) with a subtle gradient + larger icon
+- Hover: tilt-on-mouse-move (3deg max), gold underline draw-in
 
-3. **Account management additions**
-   - "Sign out" button (calls `supabase.auth.signOut`).
-   - "Change password" inline form (uses `supabase.auth.updateUser({ password })`).
-   - "Delete account" button with double confirmation → calls a new `delete-account` edge function that deletes the auth user + cascades cloud rows.
-   - Make "Reset All Progress" also clear cloud rows (mood_entries, gratitude_entries, ritual_completions, audio_history) for the current user.
-   - Make "Download All Data" pull from the cloud as well, returning a single JSON bundle.
-
-### Phase 3 — Notifications that actually work
-
-1. Add a "Browser notifications" toggle that calls `Notification.requestPermission()` and stores the choice in `profiles.notification_preferences`.
-2. In-app daily reminder: when enabled, register a service worker that fires a local notification at the chosen `reminderTime` if the page is open or installed as PWA. (Real cross-device push requires a separate push service — flag as Phase 4.)
-3. Email reminders (optional toggle): a scheduled edge function (cron) that sends a daily nudge via the project's email infra to users who opted in.
-4. Notification preferences UI: "Daily streak", "Weekly recap", "New content", "Marketing" — each a switch saved to the JSON column.
-
-### Phase 4 — Subscription clarity, security finish, minor refinements
-
-1. **Subscription card**: read latest row from `subscriptions` and show plan name, status, next renewal date, price, and a "View invoices" button that opens the Paddle customer portal.
-2. **Security**: enable Password HIBP check via `configure_auth`, add rate-limit headers to AI edge functions, run the security scanner once more and clear remaining findings.
-3. **SEO/social**: write a real OG share image (1200×630) using the brand palette + tagline.
-4. **Polish**: replace lingering placeholder copy, ensure every page uses `WillowLogo` consistently, and make the bottom-nav Settings icon match the new Profile.
+**Footer ribbon (new)**
+- Subtle quote of the week, citation styled like a New Yorker pull-quote (serif, italic, gold em-dash)
+- "Shared with care" Willow signature mark
 
 ---
 
-## Technical notes (for the agent, not required reading for you)
+## Challenges Page
 
-- New SQL migration: create `avatars` bucket (`public = true`), add storage policies (`(storage.foldername(name))[1] = auth.uid()::text` for INSERT/UPDATE/DELETE; SELECT open).
-- Add `notification_preferences` schema: `{ daily_streak: bool, weekly_recap: bool, browser_push: bool, email_reminders: bool, marketing: bool }`.
-- New edge function `delete-account`: uses service role to delete the user; cascades clear via existing FKs/policies.
-- Optional new edge function `daily-reminder-cron` (Phase 3 email reminders) — only if you want email nudges.
-- No breaking change to the payments flow, no DB destructive changes.
+**New header (editorial, magazine-style)**
+- Hero band with layered art: serif display title "Mindfulness Challenges" + thin gold rule + subtitle
+- Filter chips: All · Wellness · Emotional · Sleep · Focus · Spiritual (active = forest pill, inactive = outline)
+- Sort toggle: Recommended / Duration / Progress
+- "Featured this month" callout card (gold-bordered, with completion-rate stat)
+
+**Challenge cards (full redesign)**
+- Replace pastel `from-blue-500/20` washes with branded duo-tone gradients (forest/sage, gold/cream, charcoal/sage etc.) — keeps challenges visually distinct *while staying on-brand*
+- Each card shows:
+  - Large emoji + soft glow halo behind it
+  - Title in display serif, subtitle in body
+  - Day count rendered as 7/14/21 mini-dot row (filled = completed)
+  - Difficulty badge (Beginner / Deepening / Advanced)
+  - "X people completing this" social proof line
+- Hover: card lifts 4px, gold rule appears on the left edge, "Begin" CTA slides in from right
+- Completed challenges get a gold trophy ribbon corner-fold (CSS triangle) + subtle gold border
+
+**Challenge detail view**
+- Full-bleed branded gradient header replaces flat color card
+- Benefits become icon-tagged pills (heart, brain, moon, leaf icons) instead of plain text
+- "Your journey" timeline visualization: vertical path from Day 1 → final, with a moving "you are here" gold dot
+- Progress ring at top showing % complete + days remaining
+
+**Day completion screen**
+- Replaces current centered card with a focus-mode layout
+- Day script appears as a typographic centerpiece (serif, larger leading, drop-cap on first letter)
+- "Begin Practice" opens an immersive timer overlay (reuses MeditationPlayer pattern)
+- After completion: confetti is out — instead, a leaf-fall animation drops 5–8 small leaves, then a calm "Day complete" toast
+- Reflection prompt gets a richer textarea with a soft paper-grain background
+
+**Completion celebration (new)**
+- When a challenge hits 100%, a full-screen modal: animated trophy fill, day-by-day highlight reel of reflections, share card export (PNG), badge added to Achievements
 
 ---
 
-## What I recommend we ship first
+## Cross-cutting craft details
 
-**Batch A (Phase 1 + Phase 2):** brand polish + cloud-synced profile + avatar upload + sign-out/change-password/delete-account. This is the most visible and most-requested set, and it unblocks "the app feels real" for end users.
+- **Typography:** Stricter use of font-display (serif) for all H1/H2, tracking-wide for eyebrow labels, body-light for copy
+- **Spacing:** 8pt rhythm tightened — current pages mix 5/6/8 paddings; standardize on 6 / 8 / 10
+- **Motion:** All entrance animations use the same easing curve `[0.25, 0.1, 0.25, 1]` (currently mixed)
+- **Color discipline:** Audit and replace remaining raw Tailwind colors (blue-500, pink-500 etc.) with brand tokens — fixes the off-brand feel of challenge cards specifically
+- **Loading states:** Skeleton shimmers in the brand cream tone on first load (currently flashes blank)
+- **Accessibility:** Reduce-motion respect on all new animations; aria-labels on the leaf streak garden
 
-**Batch B (Phase 3):** real notifications.
+---
 
-**Batch C (Phase 4):** subscription card + security finish + final polish.
+## Files to add / change
 
-Reply "approve Batch A" (or whatever subset you want) and I'll switch into build mode and execute.
+- Edit: `src/pages/DashboardPage.tsx`, `src/pages/ChallengesPage.tsx`, `src/data/challenges.ts` (rebrand color strings)
+- Add: `src/components/dashboard/HeroCinema.tsx`, `WellnessRing.tsx`, `RitualTriptych.tsx`, `StreakGarden.tsx`, `BentoTools.tsx`, `QuoteRibbon.tsx`
+- Add: `src/components/challenges/ChallengeCard.tsx`, `ChallengeFilters.tsx`, `ChallengeJourneyTimeline.tsx`, `LeafFallAnimation.tsx`, `ChallengeCompleteModal.tsx`
+- Add: `src/data/affirmations.ts` (30 curated lines)
+
+---
+
+## Out of scope (flag for later)
+
+- Server-side "X people completing this" stat — needs aggregate query; will use a tasteful placeholder count for now
+- Share-card PNG export — can ship in a follow-up
+- Real radar chart for wellness — initial version uses 4-axis bars; full radar comes next
+
+Reply **"approve"** to build, or tell me which section to trim/expand first.
 
