@@ -106,9 +106,9 @@ export default function AIRecommendationsPage() {
         </div>
 
         {/* ── Mood Selector ── */}
-        <div className="bg-gradient-to-br from-gold/5 via-card to-amber-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+        <div className="bg-gradient-to-br from-[hsl(var(--gold))]/8 via-[hsl(var(--cream))] to-[hsl(var(--gold-light))]/15 rounded-2xl p-6 border border-border/50 shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Heart className="w-5 h-5 text-rose-500" />
+            <Heart className="w-5 h-5 text-[hsl(var(--gold-dark))]" />
             How are you feeling right now?
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
@@ -130,9 +130,9 @@ export default function AIRecommendationsPage() {
         </div>
 
         {/* ── Situation Selector ── */}
-        <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+        <div className="bg-gradient-to-br from-[hsl(var(--sage))]/15 via-[hsl(var(--cream))] to-[hsl(var(--sage-light))]/40 rounded-2xl p-6 border border-border/50 shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-emerald-600" />
+            <Zap className="w-5 h-5 text-[hsl(var(--forest))]" />
             What's your situation?
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -142,8 +142,8 @@ export default function AIRecommendationsPage() {
                 onClick={() => setSelectedSituation(situation)}
                 className={`p-3 rounded-xl text-center text-xs font-body font-medium transition-all ${
                   selectedSituation === situation
-                    ? 'bg-gradient-to-br from-emerald-500/20 to-teal-500/15 border-2 border-emerald-600 shadow-card'
-                    : 'bg-card border border-border/50 hover:border-emerald-500/50'
+                    ? 'bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/20 border-2 border-[hsl(var(--forest))] shadow-card'
+                    : 'bg-card border border-border/50 hover:border-[hsl(var(--forest))]/40'
                 }`}
               >
                 {situation}
@@ -154,7 +154,7 @@ export default function AIRecommendationsPage() {
 
         {/* ── Situation-Specific Recommendation ── */}
         {situationMeditation && (
-          <div className="bg-gradient-to-br from-violet-500/10 via-card to-purple-500/5 rounded-2xl p-6 border border-primary/30 shadow-soft">
+          <div className="bg-gradient-to-br from-[hsl(var(--forest-mid))]/10 via-[hsl(var(--cream))] to-[hsl(var(--sage-light))]/30 rounded-2xl p-6 border border-primary/30 shadow-soft">
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h3 className="font-display text-lg font-semibold text-foreground flex items-center gap-2">
@@ -167,7 +167,7 @@ export default function AIRecommendationsPage() {
                 <span className="text-xs font-body font-semibold text-primary">{situationMeditation.matchScore}% match</span>
               </div>
             </div>
-            <Card className="bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer">
+            <Card className="bg-gradient-to-br from-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/30 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h4 className="font-display font-semibold text-foreground">{situationMeditation.title}</h4>
@@ -186,7 +186,7 @@ export default function AIRecommendationsPage() {
               </div>
               <Link
                 to={`/day/${situationMeditation.dayId}`}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-violet-500 to-purple-500 text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
               >
                 Start Now
                 <ChevronRight className="w-3 h-3" />
@@ -244,23 +244,23 @@ export default function AIRecommendationsPage() {
         </div>
 
         {/* ── Weekly Plan ── */}
-        <div className="bg-gradient-to-br from-violet-500/5 via-card to-purple-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+        <div className="bg-gradient-to-br from-[hsl(var(--forest))]/8 via-[hsl(var(--cream))] to-[hsl(var(--sage-light))]/30 rounded-2xl p-6 border border-border/50 shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-violet-600" />
+            <Calendar className="w-5 h-5 text-[hsl(var(--forest))]" />
             Your Weekly Plan
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {Object.entries(weeklyPlan).map(([day, rec]) => (
               <Card
                 key={day}
-                className="bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-border/50 p-4 hover:shadow-card transition-all"
+                className="bg-gradient-to-br from-[hsl(var(--forest-mid))]/10 to-[hsl(var(--sage-light))]/30 border border-border/50 p-4 hover:shadow-card transition-all"
               >
                 <h4 className="font-display font-semibold text-foreground text-sm mb-2">{day}</h4>
                 <p className="text-xs text-foreground font-body mb-3">{rec.title}</p>
                 <div className="text-xs text-muted-foreground mb-3">{rec.duration}</div>
                 <Link
                   to={`/day/${rec.dayId}`}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-500 to-purple-500 text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
                 >
                   Start
                   <ChevronRight className="w-3 h-3" />
@@ -272,12 +272,12 @@ export default function AIRecommendationsPage() {
 
         {/* ── Practice Insights ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <div className="bg-gradient-to-br from-[hsl(var(--sage))]/15 via-[hsl(var(--cream))] to-[hsl(var(--sage-light))]/40 rounded-2xl p-6 border border-border/50 shadow-soft">
             <h3 className="font-display text-base font-semibold text-foreground mb-4">Your Practice Insights</h3>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/15 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/20 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-4 h-4 text-[hsl(var(--forest))]" />
                 </div>
                 <div>
                   <p className="text-xs font-body font-medium text-foreground">Consistency</p>
@@ -285,8 +285,8 @@ export default function AIRecommendationsPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/15 flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-4 h-4 text-emerald-600" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/20 flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-4 h-4 text-[hsl(var(--forest))]" />
                 </div>
                 <div>
                   <p className="text-xs font-body font-medium text-foreground">Avg. Duration</p>
@@ -294,8 +294,8 @@ export default function AIRecommendationsPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/15 flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-4 h-4 text-emerald-600" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/20 flex items-center justify-center flex-shrink-0">
+                  <Heart className="w-4 h-4 text-[hsl(var(--forest))]" />
                 </div>
                 <div>
                   <p className="text-xs font-body font-medium text-foreground">Mood Improvement</p>
@@ -305,12 +305,12 @@ export default function AIRecommendationsPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-rose-500/5 via-card to-pink-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <div className="bg-gradient-to-br from-[hsl(var(--gold))]/8 via-[hsl(var(--cream))] to-[hsl(var(--gold-light))]/15 rounded-2xl p-6 border border-border/50 shadow-soft">
             <h3 className="font-display text-base font-semibold text-foreground mb-4">Suggestions</h3>
             <div className="space-y-2">
               {patterns.suggestions.map((suggestion, idx) => (
                 <div key={idx} className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-[hsl(var(--gold-dark))] flex-shrink-0 mt-0.5" />
                   <p className="text-xs font-body text-muted-foreground">{suggestion}</p>
                 </div>
               ))}

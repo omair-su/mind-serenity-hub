@@ -1395,10 +1395,10 @@ function parseMarkdown(text: string) {
 }
 
 const sectionGradients: Record<string, { card: string; icon: string; iconColor: string }> = {
-  "Beginner's Guide": { card: "from-emerald-500/8 to-teal-500/5", icon: "from-emerald-500/15 to-teal-500/10", iconColor: "text-emerald-500" },
-  "Technique Deep-Dives": { card: "from-violet-500/8 to-purple-500/5", icon: "from-violet-500/15 to-purple-500/10", iconColor: "text-violet-500" },
-  "The Science of Mind": { card: "from-blue-500/8 to-cyan-500/5", icon: "from-blue-500/15 to-cyan-500/10", iconColor: "text-blue-500" },
-  "Tools & Worksheets": { card: "from-amber-500/8 to-gold/5", icon: "from-amber-500/15 to-gold/10", iconColor: "text-amber-500" },
+  "Beginner's Guide": { card: "from-[hsl(var(--sage))]/15 to-[hsl(var(--sage-light))]/30", icon: "from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-dark))]/20", iconColor: "text-[hsl(var(--forest))]" },
+  "Technique Deep-Dives": { card: "from-[hsl(var(--forest-mid))]/10 to-[hsl(var(--sage-light))]/30", icon: "from-[hsl(var(--forest-mid))]/20 to-[hsl(var(--forest))]/15", iconColor: "text-[hsl(var(--forest-mid))]" },
+  "The Science of Mind": { card: "from-[hsl(var(--forest-deep))]/10 to-[hsl(var(--sage-light))]/30", icon: "from-[hsl(var(--forest-deep))]/20 to-[hsl(var(--forest))]/15", iconColor: "text-[hsl(var(--forest-deep))]" },
+  "Tools & Worksheets": { card: "from-[hsl(var(--gold))]/10 to-[hsl(var(--gold-light))]/20", icon: "from-[hsl(var(--gold))]/20 to-[hsl(var(--gold-dark))]/15", iconColor: "text-[hsl(var(--gold-dark))]" },
 };
 
 export default function ResourcesPage() {
