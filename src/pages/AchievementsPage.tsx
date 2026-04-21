@@ -43,33 +43,33 @@ export default function AchievementsPage() {
   return (
     <AppLayout>
       <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
-        <motion.div variants={itemVariants} className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
-            <Award className="w-5 h-5 text-[hsl(var(--gold))]" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Achievements</h1>
-            <p className="text-sm font-body text-muted-foreground">{earned.length} of {achievements.length} badges earned</p>
-          </div>
-        </motion.div>
-
-        <motion.div variants={itemVariants} className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--gold))]/10 via-[hsl(var(--gold-light))]/8 to-[hsl(var(--cream))]/5 rounded-2xl border border-[hsl(var(--gold))]/15 p-6 shadow-[var(--shadow-soft-val)]">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-[hsl(var(--gold))]/10 to-transparent" />
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
-              <Trophy className="w-8 h-8 text-[hsl(var(--gold))]" />
-            </div>
+        {/* Editorial hero */}
+        <motion.div
+          variants={itemVariants}
+          className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10"
+        >
+          <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+            background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.45) 0%, transparent 50%), radial-gradient(circle at 10% 90%, hsl(var(--sage) / 0.25) 0%, transparent 50%)"
+          }} />
+          <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div>
-              <p className="font-display text-3xl font-bold text-foreground">{pct}%</p>
-              <p className="text-sm font-body text-muted-foreground">{earned.length} badges unlocked</p>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/30 text-[10px] font-body font-semibold tracking-[0.2em] uppercase text-[hsl(var(--gold-light))]">
+                <Award className="w-3 h-3" /> Honors
+              </span>
+              <h1 className="mt-3 font-display text-4xl sm:text-5xl font-bold text-[hsl(var(--cream))] leading-[1.05]">Your achievements</h1>
+              <p className="mt-2 font-body text-sm text-[hsl(var(--cream))]/70">{earned.length} of {achievements.length} badges earned</p>
+            </div>
+            <div className="text-right">
+              <p className="font-display text-6xl sm:text-7xl font-bold text-[hsl(var(--gold-light))] leading-none tabular-nums">{pct}<span className="text-3xl">%</span></p>
+              <p className="text-[11px] font-body uppercase tracking-[0.2em] text-[hsl(var(--cream))]/60 mt-1">unlocked</p>
             </div>
           </div>
-          <div className="h-3 bg-card/60 rounded-full overflow-hidden">
+          <div className="relative mt-6 h-2 bg-[hsl(var(--cream))]/15 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="h-full bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-light))] to-[hsl(var(--gold))] rounded-full shadow-sm"
+              transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+              className="h-full bg-gradient-to-r from-[hsl(var(--gold-dark))] via-[hsl(var(--gold))] to-[hsl(var(--gold-light))] rounded-full shadow-[0_0_12px_hsl(var(--gold)/0.5)]"
             />
           </div>
         </motion.div>
@@ -117,7 +117,7 @@ export default function AchievementsPage() {
                           {!isEarned && (
                             <div className="mt-2">
                               <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                                <div className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all" style={{ width: `${(a.progress / a.target) * 100}%` }} />
+                                <div className="h-full bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--sage-dark))] rounded-full transition-all" style={{ width: `${(a.progress / a.target) * 100}%` }} />
                               </div>
                               <p className="text-[10px] font-body text-muted-foreground mt-1">{a.progress}/{a.target}</p>
                             </div>
