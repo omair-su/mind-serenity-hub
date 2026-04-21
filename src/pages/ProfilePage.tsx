@@ -251,7 +251,7 @@ export default function ProfilePage() {
                 {(['beginner', 'intermediate', 'advanced'] as const).map(exp => (
                   <button key={exp} onClick={() => handleUpdate({ experience: exp })}
                     className={`py-2.5 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.experience === exp ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.experience === exp ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{exp}</button>
                 ))}
               </div>
@@ -261,7 +261,7 @@ export default function ProfilePage() {
                 {goalOptions.map(g => (
                   <button key={g} onClick={() => toggleGoal(g)}
                     className={`px-3 py-1.5 rounded-full text-sm font-body transition-all ${
-                      profile.goals.includes(g) ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-sm" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.goals.includes(g) ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-sm" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{g}</button>
                 ))}
               </div>
@@ -271,7 +271,7 @@ export default function ProfilePage() {
                 {(['morning', 'afternoon', 'evening', 'flexible'] as const).map(t => (
                   <button key={t} onClick={() => handleUpdate({ preferredTime: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.preferredTime === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.preferredTime === t ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
                 ))}
               </div>
@@ -289,7 +289,7 @@ export default function ProfilePage() {
                 {(['light', 'dark', 'auto'] as const).map(t => (
                   <button key={t} onClick={() => handleUpdate({ theme: t })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.theme === t ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.theme === t ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{t}</button>
                 ))}
               </div>
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                 {(['small', 'medium', 'large'] as const).map(s => (
                   <button key={s} onClick={() => handleUpdate({ fontSize: s })}
                     className={`py-2 rounded-xl text-sm font-body font-medium capitalize transition-all ${
-                      profile.fontSize === s ? "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
+                      profile.fontSize === s ? "bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white shadow-md" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
                     }`}>{s}</button>
                 ))}
               </div>
@@ -346,7 +346,7 @@ export default function ProfilePage() {
                 <button
                   onClick={handleChangePassword}
                   disabled={pwLoading || newPassword.length < 8}
-                  className="px-4 rounded-xl bg-gradient-to-r from-primary to-emerald-700 text-white text-sm font-body font-medium shadow-md disabled:opacity-50"
+                  className="px-4 rounded-xl bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-sm font-body font-medium shadow-md disabled:opacity-50"
                 >
                   {pwLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Update"}
                 </button>
@@ -367,9 +367,9 @@ export default function ProfilePage() {
           <div className="space-y-3">
             <button
               onClick={handleDownloadAll}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500/8 to-teal-500/5 border border-border/50 text-sm font-body text-foreground hover:from-emerald-500/15 hover:to-teal-500/10 transition-all shadow-soft"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--sage-light))]/40 to-[hsl(var(--sage))]/20 border border-border/50 text-sm font-body text-foreground hover:from-[hsl(var(--sage-light))]/60 hover:to-[hsl(var(--sage))]/30 transition-all shadow-soft"
             >
-              <Download className="w-4 h-4 text-emerald-500" /> Download All Data (JSON)
+              <Download className="w-4 h-4 text-[hsl(var(--forest))]" /> Download All Data (JSON)
             </button>
             <button
               onClick={handleResetAll}
@@ -394,7 +394,7 @@ export default function ProfilePage() {
         <Section icon={Sparkles} title="Subscription" gradient="from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/20 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           {isPremium ? (
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25">
+              <div className="bg-gradient-to-r from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/20 rounded-xl p-4 border border-gold/25">
                 <div className="flex items-start gap-3">
                   <Crown className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
@@ -464,7 +464,7 @@ export default function ProfilePage() {
                 <p className="text-xs font-body text-muted-foreground mt-1">Days 1–7 unlocked · Member since {new Date(profile.joinDate).toLocaleDateString()}</p>
               </div>
               <Link to="/pricing" className="block">
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white text-sm font-body font-bold shadow-lg hover:-translate-y-0.5 transition-all">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-dark))] to-[hsl(var(--gold-dark))] text-white text-sm font-body font-bold shadow-lg hover:-translate-y-0.5 transition-all">
                   <Crown className="w-4 h-4" /> Upgrade to Willow Plus
                 </button>
               </Link>
