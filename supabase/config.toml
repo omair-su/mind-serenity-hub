@@ -11,3 +11,7 @@ verify_jwt = false
 
 [functions.generate-gratitude-letter]
 verify_jwt = false
+
+[functions.send-daily-reminders]
+verify_jwt = false
+

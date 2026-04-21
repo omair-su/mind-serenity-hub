@@ -15,6 +15,7 @@ import { useSubscription, planLabel } from "@/hooks/useSubscription";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AvatarUploader from "@/components/AvatarUploader";
+import { subscribeToPush, unsubscribeFromPush, isPushSupported } from "@/lib/webPush";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
@@ -88,14 +89,20 @@ export default function ProfilePage() {
   };
 
   const handleBrowserPushToggle = async (on: boolean) => {
-    if (on && "Notification" in window) {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        toast.error("Browser notifications were blocked. Enable them in your browser settings.");
+    if (on) {
+      if (!isPushSupported()) {
+        toast.error("Push notifications aren't supported in this browser. Try installing the app or using Chrome/Safari.");
+        return;
+      }
+      const ok = await subscribeToPush();
+      if (!ok) {
+        toast.error("Couldn't enable push. Check your browser notification permissions.");
         await updateNotifPrefs({ browser_push: false });
         return;
       }
-      try { new Notification("Willow Vibes", { body: "Notifications enabled. We'll nudge you gently." }); } catch {}
+      toast.success("Reminders enabled. We'll nudge you gently — even when the app is closed.");
+    } else {
+      await unsubscribeFromPush();
     }
     await updateNotifPrefs({ browser_push: on });
     flashSaved();
@@ -302,11 +309,25 @@ export default function ProfilePage() {
             <Field label="Daily Reminder Time">
               <Input type="time" value={profile.reminderTime} onChange={e => handleUpdate({ reminderTime: e.target.value })} className="font-body w-40" />
             </Field>
-            <NotifRow label="Browser notifications" hint="Send a gentle ping when it's time to practice." checked={notifPrefs.browser_push} onChange={handleBrowserPushToggle} />
+            <NotifRow label="Browser & background push" hint="Get reminders even when the app is closed." checked={notifPrefs.browser_push} onChange={handleBrowserPushToggle} />
             <NotifRow label="Daily streak reminder" hint="Don't break the chain — we'll nudge you." checked={notifPrefs.daily_streak} onChange={(v) => updateNotifPrefs({ daily_streak: v })} />
             <NotifRow label="Weekly recap" hint="A summary of your practice every Sunday." checked={notifPrefs.weekly_recap} onChange={(v) => updateNotifPrefs({ weekly_recap: v })} />
             <NotifRow label="Email reminders" hint="Occasional encouragement by email." checked={notifPrefs.email_reminders} onChange={(v) => updateNotifPrefs({ email_reminders: v })} />
             <NotifRow label="Product updates & offers" hint="New features and special pricing." checked={notifPrefs.marketing} onChange={(v) => updateNotifPrefs({ marketing: v })} />
+            {notifPrefs.browser_push && (
+              <button
+                onClick={async () => {
+                  const { data, error } = await supabase.functions.invoke("send-push", {
+                    body: { title: "Test from Willow Vibes 🌿", body: "If you can see this, background push is working." },
+                  });
+                  if (error || !data?.sent) toast.error("No devices received the push. Make sure you've enabled browser push above.");
+                  else toast.success(`Sent to ${data.sent} device${data.sent === 1 ? "" : "s"}`);
+                }}
+                className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body text-foreground hover:bg-secondary/80 transition-all"
+              >
+                Send a test notification
+              </button>
+            )}
           </div>
         </Section>
 
