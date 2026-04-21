@@ -1,181 +1,77 @@
 
 
-# 30-Day Program — "Day Page" Premium Upgrade Plan
+## Goal
 
-Goal: Transform the Day page into the **flagship experience of Willow Vibes** — a cinematic, immersive daily ritual that rivals Calm's "Daily Calm" and Headspace's "Today" — with unique imagery for every single day, narrated guidance, ambient world-building, and intelligent progress that follows the user across devices.
+Make the landing page CTAs match real prices, send hero/free buttons through Sign In (not straight into the app — that would give your paid product away), confirm that all paid plans correctly open the live Paddle checkout, and verify the cancellation flow on Profile works end-to-end.
 
----
+## What's currently wrong
 
-## 1. Cinematic Hero — Per-Day, Not Per-Week
+1. **Hero "Start Now — $97"** — wrong price (you sell $9.99/$59.99/$199, not $97), and the small print says "$297 / $97 one-time / lifetime access" which doesn't match any real product.
+2. **Hero button links to `/app`** — anyone clicking it skips Sign In and Paddle entirely. Right now this is a security hole that gives away your full premium app.
+3. **Final "Start Your Free Trial" CTA** — links to `/pricing` (fine), but you asked for it to go to Sign In then app on the Free tier.
+4. **Test mode banner** — still shows in production preview because the live token hasn't been switched. Paddle approved your account so we can flip to live.
+5. **Profile "Manage Subscription" button** — needs an end-to-end check that the Paddle customer portal opens correctly for live subscribers.
 
-Today every week shares **one** of four hero images. We will give **each of the 30 days its own dedicated hero photograph** chosen to visually teach the practice.
+## Changes
 
-- **30 curated Unsplash images** (1600w, optimized) — one per day, hand-mapped to the technique:
-  - Day 1 Breath Awareness → close-up of soft sunrise breath/mist
-  - Day 2 Body Scan → person reclining on linen sheets, golden hour
-  - Day 5 Loving-Kindness → warm hands over heart
-  - Day 6 Walking Meditation → bare feet on a mossy forest path
-  - Day 10 Mantra → sunrise over still lake
-  - Day 16 Mountain Meditation → snow-capped peak at dawn
-  - Day 24 Forgiveness → dove in soft light
-  - Day 30 Graduation → golden sun cresting horizon
-  - …and so on for all 30 days
-- **Cinematic Ken Burns zoom** (slow 20s pan/zoom) on the hero image
-- **Mood-aware gradient overlay** — week 1 = forest-green tint, week 2 = warm gold, week 3 = deep indigo, week 4 = sunrise rose
-- **Floating particle layer** (gold dust + petals) drifting across hero
-- **Scroll-driven parallax** with subtle blur as you scroll into content
-- **Day-specific weather-mood**: misty mornings for sleep-related days, golden-hour light for gratitude days
-- **Hero CTA stack**: "Begin Practice" (primary gold), "Listen Only" (secondary), "Read First" — instead of one ambiguous timer button
+### 1. Landing page — `src/pages/LandingPage.tsx`
 
-## 2. Immersive "Practice Mode" — Full-Screen Cinema
+**Hero section:**
+- Replace `Start Now — $97` with **`Start 7-day Free Trial`** (no price in the button — cleanest, highest CTR).
+- Change link target from `/app` → `/sign-in?redirect=/app`. New users sign up, existing users sign in, then land in the app on the Free tier. Plus features stay locked behind Paddle.
+- Remove the bogus `$297 / $97 / one-time payment / lifetime access` line under the buttons. Replace with: **"7-day free trial · Cancel anytime · No card charged today"**.
+- Remove the "Limited Time — Save 67%" pill (it referenced the fake $97 anchor).
 
-A new full-screen, distraction-free **Practice Mode** that takes over when the user taps "Begin Practice":
-- Hero image expands edge-to-edge with darkened cinematic vignette
-- Floating breathing orb pulses at the practice's ideal cadence
-- Current narration line appears one at a time, fading in/out softly
-- All chrome (nav, sidebar) hidden — only Stop, Pause, and progress ring visible
-- Auto-dim screen brightness suggestion via CSS filter
-- Exit by tapping anywhere or pressing Esc
+**Final CTA section** ("Find your calm. Start today."):
+- Change `Start Your Free Trial` link from `/pricing` → `/sign-in?redirect=/app`. Same flow — sign in, land in app on Free tier, upgrade prompts route to Paddle.
 
-## 3. ElevenLabs Narrated Guided Practice (Premium Voice)
+**Nav bar Sign In / Start Free Trial buttons:** keep `/sign-in` and `/pricing` respectively (already correct).
 
-The current TTS is bolted on at the bottom. We elevate it:
-- **Per-paragraph narration** — each line of `guidedPractice` becomes its own narration clip; auto-advances visually as the audio plays
-- **Pause markers honored** — `[Pause — 10 seconds]` lines actually wait silently with a visible breath orb
-- **Voice selector** — Sarah (gentle), George (grounding), Aria (luminous) — saved to `profiles.preferred_voice`
-- **NarrationBar** at bottom (reuse existing component) — Stop, Skip, Replay last
-- **Server-side caching** via existing `audio_tracks` table + `generate-narration` edge function — second visit plays instantly with signed URL
+**Pricing cards on landing page (3-tier section):**
+- "Free" → already links to `/sign-in` ✓
+- "Plus Yearly" `Start 7-day free trial` → currently links to `/pricing`. Change to `/pricing#plus` so it scrolls to the cards (and from there opens the live Paddle overlay).
+- "Plus Monthly" → same as above.
+- "Lifetime $199" `Claim Lifetime Access` → same.
 
-## 4. Layered Soundscape — "Sound Bed Designer"
+### 2. Sign-in redirect — `src/pages/SignInPage.tsx`
 
-Not just one ambient track — a **mix**:
-- **Ambient bed** (forest, ocean, rain, monastery, silence)
-- **Binaural layer** (already built — wire actually working with Web Audio API stereo oscillators, currently fake)
-- **Singing bowl interval** — soft bowl chime every 3/5/10 minutes as a presence cue
-- **Master volume + per-layer volume sliders**
-- All audio respects the new audio-hygiene standard: silence by default, hard-stop on unmount
+Verify it reads the `?redirect=` query parameter and routes there after successful sign-in. If it doesn't already, add that. (Read-only mode — will confirm in build.)
 
-## 5. Real Breathing & Pacing Visuals
+### 3. Switch to live Paddle — `.env.development` + `.env.production`
 
-- **Live breathing orb** (reuse `BreathingOrb`) — paced to the technique (4-7-8 for breath days, box breathing for focus days, natural for body scan)
-- **Heart-coherence ring** — animated SVG ring around the practice timer pulsing at 6 BPM (the proven coherence frequency)
-- **Posture reminder gentle nudge** at minute 5/10 — subtle bottom-right bubble: "Soften your jaw"
+- `.env.production` already has the live token (`live_223c3b...`). Production builds (your published `willowvibes.com`) will automatically use live Paddle. ✓ No change needed.
+- `.env.development` keeps the test token so the **Lovable preview stays in test mode** — this is intentional and recommended. You don't want every preview click to charge real cards.
+- The orange "Test mode" banner only shows in preview because of this. Your published site at willowvibes.com will not show it and will use live checkout.
 
-## 6. Pre-Session "Intention" Ritual + Post-Session Reflection
+### 4. Pricing page — `src/pages/PricingPage.tsx`
 
-Replace the current single check-in dialog with a **3-step ritual flow**:
+No code changes needed. The three buttons (`willow_plus_monthly`, `willow_plus_yearly`, `willow_lifetime_onetime`) already call `usePaddleCheckout`, which auto-detects environment from the token prefix. Live token → live Paddle overlay → real cards.
 
-**Pre-session (60 seconds):**
-1. **Intention word** — single word input ("calm", "patience", "release")
-2. **Mood-before slider** — emoji wheel 1-10
-3. **Three settling breaths** — guided orb
+### 5. Profile cancellation — verify only
 
-**Post-session:**
-1. **Mood-after** captured automatically and **delta** displayed as a celebratory chart
-2. **AI Coach Reflection** — uses `ai-companion-chat` edge function to generate a personalized 2-sentence insight based on the intention, the practice, and the mood delta
-3. **Voice journal option** — record a 30-second voice reflection (uploads to private storage, transcribed via existing infra)
+- `ProfilePage.tsx` already invokes the `paddle-customer-portal` edge function and opens the returned URL in a new tab. After deploying, we'll click it once with a test subscriber to confirm Paddle's portal loads and Cancel works. Webhook (`subscription.canceled`) already updates the `subscriptions` table → trigger flips `profiles.is_premium` to false.
 
-## 7. AI Daily Insights Card
+### 6. End-to-end QA after build
 
-A new card above the practice that shows **personalized daily framing**:
-- "Yesterday you felt unfocused (4/10) and wrote about work stress. Today's body scan is well-timed — it's been shown to reduce work-related rumination by 23%. Suggested intention: *release*."
-- Generated by a new tiny edge function `daily-day-framing` that reads the last 3 days of `mood_entries` + `ritual_completions` and returns a 2-sentence frame
-- Cached per-day so it doesn't regenerate on every visit
+In the preview (test mode):
+- Click hero `Start 7-day Free Trial` → lands on Sign In with `?redirect=/app` → sign up → app dashboard loads on Free tier.
+- Click `/pricing` → Plus Monthly button → Paddle overlay opens showing **$9.99 · 7-day trial** (matches your screenshot 3).
+- Click Plus Yearly → Paddle overlay opens showing **$59.99/yr** (matches your screenshot 4).
+- Click Lifetime → Paddle overlay opens showing **$199 one-time**.
+- After checkout with test card `4242 4242 4242 4242`, verify `profiles.is_premium = true` via DB and that Plus features unlock.
+- On Profile, click "Manage Subscription" → Paddle portal opens in new tab → Cancel → webhook fires → `is_premium` flips to false at period end.
+- Check mobile (viewport ≤506px) for all CTAs.
 
-## 8. Cloud Sync — Replace localStorage
+## What you should NOT confuse
 
-Currently every day's reflection, mood, checklist lives only in `localStorage` — they vanish on logout/device switch.
-- New `day_completions` table mirroring the structure (reuse `ritual_completions` with `ritual_id = 'day-N'` to avoid migrations) + a small JSONB column for the rich state
-- Migration: one new column `day_state JSONB` on `ritual_completions` for the textarea/slider data
-- Helpers in `cloudSync.ts`: `loadDayState(dayNum)`, `saveDayState(dayNum, state)` with localStorage as offline cache
-- Sync indicator in the navbar ("✓ Synced" / "Saving...")
+- The hero button **must not** bypass auth. If `/app` is reachable without sign-in, anyone can use your full premium app for free and Paddle becomes pointless. The flow is: **Landing → Sign In → App (Free tier) → Plus features prompt Paddle checkout**.
+- The "Test mode" banner staying in the Lovable preview is correct and expected. It will not appear on your published site `willowvibes.com`.
+- The live Paddle flow only activates on the published domain. To verify live checkout end-to-end with a real card, you'll need to publish first and test on willowvibes.com.
 
-## 9. Premium Visual Components
+## Files touched
 
-New small components that elevate every day:
-- **`DayHeroCinema.tsx`** — Ken Burns hero + parallax + particle layer + mood gradient
-- **`PracticeStepCard.tsx`** — current narration paragraph with elegant typography, large breathable spacing
-- **`HeartCoherenceRing.tsx`** — animated SVG breathing ring around the timer
-- **`MoodDeltaChart.tsx`** — animated before/after mood arc with sparkle on improvement
-- **`IntentionRitual.tsx`** — 3-step onboarding modal with breath orb
-- **`AIDailyInsight.tsx`** — personalized framing card at top
+- `src/pages/LandingPage.tsx` — fix hero CTA text, link target, remove fake pricing copy, update final CTA link
+- `src/pages/SignInPage.tsx` — confirm/add `?redirect=` query handling
 
-## 10. Streak Ring + Day Carousel Polish
-
-- Replace the flat 30-dot row with a **horizontal day carousel** showing each day's hero thumbnail + completion ring
-- Apple-Watch-style **animated SVG streak ring** wrapping the current day card
-- **Completion celebration**: confetti + sound on hitting Day 30 + auto-generate certificate (reuse existing `CertificatePage`)
-
-## 11. Daily Affirmation + Quote Pairing
-
-- Each day's quote becomes a **shareable vertical card** (Instagram-story aspect ratio) with the day's hero image as backdrop — one-tap share/download
-- "Listen to quote" button — narrates the quote in the user's chosen voice
-
-## 12. Premium Gates
-
-Free users get Days 1-7 in full; Days 8-30 show a soft preview with a `PremiumLockModal` CTA on:
-- Premium voices (Aria/George)
-- Practice Mode (full-screen cinema)
-- Voice journal recording
-- AI Daily Insight
-- Certificate PDF export
-
-## 13. Audio Hygiene (App-Wide Standard)
-
-- Ambient bed defaults to `"silence"`; only plays when user enables it
-- Narration, ambient, binaural, singing bowls — all hard-stop on route unmount, on Stop button, on session reset
-- Visible Stop button whenever any audio plays
-
----
-
-## Technical Section
-
-**New components:**
-- `src/components/day/DayHeroCinema.tsx`
-- `src/components/day/PracticeMode.tsx`
-- `src/components/day/PracticeStepCard.tsx`
-- `src/components/day/HeartCoherenceRing.tsx`
-- `src/components/day/MoodDeltaChart.tsx`
-- `src/components/day/IntentionRitual.tsx`
-- `src/components/day/AIDailyInsight.tsx`
-- `src/components/day/QuoteShareCard.tsx`
-- `src/components/day/SoundBedDesigner.tsx`
-
-**New data:**
-- `src/data/dayHeroImages.ts` — mapping of all 30 days to curated Unsplash URLs + suggested ambient bed + breath cadence
-- `src/data/dayBreathPatterns.ts` — per-day breathing pattern (4-7-8, box, natural, etc.)
-
-**Edited files:**
-- `src/pages/DayPage.tsx` — full rewrite using new components
-- `src/lib/cloudSync.ts` — add `loadDayState`/`saveDayState`
-- `src/lib/binauralBeats.ts` — wire to actual Web Audio stereo oscillator (currently stub)
-- `src/data/courseData.ts` — extend `DayData` with `breathPattern`, `ambientBed`, `affirmation` fields
-
-**New edge function:**
-- `supabase/functions/daily-day-framing/index.ts` — pulls last 3 mood entries + completions and returns a 2-sentence personalized frame (uses Lovable AI: `google/gemini-2.5-flash`)
-
-**Migration:**
-- Add `day_state JSONB DEFAULT '{}'::jsonb` column to `ritual_completions`
-- No new tables needed
-
-**Reused infrastructure:**
-- `useTextToSpeech`, `useAmbientBed`, `NarrationBar`, `BreathingOrb`, `PremiumLockModal`, `ai-companion-chat`, `generate-narration`, `audio_tracks`, `ritual_completions`, `mood_entries`, `cloudSync`
-
-**No new API keys** — Unsplash is free, ElevenLabs already wired, Lovable AI already wired.
-
----
-
-## Suggested execution order
-
-1. `dayHeroImages.ts` with all 30 curated images + extend `DayData`
-2. `DayHeroCinema` (Ken Burns + parallax + particles + mood gradient)
-3. `IntentionRitual` pre-session flow + cloud-synced state
-4. `PracticeMode` full-screen cinema with `PracticeStepCard` auto-advance
-5. ElevenLabs per-paragraph narration wiring
-6. `SoundBedDesigner` (ambient + working binaural + singing bowls)
-7. `HeartCoherenceRing` + breath-pattern aware orb
-8. `AIDailyInsight` edge function + card
-9. `MoodDeltaChart` post-session + AI coach reflection
-10. Day carousel + streak ring + quote share card
-11. Premium gates + audio-hygiene QA on mobile
+No DB migrations, no edge function changes, no env changes.
 
