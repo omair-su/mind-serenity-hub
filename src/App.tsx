@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -51,6 +52,10 @@ import RefundPage from "./pages/legal/RefundPage";
 import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
 import PaymentTestModeBanner from "./components/PaymentTestModeBanner";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// Wrap a page in the auth guard so unauthenticated users are redirected to sign-in.
+const Guarded = (el: React.ReactNode) => <ProtectedRoute>{el}</ProtectedRoute>;
 
 function AppInner() {
   useApplySettings();
@@ -80,37 +85,37 @@ function AppInner() {
         <Route path="/week/:weekNum" element={<WeekPage />} />
         <Route path="/day/:dayNum" element={<DayPage />} />
 
-        {/* App (premium platform) */}
-        <Route path="/app" element={<DashboardPage />} />
-        <Route path="/app/explore" element={<ExplorePage />} />
-        <Route path="/app/profile" element={<ProfilePage />} />
-        <Route path="/app/analytics" element={<AnalyticsPage />} />
-        <Route path="/app/journal" element={<JournalPage />} />
-        <Route path="/app/library" element={<LibraryPage />} />
-        <Route path="/app/achievements" element={<AchievementsPage />} />
-        <Route path="/app/sos" element={<SOSPage />} />
-        <Route path="/app/breathing" element={<BreathingPage />} />
-        <Route path="/app/sleep" element={<SleepPage />} />
-        <Route path="/app/timer" element={<TimerPage />} />
-        <Route path="/app/mood" element={<MoodTrackerPage />} />
-        <Route path="/app/resources" element={<ResourcesPage />} />
-        <Route path="/app/affirmations" element={<AffirmationPage />} />
-        <Route path="/app/coach" element={<CoachPage />} />
-        <Route path="/app/help" element={<HelpPage />} />
-        <Route path="/app/review/:weekNum" element={<WeekReviewPage />} />
-        <Route path="/app/certificate" element={<CertificatePage />} />
-        <Route path="/app/sleep-stories" element={<SleepStoriesPage />} />
-        <Route path="/app/sound-bath" element={<SoundBathPage />} />
-        <Route path="/app/challenges" element={<ChallengesPage />} />
-        <Route path="/app/rituals" element={<RitualsPage />} />
-        <Route path="/app/focus" element={<FocusModePage />} />
-        <Route path="/app/body-scan" element={<BodyScanPage />} />
-        <Route path="/app/gratitude" element={<GratitudePage />} />
-        <Route path="/app/walking" element={<WalkingMeditationPage />} />
-        <Route path="/app/soundscape-builder" element={<SoundscapeBuilderPage />} />
-        <Route path="/app/ai-recommendations" element={<AIRecommendationsPage />} />
-        <Route path="/app/advanced-analytics" element={<AdvancedAnalyticsPage />} />
-        <Route path="/app/offline-downloads" element={<OfflineDownloadsPage />} />
+        {/* App (premium platform) — all routes require an authenticated session */}
+        <Route path="/app" element={Guarded(<DashboardPage />)} />
+        <Route path="/app/explore" element={Guarded(<ExplorePage />)} />
+        <Route path="/app/profile" element={Guarded(<ProfilePage />)} />
+        <Route path="/app/analytics" element={Guarded(<AnalyticsPage />)} />
+        <Route path="/app/journal" element={Guarded(<JournalPage />)} />
+        <Route path="/app/library" element={Guarded(<LibraryPage />)} />
+        <Route path="/app/achievements" element={Guarded(<AchievementsPage />)} />
+        <Route path="/app/sos" element={Guarded(<SOSPage />)} />
+        <Route path="/app/breathing" element={Guarded(<BreathingPage />)} />
+        <Route path="/app/sleep" element={Guarded(<SleepPage />)} />
+        <Route path="/app/timer" element={Guarded(<TimerPage />)} />
+        <Route path="/app/mood" element={Guarded(<MoodTrackerPage />)} />
+        <Route path="/app/resources" element={Guarded(<ResourcesPage />)} />
+        <Route path="/app/affirmations" element={Guarded(<AffirmationPage />)} />
+        <Route path="/app/coach" element={Guarded(<CoachPage />)} />
+        <Route path="/app/help" element={Guarded(<HelpPage />)} />
+        <Route path="/app/review/:weekNum" element={Guarded(<WeekReviewPage />)} />
+        <Route path="/app/certificate" element={Guarded(<CertificatePage />)} />
+        <Route path="/app/sleep-stories" element={Guarded(<SleepStoriesPage />)} />
+        <Route path="/app/sound-bath" element={Guarded(<SoundBathPage />)} />
+        <Route path="/app/challenges" element={Guarded(<ChallengesPage />)} />
+        <Route path="/app/rituals" element={Guarded(<RitualsPage />)} />
+        <Route path="/app/focus" element={Guarded(<FocusModePage />)} />
+        <Route path="/app/body-scan" element={Guarded(<BodyScanPage />)} />
+        <Route path="/app/gratitude" element={Guarded(<GratitudePage />)} />
+        <Route path="/app/walking" element={Guarded(<WalkingMeditationPage />)} />
+        <Route path="/app/soundscape-builder" element={Guarded(<SoundscapeBuilderPage />)} />
+        <Route path="/app/ai-recommendations" element={Guarded(<AIRecommendationsPage />)} />
+        <Route path="/app/advanced-analytics" element={Guarded(<AdvancedAnalyticsPage />)} />
+        <Route path="/app/offline-downloads" element={Guarded(<OfflineDownloadsPage />)} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

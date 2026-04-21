@@ -22,7 +22,17 @@ Deno.serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
 
+    // Require authenticated user — prevents AI credit drain via anonymous calls
     const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace("Bearer ", "");
+    const authClient = createClient(SUPABASE_URL, ANON_KEY);
+    const { data: claimsData, error: claimsErr } = await authClient.auth.getClaims(token);
+    if (claimsErr || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const userClient = createClient(SUPABASE_URL, ANON_KEY, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -35,7 +45,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Pull recent context if signed in
+    // Pull recent context
     let recentMoodLine = "";
     let streakLine = "";
     if (user) {
