@@ -132,13 +132,20 @@ export function getTotalMinutes(): number {
 export function getCurrentStreak(): number {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Read used freeze dates inline (avoids circular import with streakFreeze).
+  let usedFreezeDates: string[] = [];
+  try {
+    usedFreezeDates = JSON.parse(localStorage.getItem("wv-streak-freeze-used") || "[]");
+  } catch {}
+  const frozenSet = new Set<string>(usedFreezeDates);
+
   let streak = 0;
-  
   for (let i = 0; i < 30; i++) {
     const checkDate = new Date(today);
     checkDate.setDate(checkDate.getDate() - i);
     const dateStr = checkDate.toISOString().split('T')[0];
-    
+
     let foundForDate = false;
     for (let d = 1; d <= 30; d++) {
       const s = getDayState(d);
@@ -147,9 +154,13 @@ export function getCurrentStreak(): number {
         break;
       }
     }
-    
+
     if (foundForDate) {
       streak++;
+    } else if (frozenSet.has(dateStr)) {
+      // Freeze token applied to this missed day — chain stays unbroken,
+      // but the frozen day itself does not increment the count.
+      continue;
     } else if (i > 0) {
       break;
     }
