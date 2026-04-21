@@ -15,6 +15,7 @@ import { useSubscription, planLabel } from "@/hooks/useSubscription";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AvatarUploader from "@/components/AvatarUploader";
+import { subscribeToPush, unsubscribeFromPush, isPushSupported } from "@/lib/webPush";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
@@ -88,14 +89,20 @@ export default function ProfilePage() {
   };
 
   const handleBrowserPushToggle = async (on: boolean) => {
-    if (on && "Notification" in window) {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        toast.error("Browser notifications were blocked. Enable them in your browser settings.");
+    if (on) {
+      if (!isPushSupported()) {
+        toast.error("Push notifications aren't supported in this browser. Try installing the app or using Chrome/Safari.");
+        return;
+      }
+      const ok = await subscribeToPush();
+      if (!ok) {
+        toast.error("Couldn't enable push. Check your browser notification permissions.");
         await updateNotifPrefs({ browser_push: false });
         return;
       }
-      try { new Notification("Willow Vibes", { body: "Notifications enabled. We'll nudge you gently." }); } catch {}
+      toast.success("Reminders enabled. We'll nudge you gently — even when the app is closed.");
+    } else {
+      await unsubscribeFromPush();
     }
     await updateNotifPrefs({ browser_push: on });
     flashSaved();
