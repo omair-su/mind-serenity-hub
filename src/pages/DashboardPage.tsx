@@ -1,54 +1,36 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
 import {
   getGreeting, getNextDay, getCompletedDays, getTotalMinutes, getCurrentStreak,
-  getLongestStreak, getAllDayStates, getEarnedAchievements
+  getAllDayStates, getEarnedAchievements,
 } from "@/lib/userStore";
 import { weeks } from "@/data/courseData";
 import {
-  ArrowRight, Library, BookOpen, Trophy,
-  Flame, Clock, Target, Check, Sparkles, MessageCircle,
-  Wind, Heart, Sun, Moon, Leaf, Play, ChevronRight, Headphones, Brain,
-  Music, Zap, TrendingUp
+  ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf,
 } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero-premium.jpg";
 import { getWellnessScore, getWellnessLevel } from "@/lib/wellnessScore";
-import { StreakProgress, StreakBadge } from "@/components/StreakCelebration";
 import StreakCelebration from "@/components/StreakCelebration";
 import HomeFeed from "@/components/HomeFeed";
 import MeditationPlayer from "@/components/MeditationPlayer";
+import HeroCinema from "@/components/dashboard/HeroCinema";
+import WellnessRing from "@/components/dashboard/WellnessRing";
+import RitualTriptych from "@/components/dashboard/RitualTriptych";
+import StreakGarden from "@/components/dashboard/StreakGarden";
+import BentoTools from "@/components/dashboard/BentoTools";
+import QuoteRibbon from "@/components/dashboard/QuoteRibbon";
 
+const easing = [0.25, 0.1, 0.25, 1] as const;
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: easing } },
 };
-const scaleInVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" as const } },
-};
-
-const quotes = [
-  { text: "The mind is everything. What you think, you become.", author: "Buddha" },
-  { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
-  { text: "In the midst of movement and chaos, keep stillness inside of you.", author: "Deepak Chopra" },
-  { text: "Quiet the mind, and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
-  { text: "Almost everything will work again if you unplug it for a few minutes, including you.", author: "Anne Lamott" },
-  { text: "The present moment is filled with joy and happiness. If you are attentive, you will see it.", author: "Thich Nhat Hanh" },
-  { text: "Meditation is not about stopping thoughts, but recognizing that we are more than our thoughts.", author: "Arianna Huffington" },
-];
-
-function getTimeIcon() {
-  const h = new Date().getHours();
-  if (h < 12) return Sun;
-  if (h < 18) return Leaf;
-  return Moon;
-}
 
 export default function DashboardPage() {
   const location = useLocation();
@@ -62,11 +44,9 @@ export default function DashboardPage() {
   const earnedCount = achievements.filter(a => a.progress >= a.target).length;
   const allDays = weeks.flatMap(w => w.days);
   const nextDayData = allDays.find(d => d.day === nextDay);
-  const todayQuote = quotes[new Date().getDate() % quotes.length];
   const todayPracticed = completed.includes(nextDay) || (allStates[nextDay]?.checklist?.every(Boolean));
   const wellness = getWellnessScore();
   const wellnessLevel = getWellnessLevel(wellness.total);
-  const TimeIcon = getTimeIcon();
 
   const [showStreakCelebration, setShowStreakCelebration] = useState(() => {
     const isMilestone = [3, 7, 14, 21, 30].includes(streak);
@@ -77,8 +57,14 @@ export default function DashboardPage() {
     }
     return false;
   });
-
   const [showPlayer, setShowPlayer] = useState(false);
+
+  const stats = [
+    { label: "Days Done", value: `${completed.length}/30`, icon: Target },
+    { label: "Minutes", value: `${totalMins}`, icon: Clock },
+    { label: "Streak", value: `${streak}d`, icon: Flame },
+    { label: "Badges", value: `${earnedCount}`, icon: Trophy },
+  ];
 
   return (
     <AppLayout>
@@ -89,227 +75,108 @@ export default function DashboardPage() {
         initial="hidden"
         animate="visible"
       >
-        {/* ── Premium Hero ── */}
-        <motion.div variants={scaleInVariants} className="relative overflow-hidden rounded-2xl shadow-elevated">
-          <img src={dashboardHero} alt="Zen meditation garden at golden hour" className="w-full h-64 sm:h-72 object-cover" width={1920} height={800} />
-          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/95 via-[hsl(var(--forest-deep))]/40 to-transparent" />
+        {/* Hero */}
+        <motion.div variants={itemVariants}>
+          <HeroCinema
+            greeting={greeting}
+            nextDay={nextDay}
+            completedCount={completed.length}
+            streak={streak}
+            todayPracticed={!!todayPracticed}
+            onQuickSession={() => setShowPlayer(true)}
+          />
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="absolute top-4 right-4 max-w-[200px] sm:max-w-[260px]"
-          >
-            <div className="backdrop-blur-md bg-card/15 rounded-xl px-3 py-2.5 border border-card/20">
-              <p className="font-body text-[10px] sm:text-xs text-primary-foreground/90 italic leading-relaxed">"{todayQuote.text}"</p>
-              <p className="text-[9px] font-body text-primary-foreground/60 mt-1">— {todayQuote.author}</p>
-            </div>
-          </motion.div>
-
-          <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8">
-            <div className="flex items-center gap-2 mb-3">
-              {streak > 0 && (
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--gold))]/90 text-xs font-body font-bold text-[hsl(var(--charcoal))] shadow-[var(--shadow-gold-val)]"
-                >
-                  <Flame className="w-3.5 h-3.5" /> {streak} Day Streak
-                </motion.span>
-              )}
-              <motion.span
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.55, type: "spring", stiffness: 200 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-body font-medium ${
-                  todayPracticed ? "bg-[hsl(var(--forest))]/80 text-primary-foreground" : "backdrop-blur-sm bg-card/20 text-primary-foreground/80"
-                }`}
+        {/* Wellness ring + compact stat strip */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-3">
+            <WellnessRing wellness={wellness} level={wellnessLevel} />
+          </div>
+          <div className="lg:col-span-2 grid grid-cols-2 gap-2.5">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.06, duration: 0.4 }}
+                className="rounded-2xl border border-[hsl(var(--cream-dark))] bg-card p-3.5 shadow-[var(--shadow-soft-val)]"
               >
-                {todayPracticed ? <><Check className="w-3 h-3" /> Done today</> : <><TimeIcon className="w-3 h-3" /> Not practiced yet</>}
-              </motion.span>
-            </div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground leading-tight tracking-wide"
-            >
-              {greeting}
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
-              className="font-body text-sm text-primary-foreground/60 mt-1"
-            >
-              Day {nextDay} of 30 · {30 - completed.length} sessions remaining
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-              className="flex gap-3 mt-4"
-            >
-              <Link
-                to={`/day/${nextDay}`}
-                className="inline-flex items-center gap-2.5 w-fit px-6 py-3 rounded-xl bg-[hsl(var(--gold))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all duration-300 animate-pulse-subtle"
-              >
-                <Play className="w-4 h-4" />
-                {todayPracticed ? "Review Practice" : `Start Day ${nextDay}`}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <button
-                onClick={() => setShowPlayer(true)}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl backdrop-blur-sm bg-white/10 text-white font-body font-semibold text-sm hover:bg-white/20 transition-all"
-              >
-                <Play className="w-4 h-4" /> Quick Session
-              </button>
-            </motion.div>
+                <div className="flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-lg bg-[hsl(var(--sage-light))] flex items-center justify-center">
+                    <s.icon className="w-4 h-4 text-[hsl(var(--forest))]" />
+                  </span>
+                  <span className="text-[10px] font-body font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                    {s.label}
+                  </span>
+                </div>
+                <p className="font-display text-xl font-bold text-foreground mt-2">{s.value}</p>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
-        {/* ── Streak Progress (Gamification) ── */}
+        {/* Streak garden */}
         {streak > 0 && (
           <motion.div variants={itemVariants}>
-            <StreakProgress streak={streak} />
+            <StreakGarden streak={streak} />
           </motion.div>
         )}
 
-        {/* ── Unified Wellness + Stats ── */}
-        <motion.div variants={itemVariants} className="bg-card rounded-2xl p-5 border border-border/50 shadow-[var(--shadow-soft-val)]">
-          <div className="flex items-center gap-5">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ delay: 0.3, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              className="relative w-20 h-20 flex-shrink-0"
-            >
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="hsl(var(--secondary))" strokeWidth="8" />
-                <motion.circle
-                  cx="60" cy="60" r="50" fill="none" stroke="hsl(var(--primary))" strokeWidth="10"
-                  strokeDasharray={`${wellness.total * 3.14} 314`} strokeLinecap="round"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: wellness.total / 100 }}
-                  transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
-                  className="drop-shadow-[0_0_6px_hsl(var(--primary)/0.3)]"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-display text-xl font-bold text-foreground">{wellness.total}</span>
-                <span className="text-[7px] font-body font-bold text-muted-foreground uppercase tracking-tight">Wellness</span>
-              </div>
-            </motion.div>
-
-            <div className="flex-1 grid grid-cols-2 gap-2">
-              {[
-                { label: "Days Done", value: `${completed.length}/30`, icon: Target, accent: "text-primary" },
-                { label: "Minutes", value: `${totalMins}`, icon: Clock, accent: "text-[hsl(var(--gold-dark))]" },
-                { label: "Streak", value: `${streak}d`, icon: Flame, accent: "text-destructive" },
-                { label: "Badges", value: `${earnedCount}`, icon: Trophy, accent: "text-[hsl(var(--sage-dark))]" },
-              ].map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                  className="flex items-center gap-2 p-2 rounded-xl bg-secondary/40"
-                >
-                  <s.icon className={`w-4 h-4 ${s.accent} flex-shrink-0`} />
-                  <div className="min-w-0">
-                    <p className="font-display text-sm font-bold text-foreground leading-none">{s.value}</p>
-                    <p className="text-[9px] font-body text-muted-foreground">{s.label}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
-            <span className={`text-xs font-body font-semibold ${wellnessLevel.color}`}>{wellnessLevel.label}</span>
-            <span className="text-[10px] font-body text-muted-foreground">{wellnessLevel.description}</span>
-          </div>
-        </motion.div>
-
-        {/* ── Personalized Home Feed ── */}
+        {/* Today's triptych */}
         <motion.div variants={itemVariants}>
-          <HomeFeed />
+          <RitualTriptych />
         </motion.div>
 
-        {/* ── Today's Practice ── */}
+        {/* Today's focus card */}
         {nextDayData && (
-          <motion.div variants={itemVariants} className="relative overflow-hidden rounded-2xl border border-border/50 shadow-[var(--shadow-card-val)]">
-            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--forest))]/8 via-card to-[hsl(var(--gold))]/6" />
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[hsl(var(--gold))]/10 to-transparent rounded-bl-full" />
+          <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl border border-[hsl(var(--cream-dark))] shadow-[var(--shadow-card-val)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--forest))]/8 via-card to-[hsl(var(--gold))]/8" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[hsl(var(--gold))]/15 to-transparent rounded-bl-full" />
             <div className="relative p-5 sm:p-6">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <p className="text-[10px] font-body font-bold text-primary uppercase tracking-[0.2em]">Today's Focus</p>
+                  <p className="text-[10px] font-body font-bold text-[hsl(var(--forest))] uppercase tracking-[0.22em]">
+                    Today's Focus
+                  </p>
                   <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mt-1.5 leading-snug">
                     Day {nextDay}: {nextDayData.title}
                   </h3>
-                  <div className="flex items-center gap-3 mt-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-secondary/60 text-xs font-body text-foreground/80">
+                  <div className="flex flex-wrap items-center gap-2 mt-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[hsl(var(--sage-light))] text-xs font-body text-[hsl(var(--forest))]">
                       <Clock className="w-3 h-3" /> {nextDayData.duration}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-secondary/60 text-xs font-body text-foreground/80">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[hsl(var(--gold))]/15 text-xs font-body text-[hsl(var(--gold-dark))]">
                       <Target className="w-3 h-3" /> {nextDayData.difficulty}
                     </span>
                   </div>
                 </div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage))]/20 flex items-center justify-center flex-shrink-0">
-                  <Leaf className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage))]/30 flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-7 h-7 text-[hsl(var(--forest))]" />
                 </div>
               </div>
               <Link
-                to={`/day/${nextDay}`}
-                className="flex items-center justify-center gap-2 mt-5 w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-body font-bold text-sm hover:bg-primary/90 transition-colors shadow-[var(--shadow-soft-val)]"
+                to={`/app/day/${nextDay}`}
+                className="flex items-center justify-center gap-2 mt-5 w-full py-3.5 rounded-xl bg-[hsl(var(--forest))] text-white font-body font-bold text-sm hover:bg-[hsl(var(--forest-mid))] transition-colors shadow-[var(--shadow-soft-val)]"
               >
-                <Play className="w-4 h-4" /> Begin Session
+                <Play className="w-4 h-4" /> Begin Session <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </motion.div>
         )}
 
-        {/* ── Your Tools Quick Access ── */}
+        {/* Personalised feed */}
         <motion.div variants={itemVariants}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display text-base font-semibold text-foreground">Your Tools</h3>
-            <Link to="/app/explore" className="flex items-center gap-1 text-xs font-body text-primary hover:underline">
-              See all <ChevronRight className="w-3 h-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-4 gap-2.5">
-            {[
-              { label: "Body Scan", icon: Heart, path: "/app/body-scan" },
-              { label: "Sound Bath", icon: Music, path: "/app/sound-bath" },
-              { label: "Challenges", icon: Flame, path: "/app/challenges" },
-              { label: "Journal", icon: BookOpen, path: "/app/journal" },
-              { label: "AI Coach", icon: MessageCircle, path: "/app/coach" },
-              { label: "Focus", icon: Zap, path: "/app/focus" },
-              { label: "Gratitude", icon: Leaf, path: "/app/gratitude" },
-              { label: "Timer", icon: Clock, path: "/app/timer" },
-            ].map((tool, i) => (
-              <motion.div
-                key={tool.path}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6 + i * 0.05 }}
-              >
-                <Link
-                  to={tool.path}
-                  className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border border-border/40 hover:border-primary/30 hover:shadow-[var(--shadow-card-val)] hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-[hsl(var(--sage))]/10 flex items-center justify-center">
-                    <tool.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="font-display text-[10px] font-semibold text-foreground text-center leading-tight">{tool.label}</span>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          <HomeFeed />
+        </motion.div>
+
+        {/* Bento toolkit */}
+        <motion.div variants={itemVariants}>
+          <BentoTools />
+        </motion.div>
+
+        {/* Footer pull-quote */}
+        <motion.div variants={itemVariants}>
+          <QuoteRibbon />
         </motion.div>
       </motion.div>
 
