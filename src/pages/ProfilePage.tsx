@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useProfile } from "@/hooks/useProfile";
+import { useSubscription, planLabel } from "@/hooks/useSubscription";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AvatarUploader from "@/components/AvatarUploader";
@@ -28,6 +29,7 @@ export default function ProfilePage() {
   const [pwLoading, setPwLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const { isPremium } = useIsPremium();
+  const subscription = useSubscription();
 
   const flashSaved = () => {
     setSaved(true);
@@ -364,26 +366,68 @@ export default function ProfilePage() {
         <Section icon={Sparkles} title="Subscription" gradient="from-gold/12 to-amber-500/5" iconColor="text-gold">
           {isPremium ? (
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25 flex items-start gap-3">
-                <Crown className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="font-body text-sm font-semibold text-foreground">Willow Plus — Active</p>
-                  <p className="text-xs font-body text-muted-foreground mt-1">Member since {new Date(profile.joinDate).toLocaleDateString()}</p>
+              <div className="bg-gradient-to-r from-gold/15 to-amber-500/8 rounded-xl p-4 border border-gold/25">
+                <div className="flex items-start gap-3">
+                  <Crown className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-body text-sm font-semibold text-foreground">
+                      {subscription.kind === "lifetime" ? "Willow Plus — Lifetime" : planLabel(subscription.productId)}
+                    </p>
+                    <p className="text-xs font-body text-muted-foreground mt-1">
+                      Member since {new Date(profile.joinDate).toLocaleDateString()}
+                    </p>
+
+                    {subscription.kind === "subscription" && subscription.status && (
+                      <div className="mt-3 pt-3 border-t border-gold/20 space-y-1.5">
+                        <div className="flex items-center justify-between text-xs font-body">
+                          <span className="text-muted-foreground">Status</span>
+                          <span className="font-medium text-foreground capitalize">{subscription.status}</span>
+                        </div>
+                        {subscription.currentPeriodEnd && (
+                          <div className="flex items-center justify-between text-xs font-body">
+                            <span className="text-muted-foreground">
+                              {subscription.cancelAtPeriodEnd ? "Access ends" : "Renews on"}
+                            </span>
+                            <span className="font-medium text-foreground">
+                              {new Date(subscription.currentPeriodEnd).toLocaleDateString(undefined, {
+                                year: "numeric", month: "short", day: "numeric"
+                              })}
+                            </span>
+                          </div>
+                        )}
+                        {subscription.cancelAtPeriodEnd && (
+                          <p className="text-[11px] font-body text-amber-700 dark:text-amber-400 mt-1">
+                            Cancellation scheduled — you keep Plus access until the date above.
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {subscription.kind === "lifetime" && (
+                      <p className="text-[11px] font-body text-muted-foreground mt-2">
+                        One-time purchase — no renewal needed.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <button
-                onClick={handleCancelSubscription}
-                disabled={portalLoading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all disabled:opacity-60"
-              >
-                {portalLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
-                Manage or Cancel Subscription
-              </button>
-              <p className="text-[11px] font-body text-muted-foreground text-center leading-relaxed">
-                One-click cancellation via Paddle. You'll keep Plus access until the end of your billing period — no questions asked. Refund requests are honored within 14 days per our{" "}
-                <Link to="/legal/refund" className="underline hover:text-foreground">Refund Policy</Link>.
-              </p>
+              {subscription.kind !== "lifetime" && (
+                <>
+                  <button
+                    onClick={handleCancelSubscription}
+                    disabled={portalLoading}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-sm font-body font-medium text-foreground hover:bg-secondary/80 transition-all disabled:opacity-60"
+                  >
+                    {portalLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
+                    Manage Billing & Invoices
+                  </button>
+                  <p className="text-[11px] font-body text-muted-foreground text-center leading-relaxed">
+                    Open the Paddle billing portal to download invoices, update your card, or cancel. You'll keep Plus access until the end of your billing period. Refund requests are honored within 14 days per our{" "}
+                    <Link to="/legal/refund" className="underline hover:text-foreground">Refund Policy</Link>.
+                  </p>
+                </>
+              )}
             </div>
           ) : (
             <div className="space-y-3">
