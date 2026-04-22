@@ -1,3 +1,6 @@
+User-agent: *
+Allow: /
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +13,11 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Block private app routes from indexing
+Disallow: /app/
+Disallow: /sign-in
+Disallow: /reset-password
+Disallow: /onboarding
+
+Sitemap: https://www.willowvibes.com/sitemap.xml
+Host: https://www.willowvibes.com
