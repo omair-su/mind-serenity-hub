@@ -118,7 +118,7 @@ export default function LandingPage() {
                   <Button variant="outline" className="w-full rounded-full border-[hsl(var(--sage))] text-[hsl(var(--forest))]">Log In</Button>
                 </Link>
                 <Link to="/pricing" className="block w-full">
-                  <Button className="w-full rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white">Begin Your Journey</Button>
+                  <Button className="w-full rounded-full bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))]">Begin Your Journey</Button>
                 </Link>
               </div>
             </div>
