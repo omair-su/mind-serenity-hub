@@ -9,6 +9,9 @@ verify_jwt = false
 [functions.ai-companion-chat]
 verify_jwt = false
 
+[functions.ai-coach-chat]
+verify_jwt = false
+
 [functions.generate-gratitude-letter]
 verify_jwt = false
 
