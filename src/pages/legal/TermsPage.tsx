@@ -4,7 +4,7 @@ export default function TermsPage() {
   return (
     <LegalLayout title="Terms of Service" updated="April 20, 2026">
       <p>
-        Welcome to Willow Vibes ("Willow", "we", "our", "us"). Willow Vibes is a limited liability company organized under the laws of Delaware, United States ("Willow Vibes LLC"). These Terms of Service ("Terms") govern your use of the Willow Vibes website, mobile experience, and related services (collectively, the "Service"). By creating an account or using the Service, you agree to these Terms.
+        Welcome to Willow Vibes ("Willow", "we", "our", "us"). Willow Vibes is operated as an individual sole proprietorship. These Terms of Service ("Terms") govern your use of the Willow Vibes website, mobile experience, and related services (collectively, the "Service"). By creating an account or using the Service, you agree to these Terms.
       </p>
 
       <h2>1. Eligibility</h2>
