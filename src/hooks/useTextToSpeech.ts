@@ -12,7 +12,7 @@ interface GenerateOptions {
   title: string;
   description?: string;
   voice?: VoiceKey;
-  ambientBed?: "rain" | "ocean" | "forest" | "fire" | "wind" | "creek" | "birds" | "night" | "bowls" | null;
+  ambientBed?: import("@/lib/natureSounds").NatureSoundId | null;
   isPremium?: boolean;
 }
 
