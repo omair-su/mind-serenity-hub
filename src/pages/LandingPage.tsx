@@ -248,23 +248,25 @@ export default function LandingPage() {
       <CurriculumSection />
       <TestimonialsSection />
 
-      {/* Pricing — Forest gradient, gold accents */}
-      <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-[hsl(var(--forest-deep))] via-[hsl(var(--forest-mid))] to-[hsl(var(--forest-deep))] relative overflow-hidden">
-        {/* Ambient gold glow */}
-        <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-[hsl(var(--gold))]/8 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-[hsl(var(--sage))]/8 blur-[100px]" />
+      {/* Pricing — Editorial onyx, champagne accents */}
+      <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx))] relative overflow-hidden">
+        {/* Ambient champagne glow */}
+        <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-[hsl(var(--champagne))]/10 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-[hsl(var(--champagne-deep))]/8 blur-[100px]" />
+        {/* Subtle grid texture */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
 
         <div className="max-w-6xl mx-auto px-4 md:px-6 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }} className="text-center mb-16">
-            <p className="text-[10px] md:text-xs font-body tracking-[0.3em] uppercase text-[hsl(var(--gold-light))] mb-5">— Investment in Self —</p>
-            <h3 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-[1.1]">
+            <p className="text-[10px] md:text-xs font-body tracking-[0.35em] uppercase text-[hsl(var(--champagne-light))] mb-5">— Investment in Self —</p>
+            <h3 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-[1.1] tracking-[-0.02em]">
               Choose your{" "}
-              <span className="italic font-light bg-gradient-to-r from-[hsl(var(--gold-light))] to-[hsl(var(--gold))] bg-clip-text text-transparent">
+              <span className="italic font-light bg-gradient-to-r from-[hsl(var(--champagne-light))] to-[hsl(var(--champagne))] bg-clip-text text-transparent">
                 path forward.
               </span>
             </h3>
-            <div className="w-12 h-px mx-auto mb-5 bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent" />
-            <p className="font-body text-white/70 max-w-xl mx-auto leading-relaxed">
+            <div className="w-12 h-px mx-auto mb-5 bg-gradient-to-r from-transparent via-[hsl(var(--champagne))] to-transparent" />
+            <p className="font-body text-white/65 max-w-xl mx-auto leading-relaxed font-light">
               Every plan begins with a 7-day complimentary trial of Willow Plus. No card today. Cancel anytime.
             </p>
           </motion.div>
@@ -281,7 +283,7 @@ export default function LandingPage() {
               <ul className="space-y-3 flex-1">
                 {["Days 1–7 of the 30-Day Program", "Basic narration voices", "Mood tracker & gratitude", "SOS protocols (3 free)"].map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/85 font-body">
-                    <CheckCircle className="w-4 h-4 text-[hsl(var(--sage))] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[hsl(var(--champagne-light))]/80 flex-shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
@@ -299,28 +301,28 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="relative rounded-3xl bg-gradient-to-br from-[hsl(var(--forest))]/40 via-[hsl(var(--forest-mid))]/30 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))] p-8 flex flex-col shadow-[0_30px_70px_-20px_hsl(30_54%_45%/0.5)] md:scale-105 md:-translate-y-2"
+              className="relative rounded-3xl bg-gradient-to-br from-[hsl(var(--onyx-mid))]/80 via-[hsl(var(--onyx-soft))]/60 to-[hsl(var(--champagne))]/15 border-2 border-[hsl(var(--champagne))] p-8 flex flex-col shadow-[0_30px_70px_-20px_hsl(38_48%_45%/0.45)] md:scale-105 md:-translate-y-2"
             >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px] font-body font-bold uppercase tracking-[0.2em] shadow-lg">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] text-[10px] font-body font-bold uppercase tracking-[0.25em] shadow-lg">
                 ✦ Most Chosen
               </div>
               <h4 className="font-display text-xl font-bold text-white">Willow Plus · Yearly</h4>
-              <p className="font-body text-sm text-[hsl(var(--gold-light))] mt-1">Best value — save 50%</p>
+              <p className="font-body text-sm text-[hsl(var(--champagne-light))] mt-1">Best value — save 50%</p>
               <div className="mt-6">
                 <span className="font-display text-5xl font-bold text-white">$59.99</span>
                 <span className="font-body text-white/70 ml-2">/year</span>
               </div>
-              <p className="font-body text-xs text-[hsl(var(--gold-light))] mb-5">Just $4.99/month, billed annually</p>
+              <p className="font-body text-xs text-[hsl(var(--champagne-light))] mb-5">Just $4.99/month, billed annually</p>
               <ul className="space-y-3 flex-1">
                 {["All 30 days of the program", "Premium ElevenLabs voices", "AI Daily Insight & AI Coach", "Sound Bed Designer + binaurals", "Sleep stories, sound baths", "Advanced analytics & reports"].map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white font-body">
-                    <CheckCircle className="w-4 h-4 text-[hsl(var(--gold))] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[hsl(var(--champagne))] flex-shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Link to="/pricing" className="mt-7">
-                <Button className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-bold py-6 shadow-[var(--shadow-gold-val)] hover:scale-[1.02] transition-transform">
+                <Button className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] font-body font-bold py-6 shadow-[0_8px_30px_-6px_hsl(38_48%_50%/0.5)] hover:scale-[1.02] transition-transform">
                   Begin 7-Day Trial
                 </Button>
               </Link>
@@ -338,13 +340,13 @@ export default function LandingPage() {
               <ul className="space-y-3 flex-1">
                 {["All 30 days of the program", "Premium ElevenLabs voices", "AI Daily Insight & AI Coach", "Sound Bed Designer", "Sleep stories, sound baths", "Cancel anytime"].map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-white/85 font-body">
-                    <CheckCircle className="w-4 h-4 text-[hsl(var(--sage))] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[hsl(var(--champagne-light))]/80 flex-shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
               </ul>
               <Link to="/pricing" className="mt-7">
-                <Button className="w-full rounded-xl bg-[hsl(var(--cream))] text-[hsl(var(--forest-deep))] hover:bg-white font-body font-bold py-6">
+                <Button className="w-full rounded-xl bg-[hsl(var(--ivory))] text-[hsl(var(--onyx))] hover:bg-white font-body font-bold py-6">
                   Begin 7-Day Trial
                 </Button>
               </Link>
@@ -358,21 +360,21 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="mt-12 rounded-3xl overflow-hidden relative bg-gradient-to-r from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] border border-[hsl(var(--gold))]/40 p-8 sm:p-12"
+            className="mt-12 rounded-3xl overflow-hidden relative bg-gradient-to-r from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx))] border border-[hsl(var(--champagne))]/40 p-8 sm:p-12"
           >
-            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-[hsl(var(--gold))]/15 blur-[100px]" />
-            <div className="absolute -bottom-8 -left-8 w-64 h-64 rounded-full bg-[hsl(var(--sage))]/10 blur-[80px]" />
+            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-[hsl(var(--champagne))]/15 blur-[100px]" />
+            <div className="absolute -bottom-8 -left-8 w-64 h-64 rounded-full bg-[hsl(var(--champagne-deep))]/10 blur-[80px]" />
             <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
               <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))]/40 mb-4">
-                  <Sparkles className="w-3 h-3 text-[hsl(var(--gold-light))]" />
-                  <span className="text-[10px] font-body font-bold text-[hsl(var(--gold-light))] uppercase tracking-[0.25em]">Founders Lifetime — Limited to 1,000</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[hsl(var(--champagne))]/15 border border-[hsl(var(--champagne))]/40 mb-4">
+                  <Sparkles className="w-3 h-3 text-[hsl(var(--champagne-light))]" />
+                  <span className="text-[10px] font-body font-bold text-[hsl(var(--champagne-light))] uppercase tracking-[0.25em]">Founders Lifetime — Limited to 1,000</span>
                 </div>
-                <h3 className="font-display text-3xl sm:text-4xl font-bold text-white mb-3">
+                <h3 className="font-display text-3xl sm:text-4xl font-bold text-white mb-3 tracking-[-0.02em]">
                   Pay once.{" "}
-                  <span className="italic font-light text-[hsl(var(--gold-light))]">Practice forever.</span>
+                  <span className="italic font-light text-[hsl(var(--champagne-light))]">Practice forever.</span>
                 </h3>
-                <p className="font-body text-sm sm:text-base text-white/70 max-w-xl leading-relaxed">
+                <p className="font-body text-sm sm:text-base text-white/70 max-w-xl leading-relaxed font-light">
                   Every feature of Willow Plus — including all future content, AI upgrades, and seasonal collections — for a single payment. Reserved for our first thousand founders.
                 </p>
               </div>
@@ -382,7 +384,7 @@ export default function LandingPage() {
                   <span className="font-body text-sm text-white/55 ml-2 line-through">$599</span>
                 </div>
                 <Link to="/pricing">
-                  <Button className="w-full md:w-auto px-8 py-6 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-bold shadow-[var(--shadow-gold-val)] hover:scale-[1.03] transition-transform">
+                  <Button className="w-full md:w-auto px-8 py-6 rounded-xl bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] font-body font-bold shadow-[0_8px_30px_-6px_hsl(38_48%_50%/0.5)] hover:scale-[1.03] transition-transform">
                     Claim Lifetime Access →
                   </Button>
                 </Link>
@@ -394,23 +396,23 @@ export default function LandingPage() {
 
       <FAQSection />
 
-      {/* Final CTA — Forest with editorial pull-quote */}
-      <section className="py-20 md:py-32 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[hsl(var(--gold))]/8 blur-[120px]" />
+      {/* Final CTA — Onyx editorial pull-quote */}
+      <section className="py-20 md:py-32 bg-gradient-to-br from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx-mid))] relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[hsl(var(--champagne))]/10 blur-[120px]" />
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center relative">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}>
-            <p className="text-[10px] md:text-xs font-body tracking-[0.3em] uppercase text-[hsl(var(--gold-light))] mb-5">— Your Practice Begins —</p>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
+            <p className="text-[10px] md:text-xs font-body tracking-[0.35em] uppercase text-[hsl(var(--champagne-light))] mb-5">— Your Practice Begins —</p>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1] tracking-[-0.02em]">
               The mind you want{" "}
-              <span className="italic font-light text-[hsl(var(--gold-light))]">starts today.</span>
+              <span className="italic font-light text-[hsl(var(--champagne-light))]">starts today.</span>
             </h2>
-            <div className="w-12 h-px mx-auto mb-6 bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent" />
-            <p className="font-body text-lg text-white/75 mb-10 max-w-xl mx-auto leading-relaxed font-light">
+            <div className="w-12 h-px mx-auto mb-6 bg-gradient-to-r from-transparent via-[hsl(var(--champagne))] to-transparent" />
+            <p className="font-body text-lg text-white/70 mb-10 max-w-xl mx-auto leading-relaxed font-light">
               Join thousands cultivating presence, calm, and clarity with Willow Plus.
               Seven free days. No card today.
             </p>
             <Link to="/sign-in?redirect=/app">
-              <Button size="lg" className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white px-10 py-7 text-base rounded-full font-body font-semibold tracking-wide shadow-[0_20px_60px_-10px_hsl(30_54%_45%/0.6)] hover:scale-[1.03] transition-transform">
+              <Button size="lg" className="bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] px-10 py-7 text-base rounded-full font-body font-semibold tracking-wide shadow-[0_20px_60px_-10px_hsl(38_48%_50%/0.55)] hover:scale-[1.03] transition-transform">
                 Begin Your Free Trial
               </Button>
             </Link>
@@ -419,45 +421,45 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[hsl(var(--forest-deep))] text-white py-14 md:py-20 border-t border-[hsl(var(--gold))]/20">
+      <footer className="bg-[hsl(var(--onyx))] text-white py-14 md:py-20 border-t border-[hsl(var(--champagne))]/15">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-4 gap-10 mb-10">
             <div>
               <h3 className="font-display text-xl font-bold mb-4">
-                Willow <span className="text-[hsl(var(--gold-light))]">Vibes</span>
+                Willow <span className="text-[hsl(var(--champagne-light))]">Vibes</span>
               </h3>
-              <p className="font-body text-white/60 text-sm mb-4 leading-relaxed">
+              <p className="font-body text-white/55 text-sm mb-4 leading-relaxed font-light">
                 Meditation rooted in science. Designed for the rhythm of real life.
               </p>
-              <a href="mailto:support@willowvibes.com" className="font-body text-[hsl(var(--gold-light))] hover:text-[hsl(var(--gold))] text-sm transition-colors">
+              <a href="mailto:support@willowvibes.com" className="font-body text-[hsl(var(--champagne-light))] hover:text-[hsl(var(--champagne))] text-sm transition-colors">
                 support@willowvibes.com
               </a>
             </div>
             <div>
-              <h4 className="font-display font-semibold mb-4 text-sm tracking-wider uppercase text-[hsl(var(--gold-light))]">Practice</h4>
-              <ul className="space-y-2.5 text-sm text-white/65 font-body">
+              <h4 className="font-display font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-[hsl(var(--champagne-light))]">Practice</h4>
+              <ul className="space-y-2.5 text-sm text-white/60 font-body">
                 <li><button onClick={() => scrollToSection("curriculum")} className="hover:text-white transition-colors text-left">Curriculum</button></li>
                 <li><button onClick={() => scrollToSection("science")} className="hover:text-white transition-colors text-left">Science</button></li>
                 <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-display font-semibold mb-4 text-sm tracking-wider uppercase text-[hsl(var(--gold-light))]">Company</h4>
-              <ul className="space-y-2.5 text-sm text-white/65 font-body">
+              <h4 className="font-display font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-[hsl(var(--champagne-light))]">Company</h4>
+              <ul className="space-y-2.5 text-sm text-white/60 font-body">
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><a href="mailto:support@willowvibes.com" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-display font-semibold mb-4 text-sm tracking-wider uppercase text-[hsl(var(--gold-light))]">Legal</h4>
-              <ul className="space-y-2.5 text-sm text-white/65 font-body">
+              <h4 className="font-display font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-[hsl(var(--champagne-light))]">Legal</h4>
+              <ul className="space-y-2.5 text-sm text-white/60 font-body">
                 <li><Link to="/legal/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
                 <li><Link to="/legal/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/legal/refund" className="hover:text-white transition-colors">Refund Policy</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-3 justify-between items-center text-xs text-white/55 font-body tracking-wider">
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-3 justify-between items-center text-xs text-white/50 font-body tracking-[0.1em]">
             <p>© 2026 Willow Vibes™ · Cultivated with care.</p>
             <p>Secure payments by Paddle · Merchant of Record</p>
           </div>
