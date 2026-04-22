@@ -62,11 +62,11 @@ export default function CoachPage() {
     {
       id: "welcome",
       role: "coach",
-      text: `Hello, and welcome to your personal meditation coaching session! 🌿
+      text: `Hello, and welcome to your personal meditation space! 🌿
 
-I'm your **Willow Vibes™ Coach**, now powered by Claude — Anthropic's most thoughtful AI. I'm here to support you through your 30-day journey with personalized guidance on techniques, obstacles, and the science behind your practice.
+I'm your **Willow Vibes™ Coach** — here to support you through your 30-day mindfulness journey with warm, personalized guidance on techniques, obstacles, and the science behind your practice.
 
-What would you like to explore today? You can use one of the prompts below, or ask me anything about meditation.`,
+What would you like to explore today? Tap a prompt below, or ask me anything.`,
       time: now(),
     },
   ]);
@@ -82,11 +82,6 @@ What would you like to explore today? You can use one of the prompts below, or a
     const msg = (text || input).trim();
     if (!msg || isStreaming) return;
     setInput("");
-
-    if (!premiumLoading && !isPremium) {
-      setShowLock(true);
-      return;
-    }
 
     const userMsg: Message = { id: Date.now().toString(), role: "user", text: msg, time: now() };
     const history = [...messages, userMsg];
@@ -114,6 +109,13 @@ What would you like to explore today? You can use one of the prompts below, or a
         }),
       });
 
+      if (resp.status === 402) {
+        // Free daily limit reached → open upgrade modal
+        setShowLock(true);
+        setMessages(prev => prev.filter(m => m.id !== assistantId));
+        setIsStreaming(false);
+        return;
+      }
       if (resp.status === 403) {
         setShowLock(true);
         setMessages(prev => prev.filter(m => m.id !== assistantId));
@@ -176,7 +178,7 @@ What would you like to explore today? You can use one of the prompts below, or a
         open={showLock}
         onClose={() => setShowLock(false)}
         feature="Willow Coach™ Premium"
-        description="Your personal AI coach is powered by Claude — Anthropic's most thoughtful model. Upgrade to unlock unlimited 1-on-1 coaching."
+        description="You've enjoyed your free coaching preview. Upgrade to Premium for unlimited 1-on-1 coaching, longer in-depth answers, and personalized daily plans."
       />
 
       <div className="flex flex-col h-[calc(100vh-120px)] max-h-[800px] animate-fade-in">
@@ -202,9 +204,15 @@ What would you like to explore today? You can use one of the prompts below, or a
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <p className="font-display text-sm font-semibold text-foreground">Willow Coach™</p>
-                <span className="text-[9px] font-body font-bold text-gold uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-gold/10 border border-gold/30">
-                  Powered by Claude
-                </span>
+                {isPremium ? (
+                  <span className="text-[9px] font-body font-bold text-gold uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-gold/10 border border-gold/30">
+                    Premium
+                  </span>
+                ) : (
+                  <span className="text-[9px] font-body font-bold text-emerald-600 uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+                    Free Preview
+                  </span>
+                )}
               </div>
               <p className="text-xs font-body text-muted-foreground truncate">Expert in mindfulness, neuroscience & habit formation</p>
             </div>
@@ -232,8 +240,8 @@ What would you like to explore today? You can use one of the prompts below, or a
                 <Crown className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-display text-sm font-bold text-foreground">Unlock Willow Coach™ Premium</p>
-                <p className="text-xs font-body text-muted-foreground">1-on-1 AI coaching powered by Claude. Tap to upgrade.</p>
+                <p className="font-display text-sm font-bold text-foreground">You're on the Free Preview</p>
+                <p className="text-xs font-body text-muted-foreground">5 free messages/day. Upgrade for unlimited deep coaching.</p>
               </div>
             </div>
           </button>
@@ -292,7 +300,7 @@ What would you like to explore today? You can use one of the prompts below, or a
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-              placeholder={isPremium ? "Ask your coach anything about meditation..." : "Upgrade to chat with Willow Coach™ Premium"}
+              placeholder="Ask your coach anything about meditation..."
               className="flex-1 px-4 py-3 rounded-2xl border border-border/50 bg-card text-sm font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500/30 shadow-soft"
             />
             <button
