@@ -133,7 +133,8 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-5",
-        max_tokens: 1024,
+        max_tokens: 1000,
+        temperature: 0.7,
         stream: true,
         system: SYSTEM_PROMPT,
         messages: claudeMessages,
