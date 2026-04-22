@@ -99,7 +99,7 @@ interface DownloadedItem {
   downloadedAt: string;
 }
 
-export default function OfflineDownloadsPage() {
+function OfflineDownloadsPageInner() {
   const [downloads, setDownloads] = useState<DownloadedItem[]>(() => {
     try { return JSON.parse(localStorage.getItem("willow_offline_downloads") || "[]"); } catch { return []; }
   });
