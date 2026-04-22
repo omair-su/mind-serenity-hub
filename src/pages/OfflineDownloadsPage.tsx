@@ -5,6 +5,7 @@ import { Loader2, Download, Trash2, WifiOff, HardDrive, Moon, Wind, ScanEye, Hea
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import AppLayout from "@/components/AppLayout";
+import PremiumGate from "@/components/PremiumGate";
 
 // Real app content available for offline caching
 const offlineContent = [

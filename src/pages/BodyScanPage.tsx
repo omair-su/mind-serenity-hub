@@ -12,8 +12,10 @@ import ZoneCard from "@/components/bodyscan/ZoneCard";
 import NarrationBar from "@/components/NarrationBar";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackByMood } from "@/lib/realAmbientTracks";
+import PremiumGate from "@/components/PremiumGate";
+import { ScanEye } from "lucide-react";
 
-export default function BodyScanPage() {
+function BodyScanPageInner() {
   const [activeZone, setActiveZone] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -254,5 +256,26 @@ export default function BodyScanPage() {
         />
       )}
     </AppLayout>
+  );
+}
+
+export default function BodyScanPage() {
+  return (
+    <PremiumGate
+      feature="Body Scan Meditation"
+      description="A clinically-guided 8-zone somatic journey — release tension from crown to feet with neuroscience-backed scripts and premium ambient layering."
+      icon={ScanEye}
+      gradient="from-violet-500/30 to-purple-500/20"
+      previewItems={[
+        "Head & Crown — 4 min",
+        "Shoulders & Neck — 5 min",
+        "Chest & Heart — 6 min",
+        "Belly & Core — 4 min",
+        "Hands & Arms — 4 min",
+        "Feet & Grounding — 5 min",
+      ]}
+    >
+      <BodyScanPageInner />
+    </PremiumGate>
   );
 }

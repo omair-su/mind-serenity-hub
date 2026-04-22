@@ -20,8 +20,9 @@ import {
   WellnessMetrics,
   DailySnapshot,
 } from "@/lib/advancedAnalytics";
+import PremiumGate from "@/components/PremiumGate";
 
-export default function AdvancedAnalyticsPage() {
+function AdvancedAnalyticsPageInner() {
   const [period, setPeriod] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
 
   // Generate sample data for demonstration
@@ -318,5 +319,26 @@ export default function AdvancedAnalyticsPage() {
         </div>
       </div>
     </AppLayout>
+  );
+}
+
+export default function AdvancedAnalyticsPage() {
+  return (
+    <PremiumGate
+      feature="Advanced Analytics"
+      description="Deep wellness intelligence — mood, stress, energy, focus and sleep trends with weekly breakdowns, predictive insights and exportable PDF reports."
+      icon={TrendingUp}
+      gradient="from-cyan-500/30 to-blue-500/20"
+      previewItems={[
+        "Mood progression tracking (30/90/365d)",
+        "Stress trend analysis with HRV correlation",
+        "Practice distribution insights",
+        "Weekly performance breakdowns",
+        "Predictive wellness scoring",
+        "Export PDF reports & share with coach",
+      ]}
+    >
+      <AdvancedAnalyticsPageInner />
+    </PremiumGate>
   );
 }

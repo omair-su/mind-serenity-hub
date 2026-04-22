@@ -19,8 +19,9 @@ import {
   getAllPremiumSoundscapes,
   getRecommendedSoundscapes,
 } from "@/lib/advancedSoundEngine";
+import PremiumGate from "@/components/PremiumGate";
 
-export default function SoundscapeBuilderPage() {
+function SoundscapeBuilderPageInner() {
   const [soundscapeName, setSoundscapeName] = useState("");
   const [selectedSounds, setSelectedSounds] = useState<{ id: string; volume: number }[]>([]);
   const [reverbLevel, setReverbLevel] = useState(0.3);
@@ -362,5 +363,26 @@ export default function SoundscapeBuilderPage() {
         )}
       </div>
     </AppLayout>
+  );
+}
+
+export default function SoundscapeBuilderPage() {
+  return (
+    <PremiumGate
+      feature="Soundscape Studio"
+      description="Layer up to 12 nature sounds with reverb, delay and spatial width to craft your signature ambient blend — and save unlimited custom presets."
+      icon={Music}
+      gradient="from-pink-500/30 to-rose-500/20"
+      previewItems={[
+        "12 high-fidelity nature stems",
+        "Studio reverb, delay & spatial controls",
+        "20+ curated chef's-pick presets",
+        "Save unlimited personal soundscapes",
+        "Export & share your creations",
+        "Mood-based smart recommendations",
+      ]}
+    >
+      <SoundscapeBuilderPageInner />
+    </PremiumGate>
   );
 }
