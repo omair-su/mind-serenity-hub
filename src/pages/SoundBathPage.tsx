@@ -5,7 +5,9 @@ import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info, Music } from "
 import soundbathHero from "@/assets/soundbath-hero.jpg";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackByMood } from "@/lib/realAmbientTracks";
-export default function SoundBathPage() {
+import PremiumGate from "@/components/PremiumGate";
+import { Sparkles } from "lucide-react";
+function SoundBathPageInner() {
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [volume, setVolume] = useState(0.3);
   const [playing, setPlaying] = useState(false);
@@ -219,5 +221,26 @@ export default function SoundBathPage() {
         )}
       </div>
     </AppLayout>
+  );
+}
+
+export default function SoundBathPage() {
+  return (
+    <PremiumGate
+      feature="Sound Bath"
+      description="Immerse yourself in healing binaural frequencies — Tibetan bowls, crystal harmonics and brainwave-tuned tones designed to lower cortisol and induce theta-state calm."
+      icon={Headphones}
+      gradient="from-emerald-500/30 to-teal-500/20"
+      previewItems={[
+        "Delta 2.5Hz — Deep Sleep Healing",
+        "Theta 6Hz — Meditation & Creativity",
+        "Alpha 10Hz — Relaxed Focus",
+        "Beta 14Hz — Active Concentration",
+        "528Hz — DNA Repair Frequency",
+        "432Hz — Universal Harmony",
+      ]}
+    >
+      <SoundBathPageInner />
+    </PremiumGate>
   );
 }

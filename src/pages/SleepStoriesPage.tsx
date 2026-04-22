@@ -5,6 +5,7 @@ import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
 import NarrationBar from "@/components/NarrationBar";
 import { Moon, Clock, Play, Pause, Loader2, Square, ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
+import PremiumGate from "@/components/PremiumGate";
 
 const storyGradients = [
   "from-indigo-100/70 via-blue-50/50 to-violet-50/40",
@@ -17,7 +18,7 @@ const storyGradients = [
   "from-pink-100/60 via-rose-50/40 to-red-50/30",
 ];
 
-export default function SleepStoriesPage() {
+function SleepStoriesPageInner() {
   const [activeStory, setActiveStory] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [paragraphIndex, setParagraphIndex] = useState(0);
@@ -225,5 +226,26 @@ export default function SleepStoriesPage() {
         )}
       </div>
     </AppLayout>
+  );
+}
+
+export default function SleepStoriesPage() {
+  return (
+    <PremiumGate
+      feature="Sleep Stories"
+      description="Drift away with cinematic narrated tales — Lavender Fields of Provence, the Enchanted Library, midnight train journeys and more, voiced for deep restorative sleep."
+      icon={Moon}
+      gradient="from-indigo-500/30 to-violet-500/20"
+      previewItems={[
+        "Lavender Fields of Provence — 28 min",
+        "The Enchanted Library — 32 min",
+        "Mountain Train Journey — 25 min",
+        "Rainy Day Café — 22 min",
+        "Lighthouse at Dusk — 30 min",
+        "+ 12 more bedtime stories",
+      ]}
+    >
+      <SleepStoriesPageInner />
+    </PremiumGate>
   );
 }
