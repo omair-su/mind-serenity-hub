@@ -153,17 +153,17 @@ export default function LandingPage() {
 
       {/* Hero — Cinematic Full-Bleed */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <img src={heroImg} alt="Woman meditating at sunrise overlooking mountains" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1080} />
-        {/* Forest-toned cinematic overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--forest-deep))]/70 via-[hsl(var(--forest-deep))]/40 to-[hsl(var(--forest-deep))]/85" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[hsl(var(--forest-deep))]/30 via-transparent to-[hsl(var(--gold))]/15" />
+        <img src={heroImg} alt="Woman meditating in serene sanctuary at golden hour" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1080} fetchPriority="high" />
+        {/* Editorial onyx cinematic overlay — lets the photo's warm light sing */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--onyx))]/55 via-[hsl(var(--onyx))]/25 to-[hsl(var(--onyx))]/85" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[hsl(var(--onyx))]/40 via-transparent to-[hsl(var(--champagne))]/10" />
 
         {/* Floating gold particles */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {[...Array(8)].map((_, i) => (
             <span
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-[hsl(var(--gold-light))]/60 animate-particle"
+              className="absolute w-1 h-1 rounded-full bg-[hsl(var(--champagne-light))]/70 animate-particle"
               style={{
                 left: `${10 + i * 11}%`,
                 bottom: "0px",
@@ -177,20 +177,20 @@ export default function LandingPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-6 text-center py-32">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-[hsl(var(--gold))]/30 text-white/90 text-xs font-body tracking-[0.15em] uppercase mb-8">
-              <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--gold-light))]" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 backdrop-blur-md border border-[hsl(var(--champagne))]/35 text-white/90 text-[11px] font-body tracking-[0.2em] uppercase mb-8">
+              <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" />
               <span>7-Day Free Trial · No Card Today</span>
             </div>
 
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.05] tracking-tight">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.05] tracking-[-0.02em]">
               Find your calm.
               <br />
-              <span className="italic font-light bg-gradient-to-r from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--gold-light))] bg-clip-text text-transparent">
+              <span className="italic font-light bg-gradient-to-r from-[hsl(var(--champagne-light))] via-[hsl(var(--champagne))] to-[hsl(var(--champagne-light))] bg-clip-text text-transparent">
                 Master your mind.
               </span>
             </h1>
 
-            <div className="w-16 h-px mx-auto mb-6 bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent" />
+            <div className="w-16 h-px mx-auto mb-6 bg-gradient-to-r from-transparent via-[hsl(var(--champagne))] to-transparent" />
 
             <p className="font-body text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
               A 30-day, science-backed meditation journey for stressed, busy minds.
@@ -201,7 +201,7 @@ export default function LandingPage() {
               <Link to="/sign-in?redirect=/app">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] hover:scale-[1.03] transition-transform text-white px-10 py-7 text-base rounded-full font-body font-semibold tracking-wide shadow-[0_20px_60px_-10px_hsl(30_54%_45%/0.6)]"
+                  className="w-full sm:w-auto bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] hover:scale-[1.03] transition-transform text-[hsl(var(--onyx))] px-10 py-7 text-base rounded-full font-body font-semibold tracking-wide shadow-[0_20px_60px_-10px_hsl(38_48%_50%/0.55)]"
                 >
                   Begin Your 7-Day Journey
                 </Button>
@@ -209,30 +209,30 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="px-8 py-7 text-base rounded-full border-white/30 text-white bg-white/5 hover:bg-white/15 backdrop-blur-md font-body"
+                className="px-8 py-7 text-base rounded-full border-white/25 text-white bg-white/5 hover:bg-white/15 backdrop-blur-md font-body"
                 onClick={() => scrollToSection("curriculum")}
               >
                 Explore the Practice
               </Button>
             </div>
 
-            <div className="flex items-center justify-center gap-2 text-white/65 text-xs font-body tracking-wider">
-              <Shield className="w-3.5 h-3.5 text-[hsl(var(--gold-light))]" />
+            <div className="flex items-center justify-center gap-2 text-white/60 text-xs font-body tracking-wider">
+              <Shield className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" />
               <span>30-day guarantee · Cancel anytime · No card today</span>
             </div>
           </motion.div>
         </div>
 
         {/* Editorial Trust Strip */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[hsl(var(--forest-deep))]/60 backdrop-blur-xl border-t border-[hsl(var(--gold))]/20">
-          <div className="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-white/75 text-xs font-body tracking-wider">
-            <div className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-[hsl(var(--gold-light))]" /> 30-Day Guarantee</div>
+        <div className="absolute bottom-0 left-0 right-0 bg-[hsl(var(--onyx))]/65 backdrop-blur-xl border-t border-[hsl(var(--champagne))]/20">
+          <div className="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-white/75 text-xs font-body tracking-[0.12em]">
+            <div className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" /> 30-Day Guarantee</div>
             <div className="hidden sm:block w-px h-3 bg-white/20" />
-            <div className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[hsl(var(--gold-light))]" /> Lifetime Access</div>
+            <div className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" /> Lifetime Access</div>
             <div className="hidden sm:block w-px h-3 bg-white/20" />
-            <div className="flex items-center gap-2"><Users className="w-3.5 h-3.5 text-[hsl(var(--gold-light))]" /> 10,000+ Practicing</div>
+            <div className="flex items-center gap-2"><Users className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" /> 10,000+ Practicing</div>
             <div className="hidden sm:block w-px h-3 bg-white/20" />
-            <div className="flex items-center gap-2"><Star className="w-3.5 h-3.5 text-[hsl(var(--gold))] fill-[hsl(var(--gold))]" /> 4.9 / 5 Reviews</div>
+            <div className="flex items-center gap-2"><Star className="w-3.5 h-3.5 text-[hsl(var(--champagne))] fill-[hsl(var(--champagne))]" /> 4.9 / 5 Reviews</div>
           </div>
         </div>
 
