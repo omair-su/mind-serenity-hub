@@ -42,6 +42,16 @@
   --charcoal: 0 0% 24%;
   --charcoal-soft: 0 0% 38%;
 
+  /* ── Editorial Luxe Tokens (landing page) ── */
+  --onyx: 220 18% 8%;          /* deep editorial black with warm undertone */
+  --onyx-soft: 220 14% 12%;    /* secondary surface */
+  --onyx-mid: 220 12% 16%;     /* tertiary surface */
+  --ivory: 36 38% 97%;         /* warmer than cream, paper-feel */
+  --ivory-warm: 36 30% 94%;
+  --champagne: 38 48% 72%;     /* refined gold, less orange */
+  --champagne-light: 40 55% 84%;
+  --champagne-deep: 36 42% 52%;
+
   /* Typography */
   --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-inter: 'Inter', sans-serif;
