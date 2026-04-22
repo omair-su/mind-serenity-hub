@@ -134,15 +134,15 @@ export default function LandingPage() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -60, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="fixed top-[68px] left-0 right-0 z-40 bg-gradient-to-r from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] border-b border-[hsl(var(--gold))]/30 shadow-[var(--shadow-card-val)]"
+            className="fixed top-[68px] left-0 right-0 z-40 bg-gradient-to-r from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx))] border-b border-[hsl(var(--champagne))]/25 shadow-[var(--shadow-card-val)]"
           >
             <div className="max-w-7xl mx-auto px-4 md:px-6 py-2.5 flex items-center justify-center gap-3 sm:gap-6">
-              <div className="hidden sm:flex items-center gap-2 text-[hsl(var(--gold-light))] text-xs font-body tracking-[0.15em] uppercase">
+              <div className="hidden sm:flex items-center gap-2 text-[hsl(var(--champagne-light))] text-xs font-body tracking-[0.15em] uppercase">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Founders Lifetime · $199 (was $599)</span>
               </div>
               <Link to="/pricing">
-                <Button size="sm" className="rounded-full font-body font-semibold bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-xs px-5 py-1.5 hover:scale-[1.04] transition-transform">
+                <Button size="sm" className="rounded-full font-body font-semibold bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] text-xs px-5 py-1.5 hover:scale-[1.04] transition-transform">
                   Claim Your Spot →
                 </Button>
               </Link>
