@@ -225,3 +225,24 @@ function OfflineDownloadsPageInner() {
     </AppLayout>
   );
 }
+
+export default function OfflineDownloadsPage() {
+  return (
+    <PremiumGate
+      feature="Offline Downloads"
+      description="Download premium sessions to your device — meditate on flights, in the mountains or anywhere with zero connection. Your library, always with you."
+      icon={Download}
+      gradient="from-amber-500/30 to-orange-500/20"
+      previewItems={[
+        "Breathing Exercises bundle (8 MB)",
+        "Sleep Stories collection (32 MB)",
+        "Body Scan Scripts (12 MB)",
+        "Sound Bath Sessions (45 MB)",
+        "Focus Mode Sessions (18 MB)",
+        "Walking Meditations (15 MB)",
+      ]}
+    >
+      <OfflineDownloadsPageInner />
+    </PremiumGate>
+  );
+}
