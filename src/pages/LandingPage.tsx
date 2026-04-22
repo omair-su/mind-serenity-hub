@@ -96,7 +96,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link to="/pricing">
-              <Button className="rounded-full font-body font-semibold bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white shadow-[var(--shadow-gold-val)] hover:scale-[1.03] transition-transform">
+              <Button className="rounded-full font-body font-semibold bg-gradient-to-r from-[hsl(var(--champagne))] to-[hsl(var(--champagne-deep))] text-[hsl(var(--onyx))] shadow-[0_8px_28px_-6px_hsl(38_48%_50%/0.45)] hover:scale-[1.03] transition-transform">
                 Begin Your Journey
               </Button>
             </Link>
