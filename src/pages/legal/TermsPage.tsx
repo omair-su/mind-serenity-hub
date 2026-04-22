@@ -63,7 +63,7 @@ export default function TermsPage() {
       <p>We may update these Terms from time to time. Material changes will be communicated by email or in-app notice at least 14 days before they take effect.</p>
 
       <h2>13. Governing Law</h2>
-      <p>These Terms are governed by the laws of the State of Delaware, United States, without regard to conflict-of-law principles. Any disputes arising under these Terms shall be resolved in the state or federal courts located in Delaware.</p>
+      <p>These Terms are governed by the laws of the country where Willow Vibes is operated, without regard to conflict-of-law principles. Disputes shall be resolved in the competent courts of that jurisdiction. Payment-related disputes are handled by Paddle.com Market Limited as our Merchant of Record.</p>
 
       <h2>14. Contact</h2>
       <p>Questions about these Terms? Email us at <a href="mailto:support@willowvibes.com">support@willowvibes.com</a>.</p>
