@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Check, Crown, Sparkles, ArrowLeft, Infinity as InfinityIcon, Loader2 } from "lucide-react";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const FREE_FEATURES = [
   "Days 1–7 of the 30-Day Program",
