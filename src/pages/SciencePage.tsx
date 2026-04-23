@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { foundationSections } from "@/data/courseData";
 import { Sparkles } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const factGradients = [
   "from-violet-500/12 to-purple-500/5",
@@ -14,6 +15,12 @@ const factGradients = [
 ];
 
 export default function SciencePage() {
+  usePageSEO({
+    title: "The Science of Meditation — Research-Backed Benefits | Willow Vibes",
+    description:
+      "Decades of neuroscience research on meditation: stress reduction, focus, sleep, emotional regulation, and brain changes. Evidence behind every Willow Vibes practice.",
+    canonical: "https://www.willowvibes.com/science",
+  });
   return (
     <Layout>
       <div className="animate-fade-in space-y-10">
