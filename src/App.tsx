@@ -62,6 +62,7 @@ const AIRecommendationsPage = lazy(() => import("./pages/AIRecommendationsPage")
 const AdvancedAnalyticsPage = lazy(() => import("./pages/AdvancedAnalyticsPage"));
 const OfflineDownloadsPage = lazy(() => import("./pages/OfflineDownloadsPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
+const PaddleChecklistPage = lazy(() => import("./pages/PaddleChecklistPage"));
 
 // Wrap a page in the auth guard so unauthenticated users are redirected to sign-in.
 const Guarded = (el: React.ReactNode) => <ProtectedRoute>{el}</ProtectedRoute>;
@@ -133,6 +134,7 @@ function AppInner() {
           <Route path="/app/ai-recommendations" element={Guarded(<AIRecommendationsPage />)} />
           <Route path="/app/advanced-analytics" element={Guarded(<AdvancedAnalyticsPage />)} />
           <Route path="/app/offline-downloads" element={Guarded(<OfflineDownloadsPage />)} />
+          <Route path="/app/paddle-checklist" element={Guarded(<PaddleChecklistPage />)} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
