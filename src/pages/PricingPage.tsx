@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Check, Crown, Sparkles, ArrowLeft, Infinity as InfinityIcon, Loader2 } from "lucide-react";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const FREE_FEATURES = [
   "Days 1–7 of the 30-Day Program",
@@ -25,6 +26,12 @@ const PLUS_FEATURES = [
 
 export default function PricingPage() {
   const { openCheckout, loading } = usePaddleCheckout();
+  usePageSEO({
+    title: "Willow Vibes Pricing — Plus Monthly, Yearly & Lifetime Access",
+    description:
+      "Try Willow Plus free for 7 days. $9.99/month, $59.99/year, or $199 lifetime. Cancel anytime. 14-day money-back guarantee. Payments by Paddle.",
+    canonical: "https://www.willowvibes.com/pricing",
+  });
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-[hsl(var(--forest-deep))]/10">
       {/* Launch banner */}

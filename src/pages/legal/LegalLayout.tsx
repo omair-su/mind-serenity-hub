@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 interface Props {
   title: string;
@@ -7,7 +8,28 @@ interface Props {
   children: React.ReactNode;
 }
 
+const SEO_DESCRIPTIONS: Record<string, string> = {
+  "Terms of Service":
+    "Read the Willow Vibes Terms of Service. Account, subscriptions, billing through Paddle (Merchant of Record), refunds, acceptable use, and your rights.",
+  "Privacy Policy":
+    "How Willow Vibes collects, uses, and protects your personal data. GDPR, UK GDPR, and CCPA compliant. Payments processed by Paddle.",
+  "Refund Policy":
+    "Willow Vibes offers a 14-day money-back guarantee on all Plus plans and Lifetime access. Refunds processed by Paddle within 5–10 business days.",
+};
+
 export default function LegalLayout({ title, updated, children }: Props) {
+  usePageSEO({
+    title: `${title} — Willow Vibes`,
+    description:
+      SEO_DESCRIPTIONS[title] ??
+      `${title} for Willow Vibes — guided meditation, breathwork, and mindfulness.`,
+    canonical: `https://www.willowvibes.com/legal/${title
+      .toLowerCase()
+      .replace(/\s.*/, "")
+      .replace("terms", "terms")
+      .replace("privacy", "privacy")
+      .replace("refund", "refund")}`,
+  });
   return (
     <div className="min-h-screen bg-background">
       <header className="max-w-3xl mx-auto px-6 pt-8 pb-4">

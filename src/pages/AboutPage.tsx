@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Brain, Heart, Sparkles, Users, ArrowRight, Star, BookOpen, Shield } from "lucide-react";
 import WillowLogo from "@/components/WillowLogo";
 import founderImg from "@/assets/about-meditation.jpg";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 function useScrollReveal() {
   useEffect(() => {
@@ -71,6 +72,12 @@ const values = [
 
 export default function AboutPage() {
   useScrollReveal();
+  usePageSEO({
+    title: "About Willow Vibes — Meditation for Real People with Real Stress",
+    description:
+      "Meet the team and mission behind Willow Vibes. Science-backed meditation, breathwork, and mindfulness — built for stressed, busy humans who need tools that actually work.",
+    canonical: "https://www.willowvibes.com/about",
+  });
 
   return (
     <div className="min-h-screen bg-background font-body">
