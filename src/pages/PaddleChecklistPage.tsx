@@ -233,7 +233,7 @@ export default function PaddleChecklistPage() {
                     <CheckCircle2 className="w-5 h-5 text-forest" />
                   )}
                   {check.status === "fail" && (
-                    <XCircle className="w-5 h-5 text-red-600" />
+                    <XCircle className="w-5 h-5 text-destructive" />
                   )}
                   {check.status === "pending" && (
                     <Loader2 className="w-5 h-5 text-charcoal/40 animate-spin" />
