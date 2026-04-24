@@ -4,11 +4,15 @@ import PremiumLockModal from "@/components/PremiumLockModal";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { MessageCircle, Send, Bot, User, Sparkles, Brain, Heart, Shield, Crown } from "lucide-react";
+import { Send, Bot, User, Sparkles, Brain, Heart, Shield, Crown, Gem } from "lucide-react";
 import DOMPurify from "dompurify";
 
-// Sanitize AI-generated HTML to prevent XSS via prompt injection.
-// Only allow inline emphasis tags actually used by formatText().
+// ============================================================
+// Willow Coach — Luxe edition
+// Bespoke palette: midnight indigo + champagne gold + amethyst.
+// Intentionally distinct from the rest of the (forest-green) app.
+// ============================================================
+
 const SANITIZE_CONFIG = { ALLOWED_TAGS: ["strong", "em", "b", "i"], ALLOWED_ATTR: [] as string[] };
 const safeHtml = (html: string) => DOMPurify.sanitize(html, SANITIZE_CONFIG);
 
@@ -26,9 +30,9 @@ const SUGGESTIONS = [
   "How long until I see results?",
   "I missed several days. Should I restart?",
   "I'm struggling to stay consistent",
-  "What's the best time to meditate?",
-  "I fell asleep during meditation — is that bad?",
 ];
+
+const FREE_DAILY_LIMIT = 5;
 
 const now = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
@@ -36,26 +40,26 @@ function formatText(text: string) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
     if (line.startsWith("**") && line.endsWith("**")) {
-      return <p key={i} className="font-semibold text-foreground mt-3 mb-1">{line.replace(/\*\*/g, "")}</p>;
+      return <p key={i} className="font-semibold text-white mt-3 mb-1">{line.replace(/\*\*/g, "")}</p>;
     }
     if (line.startsWith("• ")) {
       return (
         <div key={i} className="flex gap-2 items-start">
-          <span className="text-primary mt-1 flex-shrink-0">•</span>
-          <p dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
+          <span className="text-amber-300 mt-1 flex-shrink-0">•</span>
+          <p className="text-slate-100" dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
         </div>
       );
     }
     if (line.startsWith("✦ ")) {
       return (
-        <div key={i} className="flex gap-2 items-start">
-          <span className="text-gold mt-0.5 flex-shrink-0">✦</span>
-          <p dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
+        <div key={i} className="mt-3 pt-3 border-t border-amber-300/20 flex gap-2 items-start">
+          <span className="text-amber-300 mt-0.5 flex-shrink-0">✦</span>
+          <p className="text-amber-100/90 italic text-[13px]" dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
         </div>
       );
     }
     if (line.trim() === "") return <div key={i} className="h-1" />;
-    return <p key={i} dangerouslySetInnerHTML={{ __html: safeHtml(line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />;
+    return <p key={i} className="text-slate-100" dangerouslySetInnerHTML={{ __html: safeHtml(line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />;
   });
 }
 
@@ -64,21 +68,39 @@ const COACH_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach-ch
 export default function CoachPage() {
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const [showLock, setShowLock] = useState(false);
+  const [usageToday, setUsageToday] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
       role: "coach",
-      text: `Hello, and welcome to your personal meditation space! 🌿
+      text: `Welcome to your private coaching space. ✦
 
-I'm your **Willow Vibes™ Coach** — here to support you through your 30-day mindfulness journey with warm, personalized guidance on techniques, obstacles, and the science behind your practice.
+I'm your **Willow Coach** — here to walk beside you on your 30-day journey with warm, science-backed guidance.
 
-What would you like to explore today? Tap a prompt below, or ask me anything.`,
+What's on your mind today? Tap a prompt below, or simply ask.`,
       time: now(),
     },
   ]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Load today's usage for free users
+  useEffect(() => {
+    if (premiumLoading || isPremium) return;
+    (async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u?.user) return;
+      const today = new Date().toISOString().slice(0, 10);
+      const { data } = await supabase
+        .from("coach_usage")
+        .select("message_count")
+        .eq("user_id", u.user.id)
+        .eq("usage_date", today)
+        .maybeSingle();
+      setUsageToday(data?.message_count ?? 0);
+    })();
+  }, [premiumLoading, isPremium]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -116,10 +138,10 @@ What would you like to explore today? Tap a prompt below, or ask me anything.`,
       });
 
       if (resp.status === 402) {
-        // Free daily limit reached → open upgrade modal
         setShowLock(true);
         setMessages(prev => prev.filter(m => m.id !== assistantId));
         setIsStreaming(false);
+        if (!isPremium) setUsageToday(FREE_DAILY_LIMIT);
         return;
       }
       if (resp.status === 403) {
@@ -140,6 +162,9 @@ What would you like to explore today? Tap a prompt below, or ask me anything.`,
         setIsStreaming(false);
         return;
       }
+
+      // Optimistically increment local usage counter for free users
+      if (!isPremium) setUsageToday(u => (u ?? 0) + 1);
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -178,144 +203,248 @@ What would you like to explore today? Tap a prompt below, or ask me anything.`,
     }
   };
 
+  const remaining = usageToday !== null ? Math.max(0, FREE_DAILY_LIMIT - usageToday) : FREE_DAILY_LIMIT;
+
   return (
     <AppLayout>
       <PremiumLockModal
         open={showLock}
         onClose={() => setShowLock(false)}
         feature="Willow Coach™ Premium"
-        description="You've enjoyed your free coaching preview. Upgrade to Premium for unlimited 1-on-1 coaching, longer in-depth answers, and personalized daily plans."
+        description={`You've used your ${FREE_DAILY_LIMIT} free coach messages for today. Upgrade to Premium for unlimited deep coaching with longer, more in-depth answers — or come back tomorrow for ${FREE_DAILY_LIMIT} fresh free messages.`}
       />
 
-      <div className="flex flex-col h-[calc(100vh-120px)] max-h-[800px] animate-fade-in">
-        <div className="flex items-center gap-3 mb-4 flex-shrink-0">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/15 flex items-center justify-center">
-            <MessageCircle className="w-5 h-5 text-emerald-600" />
-          </div>
-          <div className="flex-1">
-            <h1 className="font-display text-2xl font-bold text-foreground">Meditation Coach</h1>
-            <p className="text-xs font-body text-muted-foreground">Personalized guidance for your journey</p>
-          </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-body text-emerald-600 font-medium">Online</span>
-          </div>
-        </div>
+      {/* LUXE THEME WRAPPER — page-scoped, doesn't leak to the rest of the app */}
+      <div className="relative -mx-4 -mt-4 px-4 pt-4 pb-2 min-h-[calc(100vh-80px)]">
+        {/* Ambient luxe background */}
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(1200px 600px at 0% 0%, rgba(168,85,247,0.18), transparent 60%), radial-gradient(900px 500px at 100% 0%, rgba(251,191,36,0.10), transparent 55%), linear-gradient(180deg, #0b0a1f 0%, #0f0a26 45%, #08091d 100%)",
+          }}
+        />
+        {/* Subtle starfield */}
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-40"
+          style={{
+            backgroundImage:
+              "radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6), transparent), radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.4), transparent), radial-gradient(1px 1px at 40% 80%, rgba(251,191,36,0.5), transparent)",
+            backgroundSize: "200px 200px",
+          }}
+        />
 
-        <div className="bg-gradient-to-br from-emerald-500/8 via-card to-teal-500/5 rounded-2xl border border-border/50 p-4 mb-4 flex-shrink-0 shadow-soft">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-emerald-600 to-teal-600 shadow-lg">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <p className="font-display text-sm font-semibold text-foreground">Willow Coach™</p>
-                {isPremium ? (
-                  <span className="text-[9px] font-body font-bold text-gold uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-gold/10 border border-gold/30">
-                    Premium
-                  </span>
-                ) : (
-                  <span className="text-[9px] font-body font-bold text-emerald-600 uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30">
-                    Free Preview
-                  </span>
-                )}
-              </div>
-              <p className="text-xs font-body text-muted-foreground truncate">Expert in mindfulness, neuroscience & habit formation</p>
-            </div>
-            <div className="hidden sm:flex gap-1.5">
-              {[
-                { icon: Brain, color: "text-violet-500", bg: "from-violet-500/15 to-purple-500/10" },
-                { icon: Heart, color: "text-rose-500", bg: "from-rose-500/15 to-pink-500/10" },
-                { icon: Shield, color: "text-amber-500", bg: "from-amber-500/15 to-gold/10" },
-              ].map((badge, i) => (
-                <div key={i} className={`w-8 h-8 rounded-lg bg-gradient-to-br ${badge.bg} flex items-center justify-center`}>
-                  <badge.icon className={`w-3.5 h-3.5 ${badge.color}`} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {!premiumLoading && !isPremium && (
-          <button
-            onClick={() => setShowLock(true)}
-            className="mb-4 w-full text-left rounded-2xl border border-gold/40 bg-gradient-to-br from-gold/10 via-card to-gold/5 p-4 shadow-soft hover:shadow-md transition-all flex-shrink-0"
+        <div className="flex flex-col h-[calc(100vh-120px)] max-h-[820px] animate-fade-in">
+          {/* HERO HEADER */}
+          <div className="relative flex-shrink-0 mb-4 rounded-3xl overflow-hidden border border-amber-300/20 shadow-[0_20px_60px_-20px_rgba(168,85,247,0.4)]"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(30,27,75,0.9) 0%, rgba(76,29,149,0.7) 50%, rgba(30,27,75,0.9) 100%)",
+            }}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold to-amber-500 flex items-center justify-center shadow-md">
-                <Crown className="w-5 h-5 text-white" />
+            <div className="absolute inset-0 opacity-40"
+              style={{
+                background:
+                  "radial-gradient(400px 200px at 100% 0%, rgba(251,191,36,0.25), transparent)",
+              }}
+            />
+            <div className="relative p-5 flex items-center gap-4">
+              <div className="relative w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #b45309 100%)",
+                  boxShadow: "0 10px 30px -8px rgba(251,191,36,0.6), inset 0 1px 0 rgba(255,255,255,0.4)",
+                }}
+              >
+                <Gem className="w-7 h-7 text-white drop-shadow" />
+                <div className="absolute -inset-1 rounded-2xl blur-md opacity-50 -z-10" style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }} />
               </div>
-              <div className="flex-1">
-                <p className="font-display text-sm font-bold text-foreground">You're on the Free Preview</p>
-                <p className="text-xs font-body text-muted-foreground">5 free messages/day. Upgrade for unlimited deep coaching.</p>
-              </div>
-            </div>
-          </button>
-        )}
-
-        <div className="flex-1 overflow-y-auto space-y-4 pb-4 pr-1">
-          {messages.map(msg => (
-            <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                msg.role === "coach"
-                  ? "bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-sm"
-                  : "bg-gradient-to-br from-gold/25 to-amber-500/20 text-gold"
-              }`}>
-                {msg.role === "coach" ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-              </div>
-              <div className={`max-w-[82%] ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col gap-1`}>
-                <div className={`rounded-2xl px-5 py-4 text-sm font-body leading-relaxed space-y-1 ${
-                  msg.role === "coach"
-                    ? "bg-gradient-to-br from-card to-emerald-500/5 border border-border/50 text-foreground shadow-soft"
-                    : "bg-gradient-to-r from-primary to-emerald-700 text-white shadow-md"
-                }`}>
-                  {msg.role === "coach"
-                    ? (msg.text ? formatText(msg.text) : (
-                        <div className="flex gap-1 py-1">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500/50 animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <div className="w-2 h-2 rounded-full bg-emerald-500/50 animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <div className="w-2 h-2 rounded-full bg-emerald-500/50 animate-bounce" style={{ animationDelay: "300ms" }} />
-                        </div>
-                      ))
-                    : <p>{msg.text}</p>}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="font-display text-2xl font-bold text-white tracking-tight">Willow Coach</h1>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "linear-gradient(90deg, rgba(251,191,36,0.25), rgba(251,191,36,0.1))",
+                      color: "#fde68a",
+                      border: "1px solid rgba(251,191,36,0.4)",
+                    }}
+                  >
+                    {isPremium ? "Premium" : "Atelier"}
+                  </span>
                 </div>
-                <p className="text-[10px] text-muted-foreground px-1">{msg.time}</p>
+                <p className="text-xs font-body text-violet-200/80 mt-0.5">A private session with your mindfulness mentor</p>
+              </div>
+              <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-medium text-emerald-200">Live</span>
               </div>
             </div>
-          ))}
-          <div ref={bottomRef} />
-        </div>
 
-        {messages.length <= 2 && (
-          <div className="flex-shrink-0 mb-3">
-            <p className="text-xs font-body text-muted-foreground mb-2">Try asking:</p>
-            <div className="flex flex-wrap gap-2">
-              {SUGGESTIONS.slice(0, 4).map(s => (
-                <button key={s} onClick={() => send(s)}
-                  className="text-xs font-body px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/8 to-teal-500/5 border border-emerald-500/15 text-foreground hover:from-emerald-500/15 hover:to-teal-500/10 hover:border-emerald-500/25 transition-all">
-                  {s}
-                </button>
+            {/* Expertise badges */}
+            <div className="relative px-5 pb-4 flex gap-2 flex-wrap">
+              {[
+                { icon: Brain, label: "Neuroscience", color: "from-violet-400/30 to-purple-500/20", iconColor: "text-violet-200" },
+                { icon: Heart, label: "Compassion", color: "from-rose-400/30 to-pink-500/20", iconColor: "text-rose-200" },
+                { icon: Shield, label: "Safe Space", color: "from-amber-400/30 to-orange-500/20", iconColor: "text-amber-200" },
+                { icon: Sparkles, label: "Bespoke", color: "from-cyan-400/30 to-blue-500/20", iconColor: "text-cyan-200" },
+              ].map((b, i) => (
+                <div key={i} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r ${b.color} border border-white/10`}>
+                  <b.icon className={`w-3 h-3 ${b.iconColor}`} />
+                  <span className="text-[10px] font-medium text-white/90">{b.label}</span>
+                </div>
               ))}
             </div>
           </div>
-        )}
 
-        <div className="flex-shrink-0">
-          <div className="flex gap-2">
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-              placeholder="Ask your coach anything about meditation..."
-              className="flex-1 px-4 py-3 rounded-2xl border border-border/50 bg-card text-sm font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500/30 shadow-soft"
-            />
+          {/* FREE USAGE STRIP */}
+          {!premiumLoading && !isPremium && (
             <button
-              onClick={() => send()}
-              disabled={!input.trim() || isStreaming}
-              className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center disabled:opacity-40 transition-all hover:scale-105 shadow-md"
+              onClick={() => setShowLock(true)}
+              className="mb-4 w-full text-left rounded-2xl p-4 flex-shrink-0 transition-all hover:scale-[1.005] group"
+              style={{
+                background: "linear-gradient(135deg, rgba(251,191,36,0.12), rgba(168,85,247,0.08))",
+                border: "1px solid rgba(251,191,36,0.3)",
+                boxShadow: "0 8px 24px -8px rgba(251,191,36,0.2)",
+              }}
             >
-              <Send className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+                  style={{ background: "linear-gradient(135deg, #fbbf24, #d97706)" }}
+                >
+                  <Crown className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-display text-sm font-bold text-white">Free Atelier preview</p>
+                    <span className="text-[10px] font-bold text-amber-200 px-1.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-300/30">
+                      {remaining}/{FREE_DAILY_LIMIT} left today
+                    </span>
+                  </div>
+                  <p className="text-xs font-body text-violet-100/70">Tap to unlock unlimited deep coaching</p>
+                  {/* progress */}
+                  <div className="mt-2 h-1 rounded-full bg-white/5 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all"
+                      style={{
+                        width: `${((usageToday ?? 0) / FREE_DAILY_LIMIT) * 100}%`,
+                        background: "linear-gradient(90deg, #fbbf24, #f59e0b)",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
             </button>
+          )}
+
+          {/* MESSAGES */}
+          <div className="flex-1 overflow-y-auto space-y-4 pb-4 pr-1 scrollbar-thin">
+            {messages.map(msg => (
+              <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""} animate-fade-in`}>
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg"
+                  style={
+                    msg.role === "coach"
+                      ? {
+                          background: "linear-gradient(135deg, #fbbf24, #d97706)",
+                          boxShadow: "0 6px 16px -4px rgba(251,191,36,0.5)",
+                        }
+                      : {
+                          background: "linear-gradient(135deg, #a78bfa, #7c3aed)",
+                          boxShadow: "0 6px 16px -4px rgba(168,85,247,0.5)",
+                        }
+                  }
+                >
+                  {msg.role === "coach" ? <Bot className="w-4 h-4 text-white" /> : <User className="w-4 h-4 text-white" />}
+                </div>
+                <div className={`max-w-[82%] ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col gap-1`}>
+                  <div
+                    className="rounded-2xl px-5 py-4 text-sm font-body leading-relaxed space-y-1"
+                    style={
+                      msg.role === "coach"
+                        ? {
+                            background: "linear-gradient(135deg, rgba(30,27,75,0.85), rgba(49,46,129,0.7))",
+                            border: "1px solid rgba(251,191,36,0.18)",
+                            backdropFilter: "blur(10px)",
+                            boxShadow: "0 12px 28px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
+                          }
+                        : {
+                            background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
+                            border: "1px solid rgba(168,85,247,0.3)",
+                            boxShadow: "0 12px 28px -10px rgba(124,58,237,0.5)",
+                          }
+                    }
+                  >
+                    {msg.role === "coach"
+                      ? (msg.text ? formatText(msg.text) : (
+                          <div className="flex gap-1 py-1">
+                            <div className="w-2 h-2 rounded-full bg-amber-300 animate-bounce" style={{ animationDelay: "0ms" }} />
+                            <div className="w-2 h-2 rounded-full bg-amber-300 animate-bounce" style={{ animationDelay: "150ms" }} />
+                            <div className="w-2 h-2 rounded-full bg-amber-300 animate-bounce" style={{ animationDelay: "300ms" }} />
+                          </div>
+                        ))
+                      : <p className="text-white">{msg.text}</p>}
+                  </div>
+                  <p className="text-[10px] text-violet-300/60 px-1">{msg.time}</p>
+                </div>
+              </div>
+            ))}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* SUGGESTIONS */}
+          {messages.length <= 2 && (
+            <div className="flex-shrink-0 mb-3">
+              <p className="text-xs font-body text-violet-200/70 mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-amber-300" /> Try asking
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {SUGGESTIONS.slice(0, 4).map(s => (
+                  <button
+                    key={s}
+                    onClick={() => send(s)}
+                    className="text-xs font-body px-3 py-1.5 rounded-full text-violet-50 transition-all hover:scale-[1.02]"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(168,85,247,0.15), rgba(251,191,36,0.08))",
+                      border: "1px solid rgba(251,191,36,0.25)",
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* INPUT */}
+          <div className="flex-shrink-0">
+            <div className="flex gap-2 p-1.5 rounded-2xl"
+              style={{
+                background: "linear-gradient(135deg, rgba(30,27,75,0.6), rgba(49,46,129,0.4))",
+                border: "1px solid rgba(251,191,36,0.2)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
+                placeholder="Ask your coach anything…"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-transparent text-sm font-body text-white placeholder:text-violet-300/50 focus:outline-none"
+              />
+              <button
+                onClick={() => send()}
+                disabled={!input.trim() || isStreaming}
+                className="w-11 h-11 rounded-xl flex items-center justify-center disabled:opacity-40 transition-all hover:scale-105 shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg, #fbbf24, #d97706)",
+                  boxShadow: "0 8px 20px -6px rgba(251,191,36,0.5)",
+                }}
+              >
+                <Send className="w-4 h-4 text-white" />
+              </button>
+            </div>
+            <p className="text-[10px] text-violet-300/50 text-center mt-2">
+              Powered by an advanced AI coach · {isPremium ? "Unlimited Premium" : `${remaining} of ${FREE_DAILY_LIMIT} free messages remaining today`}
+            </p>
           </div>
         </div>
       </div>

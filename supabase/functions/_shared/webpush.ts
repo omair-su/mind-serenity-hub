@@ -43,13 +43,13 @@ function concat(...arrs: Uint8Array[]): Uint8Array {
 }
 
 async function hkdfExtract(salt: Uint8Array, ikm: Uint8Array): Promise<Uint8Array> {
-  const key = await crypto.subtle.importKey("raw", salt, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  return new Uint8Array(await crypto.subtle.sign("HMAC", key, ikm));
+  const key = await crypto.subtle.importKey("raw", salt as BufferSource, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return new Uint8Array(await crypto.subtle.sign("HMAC", key, ikm as BufferSource));
 }
 
 async function hkdfExpand(prk: Uint8Array, info: Uint8Array, length: number): Promise<Uint8Array> {
-  const key = await crypto.subtle.importKey("raw", prk, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const t1 = new Uint8Array(await crypto.subtle.sign("HMAC", key, concat(info, new Uint8Array([1]))));
+  const key = await crypto.subtle.importKey("raw", prk as BufferSource, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const t1 = new Uint8Array(await crypto.subtle.sign("HMAC", key, concat(info, new Uint8Array([1])) as BufferSource));
   return t1.slice(0, length);
 }
 
@@ -109,8 +109,8 @@ async function encryptPayload(plaintext: Uint8Array, p256dhB64: string, authB64:
   // Pad: data || 0x02 (single record, last)
   const padded = concat(plaintext, new Uint8Array([0x02]));
 
-  const aesKey = await crypto.subtle.importKey("raw", cek, { name: "AES-GCM" }, false, ["encrypt"]);
-  const ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce }, aesKey, padded));
+  const aesKey = await crypto.subtle.importKey("raw", cek as BufferSource, { name: "AES-GCM" }, false, ["encrypt"]);
+  const ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce as BufferSource }, aesKey, padded as BufferSource));
 
   // Build aes128gcm header: salt(16) || rs(4 BE = 4096) || idlen(1) || keyid(idlen)
   const rs = new Uint8Array([0, 0, 0x10, 0]); // 4096

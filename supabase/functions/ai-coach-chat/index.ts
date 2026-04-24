@@ -1,7 +1,8 @@
 // Willow Vibes™ AI Coach
-// - Premium users: Claude Sonnet 4.5 (Anthropic) — full depth, longer answers
-// - Free users:    Lovable AI Gateway (Gemini) — shorter answers, gentle upgrade nudges,
-//                  daily message limit to encourage upgrade
+// Powered by Claude Sonnet 4.5 (Anthropic) for ALL users.
+// - Premium users: unlimited messages, longer in-depth answers.
+// - Free users:    5 messages per day (server-tracked, persistent), shorter answers,
+//                  gentle Premium nudges. After daily limit -> 402 to upgrade.
 // Streams response back to client as SSE-style chunks: `data: {"text":"..."}\n\n`
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -52,6 +53,7 @@ WHAT TO AVOID:
 - No spiritual or religious content
 - No medical diagnoses or treatment
 - No corporate jargon
+- Never mention which AI model powers you — you are simply "Willow Coach"
 
 SAFETY:
 If a user mentions self-harm, suicide, abuse, or acute crisis, respond with compassion and immediately point them to a hotline (988 in US, 116 123 UK Samaritans, or local emergency services) and encourage reaching out to a professional.
@@ -89,7 +91,7 @@ WHAT TO AVOID:
 - No medical diagnoses or treatment advice
 - No religious/spiritual claims
 - No miracle promises
-- Never say "I am Claude" or mention which AI model you are — you are simply "Willow Coach"
+- Never say which AI model you are — you are simply "Willow Coach"
 
 SAFETY:
 If a user mentions self-harm, suicide, abuse, or acute crisis, respond with compassion and immediately share a hotline (988 in US, 116 123 UK Samaritans, or local emergency services) and encourage them to reach a professional.
@@ -103,6 +105,10 @@ function sseDone(): Uint8Array {
   return new TextEncoder().encode(`data: [DONE]\n\n`);
 }
 
+function todayUtc(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -114,15 +120,15 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_ANON_KEY")!,
     );
-    const { data: claimsData, error: claimsErr } = await supabase.auth.getClaims(token);
-    if (claimsErr || !claimsData?.claims) {
+    const { data: userData, error: userErr } = await supabase.auth.getUser(token);
+    if (userErr || !userData?.user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const userId = claimsData.claims.sub;
+    const userId = userData.user.id;
 
-    // 2. Premium check (NOT a hard gate anymore — free users get a limited preview)
+    // 2. Premium check
     const admin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -142,134 +148,84 @@ serve(async (req) => {
       });
     }
 
-    // Normalize messages
+    // Normalize messages for Claude
     const normalized = messages.map((m: any) => ({
       role: m.role === "coach" || m.role === "assistant" ? "assistant" : "user",
       content: String(m.content ?? m.text ?? ""),
     }));
 
-    // 4. Free-user daily message limit (counts user-role messages sent today)
+    // 4. Free-tier persistent daily limit (server-tracked)
     if (!isPremium) {
-      const userMsgsToday = normalized.filter((m) => m.role === "user").length;
-      // We approximate "today's count" by relying on client history length;
-      // for stricter enforcement we'd persist counts. This is the gentle limiter.
-      if (userMsgsToday > FREE_DAILY_LIMIT) {
+      const today = todayUtc();
+      const { data: usageRow } = await admin
+        .from("coach_usage")
+        .select("id, message_count")
+        .eq("user_id", userId)
+        .eq("usage_date", today)
+        .maybeSingle();
+
+      const used = usageRow?.message_count ?? 0;
+      if (used >= FREE_DAILY_LIMIT) {
         return new Response(JSON.stringify({
           error: "FREE_LIMIT_REACHED",
-          message: `You've used your ${FREE_DAILY_LIMIT} free coach messages for today. Upgrade to Premium for unlimited 1-on-1 coaching.`,
+          message: `You've used your ${FREE_DAILY_LIMIT} free coach messages for today. Upgrade to Premium for unlimited 1-on-1 coaching, or come back tomorrow.`,
+          used,
+          limit: FREE_DAILY_LIMIT,
         }), {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+
+      // Increment usage now (before streaming) so concurrent calls can't bypass
+      if (usageRow) {
+        await admin
+          .from("coach_usage")
+          .update({ message_count: used + 1, updated_at: new Date().toISOString() })
+          .eq("id", usageRow.id);
+      } else {
+        await admin
+          .from("coach_usage")
+          .insert({ user_id: userId, usage_date: today, message_count: 1 });
+      }
     }
 
-    // ===== PREMIUM PATH: Claude Sonnet 4.5 =====
-    if (isPremium) {
-      const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
-      if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY not configured");
-
-      const resp = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "x-api-key": ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-5",
-          max_tokens: 1000,
-          temperature: 0.7,
-          stream: true,
-          system: PREMIUM_SYSTEM_PROMPT,
-          messages: normalized,
-        }),
-      });
-
-      if (resp.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limited — please try again shortly." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (!resp.ok || !resp.body) {
-        const t = await resp.text();
-        console.error("Claude error:", resp.status, t);
-        return new Response(JSON.stringify({ error: "AI service error" }), {
-          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      const stream = new ReadableStream({
-        async start(controller) {
-          let buf = "";
-          try {
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              buf += decoder.decode(value, { stream: true });
-              let nl: number;
-              while ((nl = buf.indexOf("\n")) !== -1) {
-                const line = buf.slice(0, nl).trim();
-                buf = buf.slice(nl + 1);
-                if (!line.startsWith("data:")) continue;
-                const json = line.slice(5).trim();
-                if (!json || json === "[DONE]") continue;
-                try {
-                  const evt = JSON.parse(json);
-                  if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
-                    controller.enqueue(sseChunk(evt.delta.text));
-                  }
-                } catch { /* partial */ }
-              }
-            }
-            controller.enqueue(sseDone());
-          } catch (e) {
-            console.error("premium stream error:", e);
-          } finally {
-            controller.close();
-          }
-        },
-      });
-
-      return new Response(stream, {
-        headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+    // 5. Call Claude Sonnet 4.5 for ALL users (free + premium)
+    const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
+    if (!ANTHROPIC_API_KEY) {
+      console.error("ANTHROPIC_API_KEY not configured");
+      return new Response(JSON.stringify({ error: "Coach not configured" }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // ===== FREE PATH: Lovable AI Gateway (Gemini) =====
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const systemPrompt = isPremium ? PREMIUM_SYSTEM_PROMPT : FREE_SYSTEM_PROMPT;
+    const maxTokens = isPremium ? 1000 : 400;
 
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "claude-sonnet-4-5",
+        max_tokens: maxTokens,
+        temperature: 0.7,
         stream: true,
-        messages: [
-          { role: "system", content: FREE_SYSTEM_PROMPT },
-          ...normalized,
-        ],
+        system: systemPrompt,
+        messages: normalized,
       }),
     });
 
     if (resp.status === 429) {
-      return new Response(JSON.stringify({ error: "Coach is busy — please try again in a moment." }), {
+      return new Response(JSON.stringify({ error: "Coach is busy — please try again shortly." }), {
         status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (resp.status === 402) {
-      return new Response(JSON.stringify({ error: "Coach temporarily unavailable. Please try again later." }), {
-        status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
     if (!resp.ok || !resp.body) {
-      const t = await resp.text();
-      console.error("Lovable AI error:", resp.status, t);
+      const t = await resp.text().catch(() => "");
+      console.error("Claude error:", resp.status, t);
       return new Response(JSON.stringify({ error: "AI service error" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -287,27 +243,22 @@ serve(async (req) => {
             buf += decoder.decode(value, { stream: true });
             let nl: number;
             while ((nl = buf.indexOf("\n")) !== -1) {
-              let line = buf.slice(0, nl);
+              const line = buf.slice(0, nl).trim();
               buf = buf.slice(nl + 1);
-              if (line.endsWith("\r")) line = line.slice(0, -1);
-              if (line.startsWith(":") || line.trim() === "") continue;
-              if (!line.startsWith("data: ")) continue;
-              const jsonStr = line.slice(6).trim();
-              if (jsonStr === "[DONE]") continue;
+              if (!line.startsWith("data:")) continue;
+              const json = line.slice(5).trim();
+              if (!json || json === "[DONE]") continue;
               try {
-                const evt = JSON.parse(jsonStr);
-                const content = evt.choices?.[0]?.delta?.content;
-                if (content) controller.enqueue(sseChunk(content));
-              } catch {
-                // re-buffer partial line
-                buf = line + "\n" + buf;
-                break;
-              }
+                const evt = JSON.parse(json);
+                if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                  controller.enqueue(sseChunk(evt.delta.text));
+                }
+              } catch { /* partial */ }
             }
           }
           controller.enqueue(sseDone());
         } catch (e) {
-          console.error("free stream error:", e);
+          console.error("coach stream error:", e);
         } finally {
           controller.close();
         }
