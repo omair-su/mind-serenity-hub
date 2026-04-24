@@ -143,7 +143,7 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("ai-mood-insights error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "unknown" }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
