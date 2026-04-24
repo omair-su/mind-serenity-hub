@@ -252,7 +252,15 @@ serve(async (req) => {
       });
     }
 
-    const reader = resp.body.getReader();
+    const streamBody = resp.body;
+    if (!streamBody) {
+      return new Response(JSON.stringify({ ok: false, error: "EMPTY_STREAM", message: "AI service returned an empty response" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const reader = streamBody.getReader();
     const decoder = new TextDecoder();
     const responseStream = new ReadableStream({
       async start(controller) {
