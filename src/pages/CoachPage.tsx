@@ -5,6 +5,12 @@ import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { MessageCircle, Send, Bot, User, Sparkles, Brain, Heart, Shield, Crown } from "lucide-react";
+import DOMPurify from "dompurify";
+
+// Sanitize AI-generated HTML to prevent XSS via prompt injection.
+// Only allow inline emphasis tags actually used by formatText().
+const SANITIZE_CONFIG = { ALLOWED_TAGS: ["strong", "em", "b", "i"], ALLOWED_ATTR: [] as string[] };
+const safeHtml = (html: string) => DOMPurify.sanitize(html, SANITIZE_CONFIG);
 
 interface Message {
   id: string;
@@ -36,7 +42,7 @@ function formatText(text: string) {
       return (
         <div key={i} className="flex gap-2 items-start">
           <span className="text-primary mt-1 flex-shrink-0">•</span>
-          <p dangerouslySetInnerHTML={{ __html: line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") }} />
+          <p dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
         </div>
       );
     }
@@ -44,12 +50,12 @@ function formatText(text: string) {
       return (
         <div key={i} className="flex gap-2 items-start">
           <span className="text-gold mt-0.5 flex-shrink-0">✦</span>
-          <p dangerouslySetInnerHTML={{ __html: line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") }} />
+          <p dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
         </div>
       );
     }
     if (line.trim() === "") return <div key={i} className="h-1" />;
-    return <p key={i} dangerouslySetInnerHTML={{ __html: line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") }} />;
+    return <p key={i} dangerouslySetInnerHTML={{ __html: safeHtml(line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />;
   });
 }
 
