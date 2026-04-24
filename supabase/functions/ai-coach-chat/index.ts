@@ -141,13 +141,13 @@ serve(async (req) => {
     const isPremium = !!profile?.is_premium;
 
     // 3. Validate input
-    const { messages, stream = false } = await req.json();
+    const { messages, stream: streamRequested = false } = await req.json();
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages[] required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const wantsStream = stream === true;
+    const wantsStream = streamRequested === true;
 
     // Normalize messages for Claude
     const normalized = messages.map((m: any) => ({
@@ -226,7 +226,7 @@ serve(async (req) => {
         status: wantsStream ? 429 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (!resp.ok || !resp.body) {
+    if (!resp.ok || (wantsStream && !resp.body)) {
       const t = await resp.text().catch(() => "");
       console.error("Claude error:", resp.status, t);
       return new Response(JSON.stringify({ ok: false, error: "SERVICE_UNAVAILABLE", message: "AI service error", fallback: true }), {
@@ -254,7 +254,7 @@ serve(async (req) => {
 
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
-    const stream = new ReadableStream({
+    const responseStream = new ReadableStream({
       async start(controller) {
         let buf = "";
         try {
@@ -286,7 +286,7 @@ serve(async (req) => {
       },
     });
 
-    return new Response(stream, {
+    return new Response(responseStream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
     });
   } catch (e) {
