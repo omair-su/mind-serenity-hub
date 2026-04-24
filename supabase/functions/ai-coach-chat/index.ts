@@ -141,12 +141,13 @@ serve(async (req) => {
     const isPremium = !!profile?.is_premium;
 
     // 3. Validate input
-    const { messages } = await req.json();
+    const { messages, stream: streamRequested = false } = await req.json();
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(JSON.stringify({ error: "messages[] required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const wantsStream = streamRequested === true;
 
     // Normalize messages for Claude
     const normalized = messages.map((m: any) => ({
@@ -167,12 +168,14 @@ serve(async (req) => {
       const used = usageRow?.message_count ?? 0;
       if (used >= FREE_DAILY_LIMIT) {
         return new Response(JSON.stringify({
+          ok: false,
           error: "FREE_LIMIT_REACHED",
           message: `You've used your ${FREE_DAILY_LIMIT} free coach messages for today. Upgrade to Premium for unlimited 1-on-1 coaching, or come back tomorrow.`,
           used,
           limit: FREE_DAILY_LIMIT,
         }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: wantsStream ? 402 : 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
@@ -193,8 +196,8 @@ serve(async (req) => {
     const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
     if (!ANTHROPIC_API_KEY) {
       console.error("ANTHROPIC_API_KEY not configured");
-      return new Response(JSON.stringify({ error: "Coach not configured" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ ok: false, error: "COACH_NOT_CONFIGURED", message: "Coach not configured" }), {
+        status: wantsStream ? 500 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -212,28 +215,54 @@ serve(async (req) => {
         model: "claude-sonnet-4-5",
         max_tokens: maxTokens,
         temperature: 0.7,
-        stream: true,
+        stream: wantsStream,
         system: systemPrompt,
         messages: normalized,
       }),
     });
 
     if (resp.status === 429) {
-      return new Response(JSON.stringify({ error: "Coach is busy — please try again shortly." }), {
-        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ ok: false, error: "RATE_LIMITED", message: "Coach is busy — please try again shortly." }), {
+        status: wantsStream ? 429 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (!resp.ok || !resp.body) {
+    if (!resp.ok || (wantsStream && !resp.body)) {
       const t = await resp.text().catch(() => "");
       console.error("Claude error:", resp.status, t);
-      return new Response(JSON.stringify({ error: "AI service error" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ ok: false, error: "SERVICE_UNAVAILABLE", message: "AI service error", fallback: true }), {
+        status: wantsStream ? 500 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const reader = resp.body.getReader();
+    if (!wantsStream) {
+      const data = await resp.json();
+      const reply = data.content?.filter((part: { type?: string }) => part?.type === "text")
+        ?.map((part: { text?: string }) => part.text ?? "")
+        .join("")
+        .trim() ?? "";
+
+      return new Response(JSON.stringify({
+        ok: true,
+        reply,
+        used: isPremium ? null : 1,
+        limit: isPremium ? null : FREE_DAILY_LIMIT,
+        isPremium,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const streamBody = resp.body;
+    if (!streamBody) {
+      return new Response(JSON.stringify({ ok: false, error: "EMPTY_STREAM", message: "AI service returned an empty response" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const reader = streamBody.getReader();
     const decoder = new TextDecoder();
-    const stream = new ReadableStream({
+    const responseStream = new ReadableStream({
       async start(controller) {
         let buf = "";
         try {
@@ -265,7 +294,7 @@ serve(async (req) => {
       },
     });
 
-    return new Response(stream, {
+    return new Response(responseStream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
     });
   } catch (e) {

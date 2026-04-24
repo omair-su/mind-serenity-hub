@@ -63,8 +63,6 @@ function formatText(text: string) {
   });
 }
 
-const COACH_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach-chat`;
-
 export default function CoachPage() {
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const [showLock, setShowLock] = useState(false);
@@ -120,80 +118,55 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
     setMessages(prev => [...prev, { id: assistantId, role: "coach", text: "", time: now() }]);
 
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData.session?.access_token;
-      if (!accessToken) {
-        toast({ title: "Please sign in", description: "Sign in to chat with your coach.", variant: "destructive" });
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        setIsStreaming(false);
-        return;
-      }
-
-      const resp = await fetch(COACH_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke("ai-coach-chat", {
+        body: {
           messages: history.filter(m => m.id !== "welcome").map(m => ({ role: m.role, content: m.text })),
-        }),
+          stream: false,
+        },
       });
 
-      if (resp.status === 402) {
+      if (error) {
+        const message = error.message || "Coach unavailable";
+        if (message.includes("402") || message.includes("FREE_LIMIT_REACHED")) {
+          setShowLock(true);
+          setMessages(prev => prev.filter(m => m.id !== assistantId));
+          if (!isPremium) setUsageToday(FREE_DAILY_LIMIT);
+          return;
+        }
+        if (message.includes("429") || message.toLowerCase().includes("rate")) {
+          toast({ title: "Slow down a moment", description: "Too many messages — please try again shortly.", variant: "destructive" });
+          setMessages(prev => prev.filter(m => m.id !== assistantId));
+          return;
+        }
+        throw error;
+      }
+
+      if (!data?.ok && data?.error === "FREE_LIMIT_REACHED") {
         setShowLock(true);
         setMessages(prev => prev.filter(m => m.id !== assistantId));
-        setIsStreaming(false);
         if (!isPremium) setUsageToday(FREE_DAILY_LIMIT);
         return;
       }
-      if (resp.status === 403) {
-        setShowLock(true);
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        setIsStreaming(false);
-        return;
-      }
-      if (resp.status === 429) {
+      if (!data?.ok && data?.error === "RATE_LIMITED") {
         toast({ title: "Slow down a moment", description: "Too many messages — please try again shortly.", variant: "destructive" });
         setMessages(prev => prev.filter(m => m.id !== assistantId));
-        setIsStreaming(false);
         return;
       }
-      if (!resp.ok || !resp.body) {
+      if (!data?.ok && data?.error === "UNAUTHORIZED") {
+        toast({ title: "Please sign in", description: "Sign in to chat with your coach.", variant: "destructive" });
+        setShowLock(true);
+        setMessages(prev => prev.filter(m => m.id !== assistantId));
+        return;
+      }
+      if (!data?.ok || !data?.reply) {
         toast({ title: "Coach unavailable", description: "Please try again in a moment.", variant: "destructive" });
         setMessages(prev => prev.filter(m => m.id !== assistantId));
-        setIsStreaming(false);
         return;
       }
 
       // Optimistically increment local usage counter for free users
       if (!isPremium) setUsageToday(u => (u ?? 0) + 1);
-
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = "";
-      let acc = "";
-      let done = false;
-
-      while (!done) {
-        const { done: rDone, value } = await reader.read();
-        if (rDone) break;
-        buf += decoder.decode(value, { stream: true });
-
-        let nl: number;
-        while ((nl = buf.indexOf("\n")) !== -1) {
-          let line = buf.slice(0, nl);
-          buf = buf.slice(nl + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (!line.startsWith("data: ")) continue;
-          const json = line.slice(6).trim();
-          if (json === "[DONE]") { done = true; break; }
-          try {
-            const evt = JSON.parse(json);
-            if (evt.text) {
-              acc += evt.text;
-              setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, text: acc } : m));
-            }
-          } catch { /* partial */ }
-        }
-      }
+      setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, text: data.reply } : m));
     } catch (e) {
       console.error("coach stream error:", e);
       toast({ title: "Connection issue", description: "Couldn't reach your coach.", variant: "destructive" });
