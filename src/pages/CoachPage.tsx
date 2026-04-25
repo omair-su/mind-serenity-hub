@@ -40,7 +40,7 @@ function formatText(text: string) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
     if (line.startsWith("**") && line.endsWith("**")) {
-      return <p key={i} className="font-display font-semibold text-foreground mt-3 mb-1">{line.replace(/\*\*/g, "")}</p>;
+      return <p key={i} className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 text-charcoal">{line.replace(/\*\*/g, "")}</p>;
     }
     if (line.startsWith("• ")) {
       return (
