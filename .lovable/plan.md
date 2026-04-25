@@ -1,93 +1,82 @@
+## Goal
 
+Fix the broken "Begin Day" navigation, make the mood checker a real interactive ritual (not a static sticker), and visually upgrade the 30-Day page so it matches the ivory + forest + champagne-gold luxury brand used on the Coach page — not a rainbow of pastel cards.
 
-## Fix: Grant Your Second Account Access to the Project Connections
+## 1. Fix the 404 — `/app/day/...` does not exist
 
-### What the error means
+The router only registers `/day/:dayNum`, but four places link to `/app/day/...`. That is why every "Begin Day 1" button on the dashboard 404s.
 
-Your second account has project access (it shows as **Admin**), but Lovable connections are **workspace-scoped**, not project-scoped. The 3 connections this project uses live in your **first account's personal workspace**:
+Files to fix (change `/app/day/` → `/day/`):
 
-1. **Asjad** — likely your AI / Lovable AI gateway connection
-2. **Paddle (sandbox)** — test-mode payments
-3. **Paddle (live)** — live-mode payments at `willowvibes.com`
+- `src/components/dashboard/HeroCinema.tsx` (line 185 — the dashboard hero "Begin Day" button)
+- `src/components/dashboard/WelcomeModal.tsx` (line 162)
+- `src/components/dashboard/RitualTriptych.tsx` (line 13)
+- `src/pages/DashboardPage.tsx` (line 171)
 
-Because your second account is not a member of the workspace that owns those connections, Lovable blocks it from opening the project to prevent accidental misuse of someone else's API keys.
+After these edits, every entry point lands on a real `DayPage`.
 
-The screenshot literally tells you the fix: *"Contact a workspace admin."* You **are** that admin (on your first account).
+## 2. Make the mood checker actually work
 
-### The two ways to fix this — pick one
+Today the "Mood Shift" card (`MoodDeltaChart`) just *displays* `moodBefore` / `moodAfter` from state — there is no UI to set `moodAfter`, so it always shows the default 5 → 7 and "looks like a sticker."
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ OPTION A — Move project into a SHARED workspace (best)      │
-│   Both accounts join the same workspace.                     │
-│   Connections become accessible to both. One-time setup.     │
-├─────────────────────────────────────────────────────────────┤
-│ OPTION B — Stay on your Pro account for connection-bound    │
-│   work (checkout, AI). Use the second account only for      │
-│   pure UI / code edits that don't touch Paddle or AI.       │
-└─────────────────────────────────────────────────────────────┘
-```
+Changes:
 
-### Recommended: Option A — Shared Workspace
+- Convert `MoodDeltaChart` into an interactive component:
+  - 10 tappable emoji chips for **Before** and **After** rows.
+  - Selected chip lifts, glows champagne-gold, and shows the numeric value.
+  - When user taps After mood, the arc + delta animate to the new value.
+  - Persist via existing `autoSave` flow (already wired to `moodBefore` / `moodAfter`).
+- Add a small "Save mood" confirmation toast and an empty-state ("Tap how you felt — before and after today's session").
+- Keep the gold arc visualization but redraw it with smooth spring animation on every change.
 
-This is the clean, permanent fix. Steps (do all of this from your **Pro account**):
+## 3. Luxury rebrand of the Day page
 
-**Step 1 — Create or pick a workspace that will be shared**
-- Top-left in Lovable, click your workspace name → **Create workspace** (e.g. "Willow Team")
-- Or use your existing personal workspace — either works
+The page currently mixes 8+ pastel gradients (emerald, teal, violet, purple, sky, cyan, rose, pink, amber, orange, fuchsia…) which is exactly the "cheap, many colors" look the user objected to on Coach. Align with the Coach page palette: **ivory/cream surfaces, deep forest accents, champagne-gold highlights, charcoal text** — sparingly.
 
-**Step 2 — Invite your second account to that workspace**
-- Workspace settings → **People** → Invite `muhammadshahni743@gmail.com` as **Admin**
-- Accept the invite from the second account
+Visual rules applied across `DayPage.tsx`:
 
-**Step 3 — Move the connections into that workspace**
-- Sidebar → **Connectors** (root level)
-- Open each of the 3 connections (Asjad, Paddle sandbox, Paddle live)
-- In each connection's settings, transfer/move it to the shared workspace
-- *(If the UI does not allow moving an existing connection, you'll re-create it in the shared workspace and re-link — see fallback below)*
+- Replace all `from-emerald/teal/violet/purple/sky/cyan/rose/pink/fuchsia/amber/orange` gradient cards with two reusable surface styles:
+  - **Cream card**: `bg-[hsl(var(--cream))]/60` + `border-[hsl(var(--border))]` + `shadow-soft` for content cards (Today's Focus, Reflection, Tracker, Week Overview).
+  - **Forest accent card**: subtle `bg-gradient-to-br from-[hsl(var(--forest-deep))]/5 to-[hsl(var(--cream))]/40` + `border-[hsl(var(--gold))]/20` for the hero/wisdom/coach-note cards.
+- Use **champagne gold** only for: section eyebrows ("Today's Focus"), the active progress dot, primary CTAs (Begin Timer, Save), and the mood arc.
+- Use **deep forest** only for: the Coach's Note accent, completed-day dots, success states.
+- Use **charcoal** for all body text. Drop colored body text like `text-violet-600`, `text-emerald-600`, `text-rose-500`.
+- Replace ad-hoc emoji decorations with a single subtle gold corner glow per card (matches Coach hero).
+- Tighten the **30-day progress strip**: refine to gold ring on current, forest fill on done, soft cream-dark on locked, `Lock` icon in muted tone — no rainbow.
+- Replace the violet "Daily Wisdom" card with a cream-and-gold quote card using `Lightbulb` in gold.
+- Reflow the **timer** card (`HeartCoherenceRing`): cream surface, gold ring, charcoal numerals, gold CTA — it currently sits inside a rose/pink/fuchsia gradient.
+- Keep the existing typography (`font-display` for headings, `font-body` for body) — this already matches Coach.
+- Premium-locked day buttons: subtle `Crown` in gold + cream-dark background, no purple.
 
-**Step 4 — Move the Willow project into the shared workspace**
-- From the Pro account dashboard, right-click the Willow project → **Transfer to workspace** → pick the shared workspace
-- The project keeps its code, database, custom domain `willowvibes.com`, and published URL
+Spacing & rhythm:
 
-**Step 5 — Sign in with the second account and open the project**
-- The "You need permission" screen will be gone
-- Both accounts now spend their **own** credits when they send messages
+- Standardize card padding to `p-6 md:p-8`, radius to `rounded-2xl`, vertical gap to `space-y-6`.
+- Add a thin gold divider between major sections (`bg-gradient-to-r from-transparent via-gold/30 to-transparent`).
 
-### Fallback if connections cannot be transferred (Plan B inside Option A)
+## 4. Premium polish (functional)
 
-Some connection types are bound to the account that created them. If the transfer UI is missing:
+- Sticky bottom action bar on mobile with two buttons: **Begin Practice** (gold) and **Save Reflection** (outline).
+- Floating "Day X / 30" pill at top right that scrolls with progress (uses existing `percentage`).
+- After all 4 checklist items are checked, fire a one-shot champagne-gold confetti pulse (CSS only, no new deps) and surface the existing "Day Complete" message with a clear "Continue to Day N+1 →" gold button.
 
-1. In the **shared workspace**, re-create each connection:
-   - **Lovable AI / Asjad**: re-add via Connectors
-   - **Paddle sandbox**: paste the same sandbox API key
-   - **Paddle live**: paste the same live API key
-2. Inside the project, go to Connectors → unlink the old (Pro-account-owned) connections → link the new (shared-workspace-owned) ones
-3. The Paddle product/price IDs and webhook URL stay identical, so checkout keeps working with no code change
-4. `.env.production` and `.env.development` already hold the public client tokens — no edit needed
+## 5. Out of scope
 
-### What does NOT change (safety guarantee)
+- No backend / migration changes.
+- No new dependencies.
+- AI Daily Insight, IntentionRitual, PracticeMode, SoundBedDesigner internals stay as-is — only their wrapper/card styling is harmonized.
 
-| Asset | Status |
-|---|---|
-| All code, every file | Safe |
-| Lovable Cloud database & users | Safe |
-| Edge functions (Paddle webhook, AI chat, push) | Safe |
-| Custom domain `willowvibes.com` | Safe |
-| Published site `willowvibes.lovable.app` | Safe |
-| Paddle products, prices, live keys | Safe |
-| Memory files (`mem://`) | Safe |
+## Files touched
 
-### After the fix — verify it worked
+- `src/App.tsx` — no change (route is correct as `/day/:dayNum`)
+- `src/components/dashboard/HeroCinema.tsx` — link fix
+- `src/components/dashboard/WelcomeModal.tsx` — link fix
+- `src/components/dashboard/RitualTriptych.tsx` — link fix
+- `src/pages/DashboardPage.tsx` — link fix
+- `src/components/day/MoodDeltaChart.tsx` — make interactive (accept `onChange` props)
+- `src/pages/DayPage.tsx` — wire interactive mood, full visual rebrand, sticky action bar, completion celebration
 
-From the second account, open the project and check:
-1. The project preview loads (no permission screen)
-2. Sidebar → **Connectors** shows all 3 connections as ✓ Connected
-3. Send a small test message ("hello") — it should deduct **1 credit from the second account**, not the first
+## Outcome
 
-### Quick reply guide
-
-- **"Walk me through Option A step-by-step"** — I'll give you the exact click-by-click for the workspace transfer
-- **"Connections won't move — show me the fallback"** — I'll walk you through re-creating each connection in the shared workspace
-- **"Just keep using Pro for now"** — we skip the transfer and continue building from your Pro account until those credits run out
-
+- "Begin Day" from the dashboard, welcome modal, and triptych all open the real Day page.
+- Mood checker is a tactile before/after ritual that saves automatically.
+- The Day page reads like a calm luxury journal: ivory + forest + gold, not a candy palette — matching the Coach page brand the user already approved.
