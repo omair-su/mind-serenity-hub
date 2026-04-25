@@ -355,12 +355,12 @@ export default function DayPage() {
         )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
-          <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-5 shadow-soft border border-[hsl(var(--border))]">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider">Your Progress</span>
-              <span className="text-xs font-body text-muted-foreground">Day {dayNumber} of 30 ({percentage}% Complete)</span>
+              <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Your Journey</span>
+              <span className="text-xs font-body text-[hsl(var(--charcoal-soft))]">Day {dayNumber} of 30 · {percentage}%</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {Array.from({ length: 30 }, (_, i) => {
@@ -382,7 +382,13 @@ export default function DayPage() {
                       navigate(`/day/${num}`);
                     }}
                     className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : locked ? "bg-card/40 text-muted-foreground/50" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
+                      ${isCurrent
+                        ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
+                        : isComplete
+                        ? "bg-[hsl(var(--forest))] text-white shadow-sm"
+                        : locked
+                        ? "bg-[hsl(var(--cream-dark))]/60 text-[hsl(var(--charcoal-soft))]/60"
+                        : "bg-[hsl(var(--cream-dark))]/70 text-[hsl(var(--charcoal-soft))] hover:bg-[hsl(var(--cream-dark))]"}`}
                     title={locked ? `Day ${num} · Plus` : `Day ${num}`}
                   >
                     {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
@@ -393,18 +399,18 @@ export default function DayPage() {
           </div>
         </div>
 
-        {/* ─── PREMIUM WISDOM CARD ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/60 via-purple-50/40 to-indigo-50/30 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl border border-violet-500/20 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
+        {/* ─── DAILY WISDOM ─── */}
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-3">
               <span className="text-3xl">{selectedWisdom.icon}</span>
-              <Lightbulb className="w-5 h-5 text-violet-500/60" />
+              <Lightbulb className="w-5 h-5 text-[hsl(var(--gold-dark))]/70" />
             </div>
-            <p className="text-xs font-body font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2">Daily Wisdom</p>
-            <h3 className="font-display text-xl font-semibold text-foreground mb-2">{selectedWisdom.title}</h3>
-            <p className="font-body text-base text-foreground/80 italic leading-relaxed">{selectedWisdom.insight}</p>
-            <p className="text-xs font-body text-muted-foreground mt-4 pt-4 border-t border-violet-500/10">✨ Click to explore more wisdom</p>
+            <p className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))] mb-2">Daily Wisdom</p>
+            <h3 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))] mb-2">{selectedWisdom.title}</h3>
+            <p className="font-body text-base text-[hsl(var(--charcoal))]/85 italic leading-relaxed">{selectedWisdom.insight}</p>
+            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 pt-4 border-t border-[hsl(var(--gold))]/15">Tap to explore more wisdom</p>
           </div>
         </div>
 
@@ -415,14 +421,13 @@ export default function DayPage() {
         </blockquote>
 
         {/* ─── TODAY'S FOCUS CARD ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-amber-100/60 via-yellow-50/40 to-orange-50/30 dark:from-amber-900/20 dark:via-yellow-900/10 dark:to-gold/5 rounded-2xl border border-gold/20 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/15 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
-            <span className="text-xs font-body font-semibold tracking-widest uppercase text-gold">Today's Focus</span>
-            <h2 className="font-display text-2xl font-semibold text-foreground mt-2 mb-3">{day.focus}</h2>
-            <p className="text-base font-body text-muted-foreground leading-relaxed">{day.benefits}</p>
+            <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Today's Focus</span>
+            <h2 className="font-display text-2xl font-semibold text-[hsl(var(--charcoal))] mt-2 mb-3">{day.focus}</h2>
+            <p className="text-base font-body text-[hsl(var(--charcoal))]/80 leading-relaxed">{day.benefits}</p>
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
                 { icon: Target, label: "Practice", value: day.practice },
@@ -431,10 +436,10 @@ export default function DayPage() {
                 { icon: Sun, label: "Best Time", value: day.bestTime },
                 { icon: Sparkles, label: "Focus", value: day.focus },
               ].map(item => (
-                <div key={item.label} className="p-3 rounded-xl bg-card/60 backdrop-blur-sm border border-border/30 shadow-sm">
-                  <item.icon className="w-3.5 h-3.5 text-gold mb-1" />
-                  <p className="text-[10px] font-body font-semibold text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                  <p className="text-xs font-body text-foreground mt-0.5 line-clamp-2">{item.value}</p>
+                <div key={item.label} className="p-3 rounded-xl bg-white/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
+                  <item.icon className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] mb-1" />
+                  <p className="text-[10px] font-body font-semibold text-[hsl(var(--charcoal-soft))] uppercase tracking-wider">{item.label}</p>
+                  <p className="text-xs font-body text-[hsl(var(--charcoal))] mt-0.5 line-clamp-2">{item.value}</p>
                 </div>
               ))}
             </div>
