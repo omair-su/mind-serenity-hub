@@ -247,7 +247,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                   </div>
                   <div className="h-[3px] rounded-full bg-[hsl(var(--forest))]/8 overflow-hidden">
                     <div
-                      className="h-full rounded-full transition-all bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]"
+                      className="h-full rounded-full transition-all bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-yellow-600"
                       style={{ width: `${((usageToday ?? 0) / FREE_DAILY_LIMIT) * 100}%` }}
                     />
                   </div>
