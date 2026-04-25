@@ -355,12 +355,12 @@ export default function DayPage() {
         )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-sage-light/20 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl p-5 shadow-soft border border-primary/15">
-          <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-5 shadow-soft border border-[hsl(var(--border))]">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-body font-semibold text-muted-foreground uppercase tracking-wider">Your Progress</span>
-              <span className="text-xs font-body text-muted-foreground">Day {dayNumber} of 30 ({percentage}% Complete)</span>
+              <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Your Journey</span>
+              <span className="text-xs font-body text-[hsl(var(--charcoal-soft))]">Day {dayNumber} of 30 · {percentage}%</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {Array.from({ length: 30 }, (_, i) => {
@@ -382,7 +382,13 @@ export default function DayPage() {
                       navigate(`/day/${num}`);
                     }}
                     className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent ? "bg-gradient-to-r from-gold to-gold-dark text-card ring-2 ring-gold/30 scale-110 shadow-gold" : isComplete ? "bg-gradient-to-r from-primary to-primary/80 text-card shadow-sm" : locked ? "bg-card/40 text-muted-foreground/50" : "bg-card/60 text-muted-foreground hover:bg-card/80"}`}
+                      ${isCurrent
+                        ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
+                        : isComplete
+                        ? "bg-[hsl(var(--forest))] text-white shadow-sm"
+                        : locked
+                        ? "bg-[hsl(var(--cream-dark))]/60 text-[hsl(var(--charcoal-soft))]/60"
+                        : "bg-[hsl(var(--cream-dark))]/70 text-[hsl(var(--charcoal-soft))] hover:bg-[hsl(var(--cream-dark))]"}`}
                     title={locked ? `Day ${num} · Plus` : `Day ${num}`}
                   >
                     {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
@@ -393,18 +399,18 @@ export default function DayPage() {
           </div>
         </div>
 
-        {/* ─── PREMIUM WISDOM CARD ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/60 via-purple-50/40 to-indigo-50/30 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl border border-violet-500/20 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
+        {/* ─── DAILY WISDOM ─── */}
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-3">
               <span className="text-3xl">{selectedWisdom.icon}</span>
-              <Lightbulb className="w-5 h-5 text-violet-500/60" />
+              <Lightbulb className="w-5 h-5 text-[hsl(var(--gold-dark))]/70" />
             </div>
-            <p className="text-xs font-body font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2">Daily Wisdom</p>
-            <h3 className="font-display text-xl font-semibold text-foreground mb-2">{selectedWisdom.title}</h3>
-            <p className="font-body text-base text-foreground/80 italic leading-relaxed">{selectedWisdom.insight}</p>
-            <p className="text-xs font-body text-muted-foreground mt-4 pt-4 border-t border-violet-500/10">✨ Click to explore more wisdom</p>
+            <p className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))] mb-2">Daily Wisdom</p>
+            <h3 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))] mb-2">{selectedWisdom.title}</h3>
+            <p className="font-body text-base text-[hsl(var(--charcoal))]/85 italic leading-relaxed">{selectedWisdom.insight}</p>
+            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 pt-4 border-t border-[hsl(var(--gold))]/15">Tap to explore more wisdom</p>
           </div>
         </div>
 
@@ -415,14 +421,13 @@ export default function DayPage() {
         </blockquote>
 
         {/* ─── TODAY'S FOCUS CARD ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-amber-100/60 via-yellow-50/40 to-orange-50/30 dark:from-amber-900/20 dark:via-yellow-900/10 dark:to-gold/5 rounded-2xl border border-gold/20 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/15 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
-            <span className="text-xs font-body font-semibold tracking-widest uppercase text-gold">Today's Focus</span>
-            <h2 className="font-display text-2xl font-semibold text-foreground mt-2 mb-3">{day.focus}</h2>
-            <p className="text-base font-body text-muted-foreground leading-relaxed">{day.benefits}</p>
+            <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Today's Focus</span>
+            <h2 className="font-display text-2xl font-semibold text-[hsl(var(--charcoal))] mt-2 mb-3">{day.focus}</h2>
+            <p className="text-base font-body text-[hsl(var(--charcoal))]/80 leading-relaxed">{day.benefits}</p>
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
                 { icon: Target, label: "Practice", value: day.practice },
@@ -431,10 +436,10 @@ export default function DayPage() {
                 { icon: Sun, label: "Best Time", value: day.bestTime },
                 { icon: Sparkles, label: "Focus", value: day.focus },
               ].map(item => (
-                <div key={item.label} className="p-3 rounded-xl bg-card/60 backdrop-blur-sm border border-border/30 shadow-sm">
-                  <item.icon className="w-3.5 h-3.5 text-gold mb-1" />
-                  <p className="text-[10px] font-body font-semibold text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                  <p className="text-xs font-body text-foreground mt-0.5 line-clamp-2">{item.value}</p>
+                <div key={item.label} className="p-3 rounded-xl bg-white/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
+                  <item.icon className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] mb-1" />
+                  <p className="text-[10px] font-body font-semibold text-[hsl(var(--charcoal-soft))] uppercase tracking-wider">{item.label}</p>
+                  <p className="text-xs font-body text-[hsl(var(--charcoal))] mt-0.5 line-clamp-2">{item.value}</p>
                 </div>
               ))}
             </div>
@@ -445,40 +450,39 @@ export default function DayPage() {
         <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
 
         {/* ─── SCIENCE BOX ─── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-100/70 via-orange-50/50 to-yellow-50/40 dark:from-amber-900/20 dark:via-orange-900/15 dark:to-gold/10 border border-gold/25 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/20 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden rounded-2xl bg-[hsl(var(--cream))]/70 border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/25 to-amber-500/20 flex items-center justify-center">
-                <FlaskConical className="w-4 h-4 text-gold" />
+              <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/15 flex items-center justify-center">
+                <FlaskConical className="w-4 h-4 text-[hsl(var(--gold-dark))]" />
               </div>
               <div>
-                <span className="text-xs font-body font-bold tracking-widest uppercase text-gold">The Science</span>
-                <p className="text-sm font-display font-semibold text-foreground">Why This Works</p>
+                <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">The Science</span>
+                <p className="text-sm font-display font-semibold text-[hsl(var(--charcoal))]">Why This Works</p>
               </div>
             </div>
-            <p className="text-base font-body leading-[2] text-foreground/85">{day.scienceText}</p>
-            <p className="text-xs font-body text-muted-foreground mt-4 italic border-t border-gold/15 pt-3">📚 {day.scienceSource}</p>
+            <p className="text-base font-body leading-[2] text-[hsl(var(--charcoal))]/85">{day.scienceText}</p>
+            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 italic border-t border-[hsl(var(--gold))]/15 pt-3">{day.scienceSource}</p>
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent" />
 
         {/* ─── PREPARATION ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-cyan-100/50 via-sky-50/30 to-blue-50/20 dark:from-cyan-900/15 dark:via-sky-900/10 dark:to-blue-900/5 rounded-2xl p-8 border border-cyan-500/15 shadow-soft">
-          <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-sky-200/20 to-transparent" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-8 border border-[hsl(var(--border))] shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--forest))]/8 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-4">
-              <span className="text-2xl">🧘‍♀️</span>
-              <h2 className="font-display text-xl font-semibold text-foreground">Before You Begin</h2>
+              <Leaf className="w-5 h-5 text-[hsl(var(--forest))]" />
+              <h2 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))]">Before You Begin</h2>
             </div>
-            <p className="font-body text-base leading-[2] text-foreground/80">{day.preparation}</p>
-            <ul className="mt-4 space-y-2 font-body text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Turn off notifications</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Have your journal nearby</li>
+            <p className="font-body text-base leading-[2] text-[hsl(var(--charcoal))]/80">{day.preparation}</p>
+            <ul className="mt-4 space-y-2 font-body text-sm text-[hsl(var(--charcoal-soft))]">
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Turn off notifications</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Have your journal nearby</li>
             </ul>
           </div>
         </div>
@@ -498,7 +502,7 @@ export default function DayPage() {
         {/* ─── GUIDED PRACTICE ─── */}
         <div id="guided-practice">
           <h2 className="font-display text-3xl font-semibold text-foreground mb-6">Your Guided Practice</h2>
-          <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/40 via-teal-50/25 to-sage-light/15 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-6 md:p-10 space-y-5 shadow-soft">
+          <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/20 p-6 md:p-10 space-y-5 shadow-soft">
             <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/8 to-transparent" />
             <div className="absolute bottom-0 right-0 w-32 h-16 bg-gradient-to-tl from-sage/10 to-transparent rounded-tl-full" />
             {day.guidedPractice.map((para, i) => {
@@ -558,7 +562,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── AUDIO PLAYER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/15 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-indigo-500/15 p-6 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
           <div className="text-center mb-4">
             <p className="text-xs font-body text-muted-foreground">🎙️ Narrated by Willow Vibes Coach · AI-Generated Voice</p>
             {tts.error && <p className="text-xs text-destructive mt-1">{tts.error}</p>}
@@ -610,7 +614,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── TIMER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-gold/20 p-8 text-center shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 text-center shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-gold/10 to-transparent" />
           <div className="relative z-10 flex flex-col items-center">
             <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
@@ -655,7 +659,7 @@ export default function DayPage() {
         <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
         {/* ─── COACH'S NOTE ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/60 via-teal-50/40 to-sage-light/30 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest-deep))]/8 via-[hsl(var(--cream))]/60 to-[hsl(var(--cream))]/40 rounded-2xl border border-[hsl(var(--forest))]/20 p-8 shadow-soft">
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-sage/10 to-transparent rounded-tr-full" />
           <div className="relative z-10">
@@ -671,9 +675,9 @@ export default function DayPage() {
         </div>
 
         {/* ─── REFLECTION PROMPTS ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/50 via-purple-50/30 to-indigo-50/20 dark:from-violet-900/15 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl border border-violet-500/15 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-purple-200/15 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/8 blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-[hsl(var(--gold))]/5 to-transparent rounded-tr-full" />
           <div className="relative z-10">
             <h2 className="font-display text-2xl font-semibold text-foreground mb-6">Today's Reflection</h2>
             <p className="text-xs font-body text-muted-foreground mb-6">🔒 Your reflections are private and saved locally.</p>
@@ -687,7 +691,7 @@ export default function DayPage() {
                   value={reflection}
                   onChange={(e) => setReflection(e.target.value)}
                   placeholder="Write your thoughts here..."
-                  className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
 
@@ -713,7 +717,7 @@ export default function DayPage() {
                   value={challengeText}
                   onChange={(e) => setChallengeText(e.target.value)}
                   placeholder="Describe any challenges..."
-                  className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
 
@@ -725,7 +729,7 @@ export default function DayPage() {
                   value={rememberText}
                   onChange={(e) => setRememberText(e.target.value)}
                   placeholder="One key takeaway..."
-                  className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
             </div>
@@ -743,10 +747,15 @@ export default function DayPage() {
         </div>
 
         {/* ─── MOOD DELTA (before vs after) ─── */}
-        <MoodDeltaChart moodBefore={moodBefore[0]} moodAfter={moodAfter[0]} />
+        <MoodDeltaChart
+          moodBefore={moodBefore[0]}
+          moodAfter={moodAfter[0]}
+          onChangeBefore={(v) => setMoodBefore([v])}
+          onChangeAfter={(v) => setMoodAfter([v])}
+        />
 
         {/* ─── DAILY TRACKER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-green-50/20 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-green-900/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-8 shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="relative z-10">
             <h3 className="font-display text-xl font-semibold text-foreground mb-6">Mark Your Progress</h3>
@@ -790,7 +799,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── WEEK OVERVIEW ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-sky-100/50 via-cyan-50/30 to-blue-50/20 dark:from-sky-900/15 dark:via-cyan-900/10 dark:to-blue-900/5 rounded-2xl border border-sky-500/15 p-6 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4">This Week's Journey</h3>
           <div className="space-y-2">
             {weekData.days.map(d => {

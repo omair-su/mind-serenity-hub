@@ -10,7 +10,7 @@ const rituals = [
     title: "Set the Tone",
     copy: "A grounding intention to begin the day with clarity.",
     Icon: Sun,
-    to: "/app/day/1",
+    to: "/day/1",
     bg: "bg-gradient-to-br from-[hsl(var(--cream))] to-[hsl(var(--gold-light))]/30",
     accent: "text-[hsl(var(--gold-dark))]",
     hours: [4, 11],

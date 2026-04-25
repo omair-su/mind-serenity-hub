@@ -182,7 +182,7 @@ export default function HeroCinema({
           className="flex flex-wrap gap-2.5 mt-5"
         >
           <Link
-            to={`/app/day/${nextDay}`}
+            to={`/day/${nextDay}`}
             className="group relative inline-flex items-center gap-2.5 w-fit px-6 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all duration-300 overflow-hidden"
           >
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent" />

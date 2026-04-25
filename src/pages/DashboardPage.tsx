@@ -168,7 +168,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <Link
-                to={`/app/day/${nextDay}`}
+                to={`/day/${nextDay}`}
                 className="flex items-center justify-center gap-2 mt-5 w-full py-3.5 rounded-xl bg-[hsl(var(--forest))] text-white font-body font-bold text-sm hover:bg-[hsl(var(--forest-mid))] transition-colors shadow-[var(--shadow-soft-val)]"
               >
                 <Play className="w-4 h-4" /> Begin Session <ArrowRight className="w-4 h-4" />

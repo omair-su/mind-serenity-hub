@@ -159,7 +159,7 @@ export default function WelcomeModal() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
-                <Link to="/app/day/1" onClick={close} className="block">
+                <Link to="/day/1" onClick={close} className="block">
                   <Button className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold py-6 shadow-[var(--shadow-gold-val)] hover:scale-[1.02] transition-transform">
                     <Sparkles className="w-4 h-4 mr-2" />
                     {current.cta}
