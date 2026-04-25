@@ -202,7 +202,10 @@ serve(async (req) => {
     }
 
     const systemPrompt = isPremium ? PREMIUM_SYSTEM_PROMPT : FREE_SYSTEM_PROMPT;
-    const maxTokens = isPremium ? 1000 : 400;
+    // Free tier: Claude Haiku (~3x faster, much lower latency, perfect for short replies).
+    // Premium: Claude Sonnet 4.5 for deeper, longer answers.
+    const model = isPremium ? "claude-sonnet-4-5" : "claude-haiku-4-5";
+    const maxTokens = isPremium ? 1000 : 320;
 
     const resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -212,7 +215,7 @@ serve(async (req) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5",
+        model,
         max_tokens: maxTokens,
         temperature: 0.7,
         stream: wantsStream,
