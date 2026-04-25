@@ -450,40 +450,39 @@ export default function DayPage() {
         <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
 
         {/* ─── SCIENCE BOX ─── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-100/70 via-orange-50/50 to-yellow-50/40 dark:from-amber-900/20 dark:via-orange-900/15 dark:to-gold/10 border border-gold/25 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-gold/15 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-amber-200/20 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden rounded-2xl bg-[hsl(var(--cream))]/70 border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/25 to-amber-500/20 flex items-center justify-center">
-                <FlaskConical className="w-4 h-4 text-gold" />
+              <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/15 flex items-center justify-center">
+                <FlaskConical className="w-4 h-4 text-[hsl(var(--gold-dark))]" />
               </div>
               <div>
-                <span className="text-xs font-body font-bold tracking-widest uppercase text-gold">The Science</span>
-                <p className="text-sm font-display font-semibold text-foreground">Why This Works</p>
+                <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">The Science</span>
+                <p className="text-sm font-display font-semibold text-[hsl(var(--charcoal))]">Why This Works</p>
               </div>
             </div>
-            <p className="text-base font-body leading-[2] text-foreground/85">{day.scienceText}</p>
-            <p className="text-xs font-body text-muted-foreground mt-4 italic border-t border-gold/15 pt-3">📚 {day.scienceSource}</p>
+            <p className="text-base font-body leading-[2] text-[hsl(var(--charcoal))]/85">{day.scienceText}</p>
+            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 italic border-t border-[hsl(var(--gold))]/15 pt-3">{day.scienceSource}</p>
           </div>
         </div>
 
-        <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent" />
 
         {/* ─── PREPARATION ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-cyan-100/50 via-sky-50/30 to-blue-50/20 dark:from-cyan-900/15 dark:via-sky-900/10 dark:to-blue-900/5 rounded-2xl p-8 border border-cyan-500/15 shadow-soft">
-          <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-sky-200/20 to-transparent" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-8 border border-[hsl(var(--border))] shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--forest))]/8 blur-2xl pointer-events-none" />
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-4">
-              <span className="text-2xl">🧘‍♀️</span>
-              <h2 className="font-display text-xl font-semibold text-foreground">Before You Begin</h2>
+              <Leaf className="w-5 h-5 text-[hsl(var(--forest))]" />
+              <h2 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))]">Before You Begin</h2>
             </div>
-            <p className="font-body text-base leading-[2] text-foreground/80">{day.preparation}</p>
-            <ul className="mt-4 space-y-2 font-body text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Turn off notifications</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-primary mt-1 flex-shrink-0" /> Have your journal nearby</li>
+            <p className="font-body text-base leading-[2] text-[hsl(var(--charcoal))]/80">{day.preparation}</p>
+            <ul className="mt-4 space-y-2 font-body text-sm text-[hsl(var(--charcoal-soft))]">
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Turn off notifications</li>
+              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Have your journal nearby</li>
             </ul>
           </div>
         </div>
