@@ -4,7 +4,7 @@ import PremiumLockModal from "@/components/PremiumLockModal";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Send, Sparkles, Crown, Leaf } from "lucide-react";
+import { Send, Sparkles, Crown, Biohazard } from "lucide-react";
 import DOMPurify from "dompurify";
 
 // ============================================================
@@ -46,7 +46,7 @@ function formatText(text: string) {
       return (
         <div key={i} className="flex gap-2 items-start">
           <span className="text-[hsl(var(--gold-dark))] mt-1 flex-shrink-0">•</span>
-          <p className="text-foreground/90" dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
+          <p className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: safeHtml(line.slice(2).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />
         </div>
       );
     }
@@ -59,7 +59,7 @@ function formatText(text: string) {
       );
     }
     if (line.trim() === "") return <div key={i} className="h-1" />;
-    return <p key={i} className="text-foreground/90" dangerouslySetInnerHTML={{ __html: safeHtml(line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />;
+    return <p key={i} className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: safeHtml(line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")) }} />;
   });
 }
 
@@ -203,7 +203,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
             <div className="flex items-center gap-3">
               {/* Monogram — forest with gold ring */}
               <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--forest))] shadow-[0_8px_24px_-8px_hsl(var(--forest)/0.5)]">
-                <Leaf className="w-5 h-5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
+                <Biohazard className="w-5 h-5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
                 <span className="absolute -inset-[3px] rounded-full border border-[hsl(var(--gold))]/50 pointer-events-none" />
               </div>
 
@@ -262,7 +262,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
               <div key={msg.id} className="flex gap-3 animate-fade-in">
                 {msg.role === "coach" ? (
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--forest))] mt-0.5">
-                    <Leaf className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
+                    <Biohazard className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
                   </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--cream-dark))] border border-[hsl(var(--border))] mt-0.5">
@@ -276,7 +276,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                     </span>
                     <span className="text-[10px] text-[hsl(var(--charcoal-soft))]">{msg.time}</span>
                   </div>
-                  <div className="text-sm font-body leading-relaxed space-y-1.5 text-foreground/90">
+                  <div className="text-sm font-body leading-relaxed space-y-1.5 text-muted-foreground">
                     {msg.role === "coach"
                       ? (msg.text ? formatText(msg.text) : (
                           <div className="flex gap-1.5 py-2 items-center">
@@ -305,7 +305,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="text-xs font-body px-3 py-1.5 rounded-full text-[hsl(var(--forest-deep))] bg-[hsl(var(--cream-dark))]/60 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold))]/60 hover:bg-[hsl(var(--cream-dark))] transition-all"
+                    className="text-xs font-body px-3 py-1.5 rounded-full text-[hsl(var(--forest-deep))] bg-[hsl(var(--cream-dark))]/60 border border-[hsl(var(--border))] hover:border-[hsl(var(--gold))]/60 hover:bg-[hsl(var(--cream-dark))] transition-all text-gold-dark"
                   >
                     {s}
                   </button>
@@ -330,7 +330,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                 aria-label="Send message"
                 className="w-10 h-10 rounded-xl flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest-deep))] shadow-[0_4px_14px_-4px_hsl(var(--forest)/0.5)]"
               >
-                <Send className="w-4 h-4 text-[hsl(var(--champagne-light))]" />
+                <Send className="w-4 h-4 text-[hsl(var(--champagne-light))] border-muted-foreground" />
               </button>
             </div>
             <p className="text-[10px] text-[hsl(var(--charcoal-soft))] text-center mt-2 tracking-wide">
