@@ -40,7 +40,7 @@ function formatText(text: string) {
   const lines = text.split("\n");
   return lines.map((line, i) => {
     if (line.startsWith("**") && line.endsWith("**")) {
-      return <p key={i} className="font-display font-semibold text-foreground mt-3 mb-1">{line.replace(/\*\*/g, "")}</p>;
+      return <p key={i} className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 text-charcoal">{line.replace(/\*\*/g, "")}</p>;
     }
     if (line.startsWith("• ")) {
       return (
@@ -247,7 +247,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                   </div>
                   <div className="h-[3px] rounded-full bg-[hsl(var(--forest))]/8 overflow-hidden">
                     <div
-                      className="h-full rounded-full transition-all bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]"
+                      className="h-full rounded-full transition-all bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-yellow-600"
                       style={{ width: `${((usageToday ?? 0) / FREE_DAILY_LIMIT) * 100}%` }}
                     />
                   </div>
