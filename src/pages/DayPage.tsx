@@ -502,7 +502,7 @@ export default function DayPage() {
         {/* ─── GUIDED PRACTICE ─── */}
         <div id="guided-practice">
           <h2 className="font-display text-3xl font-semibold text-foreground mb-6">Your Guided Practice</h2>
-          <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/40 via-teal-50/25 to-sage-light/15 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-6 md:p-10 space-y-5 shadow-soft">
+          <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/20 p-6 md:p-10 space-y-5 shadow-soft">
             <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/8 to-transparent" />
             <div className="absolute bottom-0 right-0 w-32 h-16 bg-gradient-to-tl from-sage/10 to-transparent rounded-tl-full" />
             {day.guidedPractice.map((para, i) => {
@@ -562,7 +562,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── AUDIO PLAYER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/15 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-indigo-500/15 p-6 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
           <div className="text-center mb-4">
             <p className="text-xs font-body text-muted-foreground">🎙️ Narrated by Willow Vibes Coach · AI-Generated Voice</p>
             {tts.error && <p className="text-xs text-destructive mt-1">{tts.error}</p>}
@@ -614,7 +614,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── TIMER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-rose-100/50 via-pink-50/30 to-fuchsia-50/20 dark:from-rose-900/15 dark:via-pink-900/10 dark:to-fuchsia-900/5 rounded-2xl border border-gold/20 p-8 text-center shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 text-center shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-gold/10 to-transparent" />
           <div className="relative z-10 flex flex-col items-center">
             <Timer className="w-6 h-6 text-gold mx-auto mb-2" />
@@ -659,7 +659,7 @@ export default function DayPage() {
         <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
         {/* ─── COACH'S NOTE ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/60 via-teal-50/40 to-sage-light/30 dark:from-emerald-900/20 dark:via-teal-900/10 dark:to-primary/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--forest-deep))]/8 via-[hsl(var(--cream))]/60 to-[hsl(var(--cream))]/40 rounded-2xl border border-[hsl(var(--forest))]/20 p-8 shadow-soft">
           <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-sage/10 to-transparent rounded-tr-full" />
           <div className="relative z-10">
@@ -675,9 +675,9 @@ export default function DayPage() {
         </div>
 
         {/* ─── REFLECTION PROMPTS ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/50 via-purple-50/30 to-indigo-50/20 dark:from-violet-900/15 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl border border-violet-500/15 p-8 shadow-soft">
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-violet-200/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-purple-200/15 to-transparent rounded-tr-full" />
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-8 shadow-soft">
+          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/8 blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-[hsl(var(--gold))]/5 to-transparent rounded-tr-full" />
           <div className="relative z-10">
             <h2 className="font-display text-2xl font-semibold text-foreground mb-6">Today's Reflection</h2>
             <p className="text-xs font-body text-muted-foreground mb-6">🔒 Your reflections are private and saved locally.</p>
@@ -755,7 +755,7 @@ export default function DayPage() {
         />
 
         {/* ─── DAILY TRACKER ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-100/50 via-teal-50/30 to-green-50/20 dark:from-emerald-900/15 dark:via-teal-900/10 dark:to-green-900/5 rounded-2xl border border-primary/15 p-8 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-8 shadow-soft">
           <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
           <div className="relative z-10">
             <h3 className="font-display text-xl font-semibold text-foreground mb-6">Mark Your Progress</h3>
@@ -799,7 +799,7 @@ export default function DayPage() {
         </div>
 
         {/* ─── WEEK OVERVIEW ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-sky-100/50 via-cyan-50/30 to-blue-50/20 dark:from-sky-900/15 dark:via-cyan-900/10 dark:to-blue-900/5 rounded-2xl border border-sky-500/15 p-6 shadow-soft">
+        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4">This Week's Journey</h3>
           <div className="space-y-2">
             {weekData.days.map(d => {
