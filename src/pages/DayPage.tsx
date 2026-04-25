@@ -691,7 +691,7 @@ export default function DayPage() {
                   value={reflection}
                   onChange={(e) => setReflection(e.target.value)}
                   placeholder="Write your thoughts here..."
-                  className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-36 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
 
@@ -717,7 +717,7 @@ export default function DayPage() {
                   value={challengeText}
                   onChange={(e) => setChallengeText(e.target.value)}
                   placeholder="Describe any challenges..."
-                  className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-24 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
 
@@ -729,7 +729,7 @@ export default function DayPage() {
                   value={rememberText}
                   onChange={(e) => setRememberText(e.target.value)}
                   placeholder="One key takeaway..."
-                  className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-violet-500/30 resize-none leading-relaxed"
+                  className="w-full h-20 p-4 rounded-xl border border-border/50 bg-card/70 backdrop-blur-sm font-body text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))]/40 resize-none leading-relaxed"
                 />
               </div>
             </div>
