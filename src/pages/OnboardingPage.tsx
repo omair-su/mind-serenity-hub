@@ -40,13 +40,13 @@ const steps = [
 ];
 
 const goalOptions = [
-  { label: "Sleep soundly", icon: Moon, color: "from-[hsl(240,60%,70%)] to-[hsl(260,50%,60%)]" },
-  { label: "Manage anxiety", icon: Shield, color: "from-[hsl(180,50%,60%)] to-[hsl(160,45%,55%)]" },
-  { label: "Reduce stress", icon: Heart, color: "from-[hsl(145,40%,55%)] to-[hsl(139,37%,40%)]" },
-  { label: "Be present & mindful", icon: Eye, color: "from-[hsl(200,50%,60%)] to-[hsl(220,45%,55%)]" },
-  { label: "Improve focus", icon: Focus, color: "from-[hsl(30,54%,65%)] to-[hsl(43,70%,50%)]" },
-  { label: "Emotional balance", icon: Sparkles, color: "from-[hsl(300,40%,65%)] to-[hsl(280,45%,55%)]" },
-  { label: "Something else", icon: Flame, color: "from-[hsl(15,60%,60%)] to-[hsl(0,50%,55%)]" },
+  { label: "Sleep soundly", icon: Moon, color: "from-[hsl(var(--forest-deep))] to-[hsl(var(--forest-mid))]" },
+  { label: "Manage anxiety", icon: Shield, color: "from-[hsl(var(--forest))] to-[hsl(var(--sage-dark))]" },
+  { label: "Reduce stress", icon: Heart, color: "from-[hsl(var(--sage-dark))] to-[hsl(var(--forest))]" },
+  { label: "Be present & mindful", icon: Eye, color: "from-[hsl(var(--forest-mid))] to-[hsl(var(--forest))]" },
+  { label: "Improve focus", icon: Focus, color: "from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]" },
+  { label: "Emotional balance", icon: Sparkles, color: "from-[hsl(var(--gold-light))] to-[hsl(var(--gold))]" },
+  { label: "Something else", icon: Flame, color: "from-[hsl(var(--gold-dark))] to-[hsl(var(--forest-mid))]" },
 ];
 
 const stressOptions = [
