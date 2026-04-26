@@ -23,7 +23,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=1600",
     ambientId: "morning-light",
     voiceId: "EXAVITQu4vr4xnSDxMaL", // Sarah
-    accent: "from-amber-500/30 via-orange-500/15 to-transparent",
+    accent: "from-gold/30 via-gold-dark/15 to-transparent",
     iconEmoji: "🌅",
   },
   {
@@ -35,7 +35,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1519181245277-cffeb31da2e3?auto=format&fit=crop&q=80&w=1600",
     ambientId: "calm-piano",
     voiceId: "JBFqnCBsd6RMkjVDRZzb", // George
-    accent: "from-indigo-500/30 via-purple-500/15 to-transparent",
+    accent: "from-charcoal/30 via-gold-dark/15 to-transparent",
     iconEmoji: "🌙",
   },
   {
@@ -47,7 +47,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1507120410856-1f35574c3b45?auto=format&fit=crop&q=80&w=1600",
     ambientId: "focus-flow",
     voiceId: "JBFqnCBsd6RMkjVDRZzb",
-    accent: "from-cyan-500/30 via-blue-500/15 to-transparent",
+    accent: "from-forest/30 via-forest-deep/15 to-transparent",
     iconEmoji: "🎯",
   },
   {
@@ -59,7 +59,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&q=80&w=1600",
     ambientId: "forest-stream",
     voiceId: "EXAVITQu4vr4xnSDxMaL",
-    accent: "from-emerald-500/30 via-teal-500/15 to-transparent",
+    accent: "from-forest/30 via-sage/15 to-transparent",
     iconEmoji: "☀️",
   },
   {
@@ -71,7 +71,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&q=80&w=1600",
     ambientId: "deep-meditation",
     voiceId: "EXAVITQu4vr4xnSDxMaL",
-    accent: "from-pink-500/30 via-rose-500/15 to-transparent",
+    accent: "from-gold/30 via-gold-dark/15 to-transparent",
     iconEmoji: "🎨",
   },
   {
@@ -83,7 +83,7 @@ export const RITUALS_META: RitualMeta[] = [
     heroImage: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1600",
     ambientId: "tibetan-bowls",
     voiceId: "JBFqnCBsd6RMkjVDRZzb",
-    accent: "from-violet-500/30 via-purple-500/15 to-transparent",
+    accent: "from-gold-dark/30 via-gold/15 to-transparent",
     iconEmoji: "📓",
   },
 ];
