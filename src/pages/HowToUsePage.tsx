@@ -34,8 +34,8 @@ const principles = [
     icon: Heart,
     title: "Self-Compassion Over Perfection",
     description: "There is no 'good' or 'bad' meditation. Drop the judgment. The days you least want to sit are often the days you need it most. Just show up — even 3 minutes counts.",
-    color: "from-rose-500/15 to-pink-500/10",
-    iconColor: "text-rose-500",
+    color: "from-gold-dark/15 to-gold/10",
+    iconColor: "text-gold-dark",
   },
   {
     icon: Headphones,
