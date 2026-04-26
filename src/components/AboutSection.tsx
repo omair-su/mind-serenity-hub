@@ -37,22 +37,22 @@ export default function AboutSection() {
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: idx * 0.1 }} className="bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-emerald-700" />
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: idx * 0.1 }} className="bg-gradient-to-br from-cream to-cream-dark/40 border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold-dark/15 flex items-center justify-center mb-5">
+                  <Icon className="w-6 h-6 text-forest-deep" />
                 </div>
-                <h4 className="text-xl font-bold text-slate-900 mb-3">{pillar.title}</h4>
-                <p className="text-slate-600 leading-relaxed">{pillar.text}</p>
+                <h4 className="text-xl font-bold text-forest-deep mb-3">{pillar.title}</h4>
+                <p className="text-charcoal-soft leading-relaxed">{pillar.text}</p>
               </motion.div>
             );
           })}
         </div>
 
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl p-8 md:p-10">
-          <p className="text-lg md:text-xl text-slate-700 italic leading-relaxed max-w-3xl mx-auto">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center bg-gradient-to-r from-cream to-cream-dark/30 border border-gold/20 rounded-2xl p-8 md:p-10">
+          <p className="text-lg md:text-xl text-charcoal italic leading-relaxed max-w-3xl mx-auto">
             "I built Willow Vibes because I couldn't meditate with anything else. My mind raced. I felt like a failure. So I stripped away the spiritual fluff and built what actually works — neuroscience, not nonsense."
           </p>
-          <p className="mt-4 text-emerald-700 font-semibold">— Michael, Founder</p>
+          <p className="mt-4 text-gold-dark font-semibold">— Michael, Founder</p>
         </motion.div>
       </div>
     </section>
