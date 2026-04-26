@@ -24,11 +24,11 @@ export default function AboutSection() {
     <section id="about" className="py-24 md:py-32 bg-white">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-600 mb-4">Why Willow Vibes</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-            Built for People Who <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Can't Meditate</span>
+          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-gold-dark mb-4">Why Willow Vibes</h2>
+          <h3 className="text-4xl md:text-5xl font-bold text-forest-deep mb-6">
+            Built for People Who <span className="bg-gradient-to-r from-forest to-forest-deep bg-clip-text text-transparent">Can't Meditate</span>
           </h3>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-charcoal-soft max-w-2xl mx-auto">
             We designed this for the skeptics, the overthinkers, the people who tried meditation and quit. Because we were those people too.
           </p>
         </motion.div>
