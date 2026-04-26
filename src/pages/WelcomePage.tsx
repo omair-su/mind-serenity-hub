@@ -65,7 +65,7 @@ export default function WelcomePage() {
             {[
               { title: "A Calmer Mind", desc: "The constant mental chatter will quiet.", icon: Brain, gradient: "from-gold-dark/12 to-gold/5", iconColor: "text-gold-dark" },
               { title: "A Better Sleeper", desc: "Your body will learn to release the day and surrender to rest.", icon: Sun, gradient: "from-charcoal/12 to-forest-deep/5", iconColor: "text-charcoal" },
-              { title: "Emotionally Resilient", desc: "You will feel emotions fully without being controlled by them.", icon: Heart, gradient: "from-rose-500/12 to-pink-500/5", iconColor: "text-rose-500" },
+              { title: "Emotionally Resilient", desc: "You will feel emotions fully without being controlled by them.", icon: Heart, gradient: "from-gold-dark/12 to-gold/5", iconColor: "text-gold-dark" },
               { title: "Deeply Focused", desc: "Your attention span will sharpen.", icon: Target, gradient: "from-gold/12 to-gold-dark/5", iconColor: "text-gold" },
               { title: "Self-Compassionate", desc: "The harsh inner critic will soften.", icon: Sparkles, gradient: "from-forest/12 to-sage/5", iconColor: "text-forest" },
               { title: "Physically Healthier", desc: "Your cortisol will drop.", icon: Shield, gradient: "from-forest-deep/12 to-forest/5", iconColor: "text-forest-deep" },

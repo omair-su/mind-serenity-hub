@@ -7,10 +7,10 @@ export default function EmergencyContacts() {
   const list = HOTLINES.filter((h) => h.region === region || h.region === "INTL");
 
   return (
-    <div className="rounded-2xl border-2 border-rose-500/30 bg-gradient-to-br from-rose-500/5 via-card to-orange-500/5 p-5 shadow-soft">
+    <div className="rounded-2xl border-2 border-destructive/30 bg-gradient-to-br from-destructive/5 via-card to-gold/5 p-5 shadow-soft">
       <div className="flex items-start gap-3 mb-4">
         <div className="p-2 rounded-xl bg-rose-500/15">
-          <ShieldAlert className="w-5 h-5 text-rose-600" />
+          <ShieldAlert className="w-5 h-5 text-destructive" />
         </div>
         <div className="flex-1">
           <h3 className="font-display text-base font-bold text-foreground">Need to talk to someone right now?</h3>
@@ -49,7 +49,7 @@ export default function EmergencyContacts() {
               className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-rose-300 hover:bg-rose-50/50 transition-all"
             >
               <div className="p-1.5 rounded-lg bg-rose-500/10">
-                {isUrl ? <ExternalLink className="w-4 h-4 text-rose-600" /> : <Phone className="w-4 h-4 text-rose-600" />}
+                {isUrl ? <ExternalLink className="w-4 h-4 text-destructive" /> : <Phone className="w-4 h-4 text-destructive" />}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-body font-semibold text-foreground truncate">{h.name}</p>

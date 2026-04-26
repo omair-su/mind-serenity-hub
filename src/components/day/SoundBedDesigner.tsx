@@ -254,7 +254,7 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
                 <button
                   onClick={() => setMuted((m) => !m)}
                   className={`flex items-center gap-1.5 text-xs font-body px-3 py-1.5 rounded-lg transition-colors ${
-                    muted ? "bg-rose-500/20 text-rose-300" : "bg-white/10 text-white/80"
+                    muted ? "bg-destructive/20 text-destructive-foreground" : "bg-white/10 text-white/80"
                   }`}
                 >
                   {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}

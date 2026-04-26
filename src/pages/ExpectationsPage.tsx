@@ -10,7 +10,7 @@ const weekGradients = [
 ];
 
 const challengeGradients = [
-  "from-rose-500/8 to-pink-500/5",
+  "from-gold-dark/8 to-gold/5",
   "from-charcoal/8 to-gold-dark/5",
   "from-sage-dark/8 to-forest/5",
   "from-gold-dark/8 to-gold/5",

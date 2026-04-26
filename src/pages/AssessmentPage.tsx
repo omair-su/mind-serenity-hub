@@ -20,7 +20,7 @@ export default function AssessmentPage() {
     "from-forest/10 to-sage/5",
     "from-sage-dark/10 to-forest/5",
     "from-gold/10 to-gold-dark/5",
-    "from-rose-500/10 to-pink-500/5",
+    "from-gold-dark/10 to-gold/5",
     "from-gold-dark/10 to-gold/5",
   ];
 

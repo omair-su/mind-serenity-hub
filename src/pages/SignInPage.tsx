@@ -322,7 +322,7 @@ export default function SignInPage() {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="mb-5 flex items-start gap-2 rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700"
+                  className="mb-5 flex items-start gap-2 rounded-xl bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive"
                 >
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                   <span className="font-sans-body">{errorMsg}</span>
