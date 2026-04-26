@@ -135,7 +135,7 @@ export default function PricingPage() {
             <button
               onClick={() => openCheckout({ priceId: "willow_plus_yearly" })}
               disabled={loading}
-              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Start 7-day free trial
@@ -212,7 +212,7 @@ export default function PricingPage() {
               <button
                 onClick={() => openCheckout({ priceId: "willow_lifetime_onetime" })}
                 disabled={loading}
-                className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 inline-flex items-center justify-center gap-2"
+                className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all disabled:opacity-60 inline-flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Claim Lifetime Access
