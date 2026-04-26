@@ -41,7 +41,7 @@ export default function PremiumGate({
   feature,
   description,
   icon: Icon,
-  gradient = "from-gold/20 to-amber-500/10",
+  gradient = "from-gold/20 to-gold-dark/10",
   previewItems = [],
   perks = DEFAULT_PERKS,
   children,
