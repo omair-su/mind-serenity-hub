@@ -139,7 +139,7 @@ export default function PremiumGate({
                     key={item}
                     className="flex items-start gap-3 text-sm font-body text-foreground/90"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-amber-500/10 flex items-center justify-center flex-shrink-0 border border-gold/20">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-gold-dark/10 flex items-center justify-center flex-shrink-0 border border-gold/20">
                       <Sparkles className="w-3.5 h-3.5 text-gold" />
                     </div>
                     <span className="pt-1">{item}</span>
