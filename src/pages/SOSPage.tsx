@@ -18,11 +18,11 @@ const sosSessions = [
     id: "instant-calm", 
     title: "Instant Calm", 
     duration: 3, 
-    icon: <Wind className="w-6 h-6 text-emerald-500" />, 
+    icon: <Wind className="w-6 h-6 text-[hsl(var(--forest))]" />, 
     emoji: "🌬️",
     desc: "Ultra-quick anxiety reset using 4-7-8 breathing.", 
-    gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
-    luxuryColor: "emerald",
+    gradient: "from-[hsl(var(--forest))]/25 via-[hsl(var(--sage))]/15 to-transparent",
+    luxuryColor: "forest",
     image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Close your eyes. Place one hand on your chest, one on your belly.",
@@ -37,11 +37,11 @@ const sosSessions = [
     id: "panic-protocol", 
     title: "Panic Protocol", 
     duration: 5, 
-    icon: <Shield className="w-6 h-6 text-rose-500" />, 
+    icon: <Shield className="w-6 h-6 text-[hsl(var(--gold-dark))]" />, 
     emoji: "🛡️",
     desc: "5-4-3-2-1 grounding for acute anxiety.", 
-    gradient: "from-rose-500/20 via-pink-500/10 to-transparent",
-    luxuryColor: "rose",
+    gradient: "from-[hsl(var(--gold))]/25 via-[hsl(var(--gold-light))]/15 to-transparent",
+    luxuryColor: "gold",
     image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "You are safe right now. This feeling is temporary. Let's ground you.",
@@ -57,11 +57,11 @@ const sosSessions = [
     id: "overwhelm", 
     title: "Overwhelm Relief", 
     duration: 7, 
-    icon: <Activity className="w-6 h-6 text-blue-500" />, 
+    icon: <Activity className="w-6 h-6 text-[hsl(var(--sage-dark))]" />, 
     emoji: "🌊",
     desc: "When everything feels like too much.", 
-    gradient: "from-blue-500/20 via-indigo-500/10 to-transparent",
-    luxuryColor: "blue",
+    gradient: "from-[hsl(var(--sage))]/25 via-[hsl(var(--sage-light))]/15 to-transparent",
+    luxuryColor: "sage",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1200",
     steps: [
       "Stop. Whatever you were doing — pause it.",
@@ -77,11 +77,11 @@ const sosSessions = [
     id: "insomnia", 
     title: "Insomnia Reset", 
     duration: 10, 
-    icon: <Moon className="w-6 h-6 text-indigo-500" />, 
+    icon: <Moon className="w-6 h-6 text-[hsl(var(--forest-deep))]" />, 
     emoji: "🌙",
     desc: "Can't sleep? This will help.", 
-    gradient: "from-indigo-500/20 via-purple-500/10 to-transparent",
-    luxuryColor: "indigo",
+    gradient: "from-[hsl(var(--forest-deep))]/25 via-[hsl(var(--forest-mid))]/15 to-transparent",
+    luxuryColor: "forest-deep",
     image: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&q=80&w=1600",
     steps: [
       "Lie on your back. Close your eyes. Don't try to sleep — just rest.",
@@ -98,11 +98,11 @@ const sosSessions = [
     id: "pre-meeting", 
     title: "Executive Calm", 
     duration: 5, 
-    icon: <Briefcase className="w-6 h-6 text-amber-600" />, 
+    icon: <Briefcase className="w-6 h-6 text-[hsl(var(--gold-dark))]" />, 
     emoji: "💼",
     desc: "High-performance focus before important events.", 
-    gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
-    luxuryColor: "amber",
+    gradient: "from-[hsl(var(--gold-dark))]/25 via-[hsl(var(--gold))]/15 to-transparent",
+    luxuryColor: "gold-dark",
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=1600",
     steps: [
       "Sit upright. Feet flat on floor. Hands on thighs.",
@@ -117,11 +117,11 @@ const sosSessions = [
     id: "grief", 
     title: "Compassion Hold", 
     duration: 10, 
-    icon: <Heart className="w-6 h-6 text-purple-500" />, 
+    icon: <Heart className="w-6 h-6 text-[hsl(var(--forest-mid))]" />, 
     emoji: "💜",
     desc: "Hold difficult emotions with deep compassion.", 
-    gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
-    luxuryColor: "purple",
+    gradient: "from-[hsl(var(--forest-mid))]/25 via-[hsl(var(--forest))]/15 to-transparent",
+    luxuryColor: "forest-mid",
     image: "https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?auto=format&fit=crop&q=80&w=1200&h=800",
     steps: [
       "Find a quiet space. This is your time to feel whatever comes.",
@@ -137,9 +137,9 @@ const sosSessions = [
 
 // Map extra sessions to full session shape with icons + luxuryColor
 const extraIconMap: Record<string, { icon: JSX.Element; luxuryColor: string }> = {
-  "anger-defuse": { icon: <Flame className="w-6 h-6 text-red-500" />, luxuryColor: "red" },
-  "social-anxiety": { icon: <Users className="w-6 h-6 text-cyan-500" />, luxuryColor: "cyan" },
-  "pain-acceptance": { icon: <Gem className="w-6 h-6 text-violet-500" />, luxuryColor: "violet" },
+  "anger-defuse": { icon: <Flame className="w-6 h-6 text-[hsl(var(--gold-dark))]" />, luxuryColor: "gold-dark" },
+  "social-anxiety": { icon: <Users className="w-6 h-6 text-[hsl(var(--sage-dark))]" />, luxuryColor: "sage" },
+  "pain-acceptance": { icon: <Gem className="w-6 h-6 text-[hsl(var(--forest))]" />, luxuryColor: "forest" },
 };
 
 const allSessions = [
@@ -208,17 +208,14 @@ export default function SOSPage() {
 
   const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
-  // Map luxuryColor → tailwind gradient class for breathing orb
+  // Map luxuryColor → tailwind gradient class for breathing orb (brand tokens only)
   const orbColorMap: Record<string, string> = {
-    emerald: "from-emerald-400 to-teal-500",
-    rose: "from-rose-400 to-pink-500",
-    blue: "from-blue-400 to-indigo-500",
-    indigo: "from-indigo-400 to-purple-500",
-    amber: "from-amber-400 to-orange-500",
-    purple: "from-purple-400 to-violet-500",
-    red: "from-red-400 to-orange-500",
-    cyan: "from-cyan-400 to-blue-500",
-    violet: "from-violet-400 to-purple-500",
+    forest: "from-[hsl(var(--forest))]/70 to-[hsl(var(--sage))]/60",
+    "forest-deep": "from-[hsl(var(--forest-deep))]/70 to-[hsl(var(--forest-mid))]/60",
+    "forest-mid": "from-[hsl(var(--forest-mid))]/70 to-[hsl(var(--forest))]/60",
+    sage: "from-[hsl(var(--sage))]/70 to-[hsl(var(--sage-light))]/60",
+    gold: "from-[hsl(var(--gold))]/70 to-[hsl(var(--gold-light))]/60",
+    "gold-dark": "from-[hsl(var(--gold-dark))]/70 to-[hsl(var(--gold))]/60",
   };
 
 
@@ -227,12 +224,12 @@ export default function SOSPage() {
       <motion.div className="max-w-4xl mx-auto space-y-10 pb-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         
         {/* ─── REFINED PREMIUM HEADER ─── */}
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 md:p-10 text-white shadow-2xl border border-white/5">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest-mid))] to-[hsl(var(--forest))] p-8 md:p-10 text-white shadow-2xl border border-white/5">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-[80px] -ml-10 -mb-10" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-gold via-gold-dark to-amber-700 flex items-center justify-center shadow-2xl shadow-gold/20 border border-white/10">
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-2xl shadow-[hsl(var(--gold))]/30 border border-white/10">
               <Zap className="w-8 h-8 md:w-10 md:h-10 text-white" />
             </div>
             <div className="text-center md:text-left">
@@ -241,7 +238,7 @@ export default function SOSPage() {
                 <span className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-gold/80">Elite SOS Protocol</span>
               </div>
               <h1 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tight">Instant Serenity</h1>
-              <p className="text-base md:text-lg font-body text-slate-400 mt-2 max-w-lg leading-relaxed">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
+              <p className="text-base md:text-lg font-body text-white/70 mt-2 max-w-lg leading-relaxed">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
             </div>
           </div>
         </div>
@@ -276,7 +273,7 @@ export default function SOSPage() {
                     <div>
                       <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground tracking-tight">{activeSession.title}</h2>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))] animate-pulse" />
                         <p className="text-sm font-body font-medium text-muted-foreground/80">{fmtTime(timerSecs)} elapsed · {activeSession.duration}m protocol</p>
                       </div>
                     </div>
@@ -312,13 +309,13 @@ export default function SOSPage() {
                     <div className="flex items-center gap-5">
                       <button 
                         onClick={() => setRunning(!running)} 
-                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-slate-950 text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
+                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[hsl(var(--forest-deep))] text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
                       >
                         {running ? <Pause className="w-7 h-7 md:w-8 md:h-8" /> : <Play className="w-7 h-7 md:w-8 md:h-8 ml-1.5" />}
                       </button>
                       <button 
                         onClick={nextStep} 
-                        className="px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white rounded-[1.25rem] text-base md:text-lg font-body font-bold shadow-[0_20px_40px_-12px_rgba(212,175,55,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(212,175,55,0.4)] hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border border-white/10"
+                        className="px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-dark))] to-[hsl(var(--gold-dark))] text-white rounded-[1.25rem] text-base md:text-lg font-body font-bold shadow-[0_20px_40px_-12px_hsl(var(--gold)/0.4)] hover:shadow-[0_25px_50px_-12px_hsl(var(--gold)/0.5)] hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border border-white/10"
                       >
                         {stepIndex < activeSession.steps.length - 1 ? "Continue Protocol" : "I Am Restored"}
                         <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -327,7 +324,7 @@ export default function SOSPage() {
 
                     <div className="flex items-center gap-4 p-4 rounded-[1.5rem] bg-secondary/20 border border-border/40 backdrop-blur-sm">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2.5 rounded-xl transition-colors ${binauralActive ? 'bg-rose-500/20 text-rose-600 shadow-inner' : 'bg-slate-200/50 text-slate-400'}`}>
+                        <div className={`p-2.5 rounded-xl transition-colors ${binauralActive ? 'bg-[hsl(var(--gold))]/20 text-[hsl(var(--gold-dark))] shadow-inner' : 'bg-[hsl(var(--cream-dark))]/60 text-muted-foreground'}`}>
                           <Ear className="w-5 h-5" />
                         </div>
                         <div>
@@ -339,8 +336,8 @@ export default function SOSPage() {
                         onClick={() => setBinauralActive(!binauralActive)}
                         className={`px-4 py-2 rounded-full text-xs font-body font-bold uppercase tracking-wider transition-all border ${
                           binauralActive
-                            ? 'bg-rose-600 text-white border-rose-600 shadow-md hover:bg-rose-700'
-                            : 'bg-card text-foreground border-border hover:border-primary/40'
+                            ? 'bg-[hsl(var(--gold-dark))] text-white border-[hsl(var(--gold-dark))] shadow-md hover:bg-[hsl(var(--forest-mid))]'
+                            : 'bg-card text-foreground border-border hover:border-[hsl(var(--gold))]/40'
                         }`}
                       >
                         {binauralActive ? 'Stop Sound' : 'Play Sound'}
@@ -359,7 +356,7 @@ export default function SOSPage() {
                       <div 
                         key={i} 
                         className={`h-1.5 rounded-full transition-all duration-700 ${
-                          i === stepIndex ? "w-12 bg-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]" : i < stepIndex ? "w-6 bg-primary/30" : "w-6 bg-secondary/60"
+                          i === stepIndex ? "w-12 bg-[hsl(var(--gold))] shadow-[0_0_15px_hsl(var(--gold)/0.5)]" : i < stepIndex ? "w-6 bg-[hsl(var(--forest))]/30" : "w-6 bg-secondary/60"
                         }`} 
                       />
                     ))}
@@ -381,8 +378,8 @@ export default function SOSPage() {
               className="space-y-5"
             >
               <div className="flex items-center gap-3 px-2">
-                <div className="p-2 rounded-xl bg-emerald-500/15">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <div className="p-2 rounded-xl bg-[hsl(var(--sage))]/20">
+                  <CheckCircle2 className="w-5 h-5 text-[hsl(var(--forest))]" />
                 </div>
                 <div>
                   <h3 className="font-display text-lg font-bold text-foreground tracking-tight">Protocol complete</h3>
