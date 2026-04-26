@@ -75,7 +75,7 @@ export default function PremiumLockModal({ open, onClose, feature, description }
 
               <button
                 onClick={goToPricing}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 transition-all"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 transition-all"
               >
                 See Plus Plans
               </button>
