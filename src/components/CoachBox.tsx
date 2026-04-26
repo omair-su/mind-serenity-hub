@@ -6,7 +6,7 @@ interface CoachBoxProps {
 
 export default function CoachBox({ text }: CoachBoxProps) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-100/80 via-teal-50/60 to-sage-light/40 dark:from-emerald-900/30 dark:via-teal-900/20 dark:to-primary/10 border border-primary/20 p-6 sm:p-8 shadow-soft">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cream via-cream-dark/40 to-sage-light/30 dark:from-forest-deep/30 dark:via-forest/20 dark:to-primary/10 border border-primary/20 p-6 sm:p-8 shadow-soft">
       <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-bl from-primary/10 to-transparent" />
       <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-sage/10 to-transparent rounded-tr-full" />
       <div className="relative z-10">
