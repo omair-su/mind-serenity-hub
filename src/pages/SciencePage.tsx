@@ -8,8 +8,8 @@ const factGradients = [
   "from-forest/12 to-sage/5",
   "from-gold/12 to-gold-dark/5",
   "from-forest-deep/12 to-forest/5",
-  "from-rose-500/12 to-pink-500/5",
-  "from-indigo-500/12 to-violet-500/5",
+  "from-gold-dark/12 to-gold/5",
+  "from-charcoal/12 to-gold-dark/5",
   "from-sage-dark/12 to-forest/5",
   "from-gold-dark/12 to-gold/5",
 ];

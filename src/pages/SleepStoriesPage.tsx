@@ -8,14 +8,14 @@ import { Moon, Clock, Play, Pause, Loader2, Square, ArrowLeft, BookOpen, Chevron
 import PremiumGate from "@/components/PremiumGate";
 
 const storyGradients = [
-  "from-indigo-100/70 via-blue-50/50 to-violet-50/40",
-  "from-emerald-100/60 via-teal-50/40 to-cyan-50/30",
-  "from-amber-100/60 via-yellow-50/40 to-orange-50/30",
-  "from-rose-100/60 via-pink-50/40 to-fuchsia-50/30",
-  "from-violet-100/60 via-purple-50/40 to-indigo-50/30",
-  "from-cyan-100/60 via-sky-50/40 to-blue-50/30",
-  "from-teal-100/60 via-emerald-50/40 to-green-50/30",
-  "from-pink-100/60 via-rose-50/40 to-red-50/30",
+  "from-cream via-cream-dark/50 to-cream/40",
+  "from-sage-light/60 via-sage/40 to-cream/30",
+  "from-gold/30 via-gold/15 to-cream/30",
+  "from-gold-dark/15 via-gold/15 to-cream/30",
+  "from-cream via-cream-dark/40 to-cream/30",
+  "from-sage-light/60 via-sage/40 to-cream/30",
+  "from-sage-light/60 via-sage/40 to-cream/30",
+  "from-gold/30 via-gold/15 to-cream/30",
 ];
 
 function SleepStoriesPageInner() {
@@ -84,7 +84,7 @@ function SleepStoriesPageInner() {
                 <button
                   key={s.id}
                   onClick={() => { setActiveStory(s.id); setParagraphIndex(0); }}
-                  className={`group text-left relative overflow-hidden bg-gradient-to-br ${storyGradients[i % storyGradients.length]} dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all duration-300`}
+                  className={`group text-left relative overflow-hidden bg-gradient-to-br ${storyGradients[i % storyGradients.length]} dark:from-forest-deep/30 dark:via-forest/20 dark:to-charcoal/10 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all duration-300`}
                 >
                   <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-card/30 to-transparent" />
                   <div className="relative z-10">
@@ -104,8 +104,8 @@ function SleepStoriesPageInner() {
               ))}
             </div>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl p-6 border border-forest-deep/10 shadow-soft">
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-violet-200/20 to-transparent" />
+            <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/30 to-cream/20 dark:from-forest-deep/30 dark:via-forest/20 dark:to-charcoal/10 rounded-2xl p-6 border border-forest-deep/10 shadow-soft">
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-gold/20 to-transparent" />
               <h3 className="font-display text-base font-semibold text-foreground mb-2">How Sleep Stories Work</h3>
               <p className="text-sm font-body text-muted-foreground leading-relaxed">
                 Sleep stories combine gentle narration, calming imagery, and progressive relaxation to quiet your mind and guide you into deep sleep. 
@@ -125,9 +125,9 @@ function SleepStoriesPageInner() {
               <ArrowLeft className="w-4 h-4" /> Back to Stories
             </button>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/60 via-violet-50/40 to-purple-50/30 dark:from-indigo-900/30 dark:via-violet-900/20 dark:to-purple-900/10 rounded-2xl border border-forest-deep/15 p-6 sm:p-8 shadow-elevated">
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-indigo-200/30 to-transparent" />
-              <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-violet-200/20 to-transparent rounded-tr-full" />
+            <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/40 to-cream/30 dark:from-forest-deep/40 dark:via-forest/30 dark:to-charcoal/15 rounded-2xl border border-forest-deep/15 p-6 sm:p-8 shadow-elevated">
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-gold/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-gold/20 to-transparent rounded-tr-full" />
               <div className="relative z-10">
                 <div className="text-center mb-6">
                   <span className="text-5xl">{story.icon}</span>

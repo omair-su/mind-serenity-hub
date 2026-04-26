@@ -205,7 +205,7 @@ function SoundscapeBuilderPageInner() {
             {/* Right: Effects & Save */}
             <div className="space-y-6">
               {/* Effects */}
-              <div className="bg-gradient-to-br from-rose-500/5 via-card to-pink-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+              <div className="bg-gradient-to-br from-gold-dark/5 via-card to-gold/5 rounded-2xl p-6 border border-border/50 shadow-soft">
                 <h3 className="font-display text-lg font-semibold text-foreground mb-4">Effects</h3>
                 <div className="space-y-4">
                   <div>
@@ -280,7 +280,7 @@ function SoundscapeBuilderPageInner() {
             {SOUND_PRESETS.map(preset => (
               <Card
                 key={preset.id}
-                className="bg-gradient-to-br from-violet-500/5 via-card to-purple-500/5 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer"
+                className="bg-gradient-to-br from-gold-dark/5 via-card to-gold/5 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
@@ -295,7 +295,7 @@ function SoundscapeBuilderPageInner() {
                 </div>
                 <Button
                   onClick={() => handlePlaySoundscape(preset.id)}
-                  className="w-full bg-gradient-to-r from-violet-500 to-purple-500 hover:opacity-90 text-white"
+                  className="w-full bg-gradient-to-r from-gold-dark to-gold hover:opacity-90 text-white"
                   size="sm"
                 >
                   <Play className="w-3 h-3 mr-2" />
@@ -333,7 +333,7 @@ function SoundscapeBuilderPageInner() {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handlePlaySoundscape(soundscape.id)}
-                        className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white"
+                        className="flex-1 bg-gradient-to-r from-forest to-sage-dark hover:opacity-90 text-white"
                         size="sm"
                       >
                         <Play className="w-3 h-3 mr-1" />
@@ -372,7 +372,7 @@ export default function SoundscapeBuilderPage() {
       feature="Soundscape Studio"
       description="Layer up to 12 nature sounds with reverb, delay and spatial width to craft your signature ambient blend — and save unlimited custom presets."
       icon={Music}
-      gradient="from-pink-500/30 to-rose-500/20"
+      gradient="from-gold/30 to-gold-dark/20"
       previewItems={[
         "12 high-fidelity nature stems",
         "Studio reverb, delay & spatial controls",
