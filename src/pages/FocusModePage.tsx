@@ -238,8 +238,8 @@ export default function FocusModePage() {
   const phaseColors = {
     idle: "text-muted-foreground",
     focus: "text-primary",
-    break: "text-emerald-500",
-    longBreak: "text-amber-500",
+    break: "text-forest",
+    longBreak: "text-gold",
     done: "text-gold",
   };
 
@@ -296,8 +296,8 @@ export default function FocusModePage() {
                 <p className="text-2xl font-bold text-primary">{sessions.length}</p>
                 <p className="text-xs text-muted-foreground">Total Sessions</p>
               </div>
-              <div className="bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/20 text-center">
-                <p className="text-2xl font-bold text-emerald-500">{Math.round(totalMin)}</p>
+              <div className="bg-forest/5 p-4 rounded-2xl border border-forest/20 text-center">
+                <p className="text-2xl font-bold text-forest">{Math.round(totalMin)}</p>
                 <p className="text-xs text-muted-foreground">Focus Minutes</p>
               </div>
             </div>
@@ -445,11 +445,11 @@ export default function FocusModePage() {
                       <p className="text-xs font-body text-muted-foreground mt-1">Focus</p>
                     </div>
                     <div className="bg-secondary/50 rounded-xl p-3 text-center">
-                      <p className="font-display text-2xl font-bold text-emerald-500">{preset.breakMin}</p>
+                      <p className="font-display text-2xl font-bold text-forest">{preset.breakMin}</p>
                       <p className="text-xs font-body text-muted-foreground mt-1">Break</p>
                     </div>
                     <div className="bg-secondary/50 rounded-xl p-3 text-center">
-                      <p className="font-display text-2xl font-bold text-amber-500">{preset.longBreakMin}</p>
+                      <p className="font-display text-2xl font-bold text-gold">{preset.longBreakMin}</p>
                       <p className="text-xs font-body text-muted-foreground mt-1">Long</p>
                     </div>
                     <div className="bg-secondary/50 rounded-xl p-3 text-center">
@@ -551,7 +551,7 @@ export default function FocusModePage() {
 
                 {/* Break Activity Suggestion */}
                 {(phase === "break" || phase === "longBreak") && (
-                  <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-xl p-5 mb-8 max-w-md mx-auto border border-emerald-500/20">
+                  <div className="bg-gradient-to-br from-forest/10 to-sage/5 rounded-xl p-5 mb-8 max-w-md mx-auto border border-forest/20">
                     <div className="flex items-center gap-3 justify-center mb-3">
                       <span className="text-2xl">{breakActivity.icon}</span>
                       <span className="font-display text-base font-semibold text-foreground">{breakActivity.title}</span>
@@ -584,7 +584,7 @@ export default function FocusModePage() {
 
             {/* Completion Screen */}
             {phase === "done" && (
-              <div className="bg-gradient-to-br from-gold/10 via-card to-amber-500/5 rounded-2xl p-8 border border-gold/20 shadow-elevated text-center">
+              <div className="bg-gradient-to-br from-gold/10 via-card to-gold/5 rounded-2xl p-8 border border-gold/20 shadow-elevated text-center">
                 <span className="text-6xl block mb-4">🎉</span>
                 <h2 className="font-display text-3xl font-bold text-foreground mb-2">Session Complete!</h2>
                 <p className="text-sm font-body text-muted-foreground mb-8">Excellent focus work. Your mind thanks you.</p>
@@ -603,7 +603,7 @@ export default function FocusModePage() {
                     <p className="text-xs font-body text-muted-foreground mt-1">Completed</p>
                   </div>
                   <div className="bg-secondary/50 rounded-xl p-4">
-                    <p className="font-display text-2xl font-bold text-emerald-500">+25</p>
+                    <p className="font-display text-2xl font-bold text-forest">+25</p>
                     <p className="text-xs font-body text-muted-foreground mt-1">XP</p>
                   </div>
                 </div>
@@ -685,7 +685,7 @@ export default function FocusModePage() {
             </div>
 
             {/* Quick Tips Section */}
-            <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50">
+            <div className="bg-gradient-to-br from-forest/5 via-card to-sage/5 rounded-2xl p-6 border border-border/50">
               <h3 className="font-display text-base font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-primary" />
                 Pro Tips for Maximum Focus

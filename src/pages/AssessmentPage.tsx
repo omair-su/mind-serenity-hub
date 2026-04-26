@@ -14,14 +14,14 @@ export default function AssessmentPage() {
   ];
 
   const ratingGradients = [
-    "from-violet-500/10 to-purple-500/5",
-    "from-indigo-500/10 to-blue-500/5",
-    "from-blue-500/10 to-cyan-500/5",
-    "from-emerald-500/10 to-teal-500/5",
-    "from-teal-500/10 to-emerald-500/5",
-    "from-amber-500/10 to-gold/5",
-    "from-rose-500/10 to-pink-500/5",
-    "from-orange-500/10 to-amber-500/5",
+    "from-gold-dark/10 to-gold/5",
+    "from-charcoal/10 to-forest-deep/5",
+    "from-forest-deep/10 to-forest/5",
+    "from-forest/10 to-sage/5",
+    "from-sage-dark/10 to-forest/5",
+    "from-gold/10 to-gold-dark/5",
+    "from-gold-dark/10 to-gold/5",
+    "from-gold-dark/10 to-gold/5",
   ];
 
   return (
@@ -50,7 +50,7 @@ export default function AssessmentPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                   <label key={num} className="text-center">
                     <input type="radio" name={area.label} className="sr-only peer" />
-                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-emerald-700 peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
+                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-forest-deep peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
                       {num}
                     </span>
                   </label>
@@ -72,10 +72,10 @@ export default function AssessmentPage() {
             "What does 'success' look like for you after 30 days?"
           ].map((prompt, i) => {
             const promptGradients = [
-              "from-emerald-500/8 to-teal-500/5",
-              "from-violet-500/8 to-purple-500/5",
-              "from-amber-500/8 to-gold/5",
-              "from-blue-500/8 to-cyan-500/5",
+              "from-forest/8 to-sage/5",
+              "from-gold-dark/8 to-gold/5",
+              "from-gold/8 to-gold-dark/5",
+              "from-forest-deep/8 to-forest/5",
             ];
             return (
               <div key={prompt} className={`p-5 rounded-2xl bg-gradient-to-br ${promptGradients[i]} border border-border/50 shadow-soft`}>
@@ -89,7 +89,7 @@ export default function AssessmentPage() {
           })}
         </div>
 
-        <div className="bg-gradient-to-br from-gold/10 via-card to-amber-500/5 rounded-2xl border border-gold/20 p-6 shadow-soft text-center">
+        <div className="bg-gradient-to-br from-gold/10 via-card to-gold/5 rounded-2xl border border-gold/20 p-6 shadow-soft text-center">
           <Sparkles className="w-6 h-6 text-gold mx-auto mb-3" />
           <h2 className="font-display text-2xl font-medium text-foreground mb-4">Your Commitment</h2>
           <p className="willow-body max-w-lg mx-auto italic text-sm">

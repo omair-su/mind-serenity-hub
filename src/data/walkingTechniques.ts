@@ -30,7 +30,7 @@ export const walkingEnvironments: WalkingEnvironment[] = [
     icon: TreePine,
     imageUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80&auto=format&fit=crop",
     ambientBed: "birds",
-    tint: "from-emerald-950/95 via-emerald-900/40 to-transparent",
+    tint: "from-forest-deep/95 via-forest/40 to-transparent",
     desc: "Walk among ancient trees. Birdsong overhead, moss underfoot.",
   },
   {
@@ -48,7 +48,7 @@ export const walkingEnvironments: WalkingEnvironment[] = [
     icon: Waves,
     imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80&auto=format&fit=crop",
     ambientBed: "ocean",
-    tint: "from-amber-950/90 via-orange-900/30 to-transparent",
+    tint: "from-gold-dark/90 via-gold/30 to-transparent",
     desc: "Feel sand shift. Let waves synchronize with your breath.",
   },
   {
@@ -57,7 +57,7 @@ export const walkingEnvironments: WalkingEnvironment[] = [
     icon: Sun,
     imageUrl: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1200&q=80&auto=format&fit=crop",
     ambientBed: "bowls",
-    tint: "from-amber-900/90 via-yellow-900/30 to-transparent",
+    tint: "from-gold-dark/90 via-gold/30 to-transparent",
     desc: "Walk raked patterns. Each step deliberate, complete.",
   },
 ];

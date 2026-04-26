@@ -41,7 +41,7 @@ export default function PremiumGate({
   feature,
   description,
   icon: Icon,
-  gradient = "from-gold/20 to-amber-500/10",
+  gradient = "from-gold/20 to-gold-dark/10",
   previewItems = [],
   perks = DEFAULT_PERKS,
   children,
@@ -99,7 +99,7 @@ export default function PremiumGate({
             <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center justify-center">
               <Link
                 to="/pricing"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-amber-700 text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all"
               >
                 <Crown className="w-4 h-4" />
                 Unlock Willow Plus
@@ -139,7 +139,7 @@ export default function PremiumGate({
                     key={item}
                     className="flex items-start gap-3 text-sm font-body text-foreground/90"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-amber-500/10 flex items-center justify-center flex-shrink-0 border border-gold/20">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold/20 to-gold-dark/10 flex items-center justify-center flex-shrink-0 border border-gold/20">
                       <Sparkles className="w-3.5 h-3.5 text-gold" />
                     </div>
                     <span className="pt-1">{item}</span>

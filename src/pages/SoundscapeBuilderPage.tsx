@@ -95,8 +95,8 @@ function SoundscapeBuilderPageInner() {
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
         {/* ── Hero Section ── */}
-        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-indigo-500/10 border border-border/50">
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-gold-dark/10 via-gold/5 to-forest-deep/10 border border-border/50">
+          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-gold-dark/20 to-gold/10 blur-3xl" />
           <div className="relative p-8 sm:p-12">
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -107,8 +107,8 @@ function SoundscapeBuilderPageInner() {
                   Create personalized ambient soundscapes with binaural frequencies and spatial audio effects. Mix and match sounds to craft your perfect meditation environment.
                 </p>
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/15 flex items-center justify-center flex-shrink-0">
-                <Music className="w-8 h-8 text-violet-600" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-dark/20 to-gold/15 flex items-center justify-center flex-shrink-0">
+                <Music className="w-8 h-8 text-gold-dark" />
               </div>
             </div>
           </div>
@@ -142,7 +142,7 @@ function SoundscapeBuilderPageInner() {
             {/* Left: Sound Selection */}
             <div className="lg:col-span-2 space-y-6">
               {/* Available Sounds */}
-              <div className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+              <div className="bg-gradient-to-br from-forest/5 via-card to-sage/5 rounded-2xl p-6 border border-border/50 shadow-soft">
                 <h3 className="font-display text-lg font-semibold text-foreground mb-4">Available Sounds</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {SOUND_DEFINITIONS.map(sound => (
@@ -153,7 +153,7 @@ function SoundscapeBuilderPageInner() {
                       className={`p-3 rounded-xl text-center transition-all ${
                         selectedSounds.some(s => s.id === sound.id)
                           ? 'bg-primary/20 border border-primary/50 opacity-50'
-                          : 'bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-border/50 hover:border-primary/50 hover:bg-emerald-500/15'
+                          : 'bg-gradient-to-br from-forest/10 to-sage/5 border border-border/50 hover:border-primary/50 hover:bg-forest/15'
                       }`}
                     >
                       <div className="text-2xl mb-1">{sound.icon}</div>
@@ -165,7 +165,7 @@ function SoundscapeBuilderPageInner() {
 
               {/* Selected Sounds & Volume Control */}
               {selectedSounds.length > 0 && (
-                <div className="bg-gradient-to-br from-gold/5 via-card to-amber-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+                <div className="bg-gradient-to-br from-gold/5 via-card to-gold/5 rounded-2xl p-6 border border-border/50 shadow-soft">
                   <h3 className="font-display text-lg font-semibold text-foreground mb-4">Sound Mix</h3>
                   <div className="space-y-4">
                     {selectedSounds.map(sound => {
@@ -205,7 +205,7 @@ function SoundscapeBuilderPageInner() {
             {/* Right: Effects & Save */}
             <div className="space-y-6">
               {/* Effects */}
-              <div className="bg-gradient-to-br from-rose-500/5 via-card to-pink-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+              <div className="bg-gradient-to-br from-gold-dark/5 via-card to-gold/5 rounded-2xl p-6 border border-border/50 shadow-soft">
                 <h3 className="font-display text-lg font-semibold text-foreground mb-4">Effects</h3>
                 <div className="space-y-4">
                   <div>
@@ -280,7 +280,7 @@ function SoundscapeBuilderPageInner() {
             {SOUND_PRESETS.map(preset => (
               <Card
                 key={preset.id}
-                className="bg-gradient-to-br from-violet-500/5 via-card to-purple-500/5 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer"
+                className="bg-gradient-to-br from-gold-dark/5 via-card to-gold/5 border border-border/50 p-5 hover:shadow-card transition-all group cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
@@ -295,7 +295,7 @@ function SoundscapeBuilderPageInner() {
                 </div>
                 <Button
                   onClick={() => handlePlaySoundscape(preset.id)}
-                  className="w-full bg-gradient-to-r from-violet-500 to-purple-500 hover:opacity-90 text-white"
+                  className="w-full bg-gradient-to-r from-gold-dark to-gold hover:opacity-90 text-white"
                   size="sm"
                 >
                   <Play className="w-3 h-3 mr-2" />
@@ -320,20 +320,20 @@ function SoundscapeBuilderPageInner() {
                 .map(soundscape => (
                   <Card
                     key={soundscape.id}
-                    className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 border border-border/50 p-5 hover:shadow-card transition-all group"
+                    className="bg-gradient-to-br from-forest/5 via-card to-sage/5 border border-border/50 p-5 hover:shadow-card transition-all group"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h4 className="font-display font-semibold text-foreground">{soundscape.name}</h4>
                         <p className="text-xs text-muted-foreground">{soundscape.sounds.length} sounds</p>
                       </div>
-                      <Heart className="w-5 h-5 text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Heart className="w-5 h-5 text-gold-dark opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <p className="text-xs text-muted-foreground mb-4">{soundscape.description}</p>
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handlePlaySoundscape(soundscape.id)}
-                        className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white"
+                        className="flex-1 bg-gradient-to-r from-forest to-sage-dark hover:opacity-90 text-white"
                         size="sm"
                       >
                         <Play className="w-3 h-3 mr-1" />
@@ -372,7 +372,7 @@ export default function SoundscapeBuilderPage() {
       feature="Soundscape Studio"
       description="Layer up to 12 nature sounds with reverb, delay and spatial width to craft your signature ambient blend — and save unlimited custom presets."
       icon={Music}
-      gradient="from-pink-500/30 to-rose-500/20"
+      gradient="from-gold/30 to-gold-dark/20"
       previewItems={[
         "12 high-fidelity nature stems",
         "Studio reverb, delay & spatial controls",

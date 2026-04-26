@@ -19,7 +19,7 @@ export const extraSOSSessions: ExtraSOSSession[] = [
     emoji: "🔥",
     desc: "Channel heat into clarity in 8 focused minutes.",
     image: "https://images.unsplash.com/photo-1500964757637-c85e8a162699?auto=format&fit=crop&q=80&w=1600",
-    gradient: "from-red-500/25 via-orange-500/10 to-transparent",
+    gradient: "from-gold-dark/25 via-gold/10 to-transparent",
     steps: [
       "Stop. Don't speak. Don't act. The next 60 seconds are sacred.",
       "Place both feet on the ground. Push down. Feel the floor support you.",
@@ -38,7 +38,7 @@ export const extraSOSSessions: ExtraSOSSession[] = [
     emoji: "🫂",
     desc: "Calm the racing pre-event mind in 4 minutes.",
     image: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&q=80&w=1600",
-    gradient: "from-blue-500/25 via-cyan-500/10 to-transparent",
+    gradient: "from-forest-deep/25 via-forest/10 to-transparent",
     steps: [
       "You are safe. Your body is reacting to imagined danger, not real danger.",
       "Place your hand on your heart. Feel its rhythm. Tell it: 'You're okay.'",
@@ -55,7 +55,7 @@ export const extraSOSSessions: ExtraSOSSession[] = [
     emoji: "💎",
     desc: "Mindful relief for chronic or acute physical pain.",
     image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&q=80&w=1600",
-    gradient: "from-purple-500/25 via-violet-500/10 to-transparent",
+    gradient: "from-charcoal/25 via-gold-dark/10 to-transparent",
     steps: [
       "Lie down or sit in your most comfortable position. Close your eyes.",
       "Bring soft attention to the area of pain. Don't fight it. Just notice.",

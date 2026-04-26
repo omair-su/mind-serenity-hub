@@ -37,28 +37,28 @@ export default function FAQSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-24 md:py-32 bg-slate-50 overflow-hidden">
+    <section id="faq" className="py-24 md:py-32 bg-cream overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 md:px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
-          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-emerald-600 mb-4">FAQ</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-            Common <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Questions</span>
+          <h2 className="text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-gold-dark mb-4">FAQ</h2>
+          <h3 className="text-4xl md:text-5xl font-bold text-forest-deep mb-6">
+            Common <span className="bg-gradient-to-r from-forest to-forest-deep bg-clip-text text-transparent">Questions</span>
           </h3>
         </motion.div>
 
         <div className="space-y-3">
           {faqs.map((faq, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: index * 0.04 }} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <motion.div key={index} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.3, delay: index * 0.04 }} className="bg-card rounded-2xl border border-border overflow-hidden">
               <button onClick={() => setActiveIndex(activeIndex === index ? null : index)} className="w-full px-6 py-5 flex items-center justify-between text-left">
-                <span className="text-base font-semibold text-slate-900 pr-8">{faq.question}</span>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${activeIndex === index ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                <span className="text-base font-semibold text-forest-deep pr-8">{faq.question}</span>
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${activeIndex === index ? 'bg-gold/20 text-gold-dark' : 'bg-muted text-muted-foreground'}`}>
                   {activeIndex === index ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                 </div>
               </button>
               <AnimatePresence>
                 {activeIndex === index && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
-                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm">{faq.answer}</div>
+                    <div className="px-6 pb-5 text-charcoal-soft leading-relaxed text-sm">{faq.answer}</div>
                   </motion.div>
                 )}
               </AnimatePresence>

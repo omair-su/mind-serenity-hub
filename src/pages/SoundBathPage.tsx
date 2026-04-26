@@ -71,7 +71,7 @@ function SoundBathPageInner() {
         {/* Hero Banner */}
         <div className="relative rounded-2xl overflow-hidden h-[200px]">
           <img src={soundbathHero} alt="Sound bath healing" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-violet-950/90 via-violet-950/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/90 via-forest-deep/50 to-transparent" />
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
@@ -88,10 +88,10 @@ function SoundBathPageInner() {
         {/* Real spiritual ambient music to layer with binaural beats */}
         <AmbientMusicPlayer defaultTrack={pickTrackByMood("spiritual")} />
 
-        <div className="relative overflow-hidden bg-gradient-to-r from-violet-100/50 via-purple-50/30 to-indigo-50/20 dark:from-violet-900/20 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl p-4 border border-violet-500/15 shadow-soft">
-          <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-bl from-violet-200/30 to-transparent" />
+        <div className="relative overflow-hidden bg-gradient-to-r from-cream via-cream-dark/30 to-cream/20 dark:from-forest-deep/20 dark:via-forest/10 dark:to-charcoal/5 rounded-2xl p-4 border border-gold-dark/15 shadow-soft">
+          <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-bl from-gold/30 to-transparent" />
           <div className="flex items-start gap-3 relative z-10">
-            <Info className="w-5 h-5 text-violet-500 flex-shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-gold-dark flex-shrink-0 mt-0.5" />
             <p className="text-sm font-body text-muted-foreground">
               <span className="font-semibold text-foreground">Use headphones for best results.</span> Binaural beats require stereo separation — each ear receives a slightly different frequency, and your brain processes the difference as a rhythmic beat that entrains your brainwaves.
             </p>
@@ -99,9 +99,9 @@ function SoundBathPageInner() {
         </div>
 
         {playing && preset && (
-          <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/60 via-purple-50/40 to-indigo-50/30 dark:from-violet-900/30 dark:via-purple-900/20 dark:to-indigo-900/10 rounded-2xl border border-violet-500/15 p-6 shadow-elevated">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-violet-200/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-purple-200/20 to-transparent rounded-tr-full" />
+          <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/40 to-cream/30 dark:from-forest-deep/30 dark:via-forest/20 dark:to-charcoal/10 rounded-2xl border border-gold-dark/15 p-6 shadow-elevated">
+            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-gold/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-gold/20 to-transparent rounded-tr-full" />
             <div className="relative z-10">
               <div className="text-center mb-6">
                 <span className="text-5xl">{preset.icon}</span>
@@ -133,7 +133,7 @@ function SoundBathPageInner() {
               </div>
 
               <div className="flex justify-center gap-3">
-                <button onClick={stopSession} className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-destructive/15 to-rose-500/10 text-destructive rounded-xl text-sm font-body font-medium hover:from-destructive/25 hover:to-rose-500/20 transition-all">
+                <button onClick={stopSession} className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-destructive/15 to-destructive/10 text-destructive rounded-xl text-sm font-body font-medium hover:from-destructive/25 hover:to-destructive/20 transition-all">
                   <Square className="w-4 h-4" /> Stop Session
                 </button>
               </div>
@@ -152,7 +152,7 @@ function SoundBathPageInner() {
 
         {!playing && (
           <>
-            <div className="flex items-center gap-3 bg-gradient-to-r from-violet-100/30 via-purple-50/20 to-indigo-50/10 dark:from-violet-900/15 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-xl p-3 border border-violet-500/10">
+            <div className="flex items-center gap-3 bg-gradient-to-r from-cream via-cream-dark/20 to-cream/10 dark:from-forest-deep/15 dark:via-forest/10 dark:to-charcoal/5 rounded-xl p-3 border border-gold-dark/10">
               <Clock className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm font-body text-foreground">Session duration:</span>
               <div className="flex gap-1.5">
@@ -196,16 +196,16 @@ function SoundBathPageInner() {
               ))}
             </div>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-violet-100/40 via-purple-50/20 to-indigo-50/15 dark:from-violet-900/15 dark:via-purple-900/10 dark:to-indigo-900/5 rounded-2xl p-6 border border-violet-500/10 shadow-soft">
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-purple-200/20 to-transparent" />
+            <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/20 to-cream/15 dark:from-forest-deep/15 dark:via-forest/10 dark:to-charcoal/5 rounded-2xl p-6 border border-gold-dark/10 shadow-soft">
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-gold/20 to-transparent" />
               <h3 className="font-display text-base font-semibold text-foreground mb-3">Understanding Brainwave Frequencies</h3>
               <div className="space-y-3">
                 {[
-                  { range: "Delta (0.5-4 Hz)", desc: "Deep sleep, healing, regeneration", color: "bg-indigo-500" },
-                  { range: "Theta (4-8 Hz)", desc: "Deep meditation, creativity, REM sleep", color: "bg-violet-500" },
-                  { range: "Alpha (8-13 Hz)", desc: "Relaxed focus, calm alertness, flow", color: "bg-emerald-500" },
-                  { range: "Beta (13-30 Hz)", desc: "Active thinking, concentration, problem-solving", color: "bg-amber-500" },
-                  { range: "Gamma (30-100 Hz)", desc: "Peak performance, insight, higher consciousness", color: "bg-rose-500" },
+                  { range: "Delta (0.5-4 Hz)", desc: "Deep sleep, healing, regeneration", color: "bg-forest-deep" },
+                  { range: "Theta (4-8 Hz)", desc: "Deep meditation, creativity, REM sleep", color: "bg-gold-dark" },
+                  { range: "Alpha (8-13 Hz)", desc: "Relaxed focus, calm alertness, flow", color: "bg-forest" },
+                  { range: "Beta (13-30 Hz)", desc: "Active thinking, concentration, problem-solving", color: "bg-gold" },
+                  { range: "Gamma (30-100 Hz)", desc: "Peak performance, insight, higher consciousness", color: "bg-gold-dark" },
                 ].map(freq => (
                   <div key={freq.range} className="flex items-center gap-3 p-2 rounded-lg hover:bg-card/40 transition-colors">
                     <div className={`w-3 h-3 rounded-full ${freq.color} flex-shrink-0 shadow-sm`} />
@@ -230,7 +230,7 @@ export default function SoundBathPage() {
       feature="Sound Bath"
       description="Immerse yourself in healing binaural frequencies — Tibetan bowls, crystal harmonics and brainwave-tuned tones designed to lower cortisol and induce theta-state calm."
       icon={Headphones}
-      gradient="from-emerald-500/30 to-teal-500/20"
+      gradient="from-forest/30 to-sage/20"
       previewItems={[
         "Delta 2.5Hz — Deep Sleep Healing",
         "Theta 6Hz — Meditation & Creativity",

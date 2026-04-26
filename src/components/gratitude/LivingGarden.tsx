@@ -26,7 +26,7 @@ export default function LivingGarden({ count }: LivingGardenProps) {
   return (
     <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-b from-[hsl(200,60%,75%)] via-[hsl(45,55%,85%)] to-[hsl(95,40%,55%)] shadow-soft">
       {/* Sun */}
-      <div className="absolute top-3 right-5 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-200 to-amber-400 shadow-[0_0_30px_rgba(252,211,77,0.6)]" />
+      <div className="absolute top-3 right-5 w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark shadow-[0_0_30px_rgba(252,211,77,0.6)]" />
 
       {/* Distant hills */}
       <div className="absolute bottom-[40%] left-0 right-0 h-12 bg-gradient-to-b from-[hsl(140,30%,50%)] to-[hsl(140,35%,45%)] opacity-70" style={{ clipPath: "polygon(0 100%, 0 50%, 25% 30%, 50% 60%, 75% 25%, 100% 55%, 100% 100%)" }} />

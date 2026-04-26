@@ -265,7 +265,7 @@ export default function BodyScanPage() {
       feature="Body Scan Meditation"
       description="A clinically-guided 8-zone somatic journey — release tension from crown to feet with neuroscience-backed scripts and premium ambient layering."
       icon={ScanEye}
-      gradient="from-violet-500/30 to-purple-500/20"
+      gradient="from-gold-dark/30 to-gold/20"
       previewItems={[
         "Head & Crown — 4 min",
         "Shoulders & Neck — 5 min",

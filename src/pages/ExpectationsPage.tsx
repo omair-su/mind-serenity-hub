@@ -3,20 +3,20 @@ import { foundationSections } from "@/data/courseData";
 import { HelpCircle } from "lucide-react";
 
 const weekGradients = [
-  "from-emerald-500/12 to-teal-500/5",
-  "from-amber-500/12 to-gold/5",
-  "from-violet-500/12 to-purple-500/5",
-  "from-blue-500/12 to-cyan-500/5",
+  "from-forest/12 to-sage/5",
+  "from-gold/12 to-gold-dark/5",
+  "from-gold-dark/12 to-gold/5",
+  "from-forest-deep/12 to-forest/5",
 ];
 
 const challengeGradients = [
-  "from-rose-500/8 to-pink-500/5",
-  "from-indigo-500/8 to-violet-500/5",
-  "from-teal-500/8 to-emerald-500/5",
-  "from-orange-500/8 to-amber-500/5",
-  "from-blue-500/8 to-cyan-500/5",
-  "from-violet-500/8 to-purple-500/5",
-  "from-emerald-500/8 to-teal-500/5",
+  "from-gold-dark/8 to-gold/5",
+  "from-charcoal/8 to-gold-dark/5",
+  "from-sage-dark/8 to-forest/5",
+  "from-gold-dark/8 to-gold/5",
+  "from-forest-deep/8 to-forest/5",
+  "from-gold-dark/8 to-gold/5",
+  "from-forest/8 to-sage/5",
 ];
 
 export default function ExpectationsPage() {

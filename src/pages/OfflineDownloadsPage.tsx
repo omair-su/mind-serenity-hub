@@ -16,7 +16,7 @@ const offlineContent = [
     icon: Wind,
     description: "4-7-8 Relaxation, Box Breathing, Diaphragmatic & Energizing techniques",
     fileSize: 8,
-    color: "from-sky-400 to-blue-500",
+    color: "from-sage to-forest",
     items: ["4-7-8 Relaxation", "Box Breathing", "Diaphragmatic", "Energizing Breath"],
   },
   {
@@ -26,7 +26,7 @@ const offlineContent = [
     icon: Moon,
     description: "Lavender Fields, Enchanted Library, Mountain Train & more bedtime stories",
     fileSize: 32,
-    color: "from-indigo-400 to-purple-500",
+    color: "from-charcoal to-gold-dark",
     items: ["Lavender Fields of Provence", "The Enchanted Library", "Mountain Train Journey", "Rainy Day Café"],
   },
   {
@@ -36,7 +36,7 @@ const offlineContent = [
     icon: ScanEye,
     description: "Complete guided body scan sessions for head, shoulders, chest, hands & feet",
     fileSize: 12,
-    color: "from-violet-400 to-purple-500",
+    color: "from-gold-dark to-gold",
     items: ["Head & Crown", "Shoulders & Neck", "Chest & Heart", "Hands", "Feet & Grounding"],
   },
   {
@@ -46,7 +46,7 @@ const offlineContent = [
     icon: Headphones,
     description: "Tibetan bowls, crystal singing bowls, ocean waves & forest ambient soundscapes",
     fileSize: 45,
-    color: "from-emerald-400 to-teal-500",
+    color: "from-forest to-sage-dark",
     items: ["Tibetan Bowls", "Crystal Singing Bowls", "Ocean Waves", "Forest Ambience"],
   },
   {
@@ -56,7 +56,7 @@ const offlineContent = [
     icon: Brain,
     description: "25-minute Pomodoro, deep work timers with binaural beats & ambient sounds",
     fileSize: 18,
-    color: "from-amber-400 to-orange-500",
+    color: "from-gold to-gold-dark",
     items: ["25-min Focus Sprint", "Deep Work Timer", "Study Session", "Creative Flow"],
   },
   {
@@ -66,7 +66,7 @@ const offlineContent = [
     icon: Footprints,
     description: "Guided walking sessions for parks, indoor spaces & nature trails",
     fileSize: 22,
-    color: "from-green-400 to-emerald-500",
+    color: "from-sage to-forest",
     items: ["Park Walk", "Indoor Walking", "Nature Trail", "Mindful Stroll"],
   },
   {
@@ -76,7 +76,7 @@ const offlineContent = [
     icon: Sparkles,
     description: "Morning confidence, gratitude, self-love & evening wind-down affirmation sets",
     fileSize: 4,
-    color: "from-pink-400 to-rose-500",
+    color: "from-gold to-gold-dark",
     items: ["Morning Confidence", "Gratitude Set", "Self-Love", "Evening Wind-Down"],
   },
   {
@@ -232,7 +232,7 @@ export default function OfflineDownloadsPage() {
       feature="Offline Downloads"
       description="Download premium sessions to your device — meditate on flights, in the mountains or anywhere with zero connection. Your library, always with you."
       icon={Download}
-      gradient="from-amber-500/30 to-orange-500/20"
+      gradient="from-gold/30 to-gold-dark/20"
       previewItems={[
         "Breathing Exercises bundle (8 MB)",
         "Sleep Stories collection (32 MB)",

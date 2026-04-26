@@ -4,14 +4,14 @@ import { Sparkles } from "lucide-react";
 import { usePageSEO } from "@/hooks/usePageSEO";
 
 const factGradients = [
-  "from-violet-500/12 to-purple-500/5",
-  "from-emerald-500/12 to-teal-500/5",
-  "from-amber-500/12 to-gold/5",
-  "from-blue-500/12 to-cyan-500/5",
-  "from-rose-500/12 to-pink-500/5",
-  "from-indigo-500/12 to-violet-500/5",
-  "from-teal-500/12 to-emerald-500/5",
-  "from-orange-500/12 to-amber-500/5",
+  "from-gold-dark/12 to-gold/5",
+  "from-forest/12 to-sage/5",
+  "from-gold/12 to-gold-dark/5",
+  "from-forest-deep/12 to-forest/5",
+  "from-gold-dark/12 to-gold/5",
+  "from-charcoal/12 to-gold-dark/5",
+  "from-sage-dark/12 to-forest/5",
+  "from-gold-dark/12 to-gold/5",
 ];
 
 export default function SciencePage() {
@@ -48,7 +48,7 @@ export default function SciencePage() {
           ))}
         </div>
 
-        <div className="bg-gradient-to-br from-gold/8 via-card to-amber-500/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
+        <div className="bg-gradient-to-br from-gold/8 via-card to-gold/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
             <p className="text-sm font-body leading-relaxed text-foreground/80 italic">

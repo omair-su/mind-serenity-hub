@@ -75,9 +75,9 @@ export function moodGradient(tint: DayHero["moodTint"]): string {
   switch (tint) {
     case "forest": return "from-[hsl(var(--forest-deep))]/85 via-[hsl(var(--forest))]/55 to-[hsl(var(--sage))]/30";
     case "gold":   return "from-[hsl(var(--charcoal))]/80 via-[hsl(var(--gold-dark))]/50 to-[hsl(var(--gold))]/30";
-    case "indigo": return "from-indigo-950/85 via-indigo-800/55 to-violet-700/35";
-    case "rose":   return "from-rose-950/75 via-rose-800/45 to-amber-600/30";
-    case "ocean":  return "from-slate-950/80 via-cyan-900/50 to-teal-700/30";
-    case "sage":   return "from-emerald-950/75 via-emerald-800/45 to-[hsl(var(--sage))]/30";
+    case "indigo": return "from-forest-deep/85 via-forest/55 to-charcoal/35";
+    case "rose":   return "from-gold-dark/75 via-gold/45 to-gold/30";
+    case "ocean":  return "from-forest-deep/80 via-forest/50 to-sage/30";
+    case "sage":   return "from-forest-deep/75 via-forest/45 to-[hsl(var(--sage))]/30";
   }
 }
