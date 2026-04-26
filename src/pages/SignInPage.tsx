@@ -333,7 +333,7 @@ export default function SignInPage() {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="mb-5 flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700"
+                  className="mb-5 flex items-start gap-2 rounded-xl bg-sage-light/30 border border-sage/40 px-4 py-3 text-sm text-forest-deep"
                 >
                   <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
                   <span className="font-sans-body">{infoMsg}</span>
