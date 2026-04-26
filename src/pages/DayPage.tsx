@@ -53,11 +53,11 @@ const WISDOM_CARDS = [
 
 /* ─── Binaural Frequency Presets ─── */
 const BINAURAL_PRESETS = [
-  { name: "Delta (Sleep)", freq: 2, color: "from-indigo-600 to-blue-600", description: "Deep sleep & restoration" },
-  { name: "Theta (Deep Meditation)", freq: 5, color: "from-purple-600 to-violet-600", description: "Subconscious access & creativity" },
-  { name: "Alpha (Relaxation)", freq: 10, color: "from-emerald-600 to-teal-600", description: "Calm awareness & flow" },
-  { name: "Beta (Focus)", freq: 20, color: "from-amber-600 to-orange-600", description: "Concentration & alertness" },
-  { name: "Gamma (Peak Performance)", freq: 40, color: "from-rose-600 to-pink-600", description: "Insight & cognitive enhancement" },
+  { name: "Delta (Sleep)", freq: 2, color: "from-charcoal to-forest-deep", description: "Deep sleep & restoration" },
+  { name: "Theta (Deep Meditation)", freq: 5, color: "from-charcoal to-gold-dark", description: "Subconscious access & creativity" },
+  { name: "Alpha (Relaxation)", freq: 10, color: "from-forest to-sage-dark", description: "Calm awareness & flow" },
+  { name: "Beta (Focus)", freq: 20, color: "from-gold to-gold-dark", description: "Concentration & alertness" },
+  { name: "Gamma (Peak Performance)", freq: 40, color: "from-gold-dark to-gold", description: "Insight & cognitive enhancement" },
 ];
 
 /* ─── localStorage helpers (sync mirror — async cloud sync below) ─── */

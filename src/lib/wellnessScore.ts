@@ -71,9 +71,9 @@ export function getWellnessScore(): WellnessBreakdown {
 }
 
 export function getWellnessLevel(score: number): { label: string; color: string; description: string } {
-  if (score >= 80) return { label: "Flourishing", color: "text-emerald-500", description: "You're thriving in your mindfulness practice" };
+  if (score >= 80) return { label: "Flourishing", color: "text-forest", description: "You're thriving in your mindfulness practice" };
   if (score >= 60) return { label: "Growing", color: "text-primary", description: "Strong progress — keep building momentum" };
-  if (score >= 40) return { label: "Developing", color: "text-amber-500", description: "You're building good foundations" };
-  if (score >= 20) return { label: "Awakening", color: "text-orange-500", description: "Every practice counts — you're on your way" };
+  if (score >= 40) return { label: "Developing", color: "text-gold", description: "You're building good foundations" };
+  if (score >= 20) return { label: "Awakening", color: "text-gold-dark", description: "Every practice counts — you're on your way" };
   return { label: "Beginning", color: "text-muted-foreground", description: "Start your journey — your first session awaits" };
 }
