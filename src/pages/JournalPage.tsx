@@ -42,7 +42,7 @@ export default function JournalPage() {
         {/* Hero Banner */}
         <div className="relative rounded-2xl overflow-hidden h-[180px]">
           <img src={journalHero} alt="Mindful journaling" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/85 via-[hsl(var(--forest-deep))]/40 to-transparent" />
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">

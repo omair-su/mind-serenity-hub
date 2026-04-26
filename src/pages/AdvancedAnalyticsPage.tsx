@@ -46,26 +46,35 @@ function AdvancedAnalyticsPageInner() {
     { name: 'Sleep', value: Math.max(0, report.sleepTrend) },
   ];
 
-  const COLORS = ['#139A3A', '#A8C4B1', '#D4A574', '#FF6B6B', '#4ECDC4'];
+  // Brand-token chart palette: forest, sage, gold, gold-dark, charcoal-soft
+  const COLORS = [
+    'hsl(139 37% 27%)',   // forest
+    'hsl(145 25% 55%)',   // sage-dark
+    'hsl(30 54% 65%)',    // gold
+    'hsl(43 86% 38%)',    // gold-dark
+    'hsl(0 0% 38%)',      // charcoal-soft
+  ];
 
   return (
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
         {/* ── Hero Section ── */}
-        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-indigo-500/10 border border-border/50">
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-[hsl(var(--forest))]/10 via-card to-[hsl(var(--gold))]/10 border border-[hsl(var(--cream-dark))]">
+          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-[hsl(var(--gold))]/25 to-transparent blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-gradient-to-tr from-[hsl(var(--forest))]/20 to-transparent blur-3xl" />
           <div className="relative p-8 sm:p-12">
             <div className="flex items-start justify-between mb-4">
               <div>
+                <p className="text-[10px] font-body font-bold tracking-[0.22em] uppercase text-[hsl(var(--forest))] mb-2">Premium Insights</p>
                 <h1 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-2">
-                  Advanced Analytics Dashboard
+                  Advanced Analytics
                 </h1>
                 <p className="text-sm text-muted-foreground max-w-2xl">
-                  Deep insights into your meditation practice, wellness trends, and personal growth. Track your progress with detailed metrics and visualizations.
+                  Deep insights into your practice, wellness trends, and personal growth — visualized in your brand palette.
                 </p>
               </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/15 flex items-center justify-center flex-shrink-0">
-                <TrendingUp className="w-8 h-8 text-cyan-600" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/20 to-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0 shadow-soft">
+                <TrendingUp className="w-8 h-8 text-[hsl(var(--forest))]" />
               </div>
             </div>
           </div>
@@ -96,36 +105,36 @@ function AdvancedAnalyticsPageInner() {
               value: `${Math.round(report.totalPracticeMinutes)}`,
               unit: 'minutes',
               icon: Clock,
-              gradient: 'from-blue-500/10 to-cyan-500/5',
-              iconGrad: 'from-blue-500/20 to-cyan-500/15',
-              iconColor: 'text-blue-600',
+              gradient: 'from-[hsl(var(--forest))]/8 to-card',
+              iconGrad: 'from-[hsl(var(--forest))]/20 to-[hsl(var(--sage))]/15',
+              iconColor: 'text-[hsl(var(--forest))]',
             },
             {
               label: 'Consistency',
               value: `${Math.round(report.consistencyScore)}`,
               unit: '%',
               icon: Flame,
-              gradient: 'from-rose-500/10 to-pink-500/5',
-              iconGrad: 'from-rose-500/20 to-pink-500/15',
-              iconColor: 'text-rose-600',
+              gradient: 'from-[hsl(var(--gold))]/12 to-card',
+              iconGrad: 'from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/20',
+              iconColor: 'text-[hsl(var(--gold-dark))]',
             },
             {
               label: 'Avg Daily',
               value: `${report.averageDailyPractice.toFixed(1)}`,
               unit: 'min',
               icon: Target,
-              gradient: 'from-emerald-500/10 to-teal-500/5',
-              iconGrad: 'from-emerald-500/20 to-teal-500/15',
-              iconColor: 'text-emerald-600',
+              gradient: 'from-[hsl(var(--sage))]/12 to-card',
+              iconGrad: 'from-[hsl(var(--sage))]/25 to-[hsl(var(--sage-light))]/20',
+              iconColor: 'text-[hsl(var(--sage-dark))]',
             },
             {
               label: 'Mood Trend',
               value: `${Math.abs(Math.round(report.moodTrend))}`,
               unit: '%',
               icon: Heart,
-              gradient: 'from-violet-500/10 to-purple-500/5',
-              iconGrad: 'from-violet-500/20 to-purple-500/15',
-              iconColor: 'text-violet-600',
+              gradient: 'from-[hsl(var(--forest-mid))]/10 to-card',
+              iconGrad: 'from-[hsl(var(--forest-mid))]/20 to-[hsl(var(--forest))]/15',
+              iconColor: 'text-[hsl(var(--forest-mid))]',
             },
           ].map((metric, idx) => (
             <Card
@@ -149,7 +158,7 @@ function AdvancedAnalyticsPageInner() {
         {/* ── Charts Grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Weekly Practice */}
-          <Card className="bg-gradient-to-br from-blue-500/5 via-card to-cyan-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--forest))]/5 via-card to-[hsl(var(--sage))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4">Weekly Practice</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={weeklyChartData}>
@@ -163,13 +172,13 @@ function AdvancedAnalyticsPageInner() {
                     borderRadius: '8px',
                   }}
                 />
-                <Bar dataKey="minutes" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="minutes" fill="hsl(var(--forest))" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </Card>
 
           {/* Wellness Trends */}
-          <Card className="bg-gradient-to-br from-emerald-500/5 via-card to-teal-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--sage))]/5 via-card to-[hsl(var(--forest))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4">Wellness Trends</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={trendChartData}>
@@ -183,13 +192,13 @@ function AdvancedAnalyticsPageInner() {
                     borderRadius: '8px',
                   }}
                 />
-                <Bar dataKey="value" fill="hsl(var(--sage))" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="value" fill="hsl(var(--gold))" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </Card>
 
           {/* Practice Distribution */}
-          <Card className="bg-gradient-to-br from-gold/5 via-card to-amber-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--gold))]/5 via-card to-[hsl(var(--gold-light))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4">Practice Distribution</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -219,7 +228,7 @@ function AdvancedAnalyticsPageInner() {
           </Card>
 
           {/* Mood Progression */}
-          <Card className="bg-gradient-to-br from-rose-500/5 via-card to-pink-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--forest-mid))]/5 via-card to-[hsl(var(--forest))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4">Mood Progression</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={moodData.slice(-14)}>
@@ -236,7 +245,7 @@ function AdvancedAnalyticsPageInner() {
                 <Line
                   type="monotone"
                   dataKey="mood"
-                  stroke="hsl(var(--primary))"
+                  stroke="hsl(var(--forest))"
                   dot={false}
                   strokeWidth={2}
                 />
@@ -247,9 +256,9 @@ function AdvancedAnalyticsPageInner() {
 
         {/* ── Insights & Recommendations ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br from-violet-500/5 via-card to-purple-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--forest-mid))]/5 via-card to-[hsl(var(--forest-deep))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-violet-600" />
+              <Brain className="w-5 h-5 text-[hsl(var(--forest))]" />
               Key Insights
             </h3>
             <div className="space-y-3">
@@ -262,9 +271,9 @@ function AdvancedAnalyticsPageInner() {
             </div>
           </Card>
 
-          <Card className="bg-gradient-to-br from-cyan-500/5 via-card to-blue-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+          <Card className="bg-gradient-to-br from-[hsl(var(--gold))]/5 via-card to-[hsl(var(--gold-dark))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
             <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5 text-cyan-600" />
+              <Target className="w-5 h-5 text-[hsl(var(--gold-dark))]" />
               Recommendations
             </h3>
             <div className="space-y-3">
@@ -279,7 +288,7 @@ function AdvancedAnalyticsPageInner() {
         </div>
 
         {/* ── Top Practice Types ── */}
-        <Card className="bg-gradient-to-br from-gold/5 via-card to-amber-500/5 rounded-2xl p-6 border border-border/50 shadow-soft">
+        <Card className="bg-gradient-to-br from-[hsl(var(--gold))]/5 via-card to-[hsl(var(--gold-light))]/5 rounded-2xl p-6 border border-[hsl(var(--cream-dark))] shadow-soft">
           <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-gold" />
             Top Practice Types
@@ -328,7 +337,7 @@ export default function AdvancedAnalyticsPage() {
       feature="Advanced Analytics"
       description="Deep wellness intelligence — mood, stress, energy, focus and sleep trends with weekly breakdowns, predictive insights and exportable PDF reports."
       icon={TrendingUp}
-      gradient="from-cyan-500/30 to-blue-500/20"
+      gradient="from-[hsl(var(--gold))]/30 to-[hsl(var(--forest))]/20"
       previewItems={[
         "Mood progression tracking (30/90/365d)",
         "Stress trend analysis with HRV correlation",

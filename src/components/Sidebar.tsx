@@ -92,7 +92,7 @@ export default function Sidebar() {
         <Icon className={`w-4 h-4 flex-shrink-0 ${active ? "text-primary" : isPremium ? "text-gold/70" : ""}`} />
         <span className="flex-1 text-left">{label}</span>
         {isPremium && (
-          <span className="text-[8px] font-body font-bold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-gold/15 to-amber-500/10 text-gold border border-gold/20 flex-shrink-0 tracking-wider">
+          <span className="text-[8px] font-body font-bold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-gold/20 to-gold-light/15 text-gold-dark border border-gold/25 flex-shrink-0 tracking-wider">
             PRO
           </span>
         )}
