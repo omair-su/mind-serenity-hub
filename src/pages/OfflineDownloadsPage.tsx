@@ -232,7 +232,7 @@ export default function OfflineDownloadsPage() {
       feature="Offline Downloads"
       description="Download premium sessions to your device — meditate on flights, in the mountains or anywhere with zero connection. Your library, always with you."
       icon={Download}
-      gradient="from-amber-500/30 to-orange-500/20"
+      gradient="from-gold/30 to-gold-dark/20"
       previewItems={[
         "Breathing Exercises bundle (8 MB)",
         "Sleep Stories collection (32 MB)",

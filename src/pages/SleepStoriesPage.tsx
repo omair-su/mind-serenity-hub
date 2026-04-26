@@ -46,8 +46,8 @@ function SleepStoriesPageInner() {
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/15 flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-charcoal/20 to-gold-dark/15 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-charcoal dark:text-cream-dark" />
           </div>
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground">Sleep Stories</h1>
@@ -104,7 +104,7 @@ function SleepStoriesPageInner() {
               ))}
             </div>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl p-6 border border-indigo-500/10 shadow-soft">
+            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/50 via-violet-50/30 to-purple-50/20 dark:from-indigo-900/20 dark:via-violet-900/10 dark:to-purple-900/5 rounded-2xl p-6 border border-forest-deep/10 shadow-soft">
               <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-violet-200/20 to-transparent" />
               <h3 className="font-display text-base font-semibold text-foreground mb-2">How Sleep Stories Work</h3>
               <p className="text-sm font-body text-muted-foreground leading-relaxed">
@@ -125,7 +125,7 @@ function SleepStoriesPageInner() {
               <ArrowLeft className="w-4 h-4" /> Back to Stories
             </button>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/60 via-violet-50/40 to-purple-50/30 dark:from-indigo-900/30 dark:via-violet-900/20 dark:to-purple-900/10 rounded-2xl border border-indigo-500/15 p-6 sm:p-8 shadow-elevated">
+            <div className="relative overflow-hidden bg-gradient-to-br from-indigo-100/60 via-violet-50/40 to-purple-50/30 dark:from-indigo-900/30 dark:via-violet-900/20 dark:to-purple-900/10 rounded-2xl border border-forest-deep/15 p-6 sm:p-8 shadow-elevated">
               <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-indigo-200/30 to-transparent" />
               <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-violet-200/20 to-transparent rounded-tr-full" />
               <div className="relative z-10">
@@ -154,7 +154,7 @@ function SleepStoriesPageInner() {
                     <button
                       key={i}
                       onClick={() => setParagraphIndex(i)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${i === paragraphIndex ? "bg-indigo-500 scale-110" : i < paragraphIndex ? "bg-indigo-400/40" : "bg-secondary"}`}
+                      className={`w-2.5 h-2.5 rounded-full transition-all ${i === paragraphIndex ? "bg-forest-deep scale-110" : i < paragraphIndex ? "bg-forest-deep/40" : "bg-secondary"}`}
                     />
                   ))}
                 </div>
@@ -172,7 +172,7 @@ function SleepStoriesPageInner() {
                   <button
                     onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(story.paragraphs[paragraphIndex])}
                     disabled={tts.isLoading}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500/15 to-violet-500/10 text-indigo-700 dark:text-indigo-300 text-sm font-body font-medium hover:from-indigo-500/25 hover:to-violet-500/20 transition-all disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-charcoal/15 to-gold-dark/10 text-charcoal dark:text-cream text-sm font-body font-medium hover:from-charcoal/25 hover:to-gold-dark/20 transition-all disabled:opacity-50"
                   >
                     {tts.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tts.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     {tts.isLoading ? "Generating..." : tts.isPlaying ? "Pause" : "Listen"}
@@ -197,7 +197,7 @@ function SleepStoriesPageInner() {
                   <button
                     onClick={playFullStory}
                     disabled={tts.isLoading}
-                    className="px-4 py-2.5 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 rounded-xl text-sm font-body text-indigo-600 dark:text-indigo-400 hover:from-indigo-500/20 hover:to-violet-500/20 disabled:opacity-50 transition-all"
+                    className="px-4 py-2.5 bg-gradient-to-r from-charcoal/10 to-gold-dark/10 rounded-xl text-sm font-body text-charcoal dark:text-cream-dark hover:from-charcoal/20 hover:to-gold-dark/20 disabled:opacity-50 transition-all"
                   >
                     {tts.isLoading ? "..." : "▶ Play Full Story"}
                   </button>
@@ -212,7 +212,7 @@ function SleepStoriesPageInner() {
                 {tts.isPlaying && tts.duration > 0 && (
                   <div className="mt-4 max-w-md mx-auto">
                     <div className="w-full bg-secondary rounded-full h-1.5">
-                      <div className="bg-indigo-500 h-1.5 rounded-full transition-all" style={{ width: `${tts.progress}%` }} />
+                      <div className="bg-forest-deep h-1.5 rounded-full transition-all" style={{ width: `${tts.progress}%` }} />
                     </div>
                     <div className="flex justify-between mt-1">
                       <span className="text-[10px] font-body text-muted-foreground">{tts.formatTime(tts.currentTime)}</span>
@@ -235,7 +235,7 @@ export default function SleepStoriesPage() {
       feature="Sleep Stories"
       description="Drift away with cinematic narrated tales — Lavender Fields of Provence, the Enchanted Library, midnight train journeys and more, voiced for deep restorative sleep."
       icon={Moon}
-      gradient="from-indigo-500/30 to-violet-500/20"
+      gradient="from-charcoal/30 to-gold-dark/20"
       previewItems={[
         "Lavender Fields of Provence — 28 min",
         "The Enchanted Library — 32 min",
