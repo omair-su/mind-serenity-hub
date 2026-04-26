@@ -100,7 +100,7 @@ export default function HowToUsePage() {
           ))}
         </div>
 
-        <div className="bg-gradient-to-br from-amber-500/8 via-card to-gold/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
+        <div className="bg-gradient-to-br from-gold/10 via-card to-gold-dark/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
           <h2 className="font-display text-2xl font-medium text-foreground mb-5 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-gold" /> Your Meditation Space
           </h2>
@@ -159,7 +159,7 @@ export default function HowToUsePage() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gold/8 via-card to-amber-500/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
+        <div className="bg-gradient-to-br from-gold/10 via-card to-gold-dark/5 rounded-2xl border border-gold/20 p-6 shadow-soft">
           <p className="text-sm font-body leading-relaxed text-foreground/80 italic">
             "The days you least want to meditate are often the days you need it most. On those days, just sit for 3 minutes. That's enough. The act of showing up — even briefly — reinforces the neural pathway that says: I am someone who meditates."
           </p>

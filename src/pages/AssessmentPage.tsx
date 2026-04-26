@@ -50,7 +50,7 @@ export default function AssessmentPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                   <label key={num} className="text-center">
                     <input type="radio" name={area.label} className="sr-only peer" />
-                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-emerald-700 peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
+                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-forest-deep peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
                       {num}
                     </span>
                   </label>
@@ -89,7 +89,7 @@ export default function AssessmentPage() {
           })}
         </div>
 
-        <div className="bg-gradient-to-br from-gold/10 via-card to-amber-500/5 rounded-2xl border border-gold/20 p-6 shadow-soft text-center">
+        <div className="bg-gradient-to-br from-gold/10 via-card to-gold/5 rounded-2xl border border-gold/20 p-6 shadow-soft text-center">
           <Sparkles className="w-6 h-6 text-gold mx-auto mb-3" />
           <h2 className="font-display text-2xl font-medium text-foreground mb-4">Your Commitment</h2>
           <p className="willow-body max-w-lg mx-auto italic text-sm">
