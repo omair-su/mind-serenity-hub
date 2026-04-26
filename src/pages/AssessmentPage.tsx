@@ -14,14 +14,14 @@ export default function AssessmentPage() {
   ];
 
   const ratingGradients = [
-    "from-violet-500/10 to-purple-500/5",
-    "from-indigo-500/10 to-blue-500/5",
-    "from-blue-500/10 to-cyan-500/5",
-    "from-emerald-500/10 to-teal-500/5",
-    "from-teal-500/10 to-emerald-500/5",
-    "from-amber-500/10 to-gold/5",
+    "from-gold-dark/10 to-gold/5",
+    "from-charcoal/10 to-forest-deep/5",
+    "from-forest-deep/10 to-forest/5",
+    "from-forest/10 to-sage/5",
+    "from-sage-dark/10 to-forest/5",
+    "from-gold/10 to-gold-dark/5",
     "from-rose-500/10 to-pink-500/5",
-    "from-orange-500/10 to-amber-500/5",
+    "from-gold-dark/10 to-gold/5",
   ];
 
   return (
@@ -72,10 +72,10 @@ export default function AssessmentPage() {
             "What does 'success' look like for you after 30 days?"
           ].map((prompt, i) => {
             const promptGradients = [
-              "from-emerald-500/8 to-teal-500/5",
-              "from-violet-500/8 to-purple-500/5",
-              "from-amber-500/8 to-gold/5",
-              "from-blue-500/8 to-cyan-500/5",
+              "from-forest/8 to-sage/5",
+              "from-gold-dark/8 to-gold/5",
+              "from-gold/8 to-gold-dark/5",
+              "from-forest-deep/8 to-forest/5",
             ];
             return (
               <div key={prompt} className={`p-5 rounded-2xl bg-gradient-to-br ${promptGradients[i]} border border-border/50 shadow-soft`}>

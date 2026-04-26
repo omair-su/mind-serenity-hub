@@ -6,29 +6,29 @@ const principles = [
     icon: Clock,
     title: "Commit to a Consistent Time",
     description: "Choose a specific time each day — morning works best for most people. Attach meditation to an existing habit (after coffee, before shower). You never 'decide' to meditate; you just do what comes next.",
-    color: "from-violet-500/15 to-purple-500/10",
-    iconColor: "text-violet-500",
+    color: "from-gold-dark/15 to-gold/10",
+    iconColor: "text-gold-dark",
   },
   {
     icon: MapPin,
     title: "Same Place, Every Day",
     description: "Your brain creates location-based triggers. When you return to the same spot daily, your nervous system begins to calm the moment you sit down. Consistency builds the anchor.",
-    color: "from-emerald-500/15 to-teal-500/10",
-    iconColor: "text-emerald-500",
+    color: "from-forest/15 to-sage/10",
+    iconColor: "text-forest",
   },
   {
     icon: Target,
     title: "Follow the Sequence",
     description: "Each day builds on the last. Day 1 teaches breath awareness, Day 5 adds box breathing, Week 3 introduces loving-kindness. The progression is carefully designed — trust it and resist the urge to skip ahead.",
-    color: "from-amber-500/15 to-gold/10",
-    iconColor: "text-amber-500",
+    color: "from-gold/15 to-gold-dark/10",
+    iconColor: "text-gold",
   },
   {
     icon: Brain,
     title: "Embrace the Wandering Mind",
     description: "Your mind will wander — this is not failure. Each time you notice and return your attention, that IS the practice. A session with 100 distractions and 100 returns is 100 mental reps, not 100 failures.",
-    color: "from-blue-500/15 to-cyan-500/10",
-    iconColor: "text-blue-500",
+    color: "from-forest-deep/15 to-forest/10",
+    iconColor: "text-forest-deep",
   },
   {
     icon: Heart,
@@ -41,15 +41,15 @@ const principles = [
     icon: Headphones,
     title: "Use the Audio Guidance",
     description: "Every day includes a guided audio meditation. Use headphones for best results. The voice guidance keeps you anchored when the mind wants to wander. Noise-canceling headphones dramatically improve focus.",
-    color: "from-indigo-500/15 to-violet-500/10",
-    iconColor: "text-indigo-500",
+    color: "from-charcoal/15 to-gold-dark/10",
+    iconColor: "text-charcoal",
   },
   {
     icon: Flame,
     title: "Never Miss Twice",
     description: "Missing one day is a pause. Missing two days becomes a new habit. If life interrupts, pick up exactly where you left off — don't restart, don't try to 'catch up.' Just do today's practice.",
-    color: "from-orange-500/15 to-amber-500/10",
-    iconColor: "text-orange-500",
+    color: "from-gold-dark/15 to-gold/10",
+    iconColor: "text-gold-dark",
   },
 ];
 
@@ -122,7 +122,7 @@ export default function HowToUsePage() {
           <h2 className="font-display text-2xl font-medium text-foreground mb-5">8 Keys to a Successful 30 Days</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {keys.map((key) => (
-              <div key={key.num} className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-500/8 to-teal-500/5 border border-border/50 shadow-soft hover:shadow-md transition-all">
+              <div key={key.num} className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-forest/8 to-sage/5 border border-border/50 shadow-soft hover:shadow-md transition-all">
                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-primary/15 to-sage/10 flex items-center justify-center">
                   <span className="font-display text-sm font-semibold text-primary">{key.num}</span>
                 </div>

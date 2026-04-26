@@ -26,10 +26,10 @@ export default function WelcomePage() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Leaf, label: "Unique Practices", value: "30", gradient: "from-emerald-500/12 to-teal-500/5", iconColor: "text-emerald-500" },
-            { icon: BookOpen, label: "Fully Scripted", value: "100%", gradient: "from-violet-500/12 to-purple-500/5", iconColor: "text-violet-500" },
-            { icon: FlaskConical, label: "Research Citations", value: "34+", gradient: "from-amber-500/12 to-gold/5", iconColor: "text-amber-500" },
-            { icon: Clock, label: "Daily Time", value: "10–30 min", gradient: "from-blue-500/12 to-cyan-500/5", iconColor: "text-blue-500" },
+            { icon: Leaf, label: "Unique Practices", value: "30", gradient: "from-forest/12 to-sage/5", iconColor: "text-forest" },
+            { icon: BookOpen, label: "Fully Scripted", value: "100%", gradient: "from-gold-dark/12 to-gold/5", iconColor: "text-gold-dark" },
+            { icon: FlaskConical, label: "Research Citations", value: "34+", gradient: "from-gold/12 to-gold-dark/5", iconColor: "text-gold" },
+            { icon: Clock, label: "Daily Time", value: "10–30 min", gradient: "from-forest-deep/12 to-forest/5", iconColor: "text-forest-deep" },
           ].map(stat => (
             <div key={stat.label} className={`text-center p-5 rounded-2xl bg-gradient-to-br ${stat.gradient} border border-border/50 shadow-soft`}>
               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.gradient} border border-border/30 flex items-center justify-center mx-auto mb-3`}>
@@ -63,14 +63,14 @@ export default function WelcomePage() {
           <h2 className="font-display text-3xl font-bold text-foreground mb-6">After 30 Days, You Will Become</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { title: "A Calmer Mind", desc: "The constant mental chatter will quiet.", icon: Brain, gradient: "from-violet-500/12 to-purple-500/5", iconColor: "text-violet-500" },
-              { title: "A Better Sleeper", desc: "Your body will learn to release the day and surrender to rest.", icon: Sun, gradient: "from-indigo-500/12 to-blue-500/5", iconColor: "text-indigo-500" },
+              { title: "A Calmer Mind", desc: "The constant mental chatter will quiet.", icon: Brain, gradient: "from-gold-dark/12 to-gold/5", iconColor: "text-gold-dark" },
+              { title: "A Better Sleeper", desc: "Your body will learn to release the day and surrender to rest.", icon: Sun, gradient: "from-charcoal/12 to-forest-deep/5", iconColor: "text-charcoal" },
               { title: "Emotionally Resilient", desc: "You will feel emotions fully without being controlled by them.", icon: Heart, gradient: "from-rose-500/12 to-pink-500/5", iconColor: "text-rose-500" },
-              { title: "Deeply Focused", desc: "Your attention span will sharpen.", icon: Target, gradient: "from-amber-500/12 to-gold/5", iconColor: "text-amber-500" },
-              { title: "Self-Compassionate", desc: "The harsh inner critic will soften.", icon: Sparkles, gradient: "from-emerald-500/12 to-teal-500/5", iconColor: "text-emerald-500" },
-              { title: "Physically Healthier", desc: "Your cortisol will drop.", icon: Shield, gradient: "from-blue-500/12 to-cyan-500/5", iconColor: "text-blue-500" },
-              { title: "Present in Your Life", desc: "You will stop living on autopilot.", icon: Leaf, gradient: "from-teal-500/12 to-emerald-500/5", iconColor: "text-teal-500" },
-              { title: "A Person of Discipline", desc: "You will have proven to yourself that you can commit.", icon: Zap, gradient: "from-orange-500/12 to-amber-500/5", iconColor: "text-orange-500" },
+              { title: "Deeply Focused", desc: "Your attention span will sharpen.", icon: Target, gradient: "from-gold/12 to-gold-dark/5", iconColor: "text-gold" },
+              { title: "Self-Compassionate", desc: "The harsh inner critic will soften.", icon: Sparkles, gradient: "from-forest/12 to-sage/5", iconColor: "text-forest" },
+              { title: "Physically Healthier", desc: "Your cortisol will drop.", icon: Shield, gradient: "from-forest-deep/12 to-forest/5", iconColor: "text-forest-deep" },
+              { title: "Present in Your Life", desc: "You will stop living on autopilot.", icon: Leaf, gradient: "from-sage-dark/12 to-forest/5", iconColor: "text-sage-dark" },
+              { title: "A Person of Discipline", desc: "You will have proven to yourself that you can commit.", icon: Zap, gradient: "from-gold-dark/12 to-gold/5", iconColor: "text-gold-dark" },
             ].map(item => (
               <div key={item.title} className={`p-5 rounded-2xl bg-gradient-to-br ${item.gradient} border border-border/50 shadow-soft hover:shadow-md transition-all`}>
                 <div className="flex items-start gap-3">
@@ -94,10 +94,10 @@ export default function WelcomePage() {
           <div className="space-y-4">
             {weeks.map((week, i) => {
               const gradients = [
-                "from-emerald-500/10 to-teal-500/5",
-                "from-violet-500/10 to-purple-500/5",
-                "from-amber-500/10 to-gold/5",
-                "from-blue-500/10 to-cyan-500/5",
+                "from-forest/10 to-sage/5",
+                "from-gold-dark/10 to-gold/5",
+                "from-gold/10 to-gold-dark/5",
+                "from-forest-deep/10 to-forest/5",
               ];
               return (
                 <button
