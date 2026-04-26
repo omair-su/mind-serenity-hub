@@ -424,7 +424,7 @@ export default function ProfilePage() {
                           </div>
                         )}
                         {subscription.cancelAtPeriodEnd && (
-                          <p className="text-[11px] font-body text-amber-700 dark:text-amber-400 mt-1">
+                          <p className="text-[11px] font-body text-gold-dark dark:text-gold mt-1">
                             Cancellation scheduled — you keep Plus access until the date above.
                           </p>
                         )}
