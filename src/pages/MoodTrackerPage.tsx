@@ -139,6 +139,8 @@ export default function MoodTrackerPage() {
             <div className="space-y-2">
               {entries.slice(0, 6).map((m) => {
                 const slice = EMOTION_WHEEL.find((s) => s.primary === m.emotion_primary);
+                const dayMatch = m.note?.match(/^Day (\d+)/);
+                const dayNum = dayMatch ? parseInt(dayMatch[1]) : null;
                 return (
                   <div
                     key={m.id}
@@ -146,15 +148,22 @@ export default function MoodTrackerPage() {
                   >
                     <span className="text-2xl">{slice?.emoji ?? "💭"}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-body font-semibold text-charcoal capitalize">
-                        {m.emotion_primary}
-                        {m.emotion_secondary ? ` · ${m.emotion_secondary}` : ""}
-                      </p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm font-body font-semibold text-charcoal capitalize">
+                          {m.emotion_primary}
+                          {m.emotion_secondary ? ` · ${m.emotion_secondary}` : ""}
+                        </p>
+                        {dayNum && (
+                          <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-[hsl(var(--gold)/0.2)] text-[hsl(var(--gold-dark))]">
+                            Day {dayNum}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[10px] font-body text-charcoal-soft mt-0.5">
                         {new Date(m.created_at).toLocaleDateString()} · ⚡{m.energy ?? "—"} · 🎯{m.focus ?? "—"}
                       </p>
                     </div>
-                    {m.note && (
+                    {m.note && !dayNum && (
                       <p className="text-[10px] font-body text-charcoal-soft max-w-[120px] truncate italic">
                         "{m.note}"
                       </p>
