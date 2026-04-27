@@ -3,11 +3,12 @@ import { motion } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, Lock } from "lucide-react";
+import { Lock, Sparkles } from "lucide-react";
 import MoodWheel, { EMOTION_WHEEL } from "@/components/mood/MoodWheel";
 import MoodTrendChart from "@/components/mood/MoodTrendChart";
 import MoodInsightsCard from "@/components/mood/MoodInsightsCard";
 import PremiumLockModal from "@/components/PremiumLockModal";
+import { PageHero, LuxeCard, EmptyState } from "@/components/ui-premium";
 import { fetchMoodEntries, saveMoodEntry, type CloudMoodEntry } from "@/lib/cloudSync";
 
 const HERO = "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&q=80&w=1600";
