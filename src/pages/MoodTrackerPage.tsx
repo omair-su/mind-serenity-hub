@@ -53,24 +53,23 @@ export default function MoodTrackerPage() {
       />
       <motion.div className="space-y-6 pb-24" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         {/* Hero */}
-        <div className="relative rounded-3xl overflow-hidden h-44 shadow-elevated">
-          <img src={HERO} alt="Aurora dawn" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-4 left-5 right-5 text-white">
-            <div className="flex items-center gap-2 mb-1.5">
-              <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-md"><Heart className="w-4 h-4" /></div>
-              <span className="text-[10px] font-body font-bold uppercase tracking-widest text-white/80">Emotional Intelligence</span>
-            </div>
-            <h1 className="font-display text-2xl font-bold drop-shadow-lg">Mood Tracker</h1>
-            <p className="text-xs font-body text-white/80 mt-0.5">{entries.length} check-ins · {recentAvg} this week</p>
-          </div>
-          <button
-            onClick={() => setShowCheckIn(true)}
-            className="absolute top-4 right-4 px-4 py-2 bg-gold text-white rounded-xl text-xs font-body font-bold shadow-lg hover:bg-gold-dark"
-          >
-            + Check In
-          </button>
-        </div>
+        <PageHero
+          eyebrow="Emotional Intelligence"
+          title="Mood Tracker"
+          description={`${entries.length} check-ins logged · ${recentAvg} this week. Tune in to the weather of your heart.`}
+          image={HERO}
+          height="sm"
+          overlay="forest"
+          cta={
+            <button
+              onClick={() => setShowCheckIn(true)}
+              className="px-7 py-3 btn-gold-primary rounded-xl text-sm inline-flex items-center gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              New Check-In
+            </button>
+          }
+        />
 
         {/* Check-in form */}
         {showCheckIn && (
