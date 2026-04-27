@@ -141,6 +141,9 @@ export default function DayPage() {
     tts.stop();
   }, [dayNumber]);
 
+  // Tracks the linked mood_entries row for idempotent syncing (Phase 3 coherence)
+  const syncMetaRef = useRef<{ moodEntryId?: string; moodSyncedAt?: string }>({});
+
   // Hydrate from cloud on mount / day change
   useEffect(() => {
     let cancelled = false;
@@ -155,6 +158,10 @@ export default function DayPage() {
       if (Array.isArray(s.checklist)) setChecklist(s.checklist);
       if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
       if (typeof s.intention === "string") setIntentionWord(s.intention);
+      syncMetaRef.current = {
+        moodEntryId: s.moodEntryId,
+        moodSyncedAt: s.moodSyncedAt,
+      };
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [dayNumber]);
