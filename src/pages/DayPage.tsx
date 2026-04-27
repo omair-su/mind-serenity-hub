@@ -774,13 +774,27 @@ export default function DayPage() {
             </div>
 
             <button
-              onClick={autoSave}
-              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold text-base shadow-gold hover:shadow-lg transition-all"
+              onClick={saveAndSync}
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold text-base shadow-[var(--shadow-gold-val)] hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
-              Save Reflections
+              Save & Sync to Journal + Mood
             </button>
             {(reflection || challengeText || rememberText) && (
-              <p className="text-center text-xs font-body text-primary mt-2">💾 Auto-saved</p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-3 text-xs font-body">
+                <span className="text-[hsl(var(--forest))]">💾 Auto-saved</span>
+                <Link
+                  to="/app/journal"
+                  className="text-[hsl(var(--gold-dark))] hover:underline underline-offset-4 font-semibold"
+                >
+                  View in Journal →
+                </Link>
+                <Link
+                  to="/app/mood"
+                  className="text-[hsl(var(--gold-dark))] hover:underline underline-offset-4 font-semibold"
+                >
+                  View in Mood Tracker →
+                </Link>
+              </div>
             )}
           </div>
         </div>
