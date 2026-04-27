@@ -103,6 +103,10 @@ export interface DayState {
   bookmarked?: boolean;
   calmRating?: number;
   completedAt?: string;
+  /** ISO timestamp of last mood_entries sync — prevents duplicate rows */
+  moodSyncedAt?: string;
+  /** UUID of the linked mood_entries row */
+  moodEntryId?: string;
 }
 
 const dayLocalKey = (n: number) => `wv-day-${n}`;
@@ -249,4 +253,73 @@ export async function saveMoodEntry(entry: {
     .single();
   if (error) console.error(error);
   return data;
+}
+
+// ============ Day → Mood / Journal Coherence ============
+
+/** Map a 1-10 calm/mood score to an emotion label for mood_entries.emotion_primary */
+function moodScoreToEmotion(score: number): string {
+  if (score >= 9) return "joyful";
+  if (score >= 7) return "calm";
+  if (score >= 5) return "neutral";
+  if (score >= 3) return "tense";
+  return "heavy";
+}
+
+/**
+ * Sync a Day's reflection + mood-after to the mood_entries table so it appears
+ * in Mood Tracker. Idempotent — if a moodEntryId already exists for this day
+ * we update it rather than insert a duplicate.
+ *
+ * Returns the updated DayState (with moodEntryId / moodSyncedAt set) so the
+ * caller can persist it back via saveDayState.
+ */
+export async function syncDayToMood(
+  dayNum: number,
+  state: DayState,
+): Promise<DayState> {
+  const uid = await getUserId();
+  if (!uid) return state;
+  if (typeof state.moodAfter !== "number") return state;
+
+  const emotion = moodScoreToEmotion(state.moodAfter);
+  const note = state.reflection?.trim()
+    ? `Day ${dayNum} · ${state.reflection.trim().slice(0, 240)}`
+    : `Day ${dayNum} reflection`;
+
+  const payload = {
+    user_id: uid,
+    emotion_primary: emotion,
+    energy: typeof state.moodBefore === "number" ? state.moodBefore : null,
+    focus: state.calmRating ?? null,
+    note,
+  };
+
+  if (state.moodEntryId) {
+    const { error } = await supabase
+      .from("mood_entries")
+      .update(payload)
+      .eq("id", state.moodEntryId)
+      .eq("user_id", uid);
+    if (error) {
+      console.warn("[syncDayToMood] update failed, inserting new row", error.message);
+    } else {
+      return { ...state, moodSyncedAt: new Date().toISOString() };
+    }
+  }
+
+  const { data, error } = await supabase
+    .from("mood_entries")
+    .insert(payload)
+    .select("id")
+    .single();
+  if (error) {
+    console.error("[syncDayToMood] insert failed", error);
+    return state;
+  }
+  return {
+    ...state,
+    moodEntryId: data?.id,
+    moodSyncedAt: new Date().toISOString(),
+  };
 }

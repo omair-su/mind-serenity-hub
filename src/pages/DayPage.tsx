@@ -20,7 +20,8 @@ import AIDailyInsight from "@/components/day/AIDailyInsight";
 import MoodDeltaChart from "@/components/day/MoodDeltaChart";
 import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
 import { getDayHero } from "@/data/dayHeroImages";
-import { loadDayState, saveDayState, type DayState } from "@/lib/cloudSync";
+import { loadDayState, saveDayState, syncDayToMood, type DayState } from "@/lib/cloudSync";
+import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import PremiumLockModal from "@/components/PremiumLockModal";
 import { Crown, Lock } from "lucide-react";
@@ -140,6 +141,9 @@ export default function DayPage() {
     tts.stop();
   }, [dayNumber]);
 
+  // Tracks the linked mood_entries row for idempotent syncing (Phase 3 coherence)
+  const syncMetaRef = useRef<{ moodEntryId?: string; moodSyncedAt?: string }>({});
+
   // Hydrate from cloud on mount / day change
   useEffect(() => {
     let cancelled = false;
@@ -154,6 +158,10 @@ export default function DayPage() {
       if (Array.isArray(s.checklist)) setChecklist(s.checklist);
       if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
       if (typeof s.intention === "string") setIntentionWord(s.intention);
+      syncMetaRef.current = {
+        moodEntryId: s.moodEntryId,
+        moodSyncedAt: s.moodSyncedAt,
+      };
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [dayNumber]);
@@ -161,22 +169,53 @@ export default function DayPage() {
   const durationMins = day ? parseDuration(day.duration) : 15;
   const timer = useTimer(durationMins);
 
-  // Auto-save
+  // Auto-save (silent — no mood-table sync to avoid duplicate rows)
+  const buildState = useCallback((): DayState => ({
+    reflection,
+    calmRating: calmRating[0],
+    moodBefore: moodBefore[0],
+    moodAfter: moodAfter[0],
+    challengeText,
+    rememberText,
+    checklist,
+    bookmarked,
+    intention: intentionWord,
+    moodEntryId: syncMetaRef.current.moodEntryId,
+    moodSyncedAt: syncMetaRef.current.moodSyncedAt,
+  }), [reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked, intentionWord]);
+
   const autoSave = useCallback(() => {
-    const state: DayState = {
-      reflection,
-      calmRating: calmRating[0],
-      moodBefore: moodBefore[0],
-      moodAfter: moodAfter[0],
-      challengeText,
-      rememberText,
-      checklist,
-      bookmarked,
-      intention: intentionWord,
-    };
+    const state = buildState();
     try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
     saveDayState(dayNumber, state).catch(() => {});
-  }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked, intentionWord]);
+  }, [dayNumber, buildState]);
+
+  /** Explicit save — also syncs to Mood Tracker so the day's mood appears in the Mood page. */
+  const saveAndSync = useCallback(async () => {
+    const state = buildState();
+    try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
+    await saveDayState(dayNumber, state).catch(() => {});
+    try {
+      const synced = await syncDayToMood(dayNumber, state);
+      if (synced.moodEntryId) {
+        syncMetaRef.current = {
+          moodEntryId: synced.moodEntryId,
+          moodSyncedAt: synced.moodSyncedAt,
+        };
+        // Persist the link so re-opens don't create duplicates
+        await saveDayState(dayNumber, synced).catch(() => {});
+        toast.success("Reflection saved", {
+          description: "Mood logged to your tracker · Reflection added to Journal",
+        });
+      } else {
+        toast.success("Reflection saved");
+      }
+    } catch (e) {
+      console.warn("[DayPage] mood sync failed", e);
+      toast.success("Reflection saved");
+    }
+  }, [dayNumber, buildState]);
+
 
   useEffect(() => {
     const t = setTimeout(autoSave, 2000);
@@ -735,13 +774,27 @@ export default function DayPage() {
             </div>
 
             <button
-              onClick={autoSave}
-              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold text-base shadow-gold hover:shadow-lg transition-all"
+              onClick={saveAndSync}
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold text-base shadow-[var(--shadow-gold-val)] hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
-              Save Reflections
+              Save & Sync to Journal + Mood
             </button>
             {(reflection || challengeText || rememberText) && (
-              <p className="text-center text-xs font-body text-primary mt-2">💾 Auto-saved</p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-3 text-xs font-body">
+                <span className="text-[hsl(var(--forest))]">💾 Auto-saved</span>
+                <Link
+                  to="/app/journal"
+                  className="text-[hsl(var(--gold-dark))] hover:underline underline-offset-4 font-semibold"
+                >
+                  View in Journal →
+                </Link>
+                <Link
+                  to="/app/mood"
+                  className="text-[hsl(var(--gold-dark))] hover:underline underline-offset-4 font-semibold"
+                >
+                  View in Mood Tracker →
+                </Link>
+              </div>
             )}
           </div>
         </div>
