@@ -9,6 +9,7 @@ import {
   TrendingUp, Calendar, Clock, Heart, Brain, Zap, Target,
   Download, Share2, Filter, ChevronRight, Award, Flame
 } from "lucide-react";
+import { PageHero, StatTile } from "@/components/ui-premium";
 import {
   generateAnalyticsReport,
   getWeeklyBreakdown,
@@ -59,26 +60,14 @@ function AdvancedAnalyticsPageInner() {
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
         {/* ── Hero Section ── */}
-        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-[hsl(var(--forest))]/10 via-card to-[hsl(var(--gold))]/10 border border-[hsl(var(--cream-dark))]">
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-[hsl(var(--gold))]/25 to-transparent blur-3xl" />
-          <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-gradient-to-tr from-[hsl(var(--forest))]/20 to-transparent blur-3xl" />
-          <div className="relative p-8 sm:p-12">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className="text-[10px] font-body font-bold tracking-[0.22em] uppercase text-[hsl(var(--forest))] mb-2">Premium Insights</p>
-                <h1 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-2">
-                  Advanced Analytics
-                </h1>
-                <p className="text-sm text-muted-foreground max-w-2xl">
-                  Deep insights into your practice, wellness trends, and personal growth — visualized in your brand palette.
-                </p>
-              </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/20 to-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0 shadow-soft">
-                <TrendingUp className="w-8 h-8 text-[hsl(var(--forest))]" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageHero
+          eyebrow="Premium Insights"
+          title="Advanced Analytics"
+          description="Deep insights into your practice, wellness trends, and personal growth — visualized in your brand palette."
+          image="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&q=80&w=1600"
+          height="sm"
+          overlay="forest"
+        />
 
         {/* ── Period Selector ── */}
         <div className="flex gap-2 flex-wrap">
@@ -99,60 +88,38 @@ function AdvancedAnalyticsPageInner() {
 
         {/* ── Key Metrics ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            {
-              label: 'Total Practice',
-              value: `${Math.round(report.totalPracticeMinutes)}`,
-              unit: 'minutes',
-              icon: Clock,
-              gradient: 'from-[hsl(var(--forest))]/8 to-card',
-              iconGrad: 'from-[hsl(var(--forest))]/20 to-[hsl(var(--sage))]/15',
-              iconColor: 'text-[hsl(var(--forest))]',
-            },
-            {
-              label: 'Consistency',
-              value: `${Math.round(report.consistencyScore)}`,
-              unit: '%',
-              icon: Flame,
-              gradient: 'from-[hsl(var(--gold))]/12 to-card',
-              iconGrad: 'from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/20',
-              iconColor: 'text-[hsl(var(--gold-dark))]',
-            },
-            {
-              label: 'Avg Daily',
-              value: `${report.averageDailyPractice.toFixed(1)}`,
-              unit: 'min',
-              icon: Target,
-              gradient: 'from-[hsl(var(--sage))]/12 to-card',
-              iconGrad: 'from-[hsl(var(--sage))]/25 to-[hsl(var(--sage-light))]/20',
-              iconColor: 'text-[hsl(var(--sage-dark))]',
-            },
-            {
-              label: 'Mood Trend',
-              value: `${Math.abs(Math.round(report.moodTrend))}`,
-              unit: '%',
-              icon: Heart,
-              gradient: 'from-[hsl(var(--forest-mid))]/10 to-card',
-              iconGrad: 'from-[hsl(var(--forest-mid))]/20 to-[hsl(var(--forest))]/15',
-              iconColor: 'text-[hsl(var(--forest-mid))]',
-            },
-          ].map((metric, idx) => (
-            <Card
-              key={idx}
-              className={`bg-gradient-to-br ${metric.gradient} rounded-2xl p-5 border border-border/50 shadow-soft`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${metric.iconGrad} flex items-center justify-center`}>
-                  <metric.icon className={`w-5 h-5 ${metric.iconColor}`} />
-                </div>
-              </div>
-              <p className="text-xs font-body text-muted-foreground mb-1">{metric.label}</p>
-              <p className="font-display text-2xl font-bold text-foreground">
-                {metric.value}
-                <span className="text-sm text-muted-foreground ml-1">{metric.unit}</span>
-              </p>
-            </Card>
-          ))}
+          <StatTile
+            label="Total Practice"
+            value={Math.round(report.totalPracticeMinutes)}
+            unit="min"
+            icon={Clock}
+            tone="forest"
+          />
+          <StatTile
+            label="Consistency"
+            value={Math.round(report.consistencyScore)}
+            unit="%"
+            icon={Flame}
+            tone="gold"
+          />
+          <StatTile
+            label="Avg Daily"
+            value={report.averageDailyPractice.toFixed(1)}
+            unit="min"
+            icon={Target}
+            tone="sage"
+          />
+          <StatTile
+            label="Mood Trend"
+            value={Math.abs(Math.round(report.moodTrend))}
+            unit="%"
+            icon={Heart}
+            tone="neutral"
+            trend={{
+              value: `${Math.abs(Math.round(report.moodTrend))}% vs prev`,
+              direction: report.moodTrend >= 0 ? "up" : "down",
+            }}
+          />
         </div>
 
         {/* ── Charts Grid ── */}
