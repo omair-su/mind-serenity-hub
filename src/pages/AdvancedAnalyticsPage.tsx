@@ -9,6 +9,7 @@ import {
   TrendingUp, Calendar, Clock, Heart, Brain, Zap, Target,
   Download, Share2, Filter, ChevronRight, Award, Flame
 } from "lucide-react";
+import { PageHero, StatTile } from "@/components/ui-premium";
 import {
   generateAnalyticsReport,
   getWeeklyBreakdown,
@@ -59,26 +60,14 @@ function AdvancedAnalyticsPageInner() {
     <AppLayout>
       <div className="space-y-6 animate-fade-in">
         {/* ── Hero Section ── */}
-        <div className="relative overflow-hidden rounded-2xl shadow-elevated bg-gradient-to-br from-[hsl(var(--forest))]/10 via-card to-[hsl(var(--gold))]/10 border border-[hsl(var(--cream-dark))]">
-          <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-[hsl(var(--gold))]/25 to-transparent blur-3xl" />
-          <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-gradient-to-tr from-[hsl(var(--forest))]/20 to-transparent blur-3xl" />
-          <div className="relative p-8 sm:p-12">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <p className="text-[10px] font-body font-bold tracking-[0.22em] uppercase text-[hsl(var(--forest))] mb-2">Premium Insights</p>
-                <h1 className="font-display text-3xl sm:text-4xl font-semibold text-foreground mb-2">
-                  Advanced Analytics
-                </h1>
-                <p className="text-sm text-muted-foreground max-w-2xl">
-                  Deep insights into your practice, wellness trends, and personal growth — visualized in your brand palette.
-                </p>
-              </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/20 to-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0 shadow-soft">
-                <TrendingUp className="w-8 h-8 text-[hsl(var(--forest))]" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageHero
+          eyebrow="Premium Insights"
+          title="Advanced Analytics"
+          description="Deep insights into your practice, wellness trends, and personal growth — visualized in your brand palette."
+          image="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&q=80&w=1600"
+          height="sm"
+          overlay="forest"
+        />
 
         {/* ── Period Selector ── */}
         <div className="flex gap-2 flex-wrap">
