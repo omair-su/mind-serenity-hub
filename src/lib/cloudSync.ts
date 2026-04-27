@@ -103,6 +103,10 @@ export interface DayState {
   bookmarked?: boolean;
   calmRating?: number;
   completedAt?: string;
+  /** ISO timestamp of last mood_entries sync — prevents duplicate rows */
+  moodSyncedAt?: string;
+  /** UUID of the linked mood_entries row */
+  moodEntryId?: string;
 }
 
 const dayLocalKey = (n: number) => `wv-day-${n}`;
