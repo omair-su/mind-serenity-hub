@@ -116,40 +116,59 @@ export default function MoodTrackerPage() {
         {/* Premium hook */}
         <button
           onClick={() => setPremiumOpen(true)}
-          className="w-full text-left rounded-2xl p-4 bg-gradient-to-br from-gold/10 via-card to-primary/5 border border-gold/30 flex items-center gap-3 hover:shadow-soft transition-all"
+          className="w-full text-left rounded-2xl p-5 bg-gradient-to-br from-[hsl(var(--gold-light)/0.4)] via-white to-[hsl(var(--cream))] border border-[hsl(var(--gold)/0.4)] flex items-center gap-3 hover:shadow-[var(--shadow-gold-val)] hover:-translate-y-0.5 transition-all"
         >
-          <div className="p-2.5 rounded-xl bg-gold/15"><Lock className="w-4 h-4 text-gold" /></div>
-          <div className="flex-1">
-            <p className="font-display text-sm font-bold text-foreground">Monthly Emotional Health Report</p>
-            <p className="text-[10px] font-body text-muted-foreground">PDF with charts, AI narrative & recommendations</p>
+          <div className="p-3 rounded-xl bg-[hsl(var(--gold)/0.2)]">
+            <Lock className="w-4 h-4 text-[hsl(var(--gold-dark))]" />
           </div>
-          <span className="text-[10px] font-body font-bold text-gold uppercase tracking-widest">Plus</span>
+          <div className="flex-1">
+            <p className="font-display text-sm font-bold text-charcoal">Monthly Emotional Health Report</p>
+            <p className="text-xs font-body text-charcoal-soft mt-0.5">
+              PDF with charts, AI narrative & recommendations
+            </p>
+          </div>
+          <span className="text-[10px] font-body font-bold text-[hsl(var(--gold-dark))] uppercase tracking-[0.2em] px-3 py-1 rounded-full bg-[hsl(var(--gold)/0.15)]">
+            Plus
+          </span>
         </button>
 
         {/* Recent */}
-        {entries.length > 0 && (
-          <div className="rounded-2xl bg-card border border-border p-5 shadow-soft">
-            <h3 className="font-display text-base font-bold text-foreground mb-3">Recent Check-Ins</h3>
+        {entries.length > 0 ? (
+          <LuxeCard variant="default" padded>
+            <h3 className="font-display text-lg font-bold text-charcoal mb-4">Recent Check-Ins</h3>
             <div className="space-y-2">
               {entries.slice(0, 6).map((m) => {
                 const slice = EMOTION_WHEEL.find((s) => s.primary === m.emotion_primary);
                 return (
-                  <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30">
+                  <div
+                    key={m.id}
+                    className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(var(--sage-light)/0.5)] hover:bg-[hsl(var(--sage-light))] transition-colors"
+                  >
                     <span className="text-2xl">{slice?.emoji ?? "💭"}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-body font-semibold text-foreground capitalize">
-                        {m.emotion_primary}{m.emotion_secondary ? ` · ${m.emotion_secondary}` : ""}
+                      <p className="text-sm font-body font-semibold text-charcoal capitalize">
+                        {m.emotion_primary}
+                        {m.emotion_secondary ? ` · ${m.emotion_secondary}` : ""}
                       </p>
-                      <p className="text-[10px] font-body text-muted-foreground">
+                      <p className="text-[10px] font-body text-charcoal-soft mt-0.5">
                         {new Date(m.created_at).toLocaleDateString()} · ⚡{m.energy ?? "—"} · 🎯{m.focus ?? "—"}
                       </p>
                     </div>
-                    {m.note && <p className="text-[10px] font-body text-muted-foreground max-w-[120px] truncate italic">"{m.note}"</p>}
+                    {m.note && (
+                      <p className="text-[10px] font-body text-charcoal-soft max-w-[120px] truncate italic">
+                        "{m.note}"
+                      </p>
+                    )}
                   </div>
                 );
               })}
             </div>
-          </div>
+          </LuxeCard>
+        ) : (
+          <EmptyState
+            title="Your first check-in awaits"
+            description="Tap 'New Check-In' above to log how you're feeling. Each entry adds to your emotional weather pattern."
+          />
         )}
       </motion.div>
     </AppLayout>
