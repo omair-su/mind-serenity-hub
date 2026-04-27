@@ -88,60 +88,38 @@ function AdvancedAnalyticsPageInner() {
 
         {/* ── Key Metrics ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            {
-              label: 'Total Practice',
-              value: `${Math.round(report.totalPracticeMinutes)}`,
-              unit: 'minutes',
-              icon: Clock,
-              gradient: 'from-[hsl(var(--forest))]/8 to-card',
-              iconGrad: 'from-[hsl(var(--forest))]/20 to-[hsl(var(--sage))]/15',
-              iconColor: 'text-[hsl(var(--forest))]',
-            },
-            {
-              label: 'Consistency',
-              value: `${Math.round(report.consistencyScore)}`,
-              unit: '%',
-              icon: Flame,
-              gradient: 'from-[hsl(var(--gold))]/12 to-card',
-              iconGrad: 'from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/20',
-              iconColor: 'text-[hsl(var(--gold-dark))]',
-            },
-            {
-              label: 'Avg Daily',
-              value: `${report.averageDailyPractice.toFixed(1)}`,
-              unit: 'min',
-              icon: Target,
-              gradient: 'from-[hsl(var(--sage))]/12 to-card',
-              iconGrad: 'from-[hsl(var(--sage))]/25 to-[hsl(var(--sage-light))]/20',
-              iconColor: 'text-[hsl(var(--sage-dark))]',
-            },
-            {
-              label: 'Mood Trend',
-              value: `${Math.abs(Math.round(report.moodTrend))}`,
-              unit: '%',
-              icon: Heart,
-              gradient: 'from-[hsl(var(--forest-mid))]/10 to-card',
-              iconGrad: 'from-[hsl(var(--forest-mid))]/20 to-[hsl(var(--forest))]/15',
-              iconColor: 'text-[hsl(var(--forest-mid))]',
-            },
-          ].map((metric, idx) => (
-            <Card
-              key={idx}
-              className={`bg-gradient-to-br ${metric.gradient} rounded-2xl p-5 border border-border/50 shadow-soft`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${metric.iconGrad} flex items-center justify-center`}>
-                  <metric.icon className={`w-5 h-5 ${metric.iconColor}`} />
-                </div>
-              </div>
-              <p className="text-xs font-body text-muted-foreground mb-1">{metric.label}</p>
-              <p className="font-display text-2xl font-bold text-foreground">
-                {metric.value}
-                <span className="text-sm text-muted-foreground ml-1">{metric.unit}</span>
-              </p>
-            </Card>
-          ))}
+          <StatTile
+            label="Total Practice"
+            value={Math.round(report.totalPracticeMinutes)}
+            unit="min"
+            icon={Clock}
+            tone="forest"
+          />
+          <StatTile
+            label="Consistency"
+            value={Math.round(report.consistencyScore)}
+            unit="%"
+            icon={Flame}
+            tone="gold"
+          />
+          <StatTile
+            label="Avg Daily"
+            value={report.averageDailyPractice.toFixed(1)}
+            unit="min"
+            icon={Target}
+            tone="sage"
+          />
+          <StatTile
+            label="Mood Trend"
+            value={Math.abs(Math.round(report.moodTrend))}
+            unit="%"
+            icon={Heart}
+            tone="neutral"
+            trend={{
+              value: `${Math.abs(Math.round(report.moodTrend))}% vs prev`,
+              direction: report.moodTrend >= 0 ? "up" : "down",
+            }}
+          />
         </div>
 
         {/* ── Charts Grid ── */}
