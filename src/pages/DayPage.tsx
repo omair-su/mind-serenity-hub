@@ -169,22 +169,53 @@ export default function DayPage() {
   const durationMins = day ? parseDuration(day.duration) : 15;
   const timer = useTimer(durationMins);
 
-  // Auto-save
+  // Auto-save (silent — no mood-table sync to avoid duplicate rows)
+  const buildState = useCallback((): DayState => ({
+    reflection,
+    calmRating: calmRating[0],
+    moodBefore: moodBefore[0],
+    moodAfter: moodAfter[0],
+    challengeText,
+    rememberText,
+    checklist,
+    bookmarked,
+    intention: intentionWord,
+    moodEntryId: syncMetaRef.current.moodEntryId,
+    moodSyncedAt: syncMetaRef.current.moodSyncedAt,
+  }), [reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked, intentionWord]);
+
   const autoSave = useCallback(() => {
-    const state: DayState = {
-      reflection,
-      calmRating: calmRating[0],
-      moodBefore: moodBefore[0],
-      moodAfter: moodAfter[0],
-      challengeText,
-      rememberText,
-      checklist,
-      bookmarked,
-      intention: intentionWord,
-    };
+    const state = buildState();
     try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
     saveDayState(dayNumber, state).catch(() => {});
-  }, [dayNumber, reflection, calmRating, moodBefore, moodAfter, challengeText, rememberText, checklist, bookmarked, intentionWord]);
+  }, [dayNumber, buildState]);
+
+  /** Explicit save — also syncs to Mood Tracker so the day's mood appears in the Mood page. */
+  const saveAndSync = useCallback(async () => {
+    const state = buildState();
+    try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
+    await saveDayState(dayNumber, state).catch(() => {});
+    try {
+      const synced = await syncDayToMood(dayNumber, state);
+      if (synced.moodEntryId) {
+        syncMetaRef.current = {
+          moodEntryId: synced.moodEntryId,
+          moodSyncedAt: synced.moodSyncedAt,
+        };
+        // Persist the link so re-opens don't create duplicates
+        await saveDayState(dayNumber, synced).catch(() => {});
+        toast.success("Reflection saved", {
+          description: "Mood logged to your tracker · Reflection added to Journal",
+        });
+      } else {
+        toast.success("Reflection saved");
+      }
+    } catch (e) {
+      console.warn("[DayPage] mood sync failed", e);
+      toast.success("Reflection saved");
+    }
+  }, [dayNumber, buildState]);
+
 
   useEffect(() => {
     const t = setTimeout(autoSave, 2000);
