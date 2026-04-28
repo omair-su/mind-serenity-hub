@@ -10,7 +10,9 @@ import { useProfile } from "@/hooks/useProfile";
 import { toast } from "@/hooks/use-toast";
 
 const DISMISS_KEY = "wv-push-prompt-dismissed-v1";
+const DISMISS_AT_KEY = "wv-push-prompt-dismissed-at";
 const FIRST_VISIT_KEY = "wv-first-visit-at";
+const REPROMPT_AFTER_DAYS = 3;
 
 export default function PushPrefsPrompt() {
   const { profile, notifPrefs, updateNotifPrefs } = useProfile();
@@ -22,7 +24,17 @@ export default function PushPrefsPrompt() {
     if (!isPushSupported()) return;
     if (notifPrefs.browser_push) return;
     if (Notification.permission === "denied") return;
-    if (localStorage.getItem(DISMISS_KEY)) return;
+
+    // If previously dismissed, only re-prompt after REPROMPT_AFTER_DAYS days.
+    if (localStorage.getItem(DISMISS_KEY)) {
+      const dismissedAt = localStorage.getItem(DISMISS_AT_KEY);
+      if (!dismissedAt) return; // legacy dismissal — respect permanently
+      const ageMs = Date.now() - new Date(dismissedAt).getTime();
+      if (ageMs < REPROMPT_AFTER_DAYS * 24 * 60 * 60 * 1000) return;
+      // Re-prompt window reached — clear flag so user sees prompt again
+      localStorage.removeItem(DISMISS_KEY);
+      localStorage.removeItem(DISMISS_AT_KEY);
+    }
 
     // Stamp first visit so we can wait until day 2.
     const stamped = localStorage.getItem(FIRST_VISIT_KEY);
@@ -39,6 +51,7 @@ export default function PushPrefsPrompt() {
 
   const dismiss = () => {
     localStorage.setItem(DISMISS_KEY, "1");
+    localStorage.setItem(DISMISS_AT_KEY, new Date().toISOString());
     setShow(false);
   };
 
