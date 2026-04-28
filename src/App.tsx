@@ -134,7 +134,9 @@ function AppInner() {
           <Route path="/app/ai-recommendations" element={Guarded(<AIRecommendationsPage />)} />
           <Route path="/app/advanced-analytics" element={Guarded(<AdvancedAnalyticsPage />)} />
           <Route path="/app/offline-downloads" element={Guarded(<OfflineDownloadsPage />)} />
-          <Route path="/app/paddle-checklist" element={Guarded(<PaddleChecklistPage />)} />
+          {import.meta.env.DEV && (
+            <Route path="/app/paddle-checklist" element={Guarded(<PaddleChecklistPage />)} />
+          )}
 
           <Route path="*" element={<NotFound />} />
         </Routes>
