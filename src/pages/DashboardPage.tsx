@@ -24,6 +24,7 @@ import QuoteRibbon from "@/components/dashboard/QuoteRibbon";
 import WelcomeModal from "@/components/dashboard/WelcomeModal";
 import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
+import StreakRecoveryModal from "@/components/dashboard/StreakRecoveryModal";
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 const containerVariants = {
