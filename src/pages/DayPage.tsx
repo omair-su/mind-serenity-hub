@@ -2,16 +2,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { weeks } from "@/data/courseData";
 import {
-  ChevronLeft, ChevronRight, Clock, Gauge, Sun, Target, Sparkles,
-  Heart, FlaskConical, Play, Pause, Volume2, Check, Bookmark, BookmarkCheck,
-  LayoutDashboard, Timer, Leaf, Loader2, Square, Music, Lightbulb, X
+  ChevronLeft, ChevronRight, Heart, Play, Pause, Volume2, Check,
+  Timer, Loader2, Square, Music, X
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackForDay } from "@/lib/realAmbientTracks";
-import logoImg from "@/assets/willow-logo.png";
 import DayHeroCinema from "@/components/day/DayHeroCinema";
 import IntentionRitual from "@/components/day/IntentionRitual";
 import PracticeMode from "@/components/day/PracticeMode";
@@ -19,6 +17,14 @@ import SoundBedDesigner from "@/components/day/SoundBedDesigner";
 import AIDailyInsight from "@/components/day/AIDailyInsight";
 import MoodDeltaChart from "@/components/day/MoodDeltaChart";
 import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
+import DayNavbar from "@/components/day/DayNavbar";
+import DayProgressIndicator from "@/components/day/DayProgressIndicator";
+import { DailyWisdomCard, WisdomDialog } from "@/components/day/DailyWisdomCard";
+import TodaysFocusCard from "@/components/day/TodaysFocusCard";
+import DayScienceBox from "@/components/day/DayScienceBox";
+import PreparationBox from "@/components/day/PreparationBox";
+import WeekOverview from "@/components/day/WeekOverview";
+import DayNavFooter from "@/components/day/DayNavFooter";
 import { getDayHero } from "@/data/dayHeroImages";
 import { loadDayState, saveDayState, syncDayToMood, type DayState } from "@/lib/cloudSync";
 import { toast } from "sonner";
@@ -303,30 +309,14 @@ export default function DayPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* ─── STICKY NAVBAR ─── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-card/95 backdrop-blur-md shadow-sm border-b border-border" : "bg-transparent"}`}>
-        <div className="max-w-[1200px] mx-auto flex items-center justify-between h-[72px] px-6">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2">
-              <img src={logoImg} alt="Willow Vibes" className="h-7 w-7" />
-              <span className={`font-display text-lg font-bold ${scrolled ? "text-primary" : "text-card"}`}>Willow Vibes™</span>
-            </Link>
-            <span className={`hidden sm:inline text-xs font-body ${scrolled ? "text-muted-foreground" : "text-card/70"}`}>Day {dayNumber} of 30</span>
-          </div>
-          <div className={`hidden md:block text-sm font-body font-medium ${scrolled ? "text-foreground" : "text-card/90"}`}>
-            Week {weekData.week}: {weekData.title}
-          </div>
-          <div className="flex items-center gap-3">
-            <Link to="/course" className={`flex items-center gap-1.5 text-sm font-body transition-colors ${scrolled ? "text-muted-foreground hover:text-foreground" : "text-card/70 hover:text-card"}`}>
-              <LayoutDashboard className="w-4 h-4" /> <span className="hidden sm:inline">Dashboard</span>
-            </Link>
-            <button onClick={() => { setBookmarked(!bookmarked); }} className={`p-2 rounded-lg transition-colors ${scrolled ? "hover:bg-secondary" : "hover:bg-card/10"}`}>
-              {bookmarked
-                ? <BookmarkCheck className={`w-5 h-5 ${scrolled ? "text-primary" : "text-card"}`} />
-                : <Bookmark className={`w-5 h-5 ${scrolled ? "text-muted-foreground" : "text-card/70"}`} />}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <DayNavbar
+        scrolled={scrolled}
+        dayNumber={dayNumber}
+        weekNumber={weekData.week}
+        weekTitle={weekData.title}
+        bookmarked={bookmarked}
+        onToggleBookmark={() => setBookmarked(!bookmarked)}
+      />
 
       {/* ─── CINEMATIC HERO (Ken Burns + parallax + particles) ─── */}
       <DayHeroCinema
@@ -394,64 +384,20 @@ export default function DayPage() {
         )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-5 shadow-soft border border-[hsl(var(--border))]">
-          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Your Journey</span>
-              <span className="text-xs font-body text-[hsl(var(--charcoal-soft))]">Day {dayNumber} of 30 · {percentage}%</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {Array.from({ length: 30 }, (_, i) => {
-                const num = i + 1;
-                const isComplete = completedDays[i];
-                const isCurrent = num === dayNumber;
-                const locked = num >= 8 && !isPremium;
-                return (
-                  <button
-                    key={num}
-                    onClick={() => {
-                      if (locked) {
-                        setPremiumGate({
-                          feature: `Day ${num} is a Plus chapter`,
-                          description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
-                        });
-                        return;
-                      }
-                      navigate(`/day/${num}`);
-                    }}
-                    className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent
-                        ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
-                        : isComplete
-                        ? "bg-[hsl(var(--forest))] text-white shadow-sm"
-                        : locked
-                        ? "bg-[hsl(var(--cream-dark))]/60 text-[hsl(var(--charcoal-soft))]/60"
-                        : "bg-[hsl(var(--cream-dark))]/70 text-[hsl(var(--charcoal-soft))] hover:bg-[hsl(var(--cream-dark))]"}`}
-                    title={locked ? `Day ${num} · Plus` : `Day ${num}`}
-                  >
-                    {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <DayProgressIndicator
+          dayNumber={dayNumber}
+          percentage={percentage}
+          completedDays={completedDays}
+          isPremium={isPremium}
+          onSelectDay={(num) => navigate(`/day/${num}`)}
+          onLockedDay={(num) => setPremiumGate({
+            feature: `Day ${num} is a Plus chapter`,
+            description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
+          })}
+        />
 
         {/* ─── DAILY WISDOM ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-start justify-between mb-3">
-              <span className="text-3xl">{selectedWisdom.icon}</span>
-              <Lightbulb className="w-5 h-5 text-[hsl(var(--gold-dark))]/70" />
-            </div>
-            <p className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))] mb-2">Daily Wisdom</p>
-            <h3 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))] mb-2">{selectedWisdom.title}</h3>
-            <p className="font-body text-base text-[hsl(var(--charcoal))]/85 italic leading-relaxed">{selectedWisdom.insight}</p>
-            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 pt-4 border-t border-[hsl(var(--gold))]/15">Tap to explore more wisdom</p>
-          </div>
-        </div>
+        <DailyWisdomCard selected={selectedWisdom} onOpen={() => setShowWisdomDialog(true)} />
 
         {/* ─── QUOTE ─── */}
         <blockquote className="relative pl-6 border-l-[3px] border-primary/30">
@@ -460,71 +406,26 @@ export default function DayPage() {
         </blockquote>
 
         {/* ─── TODAY'S FOCUS CARD ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
-            <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Today's Focus</span>
-            <h2 className="font-display text-2xl font-semibold text-[hsl(var(--charcoal))] mt-2 mb-3">{day.focus}</h2>
-            <p className="text-base font-body text-[hsl(var(--charcoal))]/80 leading-relaxed">{day.benefits}</p>
-            <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[
-                { icon: Target, label: "Practice", value: day.practice },
-                { icon: Clock, label: "Duration", value: day.duration },
-                { icon: Gauge, label: "Level", value: day.difficulty },
-                { icon: Sun, label: "Best Time", value: day.bestTime },
-                { icon: Sparkles, label: "Focus", value: day.focus },
-              ].map(item => (
-                <div key={item.label} className="p-3 rounded-xl bg-white/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
-                  <item.icon className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] mb-1" />
-                  <p className="text-[10px] font-body font-semibold text-[hsl(var(--charcoal-soft))] uppercase tracking-wider">{item.label}</p>
-                  <p className="text-xs font-body text-[hsl(var(--charcoal))] mt-0.5 line-clamp-2">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <TodaysFocusCard
+          emoji={dayEmojis[dayNumber] || "🧘"}
+          focus={day.focus}
+          benefits={day.benefits}
+          practice={day.practice}
+          duration={day.duration}
+          difficulty={day.difficulty}
+          bestTime={day.bestTime}
+        />
 
         {/* ─── SOUND BED DESIGNER (ambient + binaural + bowls) ─── */}
         <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
 
         {/* ─── SCIENCE BOX ─── */}
-        <div className="relative overflow-hidden rounded-2xl bg-[hsl(var(--cream))]/70 border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-[hsl(var(--gold))]/15 flex items-center justify-center">
-                <FlaskConical className="w-4 h-4 text-[hsl(var(--gold-dark))]" />
-              </div>
-              <div>
-                <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">The Science</span>
-                <p className="text-sm font-display font-semibold text-[hsl(var(--charcoal))]">Why This Works</p>
-              </div>
-            </div>
-            <p className="text-base font-body leading-[2] text-[hsl(var(--charcoal))]/85">{day.scienceText}</p>
-            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 italic border-t border-[hsl(var(--gold))]/15 pt-3">{day.scienceSource}</p>
-          </div>
-        </div>
+        <DayScienceBox text={day.scienceText} source={day.scienceSource} />
 
         <div className="h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent" />
 
         {/* ─── PREPARATION ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-8 border border-[hsl(var(--border))] shadow-soft">
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--forest))]/8 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2.5 mb-4">
-              <Leaf className="w-5 h-5 text-[hsl(var(--forest))]" />
-              <h2 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))]">Before You Begin</h2>
-            </div>
-            <p className="font-body text-base leading-[2] text-[hsl(var(--charcoal))]/80">{day.preparation}</p>
-            <ul className="mt-4 space-y-2 font-body text-sm text-[hsl(var(--charcoal-soft))]">
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Find a quiet, comfortable space</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Set timer for {day.duration}</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Turn off notifications</li>
-              <li className="flex items-start gap-2"><Leaf className="w-3.5 h-3.5 text-[hsl(var(--forest))] mt-1 flex-shrink-0" /> Have your journal nearby</li>
-            </ul>
-          </div>
-        </div>
+        <PreparationBox preparation={day.preparation} duration={day.duration} />
 
         {/* ─── REAL AMBIENT MUSIC (curated per day) ─── */}
         <div>
@@ -852,102 +753,31 @@ export default function DayPage() {
         </div>
 
         {/* ─── WEEK OVERVIEW ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
-          <h3 className="font-display text-lg font-semibold text-foreground mb-4">This Week's Journey</h3>
-          <div className="space-y-2">
-            {weekData.days.map(d => {
-              const dc = completedDays[d.day - 1];
-              const isCurrent = d.day === dayNumber;
-              return (
-                <button
-                  key={d.day}
-                  onClick={() => navigate(`/day/${d.day}`)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors ${
-                    isCurrent ? "bg-gold/10 border border-gold/30" : dc ? "hover:bg-secondary/60" : "opacity-60 hover:opacity-80"
-                  }`}
-                >
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-body font-bold ${
-                    dc && !isCurrent ? "bg-primary text-card" : isCurrent ? "bg-gold text-card" : "bg-secondary text-muted-foreground"
-                  }`}>
-                    {dc && !isCurrent ? <Check className="w-3 h-3" /> : d.day}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-body truncate ${isCurrent ? "font-semibold text-foreground" : "text-foreground/70"}`}>
-                      Day {d.day}: {d.title}
-                    </p>
-                  </div>
-                  {isCurrent && <span className="text-xs font-body text-gold font-medium">Current →</span>}
-                  {dc && !isCurrent && <span className="text-xs text-primary">✓</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <WeekOverview
+          days={weekData.days}
+          currentDay={dayNumber}
+          completedDays={completedDays}
+          onSelect={(d) => navigate(`/day/${d}`)}
+        />
 
         {/* ─── NAVIGATION ─── */}
-        <div className="flex items-center justify-between gap-4 pt-4 pb-8">
-          {prevDay ? (
-            <button
-              onClick={() => navigate(`/day/${prevDay}`)}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary/10 text-primary font-body font-medium text-sm hover:bg-primary/20 transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" /> Day {prevDay}
-            </button>
-          ) : <div />}
-
-          <Link
-            to="/course"
-            className="flex items-center gap-2 px-5 py-3.5 rounded-xl border border-border bg-card text-foreground font-body text-sm hover:bg-secondary/60 transition-colors"
-          >
-            <LayoutDashboard className="w-4 h-4" /> Dashboard
-          </Link>
-
-          {nextDay ? (
-            <button
-              onClick={() => navigate(`/day/${nextDay}`)}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold text-card font-body font-semibold text-sm hover:bg-gold/90 transition-colors shadow-md"
-            >
-              Day {nextDay} <ChevronRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              onClick={() => navigate("/course")}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold text-card font-body font-semibold text-sm hover:bg-gold/90 transition-colors shadow-md"
-            >
-              Complete! 🎉 <ChevronRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        <DayNavFooter
+          prevDay={prevDay}
+          nextDay={nextDay}
+          onPrev={() => prevDay && navigate(`/day/${prevDay}`)}
+          onNext={() => nextDay && navigate(`/day/${nextDay}`)}
+          onComplete={() => navigate("/course")}
+        />
       </main>
 
       {/* ─── WISDOM DIALOG ─── */}
-      {showWisdomDialog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card rounded-2xl max-w-md w-full p-8 shadow-2xl border border-border/50">
-            <div className="flex items-start justify-between mb-4">
-              <span className="text-4xl">{selectedWisdom.icon}</span>
-              <button onClick={() => setShowWisdomDialog(false)} className="text-muted-foreground hover:text-foreground">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <h2 className="font-display text-2xl font-semibold text-foreground mb-3">{selectedWisdom.title}</h2>
-            <p className="font-body text-lg text-foreground/80 leading-relaxed mb-6 italic">{selectedWisdom.insight}</p>
-            <div className="space-y-2">
-              {WISDOM_CARDS.map((card, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedWisdom(card)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    selectedWisdom.title === card.title ? "bg-primary/20 border border-primary/30" : "hover:bg-secondary/60"
-                  }`}
-                >
-                  <p className="text-sm font-body font-semibold text-foreground">{card.icon} {card.title}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <WisdomDialog
+        open={showWisdomDialog}
+        cards={WISDOM_CARDS}
+        selected={selectedWisdom}
+        onSelect={setSelectedWisdom}
+        onClose={() => setShowWisdomDialog(false)}
+      />
 
       {/* ─── INTENTION RITUAL (pre-session 3-step flow) ─── */}
       <IntentionRitual
