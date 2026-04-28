@@ -747,102 +747,31 @@ export default function DayPage() {
         </div>
 
         {/* ─── WEEK OVERVIEW ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
-          <h3 className="font-display text-lg font-semibold text-foreground mb-4">This Week's Journey</h3>
-          <div className="space-y-2">
-            {weekData.days.map(d => {
-              const dc = completedDays[d.day - 1];
-              const isCurrent = d.day === dayNumber;
-              return (
-                <button
-                  key={d.day}
-                  onClick={() => navigate(`/day/${d.day}`)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors ${
-                    isCurrent ? "bg-gold/10 border border-gold/30" : dc ? "hover:bg-secondary/60" : "opacity-60 hover:opacity-80"
-                  }`}
-                >
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-body font-bold ${
-                    dc && !isCurrent ? "bg-primary text-card" : isCurrent ? "bg-gold text-card" : "bg-secondary text-muted-foreground"
-                  }`}>
-                    {dc && !isCurrent ? <Check className="w-3 h-3" /> : d.day}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-body truncate ${isCurrent ? "font-semibold text-foreground" : "text-foreground/70"}`}>
-                      Day {d.day}: {d.title}
-                    </p>
-                  </div>
-                  {isCurrent && <span className="text-xs font-body text-gold font-medium">Current →</span>}
-                  {dc && !isCurrent && <span className="text-xs text-primary">✓</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <WeekOverview
+          days={weekData.days}
+          currentDay={dayNumber}
+          completedDays={completedDays}
+          onSelect={(d) => navigate(`/day/${d}`)}
+        />
 
         {/* ─── NAVIGATION ─── */}
-        <div className="flex items-center justify-between gap-4 pt-4 pb-8">
-          {prevDay ? (
-            <button
-              onClick={() => navigate(`/day/${prevDay}`)}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary/10 text-primary font-body font-medium text-sm hover:bg-primary/20 transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" /> Day {prevDay}
-            </button>
-          ) : <div />}
-
-          <Link
-            to="/course"
-            className="flex items-center gap-2 px-5 py-3.5 rounded-xl border border-border bg-card text-foreground font-body text-sm hover:bg-secondary/60 transition-colors"
-          >
-            <LayoutDashboard className="w-4 h-4" /> Dashboard
-          </Link>
-
-          {nextDay ? (
-            <button
-              onClick={() => navigate(`/day/${nextDay}`)}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold text-card font-body font-semibold text-sm hover:bg-gold/90 transition-colors shadow-md"
-            >
-              Day {nextDay} <ChevronRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              onClick={() => navigate("/course")}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gold text-card font-body font-semibold text-sm hover:bg-gold/90 transition-colors shadow-md"
-            >
-              Complete! 🎉 <ChevronRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        <DayNavFooter
+          prevDay={prevDay}
+          nextDay={nextDay}
+          onPrev={() => prevDay && navigate(`/day/${prevDay}`)}
+          onNext={() => nextDay && navigate(`/day/${nextDay}`)}
+          onComplete={() => navigate("/course")}
+        />
       </main>
 
       {/* ─── WISDOM DIALOG ─── */}
-      {showWisdomDialog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-card rounded-2xl max-w-md w-full p-8 shadow-2xl border border-border/50">
-            <div className="flex items-start justify-between mb-4">
-              <span className="text-4xl">{selectedWisdom.icon}</span>
-              <button onClick={() => setShowWisdomDialog(false)} className="text-muted-foreground hover:text-foreground">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <h2 className="font-display text-2xl font-semibold text-foreground mb-3">{selectedWisdom.title}</h2>
-            <p className="font-body text-lg text-foreground/80 leading-relaxed mb-6 italic">{selectedWisdom.insight}</p>
-            <div className="space-y-2">
-              {WISDOM_CARDS.map((card, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedWisdom(card)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    selectedWisdom.title === card.title ? "bg-primary/20 border border-primary/30" : "hover:bg-secondary/60"
-                  }`}
-                >
-                  <p className="text-sm font-body font-semibold text-foreground">{card.icon} {card.title}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <WisdomDialog
+        open={showWisdomDialog}
+        cards={WISDOM_CARDS}
+        selected={selectedWisdom}
+        onSelect={setSelectedWisdom}
+        onClose={() => setShowWisdomDialog(false)}
+      />
 
       {/* ─── INTENTION RITUAL (pre-session 3-step flow) ─── */}
       <IntentionRitual
