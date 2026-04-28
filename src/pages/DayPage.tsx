@@ -2,16 +2,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { weeks } from "@/data/courseData";
 import {
-  ChevronLeft, ChevronRight, Clock, Gauge, Sun, Target, Sparkles,
-  Heart, FlaskConical, Play, Pause, Volume2, Check, Bookmark, BookmarkCheck,
-  LayoutDashboard, Timer, Leaf, Loader2, Square, Music, Lightbulb, X
+  ChevronLeft, ChevronRight, Heart, Play, Pause, Volume2, Check,
+  Timer, Loader2, Square, Music, X
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackForDay } from "@/lib/realAmbientTracks";
-import logoImg from "@/assets/willow-logo.png";
 import DayHeroCinema from "@/components/day/DayHeroCinema";
 import IntentionRitual from "@/components/day/IntentionRitual";
 import PracticeMode from "@/components/day/PracticeMode";
@@ -19,6 +17,14 @@ import SoundBedDesigner from "@/components/day/SoundBedDesigner";
 import AIDailyInsight from "@/components/day/AIDailyInsight";
 import MoodDeltaChart from "@/components/day/MoodDeltaChart";
 import HeartCoherenceRing from "@/components/day/HeartCoherenceRing";
+import DayNavbar from "@/components/day/DayNavbar";
+import DayProgressIndicator from "@/components/day/DayProgressIndicator";
+import { DailyWisdomCard, WisdomDialog } from "@/components/day/DailyWisdomCard";
+import TodaysFocusCard from "@/components/day/TodaysFocusCard";
+import DayScienceBox from "@/components/day/DayScienceBox";
+import PreparationBox from "@/components/day/PreparationBox";
+import WeekOverview from "@/components/day/WeekOverview";
+import DayNavFooter from "@/components/day/DayNavFooter";
 import { getDayHero } from "@/data/dayHeroImages";
 import { loadDayState, saveDayState, syncDayToMood, type DayState } from "@/lib/cloudSync";
 import { toast } from "sonner";
