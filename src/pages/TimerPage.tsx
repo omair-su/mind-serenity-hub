@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
-import { Timer, Play, Pause, RotateCcw, Plus, Volume2 } from "lucide-react";
+import { Timer, Play, Pause, RotateCcw, Plus, Volume2, Command } from "lucide-react";
+import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { saveTimerSession } from "@/lib/userStore";
+import { useAmbientBed, type AmbientBedId } from "@/hooks/useAmbientBed";
 
 const presets = [
   { label: "5 min", minutes: 5 },
@@ -13,23 +15,14 @@ const presets = [
   { label: "30 min", minutes: 30 },
 ];
 
-const backgrounds = [
-  { label: "Silence", id: "silence", icon: "🔇" },
-  { label: "Rain", id: "rain", icon: "🌧️" },
-  { label: "Ocean", id: "ocean", icon: "🌊" },
-  { label: "Forest", id: "forest", icon: "🌲" },
-  { label: "Fire", id: "fire", icon: "🔥" },
-  { label: "White Noise", id: "white-noise", icon: "📻" },
-];
-
 export default function TimerPage() {
   const [minutes, setMinutes] = useState(15);
   const [seconds, setSeconds] = useState(minutes * 60);
   const [running, setRunning] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [bg, setBg] = useState("silence");
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number>(0);
+  const { bed, setBed, volume, setVolume, stopBed, options } = useAmbientBed("silence", 35);
 
   useEffect(() => {
     if (running && seconds > 0) {
@@ -39,12 +32,16 @@ export default function TimerPage() {
       if (running && seconds <= 0) {
         setRunning(false);
         setCompleted(true);
+        stopBed();
         const elapsed = Math.round((Date.now() - startTimeRef.current) / 60000);
         saveTimerSession({ date: new Date().toISOString(), duration: elapsed, type: 'custom' });
       }
     }
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [running, seconds]);
+  }, [running, seconds, stopBed]);
+
+  // Stop ambient bed when leaving the page
+  useEffect(() => () => stopBed(), [stopBed]);
 
   const start = () => {
     setSeconds(minutes * 60);
@@ -54,28 +51,44 @@ export default function TimerPage() {
   };
 
   const toggle = () => setRunning(r => !r);
-  const reset = () => { setRunning(false); setSeconds(minutes * 60); setCompleted(false); };
+  const reset = () => { setRunning(false); setSeconds(minutes * 60); setCompleted(false); stopBed(); };
   const extend = () => setSeconds(s => s + 5 * 60);
 
   const fmt = `${Math.floor(seconds / 60).toString().padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
   const progress = 1 - seconds / (minutes * 60);
 
+  // 6 BPM coherent breathing cycle for the inner ring pulse
+  const breathCycle = 10;
+
   return (
     <AppLayout>
       <div className="space-y-8 max-w-xl mx-auto animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
-            <Timer className="w-5 h-5 text-gold" />
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">
+              <Timer className="w-5 h-5 text-gold" />
+            </div>
+            <div>
+              <h1 className="font-display text-3xl font-bold text-foreground">Meditation Timer</h1>
+              <p className="text-sm font-body text-muted-foreground">Build your own practice session.</p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Meditation Timer</h1>
-            <p className="text-sm font-body text-muted-foreground">Build your own practice session.</p>
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary/60 border border-border text-[10px] font-body text-muted-foreground">
+            <Command className="w-3 h-3" /> K to search
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-primary/5 via-card to-gold/5 rounded-2xl border border-border/50 p-8 shadow-soft text-center">
-          <div className="relative w-56 h-56 mx-auto mb-6">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+          <div className="relative w-64 h-64 mx-auto mb-6">
+            {/* Inner breathing pulse — only while running */}
+            {running && (
+              <motion.div
+                className="absolute inset-6 rounded-full bg-gradient-to-br from-[hsl(var(--gold))]/12 to-[hsl(var(--forest))]/8 blur-xl"
+                animate={{ scale: [0.85, 1.05, 0.85], opacity: [0.4, 0.75, 0.4] }}
+                transition={{ duration: breathCycle, repeat: Infinity, ease: "easeInOut" }}
+              />
+            )}
+            <svg className="w-full h-full -rotate-90 relative" viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="52" fill="none" stroke="hsl(var(--secondary))" strokeWidth="6" />
               <circle cx="60" cy="60" r="52" fill="none" stroke="url(#timerGradient)" strokeWidth="6"
                 strokeDasharray={`${progress * 327} 327`} strokeLinecap="round" className="transition-all duration-1000 drop-shadow-[0_0_8px_hsl(var(--gold)/0.3)]" />
@@ -87,19 +100,19 @@ export default function TimerPage() {
               </defs>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="font-display text-5xl font-bold text-foreground">{fmt}</span>
+              <span className="font-display text-5xl font-bold text-foreground tabular-nums">{fmt}</span>
               <span className={`text-xs font-body mt-1 px-2 py-0.5 rounded-full ${
                 running ? "bg-primary/10 text-primary" : completed ? "bg-gold/15 text-gold" : "text-muted-foreground"
               }`}>
-                {running ? "In Progress" : completed ? "Complete!" : "Ready"}
+                {running ? "In Progress" : completed ? "Complete" : "Ready"}
               </span>
             </div>
           </div>
 
           <div className="flex items-center justify-center gap-3">
-            {!running && !completed && (
+            {!running && !completed && seconds === minutes * 60 && (
               <button onClick={start} className="px-8 py-3.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-base font-body font-semibold flex items-center gap-2 shadow-gold hover:shadow-lg transition-all">
-                <Play className="w-5 h-5" /> Start
+                <Play className="w-5 h-5" /> Begin
               </button>
             )}
             {running && (
@@ -146,23 +159,27 @@ export default function TimerPage() {
           </div>
         )}
 
-        {!running && (
-          <div className="bg-gradient-to-br from-[hsl(var(--forest-deep))]/5 to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-6 shadow-soft">
-            <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Volume2 className="w-4 h-4 text-primary" /> Background Sound
-            </h3>
-            <div className="grid grid-cols-3 gap-2">
-              {backgrounds.map(b => (
-                <button key={b.id} onClick={() => setBg(b.id)}
-                  className={`py-2.5 rounded-xl text-sm font-body font-medium transition-all flex items-center justify-center gap-1.5 ${
-                    bg === b.id ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-sm" : "bg-secondary/60 text-muted-foreground hover:bg-secondary"
-                  }`}>
-                  <span className="text-sm">{b.icon}</span> {b.label}
-                </button>
-              ))}
-            </div>
+        <div className="bg-gradient-to-br from-[hsl(var(--forest-deep))]/5 to-[hsl(var(--forest))]/5 rounded-2xl border border-border/50 p-6 shadow-soft">
+          <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Volume2 className="w-4 h-4 text-primary" /> Background Sound
+          </h3>
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {options.map(b => (
+              <button key={b.id} onClick={() => setBed(b.id as AmbientBedId)}
+                className={`py-2.5 rounded-xl text-sm font-body font-medium transition-all flex items-center justify-center gap-1.5 ${
+                  bed === b.id ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-sm" : "bg-secondary/60 text-muted-foreground hover:bg-secondary"
+                }`}>
+                <span className="text-sm">{b.emoji}</span> {b.label}
+              </button>
+            ))}
           </div>
-        )}
+          {bed !== "silence" && (
+            <div>
+              <label className="text-xs font-body text-muted-foreground">Volume: {volume}%</label>
+              <Slider value={[volume]} onValueChange={v => setVolume(v[0])} min={0} max={100} step={1} className="mt-2" />
+            </div>
+          )}
+        </div>
       </div>
     </AppLayout>
   );
