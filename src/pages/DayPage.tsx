@@ -378,64 +378,20 @@ export default function DayPage() {
         )}
 
         {/* ─── PROGRESS INDICATOR ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl p-5 shadow-soft border border-[hsl(var(--border))]">
-          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Your Journey</span>
-              <span className="text-xs font-body text-[hsl(var(--charcoal-soft))]">Day {dayNumber} of 30 · {percentage}%</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {Array.from({ length: 30 }, (_, i) => {
-                const num = i + 1;
-                const isComplete = completedDays[i];
-                const isCurrent = num === dayNumber;
-                const locked = num >= 8 && !isPremium;
-                return (
-                  <button
-                    key={num}
-                    onClick={() => {
-                      if (locked) {
-                        setPremiumGate({
-                          feature: `Day ${num} is a Plus chapter`,
-                          description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
-                        });
-                        return;
-                      }
-                      navigate(`/day/${num}`);
-                    }}
-                    className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
-                      ${isCurrent
-                        ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
-                        : isComplete
-                        ? "bg-[hsl(var(--forest))] text-white shadow-sm"
-                        : locked
-                        ? "bg-[hsl(var(--cream-dark))]/60 text-[hsl(var(--charcoal-soft))]/60"
-                        : "bg-[hsl(var(--cream-dark))]/70 text-[hsl(var(--charcoal-soft))] hover:bg-[hsl(var(--cream-dark))]"}`}
-                    title={locked ? `Day ${num} · Plus` : `Day ${num}`}
-                  >
-                    {locked ? <Lock className="w-3 h-3" /> : isComplete && !isCurrent ? <Check className="w-3 h-3" /> : num}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <DayProgressIndicator
+          dayNumber={dayNumber}
+          percentage={percentage}
+          completedDays={completedDays}
+          isPremium={isPremium}
+          onSelectDay={(num) => navigate(`/day/${num}`)}
+          onLockedDay={(num) => setPremiumGate({
+            feature: `Day ${num} is a Plus chapter`,
+            description: "Days 1–7 are free. Unlock the full 30-day program with Willow Plus.",
+          })}
+        />
 
         {/* ─── DAILY WISDOM ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft cursor-pointer hover:shadow-md transition-all" onClick={() => setShowWisdomDialog(true)}>
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="flex items-start justify-between mb-3">
-              <span className="text-3xl">{selectedWisdom.icon}</span>
-              <Lightbulb className="w-5 h-5 text-[hsl(var(--gold-dark))]/70" />
-            </div>
-            <p className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))] mb-2">Daily Wisdom</p>
-            <h3 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))] mb-2">{selectedWisdom.title}</h3>
-            <p className="font-body text-base text-[hsl(var(--charcoal))]/85 italic leading-relaxed">{selectedWisdom.insight}</p>
-            <p className="text-xs font-body text-[hsl(var(--charcoal-soft))] mt-4 pt-4 border-t border-[hsl(var(--gold))]/15">Tap to explore more wisdom</p>
-          </div>
-        </div>
+        <DailyWisdomCard selected={selectedWisdom} onOpen={() => setShowWisdomDialog(true)} />
 
         {/* ─── QUOTE ─── */}
         <blockquote className="relative pl-6 border-l-[3px] border-primary/30">
@@ -444,30 +400,15 @@ export default function DayPage() {
         </blockquote>
 
         {/* ─── TODAY'S FOCUS CARD ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 shadow-soft">
-          <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl pointer-events-none" />
-          <div className="relative z-10">
-            <div className="text-5xl mb-4">{dayEmojis[dayNumber] || "🧘"}</div>
-            <span className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">Today's Focus</span>
-            <h2 className="font-display text-2xl font-semibold text-[hsl(var(--charcoal))] mt-2 mb-3">{day.focus}</h2>
-            <p className="text-base font-body text-[hsl(var(--charcoal))]/80 leading-relaxed">{day.benefits}</p>
-            <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[
-                { icon: Target, label: "Practice", value: day.practice },
-                { icon: Clock, label: "Duration", value: day.duration },
-                { icon: Gauge, label: "Level", value: day.difficulty },
-                { icon: Sun, label: "Best Time", value: day.bestTime },
-                { icon: Sparkles, label: "Focus", value: day.focus },
-              ].map(item => (
-                <div key={item.label} className="p-3 rounded-xl bg-white/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
-                  <item.icon className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] mb-1" />
-                  <p className="text-[10px] font-body font-semibold text-[hsl(var(--charcoal-soft))] uppercase tracking-wider">{item.label}</p>
-                  <p className="text-xs font-body text-[hsl(var(--charcoal))] mt-0.5 line-clamp-2">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <TodaysFocusCard
+          emoji={dayEmojis[dayNumber] || "🧘"}
+          focus={day.focus}
+          benefits={day.benefits}
+          practice={day.practice}
+          duration={day.duration}
+          difficulty={day.difficulty}
+          bestTime={day.bestTime}
+        />
 
         {/* ─── SOUND BED DESIGNER (ambient + binaural + bowls) ─── */}
         <SoundBedDesigner defaultBed={getDayHero(dayNumber).ambientBed} />
