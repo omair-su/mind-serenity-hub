@@ -1474,12 +1474,12 @@ export default function ResourcesPage() {
                     {selectedItem.type}
                   </span>
                 </div>
-                <h2 className="font-display text-xl font-bold text-foreground">{selectedItem.title}</h2>
+                <h2 className="font-display text-xl font-bold text-slate-950">{selectedItem.title}</h2>
                 <p className="text-sm font-body text-muted-foreground mt-0.5">{selectedItem.desc}</p>
               </div>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="w-9 h-9 rounded-xl bg-secondary hover:bg-destructive/10 hover:text-destructive flex items-center justify-center transition-colors flex-shrink-0"
+                className="w-9 h-9 rounded-xl bg-secondary hover:bg-destructive/10 flex items-center justify-center transition-colors flex-shrink-0 text-card-foreground"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1497,8 +1497,10 @@ export default function ResourcesPage() {
               <p className="text-xs font-body text-muted-foreground">Willow Vibes™ Premium Content</p>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="px-5 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-body font-medium hover:bg-primary/90 transition-colors"
+                className="px-5 py-2 text-primary-foreground rounded-xl text-sm font-body font-medium transition-colors bg-gold-dark"
               >
+                Done Reading
+              </button>
                 Done Reading
               </button>
             </div>
