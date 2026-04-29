@@ -1336,7 +1336,7 @@ A secular exploration of consciousness, self, and the deepest insights that medi
 ];
 
 const typeColors: Record<string, string> = {
-  PDF: "bg-destructive/10 text-destructive border-destructive/20",
+  PDF: "border-destructive/20 text-neutral-950 bg-gold-dark",
   Article: "bg-primary/10 text-primary border-primary/20",
   Guide: "bg-gold/10 text-gold border-gold/20",
   Checklist: "bg-accent text-accent-foreground border-border",
