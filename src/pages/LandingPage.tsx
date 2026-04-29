@@ -398,7 +398,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <FAQSection />
+      <Suspense fallback={null}>
+        <FAQSection />
+      </Suspense>
 
       {/* Final CTA — Onyx editorial pull-quote */}
       <section className="py-20 md:py-32 bg-gradient-to-br from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx-mid))] relative overflow-hidden">
