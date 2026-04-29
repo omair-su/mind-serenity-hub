@@ -26,7 +26,13 @@ export async function initializePaddle(): Promise<void> {
   paddleInitPromise = new Promise<void>((resolve, reject) => {
     const existing = document.querySelector('script[data-paddle="true"]');
     if (existing) {
-      existing.addEventListener("load", () => initFromWindow(resolve, reject));
+      if (window.Paddle) {
+        initFromWindow(resolve, reject);
+        return;
+      }
+
+      existing.addEventListener("load", () => initFromWindow(resolve, reject), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Failed to load Paddle.js")), { once: true });
       return;
     }
     const script = document.createElement("script");
@@ -43,12 +49,18 @@ export async function initializePaddle(): Promise<void> {
 
 function initFromWindow(resolve: () => void, reject: (e: Error) => void) {
   try {
+    if (!window.Paddle?.Environment || !window.Paddle?.Initialize) {
+      throw new Error("Paddle.js loaded incorrectly");
+    }
+
     const env = clientToken!.startsWith("test_") ? "sandbox" : "production";
     window.Paddle.Environment.set(env);
     window.Paddle.Initialize({ token: clientToken });
     paddleInitialized = true;
+    paddleInitPromise = null;
     resolve();
   } catch (e) {
+    paddleInitPromise = null;
     reject(e as Error);
   }
 }
