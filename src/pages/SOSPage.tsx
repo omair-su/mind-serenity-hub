@@ -582,6 +582,10 @@ export default function SOSPage() {
         </div>
 
       </motion.div>
+
+      {/* ─── Emergency Calm overlays ─── */}
+      <PanicAttackProtocol open={panicOpen} onClose={() => setPanicOpen(false)} />
+      <RescuePlayer technique={rescueActive} onClose={() => setRescueActive(null)} />
     </AppLayout>
   );
 }
