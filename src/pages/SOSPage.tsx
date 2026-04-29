@@ -168,6 +168,22 @@ export default function SOSPage() {
   const [completed, setCompleted] = useState<{ id: string; title: string } | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ─── Emergency Calm new state ──────────────────────────────────────────
+  const [panicOpen, setPanicOpen] = useState(false);
+  const [rescueActive, setRescueActive] = useState<RescueTechnique | null>(null);
+  const [rescueCategory, setRescueCategory] = useState<RescueCategory>("anxiety");
+  const [favorites, setFavorites] = useState<string[]>([]);
+  useEffect(() => { setFavorites(getFavorites()); }, [rescueActive, panicOpen]);
+
+  const filteredRescues = useMemo(
+    () => RESCUE_TECHNIQUES.filter(r => r.category === rescueCategory),
+    [rescueCategory]
+  );
+  const favoriteRescues = useMemo(
+    () => RESCUE_TECHNIQUES.filter(r => favorites.includes(r.id)),
+    [favorites]
+  );
+
   const activeSession = allSessions.find(s => s.id === active);
 
   useEffect(() => {
