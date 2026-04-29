@@ -1501,8 +1501,6 @@ export default function ResourcesPage() {
               >
                 Done Reading
               </button>
-                Done Reading
-              </button>
             </div>
           </div>
         </div>
