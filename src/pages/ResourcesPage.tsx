@@ -1336,7 +1336,7 @@ A secular exploration of consciousness, self, and the deepest insights that medi
 ];
 
 const typeColors: Record<string, string> = {
-  PDF: "bg-destructive/10 text-destructive border-destructive/20",
+  PDF: "border-destructive/20 text-neutral-950 bg-gold-dark",
   Article: "bg-primary/10 text-primary border-primary/20",
   Guide: "bg-gold/10 text-gold border-gold/20",
   Checklist: "bg-accent text-accent-foreground border-border",
@@ -1408,7 +1408,7 @@ export default function ResourcesPage() {
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
         {/* Editorial hero */}
-        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10">
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10 opacity-100 bg-slate-600">
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
             background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
           }} />
@@ -1441,7 +1441,7 @@ export default function ResourcesPage() {
                   className={`bg-gradient-to-br ${sg.card} rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-md hover:-translate-y-1 transition-all duration-300 text-left group`}
                 >
                   <div className="flex items-start justify-between mb-2 gap-2">
-                    <p className="font-display text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{item.title}</p>
+                    <p className="font-display text-sm font-semibold transition-colors text-slate-900">{item.title}</p>
                     <span className={`text-[10px] font-body font-semibold px-2 py-0.5 rounded-full border flex-shrink-0 ${typeColors[item.type] || "bg-secondary text-muted-foreground border-border"}`}>
                       {item.type}
                     </span>
