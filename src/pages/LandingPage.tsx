@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImg from "@/assets/premium-hero.webp";
-import AboutSection from "@/components/AboutSection";
-import ScienceSection from "@/components/ScienceSection";
-import CurriculumSection from "@/components/CurriculumSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import FAQSection from "@/components/FAQSection";
+// Below-the-fold sections are lazy-loaded so they don't bloat the initial JS
+// bundle (saves ~100KB on first paint without changing layout/UX).
+const AboutSection = lazy(() => import("@/components/AboutSection"));
+const ScienceSection = lazy(() => import("@/components/ScienceSection"));
+const CurriculumSection = lazy(() => import("@/components/CurriculumSection"));
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
