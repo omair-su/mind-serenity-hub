@@ -1441,7 +1441,7 @@ export default function ResourcesPage() {
                   className={`bg-gradient-to-br ${sg.card} rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-md hover:-translate-y-1 transition-all duration-300 text-left group`}
                 >
                   <div className="flex items-start justify-between mb-2 gap-2">
-                    <p className="font-display text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{item.title}</p>
+                    <p className="font-display text-sm font-semibold transition-colors text-slate-900">{item.title}</p>
                     <span className={`text-[10px] font-body font-semibold px-2 py-0.5 rounded-full border flex-shrink-0 ${typeColors[item.type] || "bg-secondary text-muted-foreground border-border"}`}>
                       {item.type}
                     </span>
