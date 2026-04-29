@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
 import { 
   Zap, Play, Pause, Clock, AlertTriangle, Shield, Wind, Heart, 
   Moon, Briefcase, Activity, Sparkles, ChevronRight, X, Volume2, 
-  Ear, Eye, Fingerprint, Info, Award, Star, Flame, Users, Gem, CheckCircle2
+  Ear, Eye, Fingerprint, Info, Award, Star, Flame, Users, Gem, CheckCircle2,
+  Siren
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { startBinaural, stopBinaural, FREQUENCY_PRESETS } from "@/lib/binauralBeats";
@@ -12,6 +13,12 @@ import BreathingOrb from "@/components/bodyscan/BreathingOrb";
 import AICompanionChat from "@/components/sos/AICompanionChat";
 import EmergencyContacts from "@/components/sos/EmergencyContacts";
 import { extraSOSSessions } from "@/data/extraSOS";
+import PanicAttackProtocol from "@/components/sos/PanicAttackProtocol";
+import RescuePlayer from "@/components/sos/RescuePlayer";
+import SOSInsightsCard from "@/components/sos/SOSInsightsCard";
+import TrustedContactsCard from "@/components/sos/TrustedContactsCard";
+import { RESCUE_TECHNIQUES, CATEGORY_META, type RescueCategory, type RescueTechnique } from "@/data/rescueTechniques";
+import { getFavorites } from "@/lib/sosStore";
 
 const sosSessions = [
   { 
