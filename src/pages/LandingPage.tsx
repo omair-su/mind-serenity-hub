@@ -239,7 +239,7 @@ export default function LandingPage() {
         </div>
 
         {/* Editorial Trust Strip */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[hsl(var(--onyx))]/65 backdrop-blur-xl border-t border-[hsl(var(--champagne))]/20">
+        <div className="absolute bottom-0 left-0 right-0 bg-[hsl(var(--onyx))]/85 border-t border-[hsl(var(--champagne))]/20">
           <div className="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-white/75 text-xs font-body tracking-[0.12em]">
             <div className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" /> 30-Day Guarantee</div>
             <div className="hidden sm:block w-px h-3 bg-white/20" />
