@@ -266,6 +266,108 @@ export default function SOSPage() {
           </div>
         </div>
 
+        {/* ─── BIG RED PANIC BUTTON — instant access, no nav ─── */}
+        <button
+          onClick={() => setPanicOpen(true)}
+          className="group w-full relative overflow-hidden rounded-3xl p-6 md:p-7 text-left bg-gradient-to-br from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-600 active:scale-[0.99] transition-all shadow-2xl shadow-rose-600/30 border border-white/10"
+        >
+          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-3xl group-hover:bg-white/20 transition" />
+          <div className="relative flex items-center gap-5">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center border border-white/30">
+              <Siren className="w-7 h-7 md:w-8 md:h-8 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-white/70 mb-1">Emergency Calm</p>
+              <h2 className="font-display text-xl md:text-3xl font-bold text-white leading-tight">I'M HAVING A PANIC ATTACK</h2>
+              <p className="text-xs md:text-sm font-body text-white/80 mt-1">Tap for instant guided intervention. You're safe.</p>
+            </div>
+            <ChevronRight className="w-6 h-6 text-white/80 hidden md:block" />
+          </div>
+        </button>
+
+        {/* ─── QUICK RESCUES ─── */}
+        {!active && (
+          <section className="space-y-5">
+            <div className="flex items-end justify-between gap-3 px-2">
+              <div>
+                <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">Quick Rescues</h2>
+                <p className="text-xs md:text-sm font-body text-muted-foreground">5-minute techniques for the moment</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2 overflow-x-auto pb-1 -mx-2 px-2">
+              {(Object.keys(CATEGORY_META) as RescueCategory[]).map(cat => {
+                const meta = CATEGORY_META[cat];
+                const isActive = rescueCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setRescueCategory(cat)}
+                    className={`flex-shrink-0 px-4 py-2.5 rounded-2xl border font-body text-sm font-bold transition flex items-center gap-2 ${
+                      isActive
+                        ? "bg-[hsl(var(--forest))] border-[hsl(var(--forest))] text-white shadow-md"
+                        : "bg-card border-border text-foreground hover:border-[hsl(var(--forest))]/40"
+                    }`}
+                  >
+                    <span>{meta.emoji}</span> {meta.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {favoriteRescues.length > 0 && (
+              <div className="rounded-2xl bg-gradient-to-br from-[hsl(var(--gold))]/8 to-[hsl(var(--gold-light))]/4 border border-[hsl(var(--gold))]/20 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Star className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] fill-current" />
+                  <p className="text-[10px] font-body font-bold uppercase tracking-widest text-[hsl(var(--gold-dark))]">My go-to calms</p>
+                </div>
+                <div className="flex gap-2 overflow-x-auto -mx-1 px-1">
+                  {favoriteRescues.map(r => (
+                    <button
+                      key={r.id}
+                      onClick={() => setRescueActive(r)}
+                      className="flex-shrink-0 px-4 py-2.5 rounded-xl bg-card border border-border hover:border-[hsl(var(--gold))]/40 transition flex items-center gap-2"
+                    >
+                      <span className="text-base">{r.emoji}</span>
+                      <span className="text-xs font-body font-bold text-foreground">{r.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {filteredRescues.map(r => (
+                <button
+                  key={r.id}
+                  onClick={() => setRescueActive(r)}
+                  className="group text-left rounded-2xl bg-card border border-border hover:border-[hsl(var(--forest))]/40 hover:shadow-lg hover:-translate-y-0.5 transition-all p-4"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl">{r.emoji}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-display text-base font-bold text-foreground">{r.title}</h3>
+                        {favorites.includes(r.id) && <Star className="w-3 h-3 text-[hsl(var(--gold-dark))] fill-current" />}
+                      </div>
+                      <p className="text-xs font-body text-muted-foreground line-clamp-2">{r.desc}</p>
+                      <div className="flex items-center gap-1.5 mt-2 text-[10px] font-body font-bold uppercase tracking-wider text-[hsl(var(--forest))]">
+                        <Clock className="w-3 h-3" /> {r.duration} min
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Insights + Trusted contacts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <SOSInsightsCard />
+              <TrustedContactsCard />
+            </div>
+          </section>
+        )}
+
         <AnimatePresence mode="wait">
           {activeSession && (
             <motion.div
