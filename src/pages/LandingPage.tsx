@@ -12,6 +12,19 @@ const CurriculumSection = lazy(() => import("@/components/CurriculumSection"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
+// Inject a high-priority preload for the hero image as soon as this module
+// loads, so the LCP image starts fetching in parallel with React hydration
+// rather than waiting until the <img> is mounted in the tree.
+if (typeof document !== "undefined" && !document.querySelector('link[data-hero-preload]')) {
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  link.href = heroImg;
+  link.fetchPriority = "high";
+  link.setAttribute("data-hero-preload", "");
+  document.head.appendChild(link);
+}
+
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
