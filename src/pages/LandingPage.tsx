@@ -245,10 +245,12 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      <AboutSection />
-      <ScienceSection />
-      <CurriculumSection />
-      <TestimonialsSection />
+      <Suspense fallback={null}>
+        <AboutSection />
+        <ScienceSection />
+        <CurriculumSection />
+        <TestimonialsSection />
+      </Suspense>
 
       {/* Pricing — Editorial onyx, champagne accents */}
       <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-[hsl(var(--onyx))] via-[hsl(var(--onyx-soft))] to-[hsl(var(--onyx))] relative overflow-hidden">
