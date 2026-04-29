@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImg from "@/assets/premium-hero.jpg";
+import heroImg from "@/assets/premium-hero.webp";
 import AboutSection from "@/components/AboutSection";
 import ScienceSection from "@/components/ScienceSection";
 import CurriculumSection from "@/components/CurriculumSection";
