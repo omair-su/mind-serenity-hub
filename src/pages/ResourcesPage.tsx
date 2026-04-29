@@ -1337,13 +1337,13 @@ A secular exploration of consciousness, self, and the deepest insights that medi
 
 const typeColors: Record<string, string> = {
   PDF: "border-destructive/20 text-neutral-950 bg-gold-dark",
-  Article: "bg-primary/10 text-primary border-primary/20",
+  Article: "border-primary/20 text-cream bg-gold-dark",
   Guide: "bg-gold/10 text-gold border-gold/20",
   Checklist: "bg-accent text-accent-foreground border-border",
   FAQ: "bg-secondary text-foreground border-border",
   Infographic: "bg-sage/20 text-foreground border-sage/30",
   Workbook: "bg-gold/10 text-gold border-gold/20",
-  Template: "bg-primary/10 text-primary border-primary/20",
+  Template: "border-primary/20 text-cream bg-gold-dark",
   Worksheet: "bg-accent text-accent-foreground border-border",
 };
 
@@ -1356,9 +1356,9 @@ function parseMarkdown(text: string) {
     const line = lines[i];
 
     if (line.startsWith("# ")) {
-      elements.push(<h1 key={i} className="font-display text-2xl font-bold text-foreground mt-2 mb-4">{line.slice(2)}</h1>);
+      elements.push(<h1 key={i} className="font-display text-2xl font-bold mt-2 mb-4 text-slate-950">{line.slice(2)}</h1>);
     } else if (line.startsWith("## ")) {
-      elements.push(<h2 key={i} className="font-display text-lg font-semibold text-foreground mt-6 mb-2 text-primary">{line.slice(3)}</h2>);
+      elements.push(<h2 key={i} className="font-display text-lg font-semibold mt-6 mb-2 text-slate-800">{line.slice(3)}</h2>);
     } else if (line.startsWith("### ")) {
       elements.push(<h3 key={i} className="font-display text-base font-semibold text-foreground mt-4 mb-1">{line.slice(4)}</h3>);
     } else if (line.startsWith("---")) {
@@ -1366,15 +1366,15 @@ function parseMarkdown(text: string) {
     } else if (line.startsWith("- ") || line.startsWith("✓ ") || line.startsWith("✗ ") || line.startsWith("❌ ") || (line.startsWith("**") && line.includes(":**"))) {
       elements.push(
         <div key={i} className="flex gap-2 items-start mb-1">
-          <span className="text-primary mt-1 flex-shrink-0 text-xs">•</span>
-          <p className="font-body text-sm text-foreground leading-relaxed" dangerouslySetInnerHTML={{ __html: line.replace(/^[-✓✗❌]\s/, "").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") }} />
+          <span className="mt-1 flex-shrink-0 text-xs text-gold">•</span>
+          <p className="font-body text-sm leading-relaxed text-charcoal" dangerouslySetInnerHTML={{ __html: line.replace(/^[-✓✗❌]\s/, "").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") }} />
         </div>
       );
     } else if (line.match(/^\*\s/)) {
       elements.push(
         <div key={i} className="flex gap-2 items-start mb-1">
-          <span className="text-primary mt-1 flex-shrink-0">•</span>
-          <p className="font-body text-sm text-foreground leading-relaxed">{line.slice(2)}</p>
+          <span className="mt-1 flex-shrink-0 text-xs text-gold">•</span>
+          <p className="font-body text-sm leading-relaxed text-charcoal">{line.slice(2)}</p>
         </div>
       );
     } else if (line.startsWith("|")) {
@@ -1384,7 +1384,7 @@ function parseMarkdown(text: string) {
       elements.push(<div key={i} className="h-2" />);
     } else {
       elements.push(
-        <p key={i} className="font-body text-sm text-foreground leading-relaxed mb-2"
+        <p key={i} className="font-body text-sm leading-relaxed mb-2 text-charcoal"
           dangerouslySetInnerHTML={{ __html: line.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>") }}
         />
       );
@@ -1474,12 +1474,12 @@ export default function ResourcesPage() {
                     {selectedItem.type}
                   </span>
                 </div>
-                <h2 className="font-display text-xl font-bold text-foreground">{selectedItem.title}</h2>
+                <h2 className="font-display text-xl font-bold text-slate-950">{selectedItem.title}</h2>
                 <p className="text-sm font-body text-muted-foreground mt-0.5">{selectedItem.desc}</p>
               </div>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="w-9 h-9 rounded-xl bg-secondary hover:bg-destructive/10 hover:text-destructive flex items-center justify-center transition-colors flex-shrink-0"
+                className="w-9 h-9 rounded-xl bg-secondary hover:bg-destructive/10 flex items-center justify-center transition-colors flex-shrink-0 text-card-foreground"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1497,7 +1497,7 @@ export default function ResourcesPage() {
               <p className="text-xs font-body text-muted-foreground">Willow Vibes™ Premium Content</p>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="px-5 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-body font-medium hover:bg-primary/90 transition-colors"
+                className="px-5 py-2 text-primary-foreground rounded-xl text-sm font-body font-medium transition-colors bg-gold-dark"
               >
                 Done Reading
               </button>
