@@ -1408,7 +1408,7 @@ export default function ResourcesPage() {
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
         {/* Editorial hero */}
-        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10">
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10 opacity-100 bg-slate-600">
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
             background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
           }} />
