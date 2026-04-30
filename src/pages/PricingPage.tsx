@@ -120,7 +120,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="relative rounded-3xl p-6 sm:p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white"
+            className="calm-card calm-card-lg relative p-6 sm:p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white border-0"
             style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px rgba(91,127,224,0.55)" }}
           >
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: VIOLET }}>
@@ -162,7 +162,7 @@ export default function PricingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col shadow-sm"
+            className="calm-card p-6 sm:p-8 flex flex-col"
           >
             <div className="flex-1">
               <h3 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Plus Monthly</h3>
@@ -201,7 +201,7 @@ export default function PricingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-12 rounded-3xl overflow-hidden relative bg-white border border-slate-200 p-6 sm:p-12 shadow-sm"
+          className="calm-card calm-card-lg mt-14 overflow-hidden relative p-6 sm:p-12"
         >
           <div className="relative grid md:grid-cols-[1fr_auto] gap-6 items-center">
             <div>
