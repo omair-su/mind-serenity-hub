@@ -64,31 +64,31 @@ export default function PricingPage() {
       </header>
 
       {/* Hero — Calm-style centered serif */}
-      <section className="max-w-3xl mx-auto px-6 text-center pt-10 pb-14">
+      <section className="calm-container calm-container-tight text-center calm-section-sm">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-5" style={{ background: "rgba(130,103,214,0.12)", color: VIOLET }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-6" style={{ background: "rgba(130,103,214,0.12)", color: VIOLET }}>
             <Sparkles className="w-3 h-3" />
             <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.25em]">Willow Plus</span>
           </div>
-          <h1 className="font-calm-display text-4xl sm:text-5xl md:text-6xl font-semibold mb-5 leading-[1.1] tracking-[-0.02em]" style={{ color: NAVY }}>
+          <h1 className="calm-h1 mb-5">
             Find your calm.<br />
             <span className="italic">Choose your path.</span>
           </h1>
-          <p className="text-base sm:text-lg font-calm-body max-w-xl mx-auto leading-relaxed" style={{ color: SLATE }}>
+          <p className="calm-lead max-w-xl mx-auto">
             Every plan starts with a 7-day free trial of Plus. Cancel anytime. No hidden fees.
           </p>
         </motion.div>
       </section>
 
       {/* Pricing cards */}
-      <section className="max-w-6xl mx-auto px-6 pb-14">
+      <section className="calm-container pb-20">
         <div className="grid md:grid-cols-3 gap-6 items-stretch">
           {/* FREE */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 flex flex-col shadow-sm"
+            className="calm-card p-6 sm:p-8 flex flex-col"
           >
             <div className="flex-1">
               <h3 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Free</h3>
