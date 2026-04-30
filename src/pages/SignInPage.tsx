@@ -15,7 +15,7 @@ import WillowLogo from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
-import signinBg from "@/assets/signin-bg.jpg";
+import signinBg from "@/assets/calm-hero-mountain.jpg";
 
 type Mode = "signin" | "signup";
 
@@ -229,16 +229,16 @@ export default function SignInPage() {
         `,
       }} />
 
-      {/* ─── PHOTO BACKGROUND ─── */}
+      {/* ─── PHOTO BACKGROUND — Calm-style misty mountain dawn ─── */}
       <div className="absolute inset-0">
         <img
           src={signinBg}
           alt="Misty mountain lake at dawn"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* Soft warm wash to keep mountain visible but readable */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-[hsl(20_60%_85%/0.25)] to-[hsl(280_40%_80%/0.35)]" />
-        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-white/10 md:to-white/40" />
+        {/* Cool navy/violet wash to match landing page palette */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0E2A47]/35 via-[#5B7FE0]/15 to-[#8267D6]/25" />
+        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-white/10 md:to-white/55" />
       </div>
 
       {/* ─── LEFT: BRAND COPY (over photo) ─── */}
