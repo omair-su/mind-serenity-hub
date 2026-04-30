@@ -15,7 +15,7 @@ import WillowLogo from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
-import signinBg from "@/assets/signin-bg.jpg";
+import signinBg from "@/assets/calm-hero-mountain.jpg";
 
 type Mode = "signin" | "signup";
 
@@ -203,7 +203,8 @@ export default function SignInPage() {
               setConfirmationSent(false);
               setMode("signin");
             }}
-            className="w-full h-[52px] rounded-2xl bg-slate-900 text-white font-sans-body font-medium hover:bg-slate-800 transition"
+            className="w-full h-[52px] rounded-full text-white font-sans-body font-semibold transition hover:scale-[1.02]"
+            style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
           >
             Back to sign in
           </button>
@@ -229,16 +230,16 @@ export default function SignInPage() {
         `,
       }} />
 
-      {/* ─── PHOTO BACKGROUND ─── */}
+      {/* ─── PHOTO BACKGROUND — Calm-style misty mountain dawn ─── */}
       <div className="absolute inset-0">
         <img
           src={signinBg}
           alt="Misty mountain lake at dawn"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* Soft warm wash to keep mountain visible but readable */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-[hsl(20_60%_85%/0.25)] to-[hsl(280_40%_80%/0.35)]" />
-        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-white/10 md:to-white/40" />
+        {/* Cool navy/violet wash to match landing page palette */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0E2A47]/35 via-[#5B7FE0]/15 to-[#8267D6]/25" />
+        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-white/10 md:to-white/55" />
       </div>
 
       {/* ─── LEFT: BRAND COPY (over photo) ─── */}
@@ -411,7 +412,8 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-[50px] rounded-xl bg-slate-900 text-white font-sans-body font-medium text-sm hover:bg-slate-800 active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-slate-900/10"
+                  className="w-full h-[52px] rounded-full text-white font-sans-body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
