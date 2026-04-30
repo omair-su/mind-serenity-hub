@@ -185,7 +185,7 @@ export default function SignInPage() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative w-full max-w-md bg-white/90 backdrop-blur-xl rounded-3xl p-10 text-center shadow-2xl border border-white/60"
+          className="relative w-full max-w-md bg-white/90 backdrop-blur-xl calm-card calm-card-lg p-10 text-center shadow-2xl border-white/60"
         >
           <div className="w-16 h-16 rounded-full bg-[hsl(20_70%_60%/0.12)] mx-auto flex items-center justify-center mb-6">
             <Mail className="w-8 h-8 text-[hsl(20_70%_50%)]" />
@@ -304,7 +304,7 @@ export default function SignInPage() {
             <WillowLogo variant="vertical" size="md" colorScheme="mono-white" className="mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]" />
           </div>
 
-          <div className="bg-white/92 backdrop-blur-xl rounded-3xl p-7 md:p-9 shadow-[0_20px_60px_-15px_rgba(30,41,59,0.25)] border border-white/70">
+          <div className="bg-white/92 backdrop-blur-xl calm-card calm-card-lg p-7 md:p-9 shadow-[0_20px_60px_-15px_rgba(30,41,59,0.25)] border-white/70">
             <motion.div variants={itemVariants} className="mb-7">
               <h2 className="font-serif-display text-3xl font-medium text-slate-900 mb-2">
                 {mode === "signup" ? "Create account" : "Sign in"}

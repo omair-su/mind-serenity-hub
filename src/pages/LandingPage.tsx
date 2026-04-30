@@ -285,7 +285,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-6 items-stretch">
             {/* Free */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-3xl bg-white border border-slate-200 p-8 flex flex-col shadow-sm">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="calm-card p-8 flex flex-col">
               <h4 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Discover</h4>
               <p className="font-calm-body text-sm mt-1" style={{ color: SLATE }}>A taste of the journey</p>
               <div className="my-6">
@@ -313,7 +313,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="relative rounded-3xl p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white"
+              className="calm-card calm-card-lg relative p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white border-0"
               style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px rgba(91,127,224,0.55)" }}
             >
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: "#8267D6" }}>
@@ -343,7 +343,7 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Plus Monthly */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.5 }} className="rounded-3xl bg-white border border-slate-200 p-8 flex flex-col shadow-sm">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.5 }} className="calm-card p-8 flex flex-col">
               <h4 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Willow Plus · Monthly</h4>
               <p className="font-calm-body text-sm mt-1" style={{ color: SLATE }}>Flexible, no commitment</p>
               <div className="my-6">
@@ -373,7 +373,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="mt-12 rounded-3xl overflow-hidden relative bg-white border border-slate-200 p-8 sm:p-12 shadow-sm"
+            className="calm-card calm-card-lg mt-14 overflow-hidden relative p-8 sm:p-12"
           >
             <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
               <div>
