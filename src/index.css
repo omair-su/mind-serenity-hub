@@ -62,21 +62,21 @@
   --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-inter: 'Inter', sans-serif;
 
-  /* Shadows */
-  --shadow-soft-val: 0 2px 20px -4px hsl(139 37% 15% / 0.08);
-  --shadow-card-val: 0 8px 40px -8px hsl(139 37% 15% / 0.12);
-  --shadow-elevated-val: 0 16px 60px -12px hsl(139 37% 15% / 0.18);
-  --shadow-gold-val: 0 6px 28px -4px hsl(30 54% 65% / 0.35);
+  /* Shadows — soft cool-tinted */
+  --shadow-soft-val: 0 2px 20px -4px hsl(213 60% 20% / 0.06);
+  --shadow-card-val: 0 8px 30px -10px hsl(213 60% 20% / 0.10);
+  --shadow-elevated-val: 0 18px 60px -16px hsl(213 60% 20% / 0.18);
+  --shadow-gold-val: 0 14px 32px -12px hsl(224 65% 60% / 0.45);
 
-  /* Sidebar */
-  --sidebar-background: 36 33% 95%;
-  --sidebar-foreground: 139 37% 27%;
-  --sidebar-primary: 139 37% 27%;
+  /* Sidebar — light ivory with navy text */
+  --sidebar-background: 210 40% 98%;
+  --sidebar-foreground: 213 67% 16%;
+  --sidebar-primary: 256 56% 62%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 145 22% 90%;
-  --sidebar-accent-foreground: 139 37% 22%;
-  --sidebar-border: 36 20% 88%;
-  --sidebar-ring: 139 37% 27%;
+  --sidebar-accent: 220 30% 95%;
+  --sidebar-accent-foreground: 213 67% 16%;
+  --sidebar-border: 220 22% 91%;
+  --sidebar-ring: 256 56% 62%;
 }
 
 .dark {
