@@ -5,42 +5,48 @@
 @tailwind utilities;
 
 :root {
-  /* ── Willow Vibes Luxury Palette ── */
-  --background: 36 33% 96%;
-  --foreground: 139 37% 27%;
+  /* ── Calm-inspired Premium Palette (light) ── */
+  /* Surfaces: airy ivory/white, text: deep calm navy */
+  --background: 210 40% 98%;             /* #F7F9FC ivory-white */
+  --foreground: 213 67% 16%;             /* #0E2A47 calm navy */
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 24%;
+  --card-foreground: 213 67% 16%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 24%;
-  --primary: 139 37% 27%;
+  --popover-foreground: 213 67% 16%;
+  /* Primary: calm violet (#8267D6) */
+  --primary: 256 56% 62%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 145 20% 91%;
-  --secondary-foreground: 139 37% 22%;
-  --muted: 36 20% 93%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 145 20% 88%;
-  --accent-foreground: 139 37% 25%;
-  --destructive: 0 60% 50%;
+  /* Secondary: soft slate-violet */
+  --secondary: 220 30% 96%;
+  --secondary-foreground: 213 67% 16%;
+  --muted: 220 25% 95%;
+  --muted-foreground: 218 17% 43%;       /* #5B6B82 calm slate */
+  /* Accent: calm blue (#5B7FE0) */
+  --accent: 224 65% 95%;
+  --accent-foreground: 224 67% 35%;
+  --destructive: 0 72% 56%;
   --destructive-foreground: 0 0% 100%;
-  --border: 36 20% 88%;
-  --input: 36 20% 86%;
-  --ring: 139 37% 27%;
+  --border: 220 22% 91%;                 /* slate-200 */
+  --input: 220 22% 91%;
+  --ring: 256 56% 62%;
   --radius: 1rem;
 
-  /* Brand Tokens */
-  --forest: 139 37% 27%;
-  --forest-deep: 139 40% 17%;
-  --forest-mid: 139 35% 22%;
-  --sage: 145 20% 71%;
-  --sage-light: 145 22% 93%;
-  --sage-dark: 145 25% 42%;
-  --gold: 30 54% 65%;
-  --gold-dark: 43 86% 38%;
-  --gold-light: 36 60% 74%;
-  --cream: 36 33% 96%;
-  --cream-dark: 36 18% 90%;
-  --charcoal: 0 0% 24%;
-  --charcoal-soft: 0 0% 38%;
+  /* Brand tokens — remapped to Calm palette so all legacy
+     components (forest/sage/gold/cream/charcoal classes)
+     inherit the new look automatically. */
+  --forest: 213 67% 16%;                 /* navy */
+  --forest-deep: 215 55% 11%;
+  --forest-mid: 214 60% 22%;
+  --sage: 224 65% 65%;                   /* calm blue */
+  --sage-light: 224 65% 95%;
+  --sage-dark: 224 67% 45%;
+  --gold: 256 56% 62%;                   /* calm violet */
+  --gold-dark: 261 50% 50%;
+  --gold-light: 268 75% 92%;             /* violet soft */
+  --cream: 210 40% 98%;
+  --cream-dark: 220 25% 94%;
+  --charcoal: 213 67% 16%;
+  --charcoal-soft: 218 17% 43%;
 
   /* ── Editorial Luxe Tokens (landing page) ── */
   --onyx: 220 18% 8%;          /* deep editorial black with warm undertone */
