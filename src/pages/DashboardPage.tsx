@@ -96,24 +96,22 @@ export default function DashboardPage() {
           <div className="lg:col-span-3">
             <WellnessRing wellness={wellness} level={wellnessLevel} />
           </div>
-          <div className="lg:col-span-2 grid grid-cols-2 gap-2.5">
+          <div className="lg:col-span-2 grid grid-cols-2 gap-3">
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.06, duration: 0.4 }}
-                className="rounded-2xl border border-[hsl(var(--cream-dark))] bg-card p-3.5 shadow-[var(--shadow-soft-val)]"
+                className="calm-widget p-4"
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-lg bg-[hsl(var(--sage-light))] flex items-center justify-center">
-                    <s.icon className="w-4 h-4 text-[hsl(var(--forest))]" />
+                  <span className="w-9 h-9 rounded-xl bg-[hsl(var(--accent))] flex items-center justify-center">
+                    <s.icon className="w-4 h-4 text-[hsl(var(--primary))]" />
                   </span>
-                  <span className="text-[10px] font-body font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                    {s.label}
-                  </span>
+                  <span className="calm-eyebrow-sm">{s.label}</span>
                 </div>
-                <p className="font-display text-xl font-bold text-foreground mt-2">{s.value}</p>
+                <p className="calm-stat-num text-[28px] leading-none mt-3">{s.value}</p>
               </motion.div>
             ))}
           </div>
@@ -143,34 +141,32 @@ export default function DashboardPage() {
 
         {/* Today's focus card */}
         {nextDayData && (
-          <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl border border-[hsl(var(--cream-dark))] shadow-[var(--shadow-card-val)]">
-            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--forest))]/8 via-card to-[hsl(var(--gold))]/8" />
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[hsl(var(--gold))]/15 to-transparent rounded-bl-full" />
-            <div className="relative p-5 sm:p-6">
+          <motion.div variants={itemVariants} className="calm-widget calm-widget-lg relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--accent))]/60 via-transparent to-[hsl(var(--primary))]/8 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-[hsl(var(--primary))]/15 to-transparent rounded-bl-full pointer-events-none" />
+            <div className="relative p-6 sm:p-7">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <p className="text-[10px] font-body font-bold text-[hsl(var(--forest))] uppercase tracking-[0.22em]">
-                    Today's Focus
-                  </p>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mt-1.5 leading-snug">
+                  <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Today's Focus</p>
+                  <h3 className="calm-widget-title text-2xl sm:text-[28px] mt-2 leading-snug">
                     Day {nextDay}: {nextDayData.title}
                   </h3>
-                  <div className="flex flex-wrap items-center gap-2 mt-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[hsl(var(--sage-light))] text-xs font-body text-[hsl(var(--forest))]">
+                  <div className="flex flex-wrap items-center gap-2 mt-4">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--accent))] text-xs font-body text-[hsl(var(--accent-foreground))]">
                       <Clock className="w-3 h-3" /> {nextDayData.duration}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[hsl(var(--gold))]/15 text-xs font-body text-[hsl(var(--gold-dark))]">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--primary))]/12 text-xs font-body text-[hsl(var(--primary))]">
                       <Target className="w-3 h-3" /> {nextDayData.difficulty}
                     </span>
                   </div>
                 </div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))]/15 to-[hsl(var(--sage))]/30 flex items-center justify-center flex-shrink-0">
-                  <Leaf className="w-7 h-7 text-[hsl(var(--forest))]" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--sage))]/30 flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-7 h-7 text-[hsl(var(--primary))]" />
                 </div>
               </div>
               <Link
                 to={`/day/${nextDay}`}
-                className="flex items-center justify-center gap-2 mt-5 w-full py-3.5 rounded-xl bg-[hsl(var(--forest))] text-white font-body font-bold text-sm hover:bg-[hsl(var(--forest-mid))] transition-colors shadow-[var(--shadow-soft-val)]"
+                className="flex items-center justify-center gap-2 mt-6 w-full py-3.5 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-white font-body font-semibold text-sm hover:shadow-[var(--shadow-gold-val)] transition-shadow"
               >
                 <Play className="w-4 h-4" /> Begin Session <ArrowRight className="w-4 h-4" />
               </Link>

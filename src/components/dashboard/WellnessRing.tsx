@@ -33,9 +33,9 @@ export default function WellnessRing({ wellness, level }: Props) {
   return (
     <motion.div
       layout
-      className="relative overflow-hidden rounded-3xl border border-[hsl(var(--cream-dark))] bg-card shadow-[var(--shadow-soft-val)]"
+      className="calm-widget calm-widget-lg relative overflow-hidden"
     >
-      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-[hsl(var(--gold))]/8 blur-3xl pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-[hsl(var(--primary))]/10 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-20 -left-10 w-56 h-56 rounded-full bg-[hsl(var(--sage))]/15 blur-3xl pointer-events-none" />
 
       <button
