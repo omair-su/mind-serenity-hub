@@ -30,11 +30,11 @@ export default function BentoTools() {
 
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-3">
-        <h3 className="font-display text-base sm:text-lg font-bold text-foreground tracking-tight">
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 className="calm-widget-title text-lg sm:text-xl">
           Your Toolkit
         </h3>
-        <Link to="/app/explore" className="flex items-center gap-1 text-xs font-body text-[hsl(var(--forest))] hover:underline">
+        <Link to="/app/explore" className="flex items-center gap-1 text-xs font-body text-[hsl(var(--primary))] hover:underline">
           See all <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
@@ -79,12 +79,12 @@ export default function BentoTools() {
           >
             <Link
               to={tool.path}
-              className="group flex flex-col items-center justify-center gap-1.5 p-3 h-full rounded-2xl bg-card border border-[hsl(var(--cream-dark))] hover:border-[hsl(var(--gold))]/40 hover:shadow-[var(--shadow-card-val)] hover:-translate-y-0.5 transition-all duration-300"
+              className="group flex flex-col items-center justify-center gap-2 p-3 h-full calm-widget hover:-translate-y-0.5"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--sage-light))] to-[hsl(var(--cream))] flex items-center justify-center group-hover:scale-105 transition-transform">
-                <tool.icon className="w-5 h-5 text-[hsl(var(--forest))]" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--accent))] to-[hsl(var(--secondary))] flex items-center justify-center group-hover:scale-105 transition-transform">
+                <tool.icon className="w-5 h-5 text-[hsl(var(--primary))]" />
               </div>
-              <span className="font-display text-[10px] sm:text-[11px] font-semibold text-foreground text-center leading-tight">
+              <span className="font-body text-[11px] font-medium text-foreground text-center leading-tight">
                 {tool.label}
               </span>
             </Link>

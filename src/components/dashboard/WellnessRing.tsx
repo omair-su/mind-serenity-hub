@@ -82,10 +82,8 @@ export default function WellnessRing({ wellness, level }: Props) {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-display text-2xl sm:text-3xl font-bold text-foreground leading-none">{pct}</span>
-            <span className="text-[8px] font-body font-bold text-muted-foreground uppercase tracking-[0.2em] mt-0.5">
-              Wellness
-            </span>
+            <span className="calm-stat-num text-3xl sm:text-[34px] leading-none">{pct}</span>
+            <span className="calm-eyebrow-sm mt-1">Wellness</span>
           </div>
         </motion.div>
 
