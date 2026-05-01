@@ -5,42 +5,48 @@
 @tailwind utilities;
 
 :root {
-  /* ── Willow Vibes Luxury Palette ── */
-  --background: 36 33% 96%;
-  --foreground: 139 37% 27%;
+  /* ── Calm-inspired Premium Palette (light) ── */
+  /* Surfaces: airy ivory/white, text: deep calm navy */
+  --background: 210 40% 98%;             /* #F7F9FC ivory-white */
+  --foreground: 213 67% 16%;             /* #0E2A47 calm navy */
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 24%;
+  --card-foreground: 213 67% 16%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 24%;
-  --primary: 139 37% 27%;
+  --popover-foreground: 213 67% 16%;
+  /* Primary: calm violet (#8267D6) */
+  --primary: 256 56% 62%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 145 20% 91%;
-  --secondary-foreground: 139 37% 22%;
-  --muted: 36 20% 93%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 145 20% 88%;
-  --accent-foreground: 139 37% 25%;
-  --destructive: 0 60% 50%;
+  /* Secondary: soft slate-violet */
+  --secondary: 220 30% 96%;
+  --secondary-foreground: 213 67% 16%;
+  --muted: 220 25% 95%;
+  --muted-foreground: 218 17% 43%;       /* #5B6B82 calm slate */
+  /* Accent: calm blue (#5B7FE0) */
+  --accent: 224 65% 95%;
+  --accent-foreground: 224 67% 35%;
+  --destructive: 0 72% 56%;
   --destructive-foreground: 0 0% 100%;
-  --border: 36 20% 88%;
-  --input: 36 20% 86%;
-  --ring: 139 37% 27%;
+  --border: 220 22% 91%;                 /* slate-200 */
+  --input: 220 22% 91%;
+  --ring: 256 56% 62%;
   --radius: 1rem;
 
-  /* Brand Tokens */
-  --forest: 139 37% 27%;
-  --forest-deep: 139 40% 17%;
-  --forest-mid: 139 35% 22%;
-  --sage: 145 20% 71%;
-  --sage-light: 145 22% 93%;
-  --sage-dark: 145 25% 42%;
-  --gold: 30 54% 65%;
-  --gold-dark: 43 86% 38%;
-  --gold-light: 36 60% 74%;
-  --cream: 36 33% 96%;
-  --cream-dark: 36 18% 90%;
-  --charcoal: 0 0% 24%;
-  --charcoal-soft: 0 0% 38%;
+  /* Brand tokens — remapped to Calm palette so all legacy
+     components (forest/sage/gold/cream/charcoal classes)
+     inherit the new look automatically. */
+  --forest: 213 67% 16%;                 /* navy */
+  --forest-deep: 215 55% 11%;
+  --forest-mid: 214 60% 22%;
+  --sage: 224 65% 65%;                   /* calm blue */
+  --sage-light: 224 65% 95%;
+  --sage-dark: 224 67% 45%;
+  --gold: 256 56% 62%;                   /* calm violet */
+  --gold-dark: 261 50% 50%;
+  --gold-light: 268 75% 92%;             /* violet soft */
+  --cream: 210 40% 98%;
+  --cream-dark: 220 25% 94%;
+  --charcoal: 213 67% 16%;
+  --charcoal-soft: 218 17% 43%;
 
   /* ── Editorial Luxe Tokens (landing page) ── */
   --onyx: 220 18% 8%;          /* deep editorial black with warm undertone */
@@ -52,72 +58,77 @@
   --champagne-light: 40 55% 84%;
   --champagne-deep: 36 42% 52%;
 
-  /* Typography */
-  --font-display: 'Plus Jakarta Sans', sans-serif;
-  --font-inter: 'Inter', sans-serif;
+  /* Typography — match Calm-inspired marketing pages */
+  --font-display: 'Lora', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
 
-  /* Shadows */
-  --shadow-soft-val: 0 2px 20px -4px hsl(139 37% 15% / 0.08);
-  --shadow-card-val: 0 8px 40px -8px hsl(139 37% 15% / 0.12);
-  --shadow-elevated-val: 0 16px 60px -12px hsl(139 37% 15% / 0.18);
-  --shadow-gold-val: 0 6px 28px -4px hsl(30 54% 65% / 0.35);
+  /* Shadows — soft cool-tinted */
+  --shadow-soft-val: 0 2px 20px -4px hsl(213 60% 20% / 0.06);
+  --shadow-card-val: 0 8px 30px -10px hsl(213 60% 20% / 0.10);
+  --shadow-elevated-val: 0 18px 60px -16px hsl(213 60% 20% / 0.18);
+  --shadow-gold-val: 0 14px 32px -12px hsl(224 65% 60% / 0.45);
 
-  /* Sidebar */
-  --sidebar-background: 36 33% 95%;
-  --sidebar-foreground: 139 37% 27%;
-  --sidebar-primary: 139 37% 27%;
+  /* Sidebar — light ivory with navy text */
+  --sidebar-background: 210 40% 98%;
+  --sidebar-foreground: 213 67% 16%;
+  --sidebar-primary: 256 56% 62%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 145 22% 90%;
-  --sidebar-accent-foreground: 139 37% 22%;
-  --sidebar-border: 36 20% 88%;
-  --sidebar-ring: 139 37% 27%;
+  --sidebar-accent: 220 30% 95%;
+  --sidebar-accent-foreground: 213 67% 16%;
+  --sidebar-border: 220 22% 91%;
+  --sidebar-ring: 256 56% 62%;
 }
 
 .dark {
-  --background: 220 25% 10%;
-  --foreground: 36 33% 94%;
-  --card: 220 22% 14%;
-  --card-foreground: 36 25% 90%;
-  --popover: 220 22% 14%;
-  --popover-foreground: 36 25% 90%;
-  --primary: 145 35% 55%;
-  --primary-foreground: 220 25% 8%;
-  --secondary: 220 20% 18%;
-  --secondary-foreground: 36 25% 85%;
-  --muted: 220 18% 18%;
-  --muted-foreground: 220 10% 55%;
-  --accent: 220 18% 20%;
-  --accent-foreground: 145 25% 65%;
-  --destructive: 0 60% 50%;
+  /* Deep calm navy night theme with violet/blue accents */
+  --background: 220 40% 7%;              /* near-black navy */
+  --foreground: 210 30% 94%;
+  --card: 220 35% 11%;
+  --card-foreground: 210 30% 94%;
+  --popover: 220 35% 11%;
+  --popover-foreground: 210 30% 94%;
+  --primary: 256 70% 72%;                /* lighter violet for dark */
+  --primary-foreground: 220 40% 8%;
+  --secondary: 220 28% 16%;
+  --secondary-foreground: 210 30% 92%;
+  --muted: 220 25% 15%;
+  --muted-foreground: 218 15% 65%;
+  --accent: 224 50% 22%;
+  --accent-foreground: 224 70% 82%;
+  --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 220 18% 20%;
-  --input: 220 18% 22%;
-  --ring: 145 35% 55%;
-  --forest: 145 35% 55%;
-  --forest-deep: 220 25% 8%;
-  --forest-mid: 220 22% 13%;
-  --sage: 145 25% 55%;
-  --sage-light: 220 18% 18%;
-  --sage-dark: 145 25% 65%;
-  --gold: 30 54% 65%;
-  --gold-dark: 43 86% 42%;
-  --gold-light: 36 60% 74%;
-  --cream: 220 25% 10%;
-  --cream-dark: 220 22% 15%;
-  --charcoal: 36 20% 85%;
-  --charcoal-soft: 220 10% 65%;
-  --shadow-soft-val: 0 2px 20px -4px hsl(220 40% 5% / 0.4);
-  --shadow-card-val: 0 8px 40px -8px hsl(220 40% 5% / 0.5);
-  --shadow-elevated-val: 0 16px 60px -12px hsl(220 40% 5% / 0.6);
-  --shadow-gold-val: 0 6px 28px -4px hsl(30 54% 65% / 0.25);
-  --sidebar-background: 220 22% 12%;
-  --sidebar-foreground: 36 25% 88%;
-  --sidebar-primary: 145 35% 55%;
-  --sidebar-primary-foreground: 220 25% 8%;
-  --sidebar-accent: 220 18% 18%;
-  --sidebar-accent-foreground: 145 25% 65%;
-  --sidebar-border: 220 18% 20%;
-  --sidebar-ring: 145 35% 55%;
+  --border: 220 25% 18%;
+  --input: 220 25% 18%;
+  --ring: 256 70% 72%;
+
+  /* Brand tokens remapped for dark calm theme */
+  --forest: 256 70% 72%;
+  --forest-deep: 220 40% 6%;
+  --forest-mid: 220 35% 11%;
+  --sage: 224 65% 70%;
+  --sage-light: 220 25% 16%;
+  --sage-dark: 224 70% 78%;
+  --gold: 256 70% 72%;
+  --gold-dark: 261 60% 60%;
+  --gold-light: 268 70% 85%;
+  --cream: 220 40% 7%;
+  --cream-dark: 220 35% 11%;
+  --charcoal: 210 30% 94%;
+  --charcoal-soft: 218 15% 65%;
+
+  --shadow-soft-val: 0 2px 20px -4px hsl(220 50% 2% / 0.5);
+  --shadow-card-val: 0 8px 40px -8px hsl(220 50% 2% / 0.6);
+  --shadow-elevated-val: 0 16px 60px -12px hsl(220 50% 2% / 0.7);
+  --shadow-gold-val: 0 14px 32px -12px hsl(256 70% 60% / 0.35);
+
+  --sidebar-background: 220 38% 9%;
+  --sidebar-foreground: 210 30% 92%;
+  --sidebar-primary: 256 70% 72%;
+  --sidebar-primary-foreground: 220 40% 8%;
+  --sidebar-accent: 220 28% 16%;
+  --sidebar-accent-foreground: 224 70% 82%;
+  --sidebar-border: 220 25% 18%;
+  --sidebar-ring: 256 70% 72%;
 }
 
 @layer base {
