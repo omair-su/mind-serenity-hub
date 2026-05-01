@@ -384,6 +384,38 @@
   .calm-stack > * + * { margin-top: var(--calm-stack-md); }
   .calm-stack-lg > * + * { margin-top: var(--calm-stack-lg); }
   .calm-stack-sm > * + * { margin-top: var(--calm-stack-sm); }
+
+  /* ── Interior dashboard widgets (Calm-aligned) ── */
+  .calm-widget {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--calm-radius-card);
+    box-shadow: var(--shadow-soft-val);
+    transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .calm-widget:hover { box-shadow: var(--shadow-card-val); }
+  .calm-widget-lg { border-radius: var(--calm-radius-card-lg); }
+
+  .calm-eyebrow-sm {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.6875rem; text-transform: uppercase;
+    letter-spacing: 0.22em; font-weight: 600;
+    color: hsl(var(--muted-foreground));
+  }
+  .calm-stat-num {
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 600; letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+  }
+  .calm-widget-title {
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 600; letter-spacing: -0.015em;
+    color: hsl(var(--foreground));
+  }
+  .calm-divider-soft {
+    height: 1px; width: 100%;
+    background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
+  }
 }
 
 html { scroll-behavior: smooth; }
