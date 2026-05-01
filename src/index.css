@@ -58,9 +58,9 @@
   --champagne-light: 40 55% 84%;
   --champagne-deep: 36 42% 52%;
 
-  /* Typography */
-  --font-display: 'Plus Jakarta Sans', sans-serif;
-  --font-inter: 'Inter', sans-serif;
+  /* Typography — match Calm-inspired marketing pages */
+  --font-display: 'Lora', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
 
   /* Shadows — soft cool-tinted */
   --shadow-soft-val: 0 2px 20px -4px hsl(213 60% 20% / 0.06);
