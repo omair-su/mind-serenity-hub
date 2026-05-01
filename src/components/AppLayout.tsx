@@ -2,6 +2,7 @@ import Sidebar from "@/components/Sidebar";
 import BottomNav from "@/components/BottomNav";
 import SoundMixer from "@/components/SoundMixer";
 import CommandPalette from "@/components/CommandPalette";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <BottomNav />
       <SoundMixer />
       <CommandPalette />
+      <ThemeToggle />
     </div>
   );
 }
