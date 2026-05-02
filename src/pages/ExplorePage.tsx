@@ -14,6 +14,7 @@ const categories = [
     accent: "from-[hsl(var(--forest))]/15 to-[hsl(var(--sage-light))]/30",
     items: [
       { label: "Library", desc: "All 30 sessions", icon: BookOpen, path: "/app/library" },
+      { label: "Audio Library", desc: "Premium meditations", icon: Headphones, path: "/app/audio-library" },
       { label: "Journal", desc: "Reflection diary", icon: BookHeart, path: "/app/journal" },
       { label: "Mood Tracker", desc: "Track your moods", icon: Heart, path: "/app/mood" },
       { label: "Gratitude", desc: "Gratitude garden", icon: Sunrise, path: "/app/gratitude" },
