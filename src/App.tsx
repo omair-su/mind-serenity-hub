@@ -62,6 +62,7 @@ const AIRecommendationsPage = lazy(() => import("./pages/AIRecommendationsPage")
 const AdvancedAnalyticsPage = lazy(() => import("./pages/AdvancedAnalyticsPage"));
 const OfflineDownloadsPage = lazy(() => import("./pages/OfflineDownloadsPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
+const AudioLibraryPage = lazy(() => import("./pages/AudioLibraryPage"));
 const PaddleChecklistPage = lazy(() => import("./pages/PaddleChecklistPage"));
 
 // Wrap a page in the auth guard so unauthenticated users are redirected to sign-in.
@@ -110,6 +111,7 @@ function AppInner() {
           <Route path="/app/analytics" element={Guarded(<AnalyticsPage />)} />
           <Route path="/app/journal" element={Guarded(<JournalPage />)} />
           <Route path="/app/library" element={Guarded(<LibraryPage />)} />
+          <Route path="/app/audio-library" element={Guarded(<AudioLibraryPage />)} />
           <Route path="/app/achievements" element={Guarded(<AchievementsPage />)} />
           <Route path="/app/sos" element={Guarded(<SOSPage />)} />
           <Route path="/app/breathing" element={Guarded(<BreathingPage />)} />
