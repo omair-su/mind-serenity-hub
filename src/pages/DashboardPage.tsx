@@ -8,7 +8,7 @@ import {
 } from "@/lib/userStore";
 import { weeks } from "@/data/courseData";
 import {
-  ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf,
+  ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf, Headphones,
 } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero-premium.jpg";
 import { getWellnessScore, getWellnessLevel } from "@/lib/wellnessScore";
@@ -177,6 +177,30 @@ export default function DashboardPage() {
         {/* Personalised feed */}
         <motion.div variants={itemVariants}>
           <HomeFeed />
+        </motion.div>
+
+        {/* Audio Library highlight */}
+        <motion.div variants={itemVariants}>
+          <Link
+            to="/app/audio-library"
+            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--primary))]/12 via-[hsl(var(--accent))]/40 to-[hsl(var(--sage))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-foreground text-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Headphones className="w-7 h-7" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Premium Audio</p>
+                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
+                  Build a playlist for your practice
+                </h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  Stream sleep stories, masterclasses & focus sessions back-to-back.
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
+            </div>
+          </Link>
         </motion.div>
 
         {/* Bento toolkit */}

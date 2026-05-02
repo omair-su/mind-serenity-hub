@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Wind, Moon, Compass, User } from "lucide-react";
+import { Home, Wind, Headphones, Compass, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 const tabs = [
   { label: "Home", icon: Home, path: "/app" },
   { label: "Breathe", icon: Wind, path: "/app/breathing" },
-  { label: "Sleep", icon: Moon, path: "/app/sleep" },
+  { label: "Audio", icon: Headphones, path: "/app/audio-library" },
   { label: "Explore", icon: Compass, path: "/app/explore" },
   { label: "Profile", icon: User, path: "/app/profile" },
 ];
