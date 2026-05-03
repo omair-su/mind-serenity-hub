@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles } from "lucide-react";
+import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles, Brain, HeartPulse, Moon, Wind, Headphones, LineChart, Smile, BookOpen, Flower2, Footprints, Focus, Music2, Trophy, Timer, Award, Library, ScrollText, Activity, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImg from "@/assets/calm-hero-mountain.jpg";
+import { LogoIcon } from "@/components/WillowLogo";
 
 // Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
 const AboutSection = lazy(() => import("@/components/AboutSection"));
@@ -99,6 +100,7 @@ export default function LandingPage() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-slate-100" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 font-calm-display text-2xl font-semibold">
+            <LogoIcon size={36} animated />
             <span style={{ color: scrolled ? NAVY : "#fff" }}>Willow</span>
             <span style={{ color: scrolled ? "#8267D6" : "#E9D9FF" }} className="italic">Vibes</span>
           </button>
@@ -184,33 +186,32 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {/* Hero — Calm-inspired: photo top, white content below */}
-      <section id="home" className="relative">
-        {/* Photo banner */}
-        <div className="relative h-[55vh] min-h-[420px] w-full overflow-hidden">
-          <img
-            src={heroImg}
-            alt="Misty mountain landscape at dawn"
-            className="absolute inset-0 w-full h-full object-cover"
-            width={1920}
-            height={1080}
-            fetchPriority="high"
-          />
-          {/* Soft fade so nav text stays readable, content floats below */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-white" />
-        </div>
+      {/* Hero — text overlaid on image */}
+      <section id="home" className="relative min-h-[100svh] w-full overflow-hidden flex items-center justify-center">
+        <img
+          src={heroImg}
+          alt="Misty mountain landscape at dawn"
+          className="absolute inset-0 w-full h-full object-cover"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0E2A47]/60 via-transparent to-transparent" />
 
-        {/* White content block — Calm signature layout */}
-        <div className="relative -mt-24 sm:-mt-32 z-10 px-4 md:px-6">
+        <div className="relative z-10 px-4 md:px-6 w-full pt-24 pb-16">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}>
-              <h1 className="font-calm-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.02em]" style={{ color: NAVY }}>
+              <div className="flex justify-center mb-6">
+                <LogoIcon size={84} animated />
+              </div>
+              <h1 className="font-calm-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.02em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)]">
                 Find your calm.
                 <br />
-                <span className="italic font-medium" style={{ color: NAVY_SOFT }}>Master your mind.</span>
+                <span className="italic font-medium text-[#E9D9FF]">Master your mind.</span>
               </h1>
 
-              <p className="font-calm-body text-base sm:text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed" style={{ color: SLATE }}>
+              <p className="font-calm-body text-base sm:text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
                 A 30-day, science-backed meditation journey for stressed, busy minds.
                 No fluff. Just proven techniques, premium narration, and an AI coach that adapts to you.
               </p>
@@ -219,48 +220,108 @@ export default function LandingPage() {
                 <Link to="/sign-in?redirect=/app" className="block">
                   <button
                     className="w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base text-white transition-transform hover:scale-[1.03]"
-                    style={{ background: CTA_GRADIENT, boxShadow: "0 14px 40px -12px rgba(91,127,224,0.55)" }}
+                    style={{ background: CTA_GRADIENT, boxShadow: "0 14px 40px -12px rgba(91,127,224,0.65)" }}
                   >
                     Begin Your 7-Day Journey
                   </button>
                 </Link>
                 <button
-                  onClick={() => scrollToSection("curriculum")}
-                  className="w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base bg-white border border-slate-200 hover:border-slate-300 transition-colors"
+                  onClick={() => scrollToSection("features")}
+                  className="w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base bg-white/95 backdrop-blur hover:bg-white transition-colors"
                   style={{ color: NAVY }}
                 >
                   Explore the Practice
                 </button>
               </div>
 
-              <div className="flex items-center justify-center gap-2 mt-6 text-xs font-calm-body" style={{ color: SLATE }}>
-                <Shield className="w-3.5 h-3.5" style={{ color: "#8267D6" }} />
+              <div className="flex items-center justify-center gap-2 mt-6 text-xs font-calm-body text-white/85">
+                <Shield className="w-3.5 h-3.5 text-[#E9D9FF]" />
                 <span>30-day guarantee · Cancel anytime · No card today</span>
               </div>
             </motion.div>
-
-            {/* Trust strip */}
-            <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 max-w-4xl mx-auto pb-4">
-              {[
-                { icon: Shield, label: "30-Day Guarantee" },
-                { icon: Clock, label: "Lifetime Access" },
-                { icon: Users, label: "10,000+ Practicing" },
-                { icon: Star, label: "4.9 / 5 Reviews" },
-              ].map(({ icon: I, label }) => (
-                <div key={label} className="flex items-center justify-center gap-2 font-calm-body text-xs sm:text-sm" style={{ color: SLATE }}>
-                  <I className="w-4 h-4" style={{ color: "#8267D6" }} />
-                  <span className="font-medium">{label}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
-        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="hidden md:flex justify-center mt-12 mb-4">
-          <button onClick={() => scrollToSection("about")} className="transition-colors" style={{ color: SLATE }}>
+        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2.5, repeat: Infinity }} className="hidden md:flex absolute bottom-6 left-0 right-0 justify-center z-10">
+          <button onClick={() => scrollToSection("features")} className="text-white/80 hover:text-white transition-colors">
             <ChevronDown className="w-6 h-6" />
           </button>
         </motion.div>
+      </section>
+
+      {/* Features overview — placed high so visitors see breadth immediately */}
+      <section id="features" className="py-16 md:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-10 md:mb-14">
+            <p className="text-[10px] md:text-xs font-calm-body tracking-[0.35em] uppercase mb-3" style={{ color: "#8267D6" }}>Everything in Willow Vibes</p>
+            <h2 className="font-calm-display text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.1] tracking-[-0.02em]" style={{ color: NAVY }}>
+              One quiet app. <span className="italic" style={{ color: NAVY_SOFT }}>Every tool you need.</span>
+            </h2>
+            <p className="font-calm-body text-base mt-4 max-w-2xl mx-auto" style={{ color: SLATE }}>
+              Twenty-plus premium practices — from AI coaching and SOS relief to sleep stories, soundscapes, and a gratitude garden — all woven into a single, beautifully calm experience.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {[
+              { icon: Brain, label: "AI Coach" },
+              { icon: AlertCircle, label: "SOS Relief" },
+              { icon: Moon, label: "Sleep Stories" },
+              { icon: Wind, label: "Breathing" },
+              { icon: Headphones, label: "Audio Library" },
+              { icon: LineChart, label: "Progress Tracking" },
+              { icon: Smile, label: "Mood Tracker" },
+              { icon: Sparkles, label: "Daily Affirmations" },
+              { icon: Activity, label: "Advanced Analytics" },
+              { icon: Library, label: "30-Day Library" },
+              { icon: BookOpen, label: "Journal" },
+              { icon: Flower2, label: "Gratitude Garden" },
+              { icon: HeartPulse, label: "Body Scan" },
+              { icon: Footprints, label: "Walking Meditation" },
+              { icon: Focus, label: "Focus Mode" },
+              { icon: Music2, label: "Soundscapes" },
+              { icon: Trophy, label: "Challenges" },
+              { icon: Star, label: "Rituals" },
+              { icon: Award, label: "Achievements" },
+              { icon: Timer, label: "Session Timer" },
+              { icon: ScrollText, label: "Resources" },
+              { icon: CheckCircle, label: "Certificate" },
+            ].map(({ icon: I, label }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: Math.min(i * 0.025, 0.4) }}
+                className="group flex items-center gap-3 p-3 md:p-4 rounded-2xl border border-slate-100 bg-gradient-to-br from-white to-[#F7F4FF] hover:border-[#C8B6F0] hover:shadow-[0_10px_30px_-12px_rgba(130,103,214,0.35)] transition-all"
+              >
+                <span
+                  className="flex-shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg, rgba(130,103,214,0.12), rgba(91,127,224,0.12))" }}
+                >
+                  <I className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#8267D6" }} />
+                </span>
+                <span className="font-calm-body text-xs md:text-sm font-semibold leading-tight" style={{ color: NAVY }}>
+                  {label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 max-w-4xl mx-auto">
+            {[
+              { icon: Shield, label: "30-Day Guarantee" },
+              { icon: Clock, label: "Lifetime Access" },
+              { icon: Users, label: "10,000+ Practicing" },
+              { icon: Star, label: "4.9 / 5 Reviews" },
+            ].map(({ icon: I, label }) => (
+              <div key={label} className="flex items-center justify-center gap-2 font-calm-body text-xs sm:text-sm" style={{ color: SLATE }}>
+                <I className="w-4 h-4" style={{ color: "#8267D6" }} />
+                <span className="font-medium">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <Suspense fallback={null}>
