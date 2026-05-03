@@ -17,8 +17,42 @@ const sizeMap = {
   xl: { icon: 72, text: "text-3xl", gap: "gap-4", tracking: "tracking-[0.18em]" },
 };
 
-const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: string }>(
-  function LogoIcon({ size = 40, className }, ref) {
+const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: string; animated?: boolean }>(
+  function LogoIcon({ size = 40, className, animated = false }, ref) {
+    if (animated) {
+      return (
+        <span
+          className={cn("relative inline-flex flex-shrink-0", className)}
+          style={{ width: size, height: size }}
+        >
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-full blur-2xl opacity-60 animate-pulse"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(196,168,247,0.55) 0%, rgba(130,103,214,0.25) 45%, transparent 70%)",
+            }}
+          />
+          <img
+            ref={ref}
+            src={logoImg}
+            alt="Willow Vibes Logo"
+            width={size}
+            height={size}
+            className="relative flex-shrink-0 object-contain drop-shadow-[0_6px_20px_rgba(130,103,214,0.45)]"
+            style={{
+              animation: "willow-float 4.5s ease-in-out infinite",
+            }}
+          />
+          <style>{`
+            @keyframes willow-float {
+              0%, 100% { transform: translateY(0) rotate(0); }
+              50% { transform: translateY(-3px) rotate(-1.2deg); }
+            }
+          `}</style>
+        </span>
+      );
+    }
     return (
       <img
         ref={ref}
