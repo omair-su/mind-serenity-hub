@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
     const { data: existingTrackMeta } = await admin
       .from('audio_tracks')
       .select('is_premium')
-      .eq('track_key', trackKey)
+      .eq('track_key', rawTrackKey)
       .maybeSingle();
 
     const { data: profile } = await admin
