@@ -74,15 +74,22 @@ Deno.serve(async (req) => {
 
     const body: GenerateRequest = await req.json();
     const {
-      trackKey, category, title, description,
+      trackKey: rawTrackKey, category, title, description,
       script, voice, ambientBed = null,
     } = body;
 
-    if (!trackKey || !script || !category || !title) {
+    if (!rawTrackKey || !script || !category || !title) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // SECURITY: Namespace every catalog write per-user. This prevents authenticated
+    // users from overwriting shared catalog rows or injecting arbitrary entries
+    // that other users would consume. Each user effectively maintains their own
+    // private cache of generated narrations.
+    const safeRawKey = String(rawTrackKey).replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 120);
+    const trackKey = `u_${userId}__${safeRawKey}`;
 
     // Determine premium status SERVER-SIDE (never trust the request body).
     // First, look up whether the requested track is premium based on existing catalog row,
@@ -90,7 +97,7 @@ Deno.serve(async (req) => {
     const { data: existingTrackMeta } = await admin
       .from('audio_tracks')
       .select('is_premium')
-      .eq('track_key', trackKey)
+      .eq('track_key', rawTrackKey)
       .maybeSingle();
 
     const { data: profile } = await admin
