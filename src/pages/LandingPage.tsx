@@ -100,6 +100,7 @@ export default function LandingPage() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-slate-100" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 font-calm-display text-2xl font-semibold">
+            <LogoIcon size={36} animated />
             <span style={{ color: scrolled ? NAVY : "#fff" }}>Willow</span>
             <span style={{ color: scrolled ? "#8267D6" : "#E9D9FF" }} className="italic">Vibes</span>
           </button>
