@@ -277,14 +277,14 @@ serve(async (req) => {
 
     if (resp.status === 429) {
       return new Response(JSON.stringify({ ok: false, error: "RATE_LIMITED", message: "Coach is busy — please try again shortly." }), {
-        status: wantsStream ? 429 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (!resp.ok || (wantsStream && !resp.body)) {
       const t = await resp.text().catch(() => "");
       console.error("Claude error:", resp.status, t);
       return new Response(JSON.stringify({ ok: false, error: "SERVICE_UNAVAILABLE", message: "AI service error", fallback: true }), {
-        status: wantsStream ? 500 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
