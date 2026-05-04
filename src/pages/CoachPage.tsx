@@ -118,15 +118,29 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
     setMessages(prev => [...prev, { id: assistantId, role: "coach", text: "", time: now() }]);
 
     try {
-      const { data, error } = await supabase.functions.invoke("ai-coach-chat", {
+      // Client-side safety net: never let the UI hang more than 25s.
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
+        setTimeout(
+          () => resolve({ data: null, error: new Error("CLIENT_TIMEOUT") }),
+          25_000,
+        ),
+      );
+      const invokePromise = supabase.functions.invoke("ai-coach-chat", {
         body: {
           messages: history.filter(m => m.id !== "welcome").map(m => ({ role: m.role, content: m.text })),
           stream: false,
         },
       });
+      const { data, error } = (await Promise.race([invokePromise, timeoutPromise])) as
+        { data: any; error: any };
 
       if (error) {
         const message = error.message || "Coach unavailable";
+        if (message === "CLIENT_TIMEOUT") {
+          toast({ title: "Coach is taking too long", description: "The connection timed out. Please try again.", variant: "destructive" });
+          setMessages(prev => prev.filter(m => m.id !== assistantId));
+          return;
+        }
         if (message.includes("402") || message.includes("FREE_LIMIT_REACHED")) {
           setShowLock(true);
           setMessages(prev => prev.filter(m => m.id !== assistantId));
@@ -152,6 +166,16 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
         setMessages(prev => prev.filter(m => m.id !== assistantId));
         return;
       }
+      if (!data?.ok && data?.error === "AI_MODEL_TIMEOUT") {
+        toast({ title: "Coach took too long", description: data?.message || "The model timed out. Please try again.", variant: "destructive" });
+        setMessages(prev => prev.filter(m => m.id !== assistantId));
+        return;
+      }
+      if (!data?.ok && (data?.error === "SERVICE_UNAVAILABLE" || data?.error === "COACH_NOT_CONFIGURED")) {
+        toast({ title: "Coach unavailable", description: data?.message || "Please try again in a moment.", variant: "destructive" });
+        setMessages(prev => prev.filter(m => m.id !== assistantId));
+        return;
+      }
       if (!data?.ok && data?.error === "UNAUTHORIZED") {
         toast({ title: "Please sign in", description: "Sign in to chat with your coach.", variant: "destructive" });
         setShowLock(true);
@@ -159,7 +183,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
         return;
       }
       if (!data?.ok || !data?.reply) {
-        toast({ title: "Coach unavailable", description: "Please try again in a moment.", variant: "destructive" });
+        toast({ title: "Coach unavailable", description: data?.message || "Please try again in a moment.", variant: "destructive" });
         setMessages(prev => prev.filter(m => m.id !== assistantId));
         return;
       }
@@ -168,8 +192,8 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
       setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, text: data.reply } : m));
     } catch (e) {
       console.error("coach error:", e);
-      toast({ title: "Connection issue", description: "Couldn't reach your coach.", variant: "destructive" });
-      setMessages(prev => prev.filter(m => m.id !== assistantId || m.text === ""));
+      toast({ title: "Connection issue", description: "Couldn't reach your coach. Please try again.", variant: "destructive" });
+      setMessages(prev => prev.filter(m => m.id !== assistantId));
     } finally {
       setIsStreaming(false);
     }

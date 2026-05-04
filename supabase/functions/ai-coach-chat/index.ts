@@ -207,33 +207,84 @@ serve(async (req) => {
     const model = isPremium ? "claude-sonnet-4-5-20250929" : "claude-haiku-4-5-20251001";
     const maxTokens = isPremium ? 1000 : 320;
 
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: maxTokens,
-        temperature: 0.7,
-        stream: wantsStream,
-        system: systemPrompt,
-        messages: normalized,
-      }),
-    });
+    // Hard timeout + one automatic retry to prevent the UI from hanging.
+    // Non-stream: 12s per attempt. Stream: 20s to first byte (handled by fetch only).
+    const PER_ATTEMPT_TIMEOUT_MS = wantsStream ? 20_000 : 12_000;
+    const MAX_ATTEMPTS = 2;
+
+    async function callClaude(): Promise<Response> {
+      let lastErr: unknown = null;
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), PER_ATTEMPT_TIMEOUT_MS);
+        try {
+          const r = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            signal: ctrl.signal,
+            headers: {
+              "x-api-key": ANTHROPIC_API_KEY!,
+              "anthropic-version": "2023-06-01",
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              model,
+              max_tokens: maxTokens,
+              temperature: 0.7,
+              stream: wantsStream,
+              system: systemPrompt,
+              messages: normalized,
+            }),
+          });
+          clearTimeout(t);
+          // Retry once on transient upstream failures (5xx / 408 / 529).
+          if ((r.status >= 500 || r.status === 408 || r.status === 529) && attempt < MAX_ATTEMPTS) {
+            await r.body?.cancel().catch(() => {});
+            lastErr = new Error(`upstream ${r.status}`);
+            continue;
+          }
+          return r;
+        } catch (err) {
+          clearTimeout(t);
+          lastErr = err;
+          const isAbort = (err as { name?: string })?.name === "AbortError";
+          console.error(`Claude attempt ${attempt} failed:`, isAbort ? "TIMEOUT" : err);
+          if (attempt >= MAX_ATTEMPTS) throw err;
+          // brief backoff before retry
+          await new Promise((res) => setTimeout(res, 400));
+        }
+      }
+      throw lastErr ?? new Error("claude_failed");
+    }
+
+    let resp: Response;
+    try {
+      resp = await callClaude();
+    } catch (err) {
+      const isAbort = (err as { name?: string })?.name === "AbortError";
+      console.error("Claude call exhausted:", err);
+      return new Response(JSON.stringify({
+        ok: false,
+        error: isAbort ? "AI_MODEL_TIMEOUT" : "SERVICE_UNAVAILABLE",
+        message: isAbort
+          ? "Your coach took too long to respond. Please try again."
+          : "Coach is temporarily unavailable. Please try again in a moment.",
+        fallback: true,
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (resp.status === 429) {
       return new Response(JSON.stringify({ ok: false, error: "RATE_LIMITED", message: "Coach is busy — please try again shortly." }), {
-        status: wantsStream ? 429 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (!resp.ok || (wantsStream && !resp.body)) {
       const t = await resp.text().catch(() => "");
       console.error("Claude error:", resp.status, t);
       return new Response(JSON.stringify({ ok: false, error: "SERVICE_UNAVAILABLE", message: "AI service error", fallback: true }), {
-        status: wantsStream ? 500 : 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
