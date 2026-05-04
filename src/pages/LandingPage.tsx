@@ -500,9 +500,12 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-4 gap-10 mb-10">
             <div>
-              <h3 className="font-calm-display text-2xl font-semibold mb-4">
-                Willow <span className="italic" style={{ color: "#E9D9FF" }}>Vibes</span>
-              </h3>
+              <div className="flex items-center gap-3 mb-4">
+                <LogoIcon size={44} className="rounded-2xl shadow-lg shadow-black/40" />
+                <h3 className="font-calm-display text-2xl font-semibold text-white">
+                  Willow <span className="italic" style={{ color: "#E9D9FF" }}>Vibes</span>
+                </h3>
+              </div>
               <p className="font-calm-body text-white/65 text-sm mb-4 leading-relaxed">
                 Meditation rooted in science. Designed for the rhythm of real life.
               </p>

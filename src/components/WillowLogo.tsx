@@ -19,6 +19,7 @@ const sizeMap = {
 
 const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: string; animated?: boolean }>(
   function LogoIcon({ size = 40, className, animated = false }, ref) {
+    const radius = Math.round(size * 0.22);
     if (animated) {
       return (
         <span
@@ -27,10 +28,10 @@ const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: strin
         >
           <span
             aria-hidden
-            className="absolute inset-0 rounded-full blur-2xl opacity-60 animate-pulse"
+            className="absolute -inset-2 rounded-[28%] blur-2xl opacity-70 animate-pulse"
             style={{
               background:
-                "radial-gradient(circle, rgba(196,168,247,0.55) 0%, rgba(130,103,214,0.25) 45%, transparent 70%)",
+                "radial-gradient(circle, rgba(255,226,122,0.45) 0%, rgba(130,103,214,0.35) 45%, transparent 75%)",
             }}
           />
           <img
@@ -39,9 +40,20 @@ const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: strin
             alt="Willow Vibes Logo"
             width={size}
             height={size}
-            className="relative flex-shrink-0 object-contain drop-shadow-[0_6px_20px_rgba(130,103,214,0.45)]"
+            className="relative flex-shrink-0 object-cover drop-shadow-[0_8px_24px_rgba(130,103,214,0.55)] ring-1 ring-white/10"
             style={{
-              animation: "willow-float 4.5s ease-in-out infinite",
+              borderRadius: radius,
+              animation: "willow-float 5s ease-in-out infinite",
+            }}
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              borderRadius: radius,
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 40%)",
+              mixBlendMode: "overlay",
             }}
           />
           <style>{`
@@ -60,7 +72,8 @@ const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: strin
         alt="Willow Vibes Logo"
         width={size}
         height={size}
-        className={cn("flex-shrink-0 object-contain", className)}
+        className={cn("flex-shrink-0 object-cover", className)}
+        style={{ borderRadius: radius }}
       />
     );
   }
