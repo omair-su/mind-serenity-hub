@@ -39,7 +39,7 @@ export const walkingEnvironments: WalkingEnvironment[] = [
     icon: Mountain,
     imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80&auto=format&fit=crop",
     ambientBed: "wind",
-    tint: "from-slate-950/95 via-slate-800/40 to-transparent",
+    tint: "from-[hsl(var(--charcoal))]/95 via-[hsl(var(--charcoal))]/40 to-transparent",
     desc: "Ascend with steady breath. Wind carries every thought away.",
   },
   {
