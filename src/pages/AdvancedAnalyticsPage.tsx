@@ -47,13 +47,13 @@ function AdvancedAnalyticsPageInner() {
     { name: 'Sleep', value: Math.max(0, report.sleepTrend) },
   ];
 
-  // Brand-token chart palette: forest, sage, gold, gold-dark, charcoal-soft
+  // Brand-token chart palette — pulls live HSL values so it follows light/dark mode.
   const COLORS = [
-    'hsl(139 37% 27%)',   // forest
-    'hsl(145 25% 55%)',   // sage-dark
-    'hsl(30 54% 65%)',    // gold
-    'hsl(43 86% 38%)',    // gold-dark
-    'hsl(0 0% 38%)',      // charcoal-soft
+    'hsl(var(--primary))',
+    'hsl(var(--sage))',
+    'hsl(var(--gold))',
+    'hsl(var(--gold-dark))',
+    'hsl(var(--charcoal-soft))',
   ];
 
   return (
@@ -176,7 +176,7 @@ function AdvancedAnalyticsPageInner() {
                   labelLine={false}
                   label={({ type, percentage }: any) => `${String(type).slice(0, 10)}: ${Number(percentage).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
+                  fill="hsl(var(--primary))"
                   dataKey="percentage"
                 >
                   {COLORS.map((color, index) => (

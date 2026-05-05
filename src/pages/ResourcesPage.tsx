@@ -1336,7 +1336,7 @@ A secular exploration of consciousness, self, and the deepest insights that medi
 ];
 
 const typeColors: Record<string, string> = {
-  PDF: "border-destructive/20 text-neutral-950 bg-gold-dark",
+  PDF: "border-destructive/20 text-cream bg-gold-dark",
   Article: "border-primary/20 text-cream bg-gold-dark",
   Guide: "bg-gold/10 text-gold border-gold/20",
   Checklist: "bg-accent text-accent-foreground border-border",
@@ -1356,9 +1356,9 @@ function parseMarkdown(text: string) {
     const line = lines[i];
 
     if (line.startsWith("# ")) {
-      elements.push(<h1 key={i} className="font-display text-2xl font-bold mt-2 mb-4 text-slate-950">{line.slice(2)}</h1>);
+      elements.push(<h1 key={i} className="font-display text-2xl font-bold mt-2 mb-4 text-foreground">{line.slice(2)}</h1>);
     } else if (line.startsWith("## ")) {
-      elements.push(<h2 key={i} className="font-display text-lg font-semibold mt-6 mb-2 text-slate-800">{line.slice(3)}</h2>);
+      elements.push(<h2 key={i} className="font-display text-lg font-semibold mt-6 mb-2 text-foreground">{line.slice(3)}</h2>);
     } else if (line.startsWith("### ")) {
       elements.push(<h3 key={i} className="font-display text-base font-semibold text-foreground mt-4 mb-1">{line.slice(4)}</h3>);
     } else if (line.startsWith("---")) {
@@ -1408,7 +1408,7 @@ export default function ResourcesPage() {
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
         {/* Editorial hero */}
-        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10 opacity-100 bg-slate-600">
+        <div className="relative overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/20 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] px-6 py-10 sm:px-10">
           <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
             background: "radial-gradient(circle at 80% 20%, hsl(var(--gold) / 0.4) 0%, transparent 50%)"
           }} />
@@ -1441,7 +1441,7 @@ export default function ResourcesPage() {
                   className={`bg-gradient-to-br ${sg.card} rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-md hover:-translate-y-1 transition-all duration-300 text-left group`}
                 >
                   <div className="flex items-start justify-between mb-2 gap-2">
-                    <p className="font-display text-sm font-semibold transition-colors text-slate-900">{item.title}</p>
+                    <p className="font-display text-sm font-semibold transition-colors text-foreground">{item.title}</p>
                     <span className={`text-[10px] font-body font-semibold px-2 py-0.5 rounded-full border flex-shrink-0 ${typeColors[item.type] || "bg-secondary text-muted-foreground border-border"}`}>
                       {item.type}
                     </span>
@@ -1474,7 +1474,7 @@ export default function ResourcesPage() {
                     {selectedItem.type}
                   </span>
                 </div>
-                <h2 className="font-display text-xl font-bold text-slate-950">{selectedItem.title}</h2>
+                <h2 className="font-display text-xl font-bold text-foreground">{selectedItem.title}</h2>
                 <p className="text-sm font-body text-muted-foreground mt-0.5">{selectedItem.desc}</p>
               </div>
               <button

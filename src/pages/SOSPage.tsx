@@ -269,7 +269,7 @@ export default function SOSPage() {
         {/* ─── BIG RED PANIC BUTTON — instant access, no nav ─── */}
         <button
           onClick={() => setPanicOpen(true)}
-          className="group w-full relative overflow-hidden rounded-3xl p-6 md:p-7 text-left bg-gradient-to-br from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-600 active:scale-[0.99] transition-all shadow-2xl shadow-rose-600/30 border border-white/10"
+          className="group w-full relative overflow-hidden rounded-3xl p-6 md:p-7 text-left bg-gradient-to-br from-destructive via-destructive to-[hsl(var(--destructive))]/80 hover:brightness-110 active:scale-[0.99] transition-all shadow-2xl shadow-destructive/30 border border-white/10"
         >
           <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-3xl group-hover:bg-white/20 transition" />
           <div className="relative flex items-center gap-5">

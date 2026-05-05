@@ -376,7 +376,7 @@ export default function FocusModePage() {
         {/* ── Premium Hero Banner ── */}
         <div className="relative rounded-2xl overflow-hidden h-[240px]">
           <img src={focusmodeHero} alt="Deep focus workspace" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--forest-deep))]/95 via-[hsl(var(--forest-deep))]/60 to-transparent" />
           <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">

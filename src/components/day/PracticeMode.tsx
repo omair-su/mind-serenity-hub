@@ -252,7 +252,7 @@ export default function PracticeMode({
 
             <button
               onClick={() => { tts.stop(); onClose(); }}
-              className="ml-4 px-4 h-11 rounded-full bg-rose-500/80 hover:bg-rose-500 text-white text-xs font-body font-bold uppercase tracking-wider"
+              className="ml-4 px-4 h-11 rounded-full bg-destructive/80 hover:bg-destructive text-destructive-foreground text-xs font-body font-bold uppercase tracking-wider"
             >
               Stop
             </button>
