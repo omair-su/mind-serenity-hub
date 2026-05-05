@@ -1356,9 +1356,9 @@ function parseMarkdown(text: string) {
     const line = lines[i];
 
     if (line.startsWith("# ")) {
-      elements.push(<h1 key={i} className="font-display text-2xl font-bold mt-2 mb-4 text-slate-950">{line.slice(2)}</h1>);
+      elements.push(<h1 key={i} className="font-display text-2xl font-bold mt-2 mb-4 text-foreground">{line.slice(2)}</h1>);
     } else if (line.startsWith("## ")) {
-      elements.push(<h2 key={i} className="font-display text-lg font-semibold mt-6 mb-2 text-slate-800">{line.slice(3)}</h2>);
+      elements.push(<h2 key={i} className="font-display text-lg font-semibold mt-6 mb-2 text-foreground">{line.slice(3)}</h2>);
     } else if (line.startsWith("### ")) {
       elements.push(<h3 key={i} className="font-display text-base font-semibold text-foreground mt-4 mb-1">{line.slice(4)}</h3>);
     } else if (line.startsWith("---")) {
