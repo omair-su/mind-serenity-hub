@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
-import { Timer, Play, Pause, RotateCcw, Plus, Volume2, Command } from "lucide-react";
+import { Timer, Play, Pause, RotateCcw, Plus, Volume2, Command, Maximize2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { saveTimerSession } from "@/lib/userStore";
 import { useAmbientBed, type AmbientBedId } from "@/hooks/useAmbientBed";
+import SignatureTimer from "@/components/timer/SignatureTimer";
 
 const presets = [
   { label: "5 min", minutes: 5 },
@@ -20,6 +21,7 @@ export default function TimerPage() {
   const [seconds, setSeconds] = useState(minutes * 60);
   const [running, setRunning] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [signatureOpen, setSignatureOpen] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number>(0);
   const { bed, setBed, volume, setVolume, stopBed, options } = useAmbientBed("silence", 35);
@@ -62,7 +64,41 @@ export default function TimerPage() {
 
   return (
     <AppLayout>
+      <SignatureTimer
+        open={signatureOpen}
+        onClose={() => setSignatureOpen(false)}
+        initialMinutes={minutes}
+      />
       <div className="space-y-8 max-w-xl mx-auto animate-fade-in">
+        {/* Signature Timer entry — Phase 4 wow feature */}
+        <motion.button
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.99 }}
+          onClick={() => setSignatureOpen(true)}
+          className="relative w-full overflow-hidden rounded-2xl p-6 sm:p-7 text-left shadow-[0_18px_50px_-20px_hsl(var(--forest)/0.45)] border border-[hsl(var(--gold)/0.3)] group"
+          style={{
+            background:
+              "radial-gradient(ellipse at top right, hsl(var(--gold) / 0.18), transparent 60%), linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--forest-deep)) 100%)",
+          }}
+        >
+          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-[hsl(var(--gold)/0.15)] blur-3xl group-hover:bg-[hsl(var(--gold)/0.25)] transition-colors" />
+          <div className="relative flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-[0_8px_24px_-8px_hsl(var(--gold)/0.6)]">
+              <Sparkles className="w-6 h-6 text-charcoal" />
+            </div>
+            <div className="flex-1">
+              <p className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-[hsl(var(--gold-light))] mb-1">
+                Signature Experience
+              </p>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-cream">Enter Focus Mode</h3>
+              <p className="text-xs sm:text-sm font-body text-cream/70 mt-0.5">
+                Full-screen timer · breathing dial · ambient bed · finish ritual
+              </p>
+            </div>
+            <Maximize2 className="w-5 h-5 text-cream/60 group-hover:text-[hsl(var(--gold))] transition-colors" />
+          </div>
+        </motion.button>
+
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/25 to-[hsl(var(--gold-light))]/15 flex items-center justify-center">

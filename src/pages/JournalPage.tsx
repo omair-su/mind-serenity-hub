@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { getAllDayStates } from "@/lib/userStore";
+import { fetchAllDayCompletions, type DayState } from "@/lib/cloudSync";
+import { supabase } from "@/integrations/supabase/client";
 import { weeks } from "@/data/courseData";
-import { BookOpen, Search, Star, Calendar } from "lucide-react";
+import { BookOpen, Search, Star, Calendar, Loader2, CloudOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { PageHero, LuxeCard, EmptyState } from "@/components/ui-premium";
 import journalHero from "@/assets/journal-hero.jpg";
@@ -11,8 +13,32 @@ import journalHero from "@/assets/journal-hero.jpg";
 export default function JournalPage() {
   const [filter, setFilter] = useState<number | "all">("all");
   const [search, setSearch] = useState("");
-  const allStates = getAllDayStates();
+  // Hydrate immediately from local cache, then refresh from cloud (Phase 3 coherence)
+  const [allStates, setAllStates] = useState<Record<number, DayState>>(() => getAllDayStates() as Record<number, DayState>);
+  const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const allDays = weeks.flatMap((w) => w.days);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (cancelled) return;
+      setSignedIn(!!data.user);
+      try {
+        const cloud = await fetchAllDayCompletions();
+        if (cancelled) return;
+        // Merge: cloud wins for any day it has, local fills the rest
+        const merged: Record<number, DayState> = { ...(getAllDayStates() as Record<number, DayState>), ...cloud };
+        setAllStates(merged);
+      } catch (e) {
+        console.warn("[JournalPage] cloud load failed, using local only", e);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const entries = Object.entries(allStates)
     .filter(([, s]) => s.reflection || s.challengeText || s.rememberText)
@@ -49,6 +75,23 @@ export default function JournalPage() {
           height="sm"
           overlay="forest"
         />
+
+        {/* Sync status (Phase 3 coherence) */}
+        {(loading || !signedIn) && (
+          <div className="flex items-center gap-2 text-xs font-body text-charcoal-soft">
+            {loading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[hsl(var(--gold-dark))]" />
+                <span>Syncing reflections from your account…</span>
+              </>
+            ) : (
+              <>
+                <CloudOff className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))]" />
+                <span>Showing local reflections only — sign in to sync across devices.</span>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
