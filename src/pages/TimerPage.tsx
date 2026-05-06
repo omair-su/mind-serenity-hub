@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
-import { Timer, Play, Pause, RotateCcw, Plus, Volume2, Command } from "lucide-react";
+import { Timer, Play, Pause, RotateCcw, Plus, Volume2, Command, Maximize2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { saveTimerSession } from "@/lib/userStore";
 import { useAmbientBed, type AmbientBedId } from "@/hooks/useAmbientBed";
+import SignatureTimer from "@/components/timer/SignatureTimer";
 
 const presets = [
   { label: "5 min", minutes: 5 },
