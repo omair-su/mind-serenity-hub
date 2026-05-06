@@ -620,7 +620,7 @@ export default function DayPage() {
           <div className="absolute bottom-0 left-0 w-32 h-16 bg-gradient-to-tr from-[hsl(var(--gold))]/5 to-transparent rounded-tr-full" />
           <div className="relative z-10">
             <h2 className="font-display text-2xl font-semibold text-foreground mb-6">Today's Reflection</h2>
-            <p className="text-xs font-body text-muted-foreground mb-6">🔒 Your reflections are private and saved locally.</p>
+            <p className="text-xs font-body text-muted-foreground mb-6">🔒 Private to you · Auto-saved & synced to your Journal and Mood Tracker.</p>
 
             <div className="space-y-6">
               <div>
