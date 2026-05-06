@@ -76,6 +76,23 @@ export default function JournalPage() {
           overlay="forest"
         />
 
+        {/* Sync status (Phase 3 coherence) */}
+        {(loading || !signedIn) && (
+          <div className="flex items-center gap-2 text-xs font-body text-charcoal-soft">
+            {loading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[hsl(var(--gold-dark))]" />
+                <span>Syncing reflections from your account…</span>
+              </>
+            ) : (
+              <>
+                <CloudOff className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))]" />
+                <span>Showing local reflections only — sign in to sync across devices.</span>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 max-w-xs">
