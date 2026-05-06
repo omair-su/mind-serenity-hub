@@ -21,6 +21,7 @@ export default function TimerPage() {
   const [seconds, setSeconds] = useState(minutes * 60);
   const [running, setRunning] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [signatureOpen, setSignatureOpen] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number>(0);
   const { bed, setBed, volume, setVolume, stopBed, options } = useAmbientBed("silence", 35);
