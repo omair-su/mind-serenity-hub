@@ -3,6 +3,7 @@ import BottomNav from "@/components/BottomNav";
 import SoundMixer from "@/components/SoundMixer";
 import CommandPalette from "@/components/CommandPalette";
 import ThemeToggle from "@/components/ThemeToggle";
+import StreakRecoveryModal from "@/components/dashboard/StreakRecoveryModal";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <SoundMixer />
       <CommandPalette />
       <ThemeToggle />
+      <StreakRecoveryModal />
     </div>
   );
 }
