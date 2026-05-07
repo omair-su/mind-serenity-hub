@@ -24,7 +24,7 @@ import QuoteRibbon from "@/components/dashboard/QuoteRibbon";
 import WelcomeModal from "@/components/dashboard/WelcomeModal";
 import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
-import StreakRecoveryModal from "@/components/dashboard/StreakRecoveryModal";
+
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 const containerVariants = {
@@ -219,9 +219,6 @@ export default function DashboardPage() {
 
       {/* Streak Celebration Modal */}
       <StreakCelebration streak={streak} show={showStreakCelebration} onClose={() => setShowStreakCelebration(false)} />
-
-      {/* Streak Recovery — offers a freeze when user missed yesterday */}
-      <StreakRecoveryModal />
 
       {/* Full-screen Meditation Player */}
       <AnimatePresence>
