@@ -251,9 +251,13 @@ export default function DayPage() {
 
 
   useEffect(() => {
-    const t = setTimeout(autoSave, 2000);
+    const t = setTimeout(() => {
+      // Only autosave once we've finished hydrating THIS day — prevents
+      // stale state from a previous /day/N route from being persisted.
+      if (hydratedDayRef.current === dayNumber) autoSave();
+    }, 2000);
     return () => clearTimeout(t);
-  }, [autoSave]);
+  }, [autoSave, dayNumber]);
 
   // Scroll to top on day change
   useEffect(() => { window.scrollTo(0, 0); tts.stop(); }, [dayNumber]);
