@@ -149,26 +149,53 @@ export default function DayPage() {
 
   // Tracks the linked mood_entries row for idempotent syncing (Phase 3 coherence)
   const syncMetaRef = useRef<{ moodEntryId?: string; moodSyncedAt?: string }>({});
+  // Prevents the 2s autoSave from writing previous-day state into the new day
+  // before hydration completes (was the cause of "all 30 days marked complete").
+  const hydratedDayRef = useRef<number | null>(null);
 
-  // Hydrate from cloud on mount / day change
+  // Reset + hydrate whenever the route :dayNum changes.
+  // The Router reuses the same DayPage instance across /day/N transitions,
+  // so we must explicitly reset every field — otherwise the previous day's
+  // checklist stays in state and gets auto-saved into the new day.
   useEffect(() => {
+    hydratedDayRef.current = null;
+    const local = loadState(dayNumber);
+    setReflection(local?.reflection || "");
+    setCalmRating([local?.calmRating ?? 5]);
+    setMoodBefore([local?.moodBefore ?? 5]);
+    setMoodAfter([local?.moodAfter ?? 7]);
+    setChallengeText(local?.challengeText || "");
+    setRememberText(local?.rememberText || "");
+    setChecklist(Array.isArray(local?.checklist) ? local.checklist : [false, false, false, false]);
+    setBookmarked(!!local?.bookmarked);
+    setIntentionWord(local?.intention || "");
+    syncMetaRef.current = {
+      moodEntryId: local?.moodEntryId,
+      moodSyncedAt: local?.moodSyncedAt,
+    };
+
     let cancelled = false;
     loadDayState(dayNumber).then((s) => {
-      if (cancelled || !s) return;
-      if (typeof s.reflection === "string") setReflection(s.reflection);
-      if (typeof s.calmRating === "number") setCalmRating([s.calmRating]);
-      if (typeof s.moodBefore === "number") setMoodBefore([s.moodBefore]);
-      if (typeof s.moodAfter === "number") setMoodAfter([s.moodAfter]);
-      if (typeof s.challengeText === "string") setChallengeText(s.challengeText);
-      if (typeof s.rememberText === "string") setRememberText(s.rememberText);
-      if (Array.isArray(s.checklist)) setChecklist(s.checklist);
-      if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
-      if (typeof s.intention === "string") setIntentionWord(s.intention);
-      syncMetaRef.current = {
-        moodEntryId: s.moodEntryId,
-        moodSyncedAt: s.moodSyncedAt,
-      };
-    }).catch(() => {});
+      if (cancelled) return;
+      if (s) {
+        if (typeof s.reflection === "string") setReflection(s.reflection);
+        if (typeof s.calmRating === "number") setCalmRating([s.calmRating]);
+        if (typeof s.moodBefore === "number") setMoodBefore([s.moodBefore]);
+        if (typeof s.moodAfter === "number") setMoodAfter([s.moodAfter]);
+        if (typeof s.challengeText === "string") setChallengeText(s.challengeText);
+        if (typeof s.rememberText === "string") setRememberText(s.rememberText);
+        if (Array.isArray(s.checklist)) setChecklist(s.checklist);
+        if (typeof s.bookmarked === "boolean") setBookmarked(s.bookmarked);
+        if (typeof s.intention === "string") setIntentionWord(s.intention);
+        syncMetaRef.current = {
+          moodEntryId: s.moodEntryId,
+          moodSyncedAt: s.moodSyncedAt,
+        };
+      }
+      hydratedDayRef.current = dayNumber;
+    }).catch(() => {
+      hydratedDayRef.current = dayNumber;
+    });
     return () => { cancelled = true; };
   }, [dayNumber]);
 
@@ -224,9 +251,13 @@ export default function DayPage() {
 
 
   useEffect(() => {
-    const t = setTimeout(autoSave, 2000);
+    const t = setTimeout(() => {
+      // Only autosave once we've finished hydrating THIS day — prevents
+      // stale state from a previous /day/N route from being persisted.
+      if (hydratedDayRef.current === dayNumber) autoSave();
+    }, 2000);
     return () => clearTimeout(t);
-  }, [autoSave]);
+  }, [autoSave, dayNumber]);
 
   // Scroll to top on day change
   useEffect(() => { window.scrollTo(0, 0); tts.stop(); }, [dayNumber]);
