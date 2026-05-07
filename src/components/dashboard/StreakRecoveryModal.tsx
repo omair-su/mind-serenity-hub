@@ -49,12 +49,14 @@ export default function StreakRecoveryModal() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    // Only consider showing if user has at least 1 completed day in their history
+    // Run detection on every app launch (mounted once globally in AppLayout).
+    // Guard: only if user has any prior completed day (so brand-new users aren't nagged).
     if (getCompletedDays().length === 0) return;
 
     const missed = findMissedDay();
     if (!missed) return;
 
+    // Per-launch dedupe (sessionStorage) + per-missed-day dismissal (localStorage).
     if (sessionStorage.getItem(SHOWN_PREFIX + missed)) return;
     if (localStorage.getItem(DECLINED_PREFIX + missed)) return;
 
@@ -64,7 +66,8 @@ export default function StreakRecoveryModal() {
     setMissedDate(missed);
     setAvailable(tokens);
     sessionStorage.setItem(SHOWN_PREFIX + missed, "1");
-    const t = window.setTimeout(() => setOpen(true), 1000);
+    // Small delay so the modal doesn't fight the page-mount animation.
+    const t = window.setTimeout(() => setOpen(true), 250);
     return () => window.clearTimeout(t);
   }, []);
 
