@@ -220,9 +220,6 @@ export default function DashboardPage() {
       {/* Streak Celebration Modal */}
       <StreakCelebration streak={streak} show={showStreakCelebration} onClose={() => setShowStreakCelebration(false)} />
 
-      {/* Streak Recovery — offers a freeze when user missed yesterday */}
-      <StreakRecoveryModal />
-
       {/* Full-screen Meditation Player */}
       <AnimatePresence>
         {showPlayer && (
