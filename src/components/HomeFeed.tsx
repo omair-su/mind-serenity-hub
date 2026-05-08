@@ -92,9 +92,14 @@ export default function HomeFeed() {
 
   useEffect(() => {
     let cancelled = false;
-    const cacheKey = `wv-ai-recs-${tod}-${completed.length}`;
+    // v2 cache: keyed by tod + completed count + streak bucket; 2h TTL
+    const streakBucket = streak >= 7 ? "7+" : streak >= 3 ? "3-6" : "0-2";
+    const cacheKey = `wv-ai-recs-v2-${tod}-${completed.length}-${streakBucket}`;
+    const stampKey = `${cacheKey}-at`;
+    const TTL_MS = 2 * 60 * 60 * 1000;
     const cached = sessionStorage.getItem(cacheKey);
-    if (cached) {
+    const stamp = Number(sessionStorage.getItem(stampKey) || 0);
+    if (cached && Date.now() - stamp < TTL_MS) {
       try {
         setAiRecs(JSON.parse(cached));
         return;
@@ -122,6 +127,7 @@ export default function HomeFeed() {
           setAiRecs(data.recommendations);
           try {
             sessionStorage.setItem(cacheKey, JSON.stringify(data.recommendations));
+            sessionStorage.setItem(stampKey, String(Date.now()));
           } catch {}
         }
       })
@@ -132,7 +138,7 @@ export default function HomeFeed() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tod, completed.length]);
+  }, [tod, completed.length, streak]);
 
   // Smart recommendations based on user data
   const recommendations: { label: string; reason: string; path: string; emoji: string }[] = [];
