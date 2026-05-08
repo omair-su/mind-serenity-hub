@@ -23,6 +23,7 @@ import BentoTools from "@/components/dashboard/BentoTools";
 import QuoteRibbon from "@/components/dashboard/QuoteRibbon";
 import WelcomeModal from "@/components/dashboard/WelcomeModal";
 import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
+import WeeklyRecapCard from "@/components/dashboard/WeeklyRecapCard";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
 
 
@@ -132,6 +133,11 @@ export default function DashboardPage() {
         {/* Soft push reminders prompt (day 2+) */}
         <motion.div variants={itemVariants}>
           <PushPrefsPrompt />
+        </motion.div>
+
+        {/* Weekly recap */}
+        <motion.div variants={itemVariants}>
+          <WeeklyRecapCard />
         </motion.div>
 
         {/* Today's triptych */}
