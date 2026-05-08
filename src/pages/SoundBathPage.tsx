@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { FREQUENCY_PRESETS, startBinaural, stopBinaural, setBinauralVolume, isBinauralPlaying } from "@/lib/binauralBeats";
 import { Headphones, Play, Square, Clock, Volume2, VolumeX, Info, Music } from "lucide-react";
-import soundbathHero from "@/assets/soundbath-hero.jpg";
+import soundbathHero from "@/assets/soundbath-hero.webp";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackByMood } from "@/lib/realAmbientTracks";
 import PremiumGate from "@/components/PremiumGate";

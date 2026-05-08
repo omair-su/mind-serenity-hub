@@ -10,7 +10,7 @@ import { weeks } from "@/data/courseData";
 import {
   ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf, Headphones,
 } from "lucide-react";
-import dashboardHero from "@/assets/dashboard-hero-premium.jpg";
+import dashboardHero from "@/assets/dashboard-hero-premium.webp";
 import { getWellnessScore, getWellnessLevel } from "@/lib/wellnessScore";
 import StreakCelebration from "@/components/StreakCelebration";
 import HomeFeed from "@/components/HomeFeed";

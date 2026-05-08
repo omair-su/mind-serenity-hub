@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Wind, Play, Pause, RotateCcw } from "lucide-react";
-import breathingHero from "@/assets/breathing-hero.jpg";
+import breathingHero from "@/assets/breathing-hero.webp";
 
 interface BreathExercise {
   id: string;

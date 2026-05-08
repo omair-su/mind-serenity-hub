@@ -8,7 +8,7 @@ import { weeks } from "@/data/courseData";
 import { BookOpen, Search, Star, Calendar, Loader2, CloudOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { PageHero, LuxeCard, EmptyState } from "@/components/ui-premium";
-import journalHero from "@/assets/journal-hero.jpg";
+import journalHero from "@/assets/journal-hero.webp";
 
 export default function JournalPage() {
   const [filter, setFilter] = useState<number | "all">("all");

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Play, ArrowRight, Flame, Check, Sun, Leaf, Moon, CloudSun } from "lucide-react";
-import dashboardHero from "@/assets/dashboard-hero-premium.jpg";
+import dashboardHero from "@/assets/dashboard-hero-premium.webp";
 import { getAffirmationsForToday, type Affirmation } from "@/data/affirmations";
 
 interface HeroCinemaProps {
