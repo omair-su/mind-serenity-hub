@@ -32,40 +32,15 @@ import { useIsPremium } from "@/hooks/useIsPremium";
 import PremiumLockModal from "@/components/PremiumLockModal";
 import { Crown, Lock } from "lucide-react";
 
-type VoiceKey = "sarah" | "george" | "matilda" | "charlie";
-const FREE_VOICES: VoiceKey[] = ["sarah", "matilda"];
-const PREMIUM_VOICES: { key: VoiceKey; label: string; tier: "free" | "premium" }[] = [
-  { key: "sarah", label: "Sarah · Warm", tier: "free" },
-  { key: "matilda", label: "Matilda · Soft", tier: "free" },
-  { key: "george", label: "George · Deep", tier: "premium" },
-  { key: "charlie", label: "Aria · Ethereal", tier: "premium" },
-];
-
-/* ─── Day emoji mapping ─── */
-const dayEmojis: Record<number, string> = {
-  1: "🌬️", 2: "💆‍♀️", 3: "🔢", 4: "👁️", 5: "💗", 6: "🚶", 7: "🙏",
-  8: "🌊", 9: "🏷️", 10: "🕉️", 11: "🍇", 12: "🔔", 13: "✨", 14: "🌀",
-  15: "🌄", 16: "🦴", 17: "💚", 18: "🎯", 19: "🤝", 20: "🧘", 21: "🌟",
-  22: "☁️", 23: "🪞", 24: "🕊️", 25: "🔥", 26: "🌍", 27: "💝", 28: "🤫", 29: "🛤️", 30: "🎉",
-};
-
-/* ─── Premium Wisdom Cards ─── */
-const WISDOM_CARDS = [
-  { title: "The Power of Presence", insight: "Your mind can only be in one place at a time. When you're here, you're not there.", icon: "🎯" },
-  { title: "Breath = Life", insight: "Every breath connects you to the present moment. The breath is always now.", icon: "🌬️" },
-  { title: "Consistency Over Perfection", insight: "A imperfect practice done daily beats a perfect practice done rarely.", icon: "🔥" },
-  { title: "The Observer Effect", insight: "Simply noticing your thoughts changes them. Awareness is the first step to freedom.", icon: "👁️" },
-  { title: "Neuroplasticity", insight: "Every meditation rewires your brain. You're literally building new neural pathways for peace.", icon: "🧠" },
-];
-
-/* ─── Binaural Frequency Presets ─── */
-const BINAURAL_PRESETS = [
-  { name: "Delta (Sleep)", freq: 2, color: "from-charcoal to-forest-deep", description: "Deep sleep & restoration" },
-  { name: "Theta (Deep Meditation)", freq: 5, color: "from-charcoal to-gold-dark", description: "Subconscious access & creativity" },
-  { name: "Alpha (Relaxation)", freq: 10, color: "from-forest to-sage-dark", description: "Calm awareness & flow" },
-  { name: "Beta (Focus)", freq: 20, color: "from-gold to-gold-dark", description: "Concentration & alertness" },
-  { name: "Gamma (Peak Performance)", freq: 40, color: "from-gold-dark to-gold", description: "Insight & cognitive enhancement" },
-];
+import {
+  dayEmojis,
+  WISDOM_CARDS,
+  BINAURAL_PRESETS,
+  FREE_VOICES,
+  PREMIUM_VOICES,
+  type VoiceKey,
+} from "@/data/dayConstants";
+import { useDayTimer as useTimer, parseDuration } from "@/hooks/useDayTimer";
 
 /* ─── localStorage helpers (sync mirror — async cloud sync below) ─── */
 function loadState(dayNum: number) {
@@ -73,35 +48,6 @@ function loadState(dayNum: number) {
     const raw = localStorage.getItem(`wv-day-${dayNum}`);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
-}
-
-/* ─── Timer Hook ─── */
-function useTimer(initialMinutes: number) {
-  const [seconds, setSeconds] = useState(initialMinutes * 60);
-  const [running, setRunning] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (running && seconds > 0) {
-      intervalRef.current = setInterval(() => setSeconds(s => s - 1), 1000);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [running, seconds]);
-
-  const toggle = () => setRunning(r => !r);
-  const reset = (mins: number) => { setRunning(false); setSeconds(mins * 60); };
-  const extend = () => setSeconds(s => s + 5 * 60);
-  const fmt = `${Math.floor(seconds / 60).toString().padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
-
-  return { seconds, running, toggle, reset, extend, display: fmt };
-}
-
-/* ─── Parse duration string to minutes ─── */
-function parseDuration(dur: string): number {
-  const match = dur.match(/(\d+)/);
-  return match ? parseInt(match[1]) : 15;
 }
 
 export default function DayPage() {
