@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Moon, Clock, Play, Pause, Loader2, Square } from "lucide-react";
-import sleepHero from "@/assets/sleep-hero.jpg";
+import sleepHero from "@/assets/sleep-hero.webp";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
 import NarrationBar from "@/components/NarrationBar";

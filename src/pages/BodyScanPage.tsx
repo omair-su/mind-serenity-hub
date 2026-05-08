@@ -3,7 +3,7 @@ import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Play, RotateCcw, Sparkles, Loader2 } from "lucide-react";
-import bodyscanHero from "@/assets/bodyscan-hero.jpg";
+import bodyscanHero from "@/assets/bodyscan-hero.webp";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
 import { bodyScanZones, bodyScanIntroScript, bodyScanOutroScript } from "@/data/bodyScanScripts";

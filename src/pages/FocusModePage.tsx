@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import focusmodeHero from "@/assets/focusmode-hero.jpg";
+import focusmodeHero from "@/assets/focusmode-hero.webp";
 import { startBinaural, stopBinaural, setBinauralVolume, FREQUENCY_PRESETS, FrequencyPreset, isBinauralPlaying } from "@/lib/binauralBeats";
 import { saveTimerSession, getTimerSessions, getEarnedAchievements } from "@/lib/userStore";
 

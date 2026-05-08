@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Brain, Heart, Sparkles, Users, ArrowRight, Star, BookOpen, Shield } from "lucide-react";
 import WillowLogo from "@/components/WillowLogo";
-import founderImg from "@/assets/about-meditation.jpg";
+import founderImg from "@/assets/about-meditation.webp";
 import { usePageSEO } from "@/hooks/usePageSEO";
 
 function useScrollReveal() {

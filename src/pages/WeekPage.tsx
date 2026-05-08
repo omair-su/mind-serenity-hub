@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { weeks } from "@/data/courseData";
-import weekNatureImg from "@/assets/week-nature.jpg";
+import weekNatureImg from "@/assets/week-nature.webp";
 import { ArrowRight } from "lucide-react";
 
 export default function WeekPage() {

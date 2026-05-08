@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { foundationSections, weeks } from "@/data/courseData";
-import heroImg from "@/assets/hero-meditation.jpg";
+import heroImg from "@/assets/hero-meditation.webp";
 import { ArrowRight, Leaf, BookOpen, FlaskConical, Clock, Sparkles, Brain, Heart, Shield, Target, Zap, Sun } from "lucide-react";
 
 export default function WelcomePage() {
