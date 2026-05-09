@@ -91,7 +91,14 @@ function AppInner() {
           <Route path="/legal/terms" element={<TermsPage />} />
           <Route path="/legal/privacy" element={<PrivacyPage />} />
           <Route path="/legal/refund" element={<RefundPage />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute allowIncompleteOnboarding>
+                <OnboardingPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Course foundation */}
           <Route path="/course" element={<WelcomePage />} />

@@ -119,7 +119,8 @@ export default function SignInPage() {
           description: `We sent a confirmation link to ${email}.`,
         });
       } else {
-        navigate(safeRedirect, { replace: true });
+        // Brand-new account → run onboarding before landing on the dashboard.
+        navigate("/onboarding", { replace: true });
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({

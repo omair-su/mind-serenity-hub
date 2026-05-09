@@ -16,13 +16,14 @@ export default function WelcomeModal() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    // Only show once per device, and only after profile loads with a userId.
+    // Only show once per device, only after profile loads, and only after the
+    // full onboarding flow has been completed (otherwise it collides with /onboarding).
     const seen = localStorage.getItem(STORAGE_KEY);
-    if (!seen && profile.userId) {
+    if (!seen && profile.userId && profile.onboardingComplete) {
       const t = window.setTimeout(() => setOpen(true), 600);
       return () => window.clearTimeout(t);
     }
-  }, [profile.userId]);
+  }, [profile.userId, profile.onboardingComplete]);
 
   const close = () => {
     localStorage.setItem(STORAGE_KEY, "1");
