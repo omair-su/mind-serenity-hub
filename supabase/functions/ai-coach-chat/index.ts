@@ -208,8 +208,9 @@ serve(async (req) => {
     const maxTokens = isPremium ? 1000 : 320;
 
     // Hard timeout + one automatic retry to prevent the UI from hanging.
-    // Non-stream: 12s per attempt. Stream: 20s to first byte (handled by fetch only).
-    const PER_ATTEMPT_TIMEOUT_MS = wantsStream ? 20_000 : 12_000;
+    // Claude Sonnet 4.5 with 1000 max_tokens can take 15-25s; Haiku is faster.
+    // Previous 12s timeout was firing AbortError before Claude finished -> "Coach unavailable".
+    const PER_ATTEMPT_TIMEOUT_MS = wantsStream ? 25_000 : (isPremium ? 35_000 : 20_000);
     const MAX_ATTEMPTS = 2;
 
     async function callClaude(): Promise<Response> {
