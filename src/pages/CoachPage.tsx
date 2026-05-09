@@ -118,11 +118,12 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
     setMessages(prev => [...prev, { id: assistantId, role: "coach", text: "", time: now() }]);
 
     try {
-      // Client-side safety net: never let the UI hang more than 25s.
+      // Client-side safety net: never let the UI hang more than 45s.
+      // Premium Sonnet replies can take 25-35s; previous 25s cap was killing valid replies.
       const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
         setTimeout(
           () => resolve({ data: null, error: new Error("CLIENT_TIMEOUT") }),
-          25_000,
+          45_000,
         ),
       );
       const invokePromise = supabase.functions.invoke("ai-coach-chat", {
