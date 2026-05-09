@@ -99,23 +99,22 @@ Rules:
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: systemPrompt + "\n\nReturn ONLY raw JSON. No markdown, no code fences, no commentary." },
           { role: "user", content: userPrompt },
         ],
-        response_format: { type: "json_object" },
       }),
     });
 
     if (aiRes.status === 429) {
-      return new Response(JSON.stringify({ error: "Rate limited" }), {
+      return new Response(JSON.stringify({ error: "Rate limited", recommendations: [] }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (aiRes.status === 402) {
-      return new Response(JSON.stringify({ error: "AI credits exhausted" }), {
+      return new Response(JSON.stringify({ error: "AI credits exhausted", recommendations: [] }), {
         status: 402,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -123,8 +122,8 @@ Rules:
     if (!aiRes.ok) {
       const txt = await aiRes.text();
       console.error("AI error", aiRes.status, txt);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "AI gateway error", recommendations: [] }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -133,9 +132,18 @@ Rules:
     const raw = aiJson.choices?.[0]?.message?.content ?? "{}";
     let parsed: { recommendations: Omit<Recommendation, "path">[] } = { recommendations: [] };
     try {
-      parsed = JSON.parse(raw);
-    } catch {
-      console.error("Failed to parse AI JSON", raw);
+      // Strip markdown code fences if model added them despite instructions.
+      let cleaned = String(raw).trim()
+        .replace(/^```json\s*/i, "")
+        .replace(/^```\s*/i, "")
+        .replace(/```\s*$/i, "")
+        .trim();
+      const start = cleaned.indexOf("{");
+      const end = cleaned.lastIndexOf("}");
+      if (start !== -1 && end !== -1) cleaned = cleaned.slice(start, end + 1);
+      parsed = JSON.parse(cleaned);
+    } catch (err) {
+      console.error("Failed to parse AI JSON", err, raw);
     }
 
     const recommendations: Recommendation[] = (parsed.recommendations ?? [])
