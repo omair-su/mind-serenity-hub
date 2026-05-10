@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfile, saveProfile } from "@/lib/userStore";
+import {
+  syncOnboardingAnswers,
+  finalizeOnboarding,
+  getResumeStep,
+  setResumeStep,
+  track,
+} from "@/lib/onboardingSync";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import {
-  ArrowRight,
   ArrowLeft,
   Moon,
   Brain,
@@ -18,11 +24,11 @@ import {
   Leaf,
   Eye,
   Sun,
-  Clock,
   Sunrise,
   Sunset,
   RefreshCw,
   Check,
+  Loader2,
 } from "lucide-react";
 import willowLogo from "@/assets/willow-logo.png";
 
@@ -36,8 +42,9 @@ const steps = [
   "experience",
   "time",
   "minutes",
+  "summary",
   "ready",
-];
+] as const;
 
 const goalOptions = [
   { label: "Sleep soundly", icon: Moon, color: "from-[hsl(var(--forest-deep))] to-[hsl(var(--forest-mid))]" },
@@ -72,119 +79,133 @@ const feelingOptions = [
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => getResumeStep(steps.length));
   const [profile, setProfile] = useState(getProfile());
-  const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [finishing, setFinishing] = useState(false);
+  const startedAt = useRef<number>(Date.now());
+
+  // Mark started + persist + emit step view events
+  useEffect(() => {
+    track({ type: "onboarding_started" });
+  }, []);
+
+  useEffect(() => {
+    setResumeStep(step);
+    track({ type: "onboarding_step_view", step: steps[step], index: step });
+  }, [step]);
 
   const update = (partial: Partial<typeof profile>) => {
     const next = { ...profile, ...partial };
     setProfile(next);
-    saveProfile(next);
+    syncOnboardingAnswers(next); // local + debounced cloud
+    const key = Object.keys(partial)[0];
+    track({
+      type: "onboarding_step_answered",
+      step: steps[step],
+      index: step,
+      value: partial[key as keyof typeof partial] as unknown,
+    });
   };
 
-  const animateStep = (newStep: number, dir: "next" | "prev") => {
+  const goTo = (newStep: number, dir: "next" | "prev") => {
     setDirection(dir);
-    setAnimating(true);
-    setTimeout(() => {
-      setStep(newStep);
-      setAnimating(false);
-    }, 250);
+    setStep(newStep);
   };
 
-  const syncToCloud = async (finalProfile: typeof profile) => {
-    try {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user) return; // Not signed in yet — local only is fine
-      await supabase
-        .from("profiles")
-        .update({
-          display_name: finalProfile.name || null,
-          experience_level: finalProfile.experience,
-          goals: finalProfile.goals,
-          onboarding_answers: {
-            stressLevel: finalProfile.stressLevel,
-            stressManagement: finalProfile.stressManagement,
-            desiredFeeling: finalProfile.desiredFeeling,
-            preferredTime: finalProfile.preferredTime,
-            dailyMinutes: finalProfile.dailyMinutes,
-          },
-        })
-        .eq("user_id", auth.user.id);
-    } catch (e) {
-      console.warn("Onboarding cloud sync failed (non-blocking)", e);
-    }
-  };
-
-  const next = () => {
+  const next = async () => {
     if (step < steps.length - 1) {
-      animateStep(step + 1, "next");
+      goTo(step + 1, "next");
     } else {
-      const finished = { ...profile, onboardingComplete: true };
-      update({ onboardingComplete: true });
-      void syncToCloud(finished);
-      navigate("/app");
+      setFinishing(true);
+      const { synced, error } = await finalizeOnboarding(profile, startedAt.current);
+      setFinishing(false);
+      if (!synced) {
+        toast({
+          title: "Saved on this device",
+          description: "We'll sync your answers as soon as you're back online.",
+        });
+        if (error) console.warn(error);
+      }
+      navigate("/app", { replace: true });
     }
   };
 
   const prev = () => {
-    if (step > 0) animateStep(step - 1, "prev");
+    if (step > 0) goTo(step - 1, "prev");
   };
 
-  const skip = () => {
-    const finished = { ...profile, onboardingComplete: true };
-    update({ onboardingComplete: true });
-    void syncToCloud(finished);
-    navigate("/app");
+  const skip = async () => {
+    track({ type: "onboarding_skipped", atStep: steps[step], index: step });
+    setFinishing(true);
+    await finalizeOnboarding(profile, startedAt.current);
+    setFinishing(false);
+    navigate("/app", { replace: true });
   };
 
   const currentStep = steps[step];
   const progress = ((step + 1) / steps.length) * 100;
 
+  // Disable Continue if the current step has no required answer
+  const canContinue = (() => {
+    switch (currentStep) {
+      case "name": return profile.name.trim().length > 0;
+      case "goals": return profile.goals.length > 0;
+      case "stress": return !!profile.stressLevel;
+      case "coping": return !!profile.stressManagement;
+      case "feeling": return !!profile.desiredFeeling;
+      default: return true;
+    }
+  })();
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Top bar with logo + progress */}
-      <div className="px-6 pt-6 pb-2">
-        <div className="flex items-center justify-between mb-4">
-          <img src={willowLogo} alt="Willow Vibes" className="w-10 h-10" />
-          <span className="text-xs font-body text-muted-foreground">
-            {step + 1} of {steps.length}
+      {/* Sticky progress header */}
+      <div className="sticky top-0 z-20 bg-background/85 backdrop-blur-md px-6 pt-6 pb-3 border-b border-border/50">
+        <div className="flex items-center justify-between mb-3">
+          <img src={willowLogo} alt="Willow Vibes" className="w-9 h-9" />
+          <span className="text-xs font-body text-muted-foreground tabular-nums">
+            Step {step + 1} of {steps.length}
           </span>
         </div>
-        {/* Progress bar */}
         <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500 ease-out"
-            style={{
-              width: `${progress}%`,
-              background: "linear-gradient(90deg, hsl(var(--forest)), hsl(var(--gold)))",
-            }}
+          <motion.div
+            initial={false}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg, hsl(var(--forest)), hsl(var(--gold)))" }}
           />
         </div>
       </div>
 
-      {/* Content area */}
-      <div className="flex-1 flex flex-col justify-between px-6 pb-6">
-        <AnimatePresence mode="wait">
+      <div className="flex-1 flex flex-col justify-between px-6 pb-6 pt-4">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={step}
+            custom={direction}
             initial={{ opacity: 0, x: direction === "next" ? 40 : -40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: direction === "next" ? -40 : 40 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             className="flex-1 flex flex-col justify-center"
           >
           {/* ── Welcome ── */}
           {currentStep === "welcome" && (
             <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--sage))] flex items-center justify-center shadow-lg">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="w-24 h-24 mx-auto mb-8 rounded-full bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--sage))] flex items-center justify-center shadow-lg"
+              >
                 <Leaf className="w-12 h-12 text-primary-foreground" />
-              </div>
+              </motion.div>
               <h1 className="font-display text-3xl font-bold text-foreground mb-4 leading-tight">
-                Welcome to Your<br />Transformation
+                Welcome to your<br />quiet practice
               </h1>
               <p className="font-body text-muted-foreground text-base leading-relaxed max-w-sm mx-auto">
-                Let's personalize your experience so every session feels like it was made just for you.
+                Ten thoughtful questions. Two minutes. A program shaped entirely around you.
               </p>
             </div>
           )}
@@ -196,11 +217,12 @@ export default function OnboardingPage() {
                 What should we<br />call you?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                We'll use this to make your journey personal 🌿
+                We'll use this in your daily practice 🌿
               </p>
               <Input
                 value={profile.name}
                 onChange={(e) => update({ name: e.target.value })}
+                onKeyDown={(e) => { if (e.key === "Enter" && canContinue) next(); }}
                 placeholder="Your name"
                 className="font-body text-lg h-14 rounded-2xl border-2 border-border focus:border-primary bg-card"
                 autoFocus
@@ -212,10 +234,10 @@ export default function OnboardingPage() {
           {currentStep === "goals" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-2 leading-tight">
-                Which goals should we<br />work toward together?
+                What would you love<br />to feel more of?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-6">
-                Select all that resonate with you.
+                Pick everything that resonates — we'll weave them into your sessions.
               </p>
               <div className="space-y-3">
                 {goalOptions.map((g) => {
@@ -236,14 +258,10 @@ export default function OnboardingPage() {
                           : "border-border bg-card hover:border-primary/30"
                       }`}
                     >
-                      <div
-                        className={`w-10 h-10 rounded-xl bg-gradient-to-br ${g.color} flex items-center justify-center flex-shrink-0`}
-                      >
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${g.color} flex items-center justify-center flex-shrink-0`}>
                         <Icon className="w-5 h-5 text-white" />
                       </div>
-                      <span className="font-body font-medium text-foreground text-left flex-1">
-                        {g.label}
-                      </span>
+                      <span className="font-body font-medium text-foreground text-left flex-1">{g.label}</span>
                       {isSelected && (
                         <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                           <Check className="w-3.5 h-3.5 text-primary-foreground" />
@@ -256,14 +274,14 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* ── Stress Level ── */}
+          {/* ── Stress ── */}
           {currentStep === "stress" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-2 leading-tight">
                 How often do you<br />feel stressed?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                No pressure, there's no wrong answer 🙂
+                Be honest — there's no wrong answer here.
               </p>
               <div className="space-y-3">
                 {stressOptions.map((opt) => (
@@ -288,10 +306,10 @@ export default function OnboardingPage() {
           {currentStep === "coping" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-2 leading-tight">
-                How do you manage<br />your stress now?
+                How do you cope<br />with it today?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                You've come to the right place for help!
+                We'll meet you exactly where you are.
               </p>
               <div className="space-y-3">
                 {copingOptions.map((opt) => (
@@ -312,14 +330,14 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* ── Desired Feeling ── */}
+          {/* ── Feeling ── */}
           {currentStep === "feeling" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-2 leading-tight">
                 How would you like<br />to feel every day?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                Imagine if you didn't feel anxious or stressed.
+                Picture the quietest version of yourself.
               </p>
               <div className="space-y-3">
                 {feelingOptions.map((opt) => {
@@ -350,7 +368,7 @@ export default function OnboardingPage() {
                 Your meditation<br />experience?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                We'll tailor the guidance to your level.
+                We'll calibrate the depth of guidance.
               </p>
               <div className="space-y-3">
                 {([
@@ -378,14 +396,14 @@ export default function OnboardingPage() {
             </div>
           )}
 
-          {/* ── Time Preference ── */}
+          {/* ── Time ── */}
           {currentStep === "time" && (
             <div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-2 leading-tight">
                 When do you prefer<br />to practice?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-8">
-                We'll remind you at the perfect moment.
+                We'll nudge you at the perfect moment.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {([
@@ -419,10 +437,10 @@ export default function OnboardingPage() {
                 How much time<br />can you give daily?
               </h2>
               <p className="text-sm font-body text-muted-foreground mb-10">
-                Even 5 minutes can change your day.
+                Even five minutes will reshape your day.
               </p>
               <div className="text-center mb-8">
-                <span className="font-display text-6xl font-bold text-primary">{profile.dailyMinutes}</span>
+                <span className="font-display text-6xl font-bold text-primary tabular-nums">{profile.dailyMinutes}</span>
                 <span className="font-body text-muted-foreground ml-2 text-lg">minutes</span>
               </div>
               <Slider
@@ -434,9 +452,41 @@ export default function OnboardingPage() {
                 className="mb-4"
               />
               <div className="flex justify-between text-xs font-body text-muted-foreground">
-                <span>5 min</span>
-                <span>15 min</span>
-                <span>30 min</span>
+                <span>5 min</span><span>15 min</span><span>30 min</span>
+              </div>
+            </div>
+          )}
+
+          {/* ── Summary ── (NEW) */}
+          {currentStep === "summary" && (
+            <div>
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[hsl(var(--gold-light))] to-[hsl(var(--gold))] flex items-center justify-center shadow-md">
+                  <Sparkles className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="font-display text-2xl font-bold text-foreground leading-tight">
+                  Your personalized<br />practice plan
+                </h2>
+                <p className="text-sm font-body text-muted-foreground mt-2">
+                  Review and adjust anytime in Settings.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {[
+                  { label: "Name", value: profile.name || "Friend" },
+                  { label: "Focus", value: profile.goals.slice(0, 3).join(" • ") || "—" },
+                  { label: "Stress", value: profile.stressLevel || "—" },
+                  { label: "Aiming for", value: profile.desiredFeeling || "—" },
+                  { label: "Experience", value: profile.experience.charAt(0).toUpperCase() + profile.experience.slice(1) },
+                  { label: "Best time", value: profile.preferredTime.charAt(0).toUpperCase() + profile.preferredTime.slice(1) },
+                  { label: "Daily commitment", value: `${profile.dailyMinutes} minutes` },
+                ].map((row) => (
+                  <div key={row.label} className="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-card border border-border">
+                    <span className="text-xs font-body uppercase tracking-wider text-muted-foreground">{row.label}</span>
+                    <span className="text-sm font-body font-semibold text-foreground text-right">{row.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -444,9 +494,14 @@ export default function OnboardingPage() {
           {/* ── Ready ── */}
           {currentStep === "ready" && (
             <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-lg animate-pulse-glow">
+              <motion.div
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-lg animate-pulse-glow"
+              >
                 <Sparkles className="w-10 h-10 text-white" />
-              </div>
+              </motion.div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-3 leading-tight">
                 You're in the right place<br />to start feeling better
               </h2>
@@ -454,7 +509,6 @@ export default function OnboardingPage() {
                 Willow Vibes is proven to decrease stress by 50% and improve sleep by 40% in just 30 days.
               </p>
 
-              {/* Benefit cards */}
               <div className="space-y-3 text-left mb-6">
                 {[
                   { icon: Heart, text: `Reduce stress with ${profile.dailyMinutes}-min daily guided practices` },
@@ -480,18 +534,20 @@ export default function OnboardingPage() {
           </motion.div>
         </AnimatePresence>
 
-        {/* ── Bottom Navigation ── */}
+        {/* Bottom Navigation */}
         <div className="pt-4 space-y-3">
           <button
             onClick={next}
-            className="w-full py-4 rounded-2xl font-body font-bold text-base transition-all duration-300"
+            disabled={!canContinue || finishing}
+            className="w-full py-4 rounded-2xl font-body font-bold text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             style={{
               background: "linear-gradient(135deg, hsl(var(--forest)), hsl(var(--forest-mid)))",
               color: "white",
               boxShadow: "0 8px 32px hsl(139 37% 27% / 0.3)",
             }}
           >
-            {currentStep === "ready" ? "Start My Journey" : "Continue"}
+            {finishing && <Loader2 className="w-4 h-4 animate-spin" />}
+            {currentStep === "ready" ? "Start My Journey" : currentStep === "summary" ? "Looks good — continue" : "Continue"}
           </button>
 
           <div className="flex items-center justify-between">
@@ -502,13 +558,12 @@ export default function OnboardingPage() {
               >
                 <ArrowLeft className="w-4 h-4" /> Back
               </button>
-            ) : (
-              <div />
-            )}
+            ) : <div />}
             {step < steps.length - 1 && (
               <button
                 onClick={skip}
-                className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors px-2 py-2"
+                disabled={finishing}
+                className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors px-2 py-2 disabled:opacity-50"
               >
                 Skip for now
               </button>
