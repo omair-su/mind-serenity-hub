@@ -69,9 +69,13 @@ async function pushOnce(profile: UserProfile, retries = 2): Promise<void> {
     },
   };
 
+  // Profile row is auto-created by `handle_new_user` trigger on signup,
+  // so update is the safe path. user_id is unique in practice via that trigger.
+  const { user_id: _uid, ...updates } = payload;
   const { error } = await supabase
     .from("profiles")
-    .upsert(payload, { onConflict: "user_id" });
+    .update(updates)
+    .eq("user_id", auth.user.id);
 
   if (error) {
     lastError = error as unknown as Error;
