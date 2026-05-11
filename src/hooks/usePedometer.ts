@@ -14,7 +14,10 @@ interface UsePedometerOptions {
   fallbackCadence?: number; // steps/min for fallback (default 110)
 }
 
-const STEP_THRESHOLD = 11; // m/s^2 magnitude delta — calibrated for typical walking
+// Walking peaks add ~1.5–4 m/s² above gravity baseline. Delta between consecutive
+// samples is typically 1–3 m/s² during a heel-strike. 11 was way too high — almost
+// nothing fired. 1.2 is calibrated against iOS/Android accelerometer event rates.
+const STEP_THRESHOLD = 1.2;
 const MIN_STEP_INTERVAL_MS = 280; // debounce ~ 215 spm cap
 
 export function usePedometer({ active, fallbackCadence = 110 }: UsePedometerOptions): PedometerState & {
