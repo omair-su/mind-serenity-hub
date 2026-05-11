@@ -268,6 +268,25 @@ export default function WalkingMeditationPage() {
           ))}
         </div>
 
+        {/* Pedometer enable card — only shown before active session when not yet granted */}
+        {!isActive && !completed && pedometer.permissionState !== "granted" && pedometer.permissionState !== "unsupported" && (
+          <button
+            onClick={() => pedometer.requestPermission()}
+            className="w-full rounded-2xl bg-gradient-to-br from-[hsl(var(--gold)/0.12)] via-card to-[hsl(var(--forest)/0.08)] border border-[hsl(var(--gold)/0.3)] p-4 flex items-center gap-3 text-left transition-all hover:shadow-gold active:scale-[0.99]"
+          >
+            <div className="p-2.5 rounded-xl bg-[hsl(var(--gold)/0.2)]">
+              <Footprints className="w-5 h-5 text-[hsl(var(--gold-dark))]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-display font-bold text-foreground">Enable real step tracking</p>
+              <p className="text-[11px] font-body text-muted-foreground leading-snug">
+                Grant motion access for authentic pedometer readings · works best on mobile
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          </button>
+        )}
+
         {!isActive && !completed && (
           <>
             {/* Environments */}
