@@ -412,9 +412,21 @@ export default function WalkingMeditationPage() {
                 </div>
               </div>
 
-              {!pedometer.isReal && (
+              {pedometer.isReal ? (
+                <p className="text-[10px] text-center font-body text-primary/80 italic flex items-center justify-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] animate-pulse" />
+                  Live pedometer · real motion tracking
+                </p>
+              ) : pedometer.permissionState === "prompt" ? (
+                <button
+                  onClick={() => pedometer.requestPermission()}
+                  className="mx-auto block text-[10px] font-body font-semibold text-[hsl(var(--gold-dark))] underline underline-offset-2"
+                >
+                  Tap to enable real step tracking
+                </button>
+              ) : (
                 <p className="text-[10px] text-center font-body text-muted-foreground/70 italic">
-                  Using estimated cadence · open on mobile for real step tracking
+                  Estimated cadence · open on a mobile device for live tracking
                 </p>
               )}
 
