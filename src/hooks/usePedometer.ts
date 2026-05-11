@@ -14,7 +14,10 @@ interface UsePedometerOptions {
   fallbackCadence?: number; // steps/min for fallback (default 110)
 }
 
-const STEP_THRESHOLD = 11; // m/s^2 magnitude delta — calibrated for typical walking
+// Walking peaks add ~1.5–4 m/s² above gravity baseline. Delta between consecutive
+// samples is typically 1–3 m/s² during a heel-strike. 11 was way too high — almost
+// nothing fired. 1.2 is calibrated against iOS/Android accelerometer event rates.
+const STEP_THRESHOLD = 1.2;
 const MIN_STEP_INTERVAL_MS = 280; // debounce ~ 215 spm cap
 
 export function usePedometer({ active, fallbackCadence = 110 }: UsePedometerOptions): PedometerState & {
@@ -36,14 +39,16 @@ export function usePedometer({ active, fallbackCadence = 110 }: UsePedometerOpti
     const a = e.accelerationIncludingGravity;
     if (!a || a.x == null || a.y == null || a.z == null) return;
     const mag = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-    const delta = Math.abs(mag - lastMagRef.current);
-    lastMagRef.current = mag;
+    // Smoothed baseline (low-pass) approximates current gravity vector magnitude.
+    // Peak above baseline = a step impact. This is robust across orientations.
+    const baseline = lastMagRef.current * 0.9 + mag * 0.1;
+    const delta = mag - baseline;
+    lastMagRef.current = baseline;
     const now = Date.now();
     if (delta > STEP_THRESHOLD && now - lastStepAtRef.current > MIN_STEP_INTERVAL_MS) {
       lastStepAtRef.current = now;
       setSteps((s) => s + 1);
       stepTimesRef.current.push(now);
-      // Keep a rolling 30s window for cadence
       const cutoff = now - 30000;
       stepTimesRef.current = stepTimesRef.current.filter((t) => t > cutoff);
       if (stepTimesRef.current.length >= 3) {

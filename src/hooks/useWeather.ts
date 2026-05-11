@@ -1,4 +1,5 @@
-// Geolocation + Open-Meteo lookup. No API key required.
+// Geolocation + Open-Meteo weather lookup with cascading IP fallbacks.
+// No API key required. Survives blocked geolocation, blocked iframes, and IP provider outages.
 import { useCallback, useEffect, useState } from "react";
 
 export interface Weather {
@@ -7,6 +8,8 @@ export interface Weather {
   description: string;
   isGoodForWalking: boolean;
   emoji: string;
+  city?: string;
+  source: "gps" | "ip";
 }
 
 const codeMap: Record<number, { desc: string; good: boolean; emoji: string }> = {
@@ -29,9 +32,20 @@ const codeMap: Record<number, { desc: string; good: boolean; emoji: string }> = 
   95: { desc: "Thunderstorm", good: false, emoji: "⛈️" },
 };
 
-async function fetchWeatherForCoords(lat: number, lon: number): Promise<Weather> {
+const CACHE_KEY = "wv-weather-cache-v1";
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 min
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error("timeout")), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+  });
+}
+
+async function fetchWeatherForCoords(lat: number, lon: number, source: "gps" | "ip", city?: string): Promise<Weather> {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
-  const res = await fetch(url);
+  const res = await withTimeout(fetch(url), 7000);
+  if (!res.ok) throw new Error(`weather ${res.status}`);
   const data = await res.json();
   const code = data?.current?.weather_code ?? 0;
   const tempC = data?.current?.temperature_2m ?? 0;
@@ -42,24 +56,62 @@ async function fetchWeatherForCoords(lat: number, lon: number): Promise<Weather>
     description: meta.desc,
     isGoodForWalking: meta.good && tempC > 0 && tempC < 35,
     emoji: meta.emoji,
+    city,
+    source,
   };
 }
 
-// IP-based fallback (no permission needed). Used when geolocation is denied/unavailable.
+// Cascade through several free no-key IP geolocation providers.
+const IP_PROVIDERS: Array<() => Promise<{ lat: number; lon: number; city?: string } | null>> = [
+  async () => {
+    const r = await withTimeout(fetch("https://ipwho.is/"), 4000);
+    const j = await r.json();
+    if (j?.success === false || !j?.latitude) return null;
+    return { lat: j.latitude, lon: j.longitude, city: j.city };
+  },
+  async () => {
+    const r = await withTimeout(fetch("https://get.geojs.io/v1/ip/geo.json"), 4000);
+    const j = await r.json();
+    if (!j?.latitude) return null;
+    return { lat: parseFloat(j.latitude), lon: parseFloat(j.longitude), city: j.city };
+  },
+  async () => {
+    const r = await withTimeout(fetch("https://ipapi.co/json/"), 4000);
+    const j = await r.json();
+    if (!j?.latitude) return null;
+    return { lat: j.latitude, lon: j.longitude, city: j.city };
+  },
+];
+
 async function fetchWeatherByIP(): Promise<Weather | null> {
-  try {
-    // Open-Meteo doesn't do IP lookup; use ipapi.co (free, no key) for coords.
-    const ip = await fetch("https://ipapi.co/json/").then((r) => r.json()).catch(() => null);
-    if (!ip?.latitude || !ip?.longitude) return null;
-    return await fetchWeatherForCoords(ip.latitude, ip.longitude);
-  } catch {
-    return null;
+  for (const provider of IP_PROVIDERS) {
+    try {
+      const loc = await provider();
+      if (!loc) continue;
+      return await fetchWeatherForCoords(loc.lat, loc.lon, "ip", loc.city);
+    } catch {
+      // try next provider
+    }
   }
+  return null;
+}
+
+function readCache(): Weather | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { weather, ts } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL_MS) return null;
+    return weather;
+  } catch { return null; }
+}
+function writeCache(w: Weather) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ weather: w, ts: Date.now() })); } catch { /* ignore */ }
 }
 
 export function useWeather() {
-  const [weather, setWeather] = useState<Weather | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState<Weather | null>(() => readCache());
+  const [loading, setLoading] = useState(!readCache());
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(() => {
@@ -67,43 +119,50 @@ export function useWeather() {
     setError(null);
     let cancelled = false;
 
-    const tryIPFallback = async () => {
-      const w = await fetchWeatherByIP();
+    const finish = (w: Weather | null, err?: string) => {
       if (cancelled) return;
-      if (w) {
-        setWeather(w);
-        setError(null);
-      } else {
-        setError("Weather unavailable");
-      }
+      if (w) { setWeather(w); writeCache(w); setError(null); }
+      else if (err) { setError(err); }
       setLoading(false);
     };
 
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
-      tryIPFallback();
-      return () => { cancelled = true; };
-    }
+    const tryIPFallback = async () => {
+      const w = await fetchWeatherByIP();
+      finish(w, w ? undefined : "Weather unavailable");
+    };
+
+    // Geolocation only works in secure contexts and may be blocked in iframes.
+    // We race a short timer so the widget never hangs waiting on the prompt.
+    const useGeo = typeof navigator !== "undefined"
+      && !!navigator.geolocation
+      && typeof window !== "undefined"
+      && window.isSecureContext;
+
+    if (!useGeo) { tryIPFallback(); return () => { cancelled = true; }; }
+
+    let settled = false;
+    const fallbackTimer = setTimeout(() => {
+      if (!settled) { settled = true; tryIPFallback(); }
+    }, 3500);
 
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
+        if (settled) return; settled = true; clearTimeout(fallbackTimer);
         try {
-          const w = await fetchWeatherForCoords(pos.coords.latitude, pos.coords.longitude);
-          if (cancelled) return;
-          setWeather(w);
+          const w = await fetchWeatherForCoords(pos.coords.latitude, pos.coords.longitude, "gps");
+          finish(w);
         } catch {
-          if (!cancelled) await tryIPFallback();
-        } finally {
-          if (!cancelled) setLoading(false);
+          await tryIPFallback();
         }
       },
       async () => {
-        // Permission denied or timeout — fall back to IP lookup so widget still shows.
-        if (!cancelled) await tryIPFallback();
+        if (settled) return; settled = true; clearTimeout(fallbackTimer);
+        await tryIPFallback();
       },
-      { timeout: 6000, maximumAge: 600000 }
+      { timeout: 3000, maximumAge: 600000, enableHighAccuracy: false }
     );
 
-    return () => { cancelled = true; };
+    return () => { cancelled = true; clearTimeout(fallbackTimer); };
   }, []);
 
   useEffect(() => {

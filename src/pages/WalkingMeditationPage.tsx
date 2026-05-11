@@ -193,8 +193,9 @@ export default function WalkingMeditationPage() {
 
           {/* Weather widget — always visible */}
           <button
-            onClick={() => weatherError && retryWeather()}
-            className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/35 backdrop-blur-md border border-white/15 flex items-center gap-2 z-10 transition-all hover:bg-black/45"
+            onClick={() => retryWeather()}
+            className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 flex items-center gap-2 z-10 transition-all hover:bg-black/55 active:scale-95"
+            aria-label="Refresh weather"
           >
             {weatherLoading ? (
               <>
@@ -205,12 +206,16 @@ export default function WalkingMeditationPage() {
               <>
                 <span className="text-sm">{weather.emoji}</span>
                 <span className="text-[11px] font-body font-bold text-white tabular-nums">{weather.tempC}°C</span>
-                <span className="text-[10px] font-body text-white/75 hidden sm:inline">· {weather.description}</span>
+                <span className="text-[10px] font-body text-white/75 hidden sm:inline">
+                  · {weather.city ? `${weather.city} · ` : ""}{weather.description}
+                </span>
               </>
             ) : (
               <>
                 <span className="text-sm">📍</span>
-                <span className="text-[10px] font-body font-semibold text-white/80">Tap for weather</span>
+                <span className="text-[10px] font-body font-semibold text-white/80">
+                  {weatherError ? "Tap to retry" : "Tap for weather"}
+                </span>
               </>
             )}
           </button>
@@ -262,6 +267,25 @@ export default function WalkingMeditationPage() {
             </div>
           ))}
         </div>
+
+        {/* Pedometer enable card — only shown before active session when not yet granted */}
+        {!isActive && !completed && pedometer.permissionState !== "granted" && pedometer.permissionState !== "unsupported" && (
+          <button
+            onClick={() => pedometer.requestPermission()}
+            className="w-full rounded-2xl bg-gradient-to-br from-[hsl(var(--gold)/0.12)] via-card to-[hsl(var(--forest)/0.08)] border border-[hsl(var(--gold)/0.3)] p-4 flex items-center gap-3 text-left transition-all hover:shadow-gold active:scale-[0.99]"
+          >
+            <div className="p-2.5 rounded-xl bg-[hsl(var(--gold)/0.2)]">
+              <Footprints className="w-5 h-5 text-[hsl(var(--gold-dark))]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-display font-bold text-foreground">Enable real step tracking</p>
+              <p className="text-[11px] font-body text-muted-foreground leading-snug">
+                Grant motion access for authentic pedometer readings · works best on mobile
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          </button>
+        )}
 
         {!isActive && !completed && (
           <>
@@ -388,9 +412,21 @@ export default function WalkingMeditationPage() {
                 </div>
               </div>
 
-              {!pedometer.isReal && (
+              {pedometer.isReal ? (
+                <p className="text-[10px] text-center font-body text-primary/80 italic flex items-center justify-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))] animate-pulse" />
+                  Live pedometer · real motion tracking
+                </p>
+              ) : pedometer.permissionState === "prompt" ? (
+                <button
+                  onClick={() => pedometer.requestPermission()}
+                  className="mx-auto block text-[10px] font-body font-semibold text-[hsl(var(--gold-dark))] underline underline-offset-2"
+                >
+                  Tap to enable real step tracking
+                </button>
+              ) : (
                 <p className="text-[10px] text-center font-body text-muted-foreground/70 italic">
-                  Using estimated cadence · open on mobile for real step tracking
+                  Estimated cadence · open on a mobile device for live tracking
                 </p>
               )}
 
