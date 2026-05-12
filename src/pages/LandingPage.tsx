@@ -2,7 +2,8 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles, Brain, HeartPulse, Moon, Wind, Headphones, LineChart, Smile, BookOpen, Flower2, Footprints, Focus, Music2, Trophy, Timer, Award, Library, ScrollText, Activity, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImg from "@/assets/calm-hero-mountain.webp";
+// Served from /public so it can be preloaded from index.html with a stable URL (no hash).
+const heroImg = "/calm-hero-mountain.webp";
 import { LogoIcon } from "@/components/WillowLogo";
 
 // Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
@@ -12,16 +13,7 @@ const CurriculumSection = lazy(() => import("@/components/CurriculumSection"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
-// Preload hero (LCP) as soon as this module evaluates
-if (typeof document !== "undefined" && !document.querySelector('link[data-hero-preload]')) {
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.as = "image";
-  link.href = heroImg;
-  link.fetchPriority = "high";
-  link.setAttribute("data-hero-preload", "");
-  document.head.appendChild(link);
-}
+// Hero is preloaded directly from index.html (stable /public URL), so no JS-side preload needed.
 
 // Calm-style design tokens (inline for this page so we don't disturb the global system)
 // Deep navy text, soft pastel surfaces, blue→violet gradient CTAs, airy white sections.

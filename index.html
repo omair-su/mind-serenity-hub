@@ -16,6 +16,10 @@
     <meta name="googlebot" content="index, follow" />
     <link rel="canonical" href="https://www.willowvibes.com/" />
 
+    <!-- Preload LCP hero image directly from HTML so it starts downloading immediately,
+         without waiting for the JS bundle to parse and evaluate. -->
+    <link rel="preload" as="image" href="/calm-hero-mountain.webp" fetchpriority="high" />
+
     <!-- Preconnect to font origins (saves ~300ms FCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
