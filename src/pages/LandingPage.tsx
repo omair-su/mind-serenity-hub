@@ -49,23 +49,43 @@ export default function LandingPage() {
   const [showStickyCTA, setShowStickyCTA] = useState(false);
 
   useEffect(() => {
+    // Throttle scroll work via rAF and only read window.scrollY (no layout-forcing reads)
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      setShowStickyCTA(window.scrollY > window.innerHeight * 0.9);
-      const sections = ["home", "about", "science", "curriculum", "testimonials", "pricing", "faq"];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setScrolled(y > 50);
+        setShowStickyCTA(y > window.innerHeight * 0.9);
+        ticking = false;
+      });
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Use IntersectionObserver instead of getBoundingClientRect on every scroll
+    // (which forced a layout/reflow per scroll event for 7 sections).
+    const sectionIds = ["home", "about", "science", "curriculum", "testimonials", "pricing", "faq"];
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry closest to the top that is intersecting the 100px line
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible?.target.id) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-100px 0px -50% 0px", threshold: 0 }
+    );
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
