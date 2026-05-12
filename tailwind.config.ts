@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Lora', 'Georgia', 'serif'],
+        display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
