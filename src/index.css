@@ -293,7 +293,7 @@
    Provides a consistent vertical rhythm, radius scale,
    and typography scale so all three feel like one product.
    ───────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Fraunces:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+/* Fonts moved to async <link> in index.html to avoid render-blocking @import (FCP fix). */
 
 :root {
   /* Calm palette */
