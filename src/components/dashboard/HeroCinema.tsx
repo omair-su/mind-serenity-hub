@@ -1,13 +1,11 @@
-// Cinematic dashboard hero with time-of-day adaptive overlay,
-// floating gold particles, parallax drift, and rotating affirmations.
+// Cinematic dashboard hero with time-of-day adaptive imagery and parallax drift.
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Play, ArrowRight, Flame, Check, Sun, Leaf, Moon } from "lucide-react";
 import heroMorning from "@/assets/dashboard-hero-morning.jpg";
 import heroAfternoon from "@/assets/dashboard-hero-afternoon.jpg";
 import heroEvening from "@/assets/dashboard-hero-evening.jpg";
-import { getAffirmationsForToday, type Affirmation } from "@/data/affirmations";
 
 interface HeroCinemaProps {
   greeting: string;
@@ -32,22 +30,13 @@ export default function HeroCinema({
   greeting, nextDay, completedCount, streak, todayPracticed, onQuickSession, weatherLabel,
 }: HeroCinemaProps) {
   const meta = getTimeMeta();
-  const affirmations = getAffirmationsForToday(3);
-  const [idx, setIdx] = useState(0);
   const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % affirmations.length), 6500);
-    return () => clearInterval(t);
-  }, [affirmations.length]);
 
   useEffect(() => {
     const onScroll = () => setScrollY(Math.min(40, window.scrollY * 0.08));
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const current: Affirmation = affirmations[idx];
 
   return (
     <motion.div
