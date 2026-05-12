@@ -87,11 +87,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white" style={{ color: NAVY }}>
-      {/* Inline Calm-style font (Lora + Inter) */}
+      {/* Calm-style display font — uses already-preloaded Plus Jakarta Sans to avoid render-blocking @import that delayed LCP. */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap');
-          .font-calm-display { font-family: 'Lora', Georgia, serif; letter-spacing: -0.01em; }
+          .font-calm-display { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif; letter-spacing: -0.01em; }
           .font-calm-body { font-family: 'Inter', system-ui, sans-serif; }
         `,
       }} />
