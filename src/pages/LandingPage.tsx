@@ -471,7 +471,15 @@ export default function LandingPage() {
       {/* Final CTA — Calm-style ocean banner */}
       <section className="relative overflow-hidden">
         <div className="relative h-[420px] md:h-[520px]">
-          <img src={PHOTOS.ocean_wave} alt="Calm ocean wave at dusk" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=70"
+            srcSet="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=600&q=70 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=900&q=70 900w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1400&q=72 1400w"
+            sizes="100vw"
+            alt="Calm ocean wave at dusk"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/40 to-transparent" />
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-4xl mx-auto px-4 md:px-6 text-center w-full">
