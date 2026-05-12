@@ -21,11 +21,11 @@ interface HeroCinemaProps {
 
 function getTimeMeta() {
   const h = new Date().getHours();
-  if (h < 6) return { Icon: Moon, overlay: "from-[hsl(220_40%_8%)]/95 via-[hsl(220_30%_15%)]/55 to-transparent", label: "Pre-dawn" };
-  if (h < 12) return { Icon: Sun, overlay: "from-[hsl(var(--forest-deep))]/85 via-[hsl(var(--forest))]/30 to-[hsl(var(--gold))]/10", label: "Morning" };
-  if (h < 17) return { Icon: Leaf, overlay: "from-[hsl(var(--forest-deep))]/80 via-[hsl(var(--sage-dark))]/30 to-transparent", label: "Afternoon" };
-  if (h < 20) return { Icon: CloudSun, overlay: "from-[hsl(var(--forest-deep))]/90 via-[hsl(var(--gold-dark))]/25 to-[hsl(var(--gold))]/15", label: "Dusk" };
-  return { Icon: Moon, overlay: "from-[hsl(220_40%_6%)]/95 via-[hsl(var(--forest-deep))]/60 to-transparent", label: "Evening" };
+  if (h < 5)  return { Icon: Moon, image: heroEvening,   overlay: "from-[hsl(220_45%_6%)]/85 via-[hsl(220_30%_12%)]/40 to-transparent", label: "Late Night" };
+  if (h < 12) return { Icon: Sun,  image: heroMorning,   overlay: "from-[hsl(var(--forest-deep))]/70 via-[hsl(var(--forest))]/15 to-transparent", label: "Morning" };
+  if (h < 17) return { Icon: Leaf, image: heroAfternoon, overlay: "from-[hsl(var(--forest-deep))]/65 via-[hsl(var(--sage-dark))]/15 to-transparent", label: "Afternoon" };
+  if (h < 20) return { Icon: Sun,  image: heroEvening,   overlay: "from-[hsl(220_45%_8%)]/80 via-[hsl(var(--gold-dark))]/20 to-transparent", label: "Dusk" };
+  return         { Icon: Moon, image: heroEvening,   overlay: "from-[hsl(220_45%_5%)]/88 via-[hsl(var(--forest-deep))]/45 to-transparent", label: "Evening" };
 }
 
 export default function HeroCinema({
