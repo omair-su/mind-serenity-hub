@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
-import logoImg from "@/assets/logo/willow-logo-premium.png";
+import logoImg from "@/assets/logo/willow-logo-premium.webp";
 
 interface WillowLogoProps {
   variant?: "full" | "horizontal" | "vertical" | "icon" | "wordmark";
