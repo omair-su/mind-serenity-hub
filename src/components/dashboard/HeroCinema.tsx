@@ -1,11 +1,11 @@
-// Cinematic dashboard hero with time-of-day adaptive overlay,
-// floating gold particles, parallax drift, and rotating affirmations.
+// Cinematic dashboard hero with time-of-day adaptive imagery and parallax drift.
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Play, ArrowRight, Flame, Check, Sun, Leaf, Moon, CloudSun } from "lucide-react";
-import dashboardHero from "@/assets/dashboard-hero-premium.webp";
-import { getAffirmationsForToday, type Affirmation } from "@/data/affirmations";
+import { Play, ArrowRight, Flame, Check, Sun, Leaf, Moon } from "lucide-react";
+import heroMorning from "@/assets/dashboard-hero-morning.jpg";
+import heroAfternoon from "@/assets/dashboard-hero-afternoon.jpg";
+import heroEvening from "@/assets/dashboard-hero-evening.jpg";
 
 interface HeroCinemaProps {
   greeting: string;
@@ -19,33 +19,24 @@ interface HeroCinemaProps {
 
 function getTimeMeta() {
   const h = new Date().getHours();
-  if (h < 6) return { Icon: Moon, overlay: "from-[hsl(220_40%_8%)]/95 via-[hsl(220_30%_15%)]/55 to-transparent", label: "Pre-dawn" };
-  if (h < 12) return { Icon: Sun, overlay: "from-[hsl(var(--forest-deep))]/85 via-[hsl(var(--forest))]/30 to-[hsl(var(--gold))]/10", label: "Morning" };
-  if (h < 17) return { Icon: Leaf, overlay: "from-[hsl(var(--forest-deep))]/80 via-[hsl(var(--sage-dark))]/30 to-transparent", label: "Afternoon" };
-  if (h < 20) return { Icon: CloudSun, overlay: "from-[hsl(var(--forest-deep))]/90 via-[hsl(var(--gold-dark))]/25 to-[hsl(var(--gold))]/15", label: "Dusk" };
-  return { Icon: Moon, overlay: "from-[hsl(220_40%_6%)]/95 via-[hsl(var(--forest-deep))]/60 to-transparent", label: "Evening" };
+  if (h < 5)  return { Icon: Moon, image: heroEvening,   overlay: "from-[hsl(220_45%_6%)]/85 via-[hsl(220_30%_12%)]/40 to-transparent", label: "Late Night" };
+  if (h < 12) return { Icon: Sun,  image: heroMorning,   overlay: "from-[hsl(var(--forest-deep))]/70 via-[hsl(var(--forest))]/15 to-transparent", label: "Morning" };
+  if (h < 17) return { Icon: Leaf, image: heroAfternoon, overlay: "from-[hsl(var(--forest-deep))]/65 via-[hsl(var(--sage-dark))]/15 to-transparent", label: "Afternoon" };
+  if (h < 20) return { Icon: Sun,  image: heroEvening,   overlay: "from-[hsl(220_45%_8%)]/80 via-[hsl(var(--gold-dark))]/20 to-transparent", label: "Dusk" };
+  return         { Icon: Moon, image: heroEvening,   overlay: "from-[hsl(220_45%_5%)]/88 via-[hsl(var(--forest-deep))]/45 to-transparent", label: "Evening" };
 }
 
 export default function HeroCinema({
   greeting, nextDay, completedCount, streak, todayPracticed, onQuickSession, weatherLabel,
 }: HeroCinemaProps) {
   const meta = getTimeMeta();
-  const affirmations = getAffirmationsForToday(3);
-  const [idx, setIdx] = useState(0);
   const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % affirmations.length), 6500);
-    return () => clearInterval(t);
-  }, [affirmations.length]);
 
   useEffect(() => {
     const onScroll = () => setScrollY(Math.min(40, window.scrollY * 0.08));
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const current: Affirmation = affirmations[idx];
 
   return (
     <motion.div
@@ -54,68 +45,20 @@ export default function HeroCinema({
       transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
       className="relative overflow-hidden rounded-3xl shadow-[var(--shadow-elevated-val)] border border-white/5"
     >
-      {/* Parallax image */}
+      {/* Time-of-day adaptive hero */}
       <motion.img
-        src={dashboardHero}
-        alt="Zen meditation garden at golden hour"
-        className="w-full h-72 sm:h-80 object-cover"
+        key={meta.image}
+        src={meta.image}
+        alt="Calm meditation landscape"
+        className="w-full h-72 sm:h-[22rem] object-cover"
         width={1920}
         height={800}
         style={{ transform: `translateY(${scrollY}px) scale(1.05)` }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.9 }}
       />
       <div className={`absolute inset-0 bg-gradient-to-t ${meta.overlay}`} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,hsl(var(--gold))/0.18,transparent_55%)]" />
-
-      {/* Floating gold particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(10)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-[hsl(var(--gold))]/70 animate-particle"
-            style={{
-              left: `${(i * 11 + 8) % 95}%`,
-              bottom: `${(i * 7) % 50}px`,
-              ["--dur" as string]: `${5 + (i % 4)}s`,
-              ["--delay" as string]: `${i * 0.7}s`,
-              ["--dx" as string]: `${(i % 2 ? 1 : -1) * (10 + i * 2)}px`,
-              ["--rot" as string]: `${i * 22}deg`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Affirmation card top-right */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
-        className="absolute top-4 right-4 max-w-[210px] sm:max-w-[280px]"
-      >
-        <div className="backdrop-blur-md bg-white/10 rounded-xl px-3.5 py-3 border border-white/15 shadow-lg">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <span className="w-1 h-1 rounded-full bg-[hsl(var(--gold))]" />
-            <span className="text-[8px] font-body font-bold text-white/70 uppercase tracking-[0.2em]">
-              Affirmation
-            </span>
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="font-display text-[11px] sm:text-xs text-white/95 italic leading-relaxed">
-                "{current.text}"
-              </p>
-              {current.author && (
-                <p className="text-[9px] font-body text-[hsl(var(--gold-light))]/80 mt-1">— {current.author}</p>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </motion.div>
 
       {/* Bottom content */}
       <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8">
