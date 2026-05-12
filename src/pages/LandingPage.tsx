@@ -13,16 +13,7 @@ const CurriculumSection = lazy(() => import("@/components/CurriculumSection"));
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
-// Preload hero (LCP) as soon as this module evaluates
-if (typeof document !== "undefined" && !document.querySelector('link[data-hero-preload]')) {
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.as = "image";
-  link.href = heroImg;
-  link.fetchPriority = "high";
-  link.setAttribute("data-hero-preload", "");
-  document.head.appendChild(link);
-}
+// Hero is preloaded directly from index.html (stable /public URL), so no JS-side preload needed.
 
 // Calm-style design tokens (inline for this page so we don't disturb the global system)
 // Deep navy text, soft pastel surfaces, blue→violet gradient CTAs, airy white sections.
