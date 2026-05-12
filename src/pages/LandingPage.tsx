@@ -484,8 +484,8 @@ export default function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="relative h-[420px] md:h-[520px]">
           <img
-            src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=70"
-            srcSet="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=600&q=70 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=900&q=70 900w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1400&q=72 1400w"
+            src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=60"
+            srcSet="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=600&q=60 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=900&q=60 900w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1400&q=65 1400w"
             sizes="100vw"
             alt="Calm ocean wave at dusk"
             loading="lazy"
