@@ -84,6 +84,26 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Hard cap script length to bound ElevenLabs cost per call.
+    const MAX_SCRIPT_CHARS = 8000;
+    if (typeof script !== 'string' || script.length > MAX_SCRIPT_CHARS) {
+      return new Response(JSON.stringify({
+        error: `Script too long (max ${MAX_SCRIPT_CHARS} characters)`,
+      }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Restrict category to known values to reduce attack surface.
+    const ALLOWED_CATEGORIES = new Set([
+      'meditation', 'sleep_story', 'affirmation', 'sound_bath', 'body_scan', 'breathing', 'walking',
+    ]);
+    if (!ALLOWED_CATEGORIES.has(category)) {
+      return new Response(JSON.stringify({ error: 'Invalid category' }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // SECURITY: Namespace every catalog write per-user. This prevents authenticated
     // users from overwriting shared catalog rows or injecting arbitrary entries
     // that other users would consume. Each user effectively maintains their own
