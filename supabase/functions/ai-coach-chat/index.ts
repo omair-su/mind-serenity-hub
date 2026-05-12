@@ -149,10 +149,15 @@ serve(async (req) => {
     }
     const wantsStream = streamRequested === true;
 
-    // Normalize messages for Claude
-    const normalized = messages.map((m: any) => ({
+    // Trim conversation history server-side to bound input-token cost.
+    // - Keep only the last 20 turns
+    // - Cap each message's content to 4000 characters
+    const MAX_TURNS = 20;
+    const MAX_CONTENT_CHARS = 4000;
+    const trimmed = messages.slice(-MAX_TURNS);
+    const normalized = trimmed.map((m: any) => ({
       role: m.role === "coach" || m.role === "assistant" ? "assistant" : "user",
-      content: String(m.content ?? m.text ?? ""),
+      content: String(m.content ?? m.text ?? "").slice(0, MAX_CONTENT_CHARS),
     }));
 
     // 4. Free-tier persistent daily limit (server-tracked)
