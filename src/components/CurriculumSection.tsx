@@ -5,10 +5,10 @@ const NAVY = "#0E2A47";
 const SLATE = "#5B6B82";
 
 const weeks = [
-  { week: 1, title: "Foundation", focus: "Building the habit", practices: ["Breathing fundamentals", "Body scan basics", "Mindfulness intro"], color: "#5B7FE0", img: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80" },
-  { week: 2, title: "Deepening", focus: "Exploring techniques", practices: ["Guided visualization", "Loving-kindness", "Progressive relaxation"], color: "#8267D6", img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=800&q=80" },
-  { week: 3, title: "Mastery", focus: "Advanced practices", practices: ["Advanced breathing", "Walking meditation", "Sound bath sessions"], color: "#5BB7B0", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80" },
-  { week: 4, title: "Integration", focus: "Making it stick", practices: ["Personal routines", "Stress management", "Lifelong practice guide"], color: "#E0B05B", img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80" },
+  { week: 1, title: "Foundation", focus: "Building the habit", practices: ["Breathing fundamentals", "Body scan basics", "Mindfulness intro"], color: "#5B7FE0", img: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=65" },
+  { week: 2, title: "Deepening", focus: "Exploring techniques", practices: ["Guided visualization", "Loving-kindness", "Progressive relaxation"], color: "#8267D6", img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=800&q=65" },
+  { week: 3, title: "Mastery", focus: "Advanced practices", practices: ["Advanced breathing", "Walking meditation", "Sound bath sessions"], color: "#5BB7B0", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=65" },
+  { week: 4, title: "Integration", focus: "Making it stick", practices: ["Personal routines", "Stress management", "Lifelong practice guide"], color: "#E0B05B", img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=65" },
 ];
 
 const included = [
