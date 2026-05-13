@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles
 import { Link } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
 import PremiumHero from "@/components/landing/PremiumHero";
+import WatchDemoModal from "@/components/landing/WatchDemoModal";
 
 // Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
 const AboutSection = lazy(() => import("@/components/AboutSection"));
