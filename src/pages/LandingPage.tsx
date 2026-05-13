@@ -199,7 +199,8 @@ export default function LandingPage() {
       </AnimatePresence>
 
       {/* Hero — premium cinematic */}
-      <PremiumHero onWatchDemo={() => scrollToSection("features")} />
+      <PremiumHero onWatchDemo={() => setDemoOpen(true)} />
+      <WatchDemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
 
       {/* Features overview — placed high so visitors see breadth immediately */}
       <section id="features" className="py-16 md:py-24 bg-white">
