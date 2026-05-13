@@ -39,6 +39,7 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useEffect(() => {
     // Throttle scroll work via rAF and only read window.scrollY (no layout-forcing reads)
