@@ -2,9 +2,8 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles, Brain, HeartPulse, Moon, Wind, Headphones, LineChart, Smile, BookOpen, Flower2, Footprints, Focus, Music2, Trophy, Timer, Award, Library, ScrollText, Activity, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-// Served from /public so it can be preloaded from index.html with a stable URL (no hash).
-const heroImg = "/calm-hero-mountain.webp";
 import { LogoIcon } from "@/components/WillowLogo";
+import PremiumHero from "@/components/landing/PremiumHero";
 
 // Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
 const AboutSection = lazy(() => import("@/components/AboutSection"));
