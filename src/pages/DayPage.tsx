@@ -50,6 +50,15 @@ function loadState(dayNum: number) {
   } catch { return null; }
 }
 
+/** Stable JSON key for the user-editable subset of DayState (used to detect dirty edits). */
+function snapshotKey(s: {
+  reflection: string; calmRating: number; moodBefore: number; moodAfter: number;
+  challengeText: string; rememberText: string; checklist: boolean[];
+  bookmarked: boolean; intention: string;
+}) {
+  return JSON.stringify(s);
+}
+
 export default function DayPage() {
   const { dayNum } = useParams();
   const navigate = useNavigate();
