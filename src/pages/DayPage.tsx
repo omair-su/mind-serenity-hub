@@ -98,6 +98,9 @@ export default function DayPage() {
   // Prevents the 2s autoSave from writing previous-day state into the new day
   // before hydration completes (was the cause of "all 30 days marked complete").
   const hydratedDayRef = useRef<number | null>(null);
+  // Snapshot of the hydrated state — autoSave skips if current state matches
+  // (prevents writing default mood/checklist rows just from visiting a day).
+  const hydratedSnapshotRef = useRef<string>("");
 
   // Reset + hydrate whenever the route :dayNum changes.
   // The Router reuses the same DayPage instance across /day/N transitions,
