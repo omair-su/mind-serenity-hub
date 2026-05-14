@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { X, Wind, Moon, Music2, Brain, Sparkles, Heart } from "lucide-react";
-import demoAsset from "/public/videos/willow-demo.mp4.asset.json";
+import demoAsset from "../../../public/videos/willow-demo.mp4.asset.json";
 
 interface WatchDemoModalProps {
   open: boolean;
