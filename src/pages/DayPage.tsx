@@ -142,8 +142,30 @@ export default function DayPage() {
         };
       }
       hydratedDayRef.current = dayNumber;
+      hydratedSnapshotRef.current = snapshotKey({
+        reflection: s?.reflection ?? local?.reflection ?? "",
+        calmRating: s?.calmRating ?? local?.calmRating ?? 5,
+        moodBefore: s?.moodBefore ?? local?.moodBefore ?? 5,
+        moodAfter: s?.moodAfter ?? local?.moodAfter ?? 7,
+        challengeText: s?.challengeText ?? local?.challengeText ?? "",
+        rememberText: s?.rememberText ?? local?.rememberText ?? "",
+        checklist: Array.isArray(s?.checklist) ? s.checklist : (Array.isArray(local?.checklist) ? local.checklist : [false, false, false, false]),
+        bookmarked: !!(s?.bookmarked ?? local?.bookmarked),
+        intention: s?.intention ?? local?.intention ?? "",
+      });
     }).catch(() => {
       hydratedDayRef.current = dayNumber;
+      hydratedSnapshotRef.current = snapshotKey({
+        reflection: local?.reflection ?? "",
+        calmRating: local?.calmRating ?? 5,
+        moodBefore: local?.moodBefore ?? 5,
+        moodAfter: local?.moodAfter ?? 7,
+        challengeText: local?.challengeText ?? "",
+        rememberText: local?.rememberText ?? "",
+        checklist: Array.isArray(local?.checklist) ? local.checklist : [false, false, false, false],
+        bookmarked: !!local?.bookmarked,
+        intention: local?.intention ?? "",
+      });
     });
     return () => { cancelled = true; };
   }, [dayNumber]);
