@@ -199,6 +199,20 @@ export default function DayPage() {
 
   const autoSave = useCallback(() => {
     const state = buildState();
+    // Skip if user hasn't actually edited anything since hydration —
+    // prevents auto-creating empty day rows just from visiting a day page.
+    const currentKey = snapshotKey({
+      reflection: state.reflection ?? "",
+      calmRating: state.calmRating ?? 5,
+      moodBefore: state.moodBefore ?? 5,
+      moodAfter: state.moodAfter ?? 7,
+      challengeText: state.challengeText ?? "",
+      rememberText: state.rememberText ?? "",
+      checklist: state.checklist ?? [false, false, false, false],
+      bookmarked: !!state.bookmarked,
+      intention: state.intention ?? "",
+    });
+    if (currentKey === hydratedSnapshotRef.current) return;
     try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
     saveDayState(dayNumber, state).catch(() => {});
   }, [dayNumber, buildState]);
