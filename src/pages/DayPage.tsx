@@ -50,6 +50,15 @@ function loadState(dayNum: number) {
   } catch { return null; }
 }
 
+/** Stable JSON key for the user-editable subset of DayState (used to detect dirty edits). */
+function snapshotKey(s: {
+  reflection: string; calmRating: number; moodBefore: number; moodAfter: number;
+  challengeText: string; rememberText: string; checklist: boolean[];
+  bookmarked: boolean; intention: string;
+}) {
+  return JSON.stringify(s);
+}
+
 export default function DayPage() {
   const { dayNum } = useParams();
   const navigate = useNavigate();
@@ -98,6 +107,9 @@ export default function DayPage() {
   // Prevents the 2s autoSave from writing previous-day state into the new day
   // before hydration completes (was the cause of "all 30 days marked complete").
   const hydratedDayRef = useRef<number | null>(null);
+  // Snapshot of the hydrated state — autoSave skips if current state matches
+  // (prevents writing default mood/checklist rows just from visiting a day).
+  const hydratedSnapshotRef = useRef<string>("");
 
   // Reset + hydrate whenever the route :dayNum changes.
   // The Router reuses the same DayPage instance across /day/N transitions,
@@ -139,8 +151,30 @@ export default function DayPage() {
         };
       }
       hydratedDayRef.current = dayNumber;
+      hydratedSnapshotRef.current = snapshotKey({
+        reflection: s?.reflection ?? local?.reflection ?? "",
+        calmRating: s?.calmRating ?? local?.calmRating ?? 5,
+        moodBefore: s?.moodBefore ?? local?.moodBefore ?? 5,
+        moodAfter: s?.moodAfter ?? local?.moodAfter ?? 7,
+        challengeText: s?.challengeText ?? local?.challengeText ?? "",
+        rememberText: s?.rememberText ?? local?.rememberText ?? "",
+        checklist: Array.isArray(s?.checklist) ? s.checklist : (Array.isArray(local?.checklist) ? local.checklist : [false, false, false, false]),
+        bookmarked: !!(s?.bookmarked ?? local?.bookmarked),
+        intention: s?.intention ?? local?.intention ?? "",
+      });
     }).catch(() => {
       hydratedDayRef.current = dayNumber;
+      hydratedSnapshotRef.current = snapshotKey({
+        reflection: local?.reflection ?? "",
+        calmRating: local?.calmRating ?? 5,
+        moodBefore: local?.moodBefore ?? 5,
+        moodAfter: local?.moodAfter ?? 7,
+        challengeText: local?.challengeText ?? "",
+        rememberText: local?.rememberText ?? "",
+        checklist: Array.isArray(local?.checklist) ? local.checklist : [false, false, false, false],
+        bookmarked: !!local?.bookmarked,
+        intention: local?.intention ?? "",
+      });
     });
     return () => { cancelled = true; };
   }, [dayNumber]);
@@ -165,6 +199,20 @@ export default function DayPage() {
 
   const autoSave = useCallback(() => {
     const state = buildState();
+    // Skip if user hasn't actually edited anything since hydration —
+    // prevents auto-creating empty day rows just from visiting a day page.
+    const currentKey = snapshotKey({
+      reflection: state.reflection ?? "",
+      calmRating: state.calmRating ?? 5,
+      moodBefore: state.moodBefore ?? 5,
+      moodAfter: state.moodAfter ?? 7,
+      challengeText: state.challengeText ?? "",
+      rememberText: state.rememberText ?? "",
+      checklist: state.checklist ?? [false, false, false, false],
+      bookmarked: !!state.bookmarked,
+      intention: state.intention ?? "",
+    });
+    if (currentKey === hydratedSnapshotRef.current) return;
     try { localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(state)); } catch {}
     saveDayState(dayNumber, state).catch(() => {});
   }, [dayNumber, buildState]);
