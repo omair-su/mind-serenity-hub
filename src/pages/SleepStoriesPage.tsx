@@ -1,35 +1,200 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import AppLayout from "@/components/AppLayout";
-import { sleepStories, sleepStoryCategories } from "@/data/sleepStories";
+import { sleepStories, sleepStoryCategories, SleepStory } from "@/data/sleepStories";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
-import NarrationBar from "@/components/NarrationBar";
-import { Moon, Clock, Play, Pause, Loader2, Square, ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
+import {
+  Moon,
+  Clock,
+  Play,
+  Pause,
+  Loader2,
+  Square,
+  ArrowLeft,
+  ChevronRight,
+  Sparkles,
+  Volume2,
+  Timer as TimerIcon,
+  Download,
+  Headphones,
+} from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
+import heroBg from "@/assets/sleep/hero-bg.jpg";
 
-const storyGradients = [
-  "from-cream via-cream-dark/50 to-cream/40",
-  "from-sage-light/60 via-sage/40 to-cream/30",
-  "from-gold/30 via-gold/15 to-cream/30",
-  "from-gold-dark/15 via-gold/15 to-cream/30",
-  "from-cream via-cream-dark/40 to-cream/30",
-  "from-sage-light/60 via-sage/40 to-cream/30",
-  "from-sage-light/60 via-sage/40 to-cream/30",
-  "from-gold/30 via-gold/15 to-cream/30",
-];
+/* ---------- Atmospheric layers ---------- */
+function StarField() {
+  const stars = useMemo(
+    () =>
+      Array.from({ length: 40 }, (_, i) => ({
+        id: i,
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        size: Math.random() * 2 + 0.5,
+        delay: Math.random() * 6,
+        dur: 4 + Math.random() * 6,
+      })),
+    []
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {stars.map((s) => (
+        <span
+          key={s.id}
+          className="absolute rounded-full bg-white/80"
+          style={{
+            top: `${s.top}%`,
+            left: `${s.left}%`,
+            width: s.size,
+            height: s.size,
+            animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
+          }}
+        />
+      ))}
+      <style>{`@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}`}</style>
+    </div>
+  );
+}
 
-function SleepStoriesPageInner() {
-  const [activeStory, setActiveStory] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+function Mist() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div
+        className="absolute -inset-x-20 bottom-0 h-2/3 opacity-60"
+        style={{
+          background:
+            "radial-gradient(60% 80% at 30% 100%, rgba(255,255,255,0.10), transparent 60%), radial-gradient(50% 70% at 80% 100%, rgba(200,180,255,0.08), transparent 70%)",
+          animation: "drift 22s ease-in-out infinite alternate",
+        }}
+      />
+      <style>{`@keyframes drift{0%{transform:translateX(-20px)}100%{transform:translateX(20px)}}`}</style>
+    </div>
+  );
+}
+
+function MoonGlow() {
+  return (
+    <div className="pointer-events-none absolute -top-24 right-6 sm:right-16">
+      <div
+        className="w-40 h-40 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,236,200,0.55) 0%, rgba(255,220,160,0.18) 35%, transparent 70%)",
+          filter: "blur(2px)",
+          animation: "moonpulse 8s ease-in-out infinite",
+        }}
+      />
+      <style>{`@keyframes moonpulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.06);opacity:1}}`}</style>
+    </div>
+  );
+}
+
+/* ---------- Card components ---------- */
+function FlagshipCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
+  return (
+    <button
+      onClick={onOpen}
+      className="group relative overflow-hidden rounded-3xl text-left shadow-elevated focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+      style={{ aspectRatio: "16 / 10" }}
+    >
+      {s.cover ? (
+        <img
+          src={s.cover}
+          alt={s.title}
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[1400ms] ease-out"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0b1530] via-[#1a2150] to-[#2a1f4d]" />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
+
+      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[10px] font-body text-white/90">
+        <Sparkles className="w-3 h-3 text-gold" /> Flagship
+      </div>
+      <div className="absolute top-4 right-4 inline-flex items-center gap-1 text-[10px] font-body text-white/85 bg-black/40 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
+        <Clock className="w-3 h-3" /> {s.duration} min
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+        {s.mood && (
+          <span className="inline-block text-[10px] uppercase tracking-[0.18em] text-gold/90 font-body mb-2">
+            {s.mood}
+          </span>
+        )}
+        <h3 className="font-display text-xl sm:text-2xl font-semibold text-white drop-shadow-md">
+          {s.title}
+        </h3>
+        {s.teaser && (
+          <p className="text-sm text-white/75 mt-1 font-body leading-relaxed line-clamp-2">
+            {s.teaser}
+          </p>
+        )}
+        <div className="mt-4 flex items-center gap-2 text-white/90">
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/15 backdrop-blur-md border border-white/20 group-hover:bg-gold group-hover:text-charcoal transition-all duration-500">
+            <Play className="w-4 h-4 ml-0.5" />
+          </span>
+          <span className="text-xs font-body text-white/75">
+            Narrated by {s.narrator}
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function StoryCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
+  return (
+    <button
+      onClick={onOpen}
+      className="group relative overflow-hidden rounded-2xl text-left bg-gradient-to-br from-[#0d1734]/90 via-[#141a3a]/85 to-[#1d1843]/90 border border-white/10 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-500 p-5"
+    >
+      <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-gold/10 blur-2xl" />
+      <div className="relative z-10">
+        <div className="flex items-start justify-between">
+          <span className="text-3xl group-hover:scale-110 transition-transform duration-500">
+            {s.icon}
+          </span>
+          <span className="inline-flex items-center gap-1 text-[10px] font-body text-white/70 bg-white/5 px-2 py-1 rounded-full border border-white/10">
+            <Clock className="w-3 h-3" /> {s.duration} min
+          </span>
+        </div>
+        <h3 className="font-display text-base font-semibold text-white mt-3">{s.title}</h3>
+        <p className="text-xs font-body text-white/65 mt-1 leading-relaxed line-clamp-2">
+          {s.teaser || s.description}
+        </p>
+        <div className="flex items-center gap-1.5 mt-3 text-gold text-xs font-body font-medium">
+          <Play className="w-3 h-3" /> Begin Story <ChevronRight className="w-3 h-3" />
+        </div>
+      </div>
+    </button>
+  );
+}
+
+/* ---------- Detail view ---------- */
+function StoryDetail({
+  story,
+  onBack,
+}: {
+  story: SleepStory;
+  onBack: () => void;
+}) {
   const [paragraphIndex, setParagraphIndex] = useState(0);
+  const [volume, setVolume] = useState(0.8);
+  const [sleepTimer, setSleepTimer] = useState<number | null>(null);
   const tts = useTextToSpeech();
   const ambient = useAmbientBed("silence", 40);
 
-  const story = sleepStories.find(s => s.id === activeStory);
-  const filtered = activeCategory === "all" ? sleepStories : sleepStories.filter(s => s.category === activeCategory);
+  useEffect(() => {
+    if (sleepTimer === null) return;
+    const t = setTimeout(() => {
+      tts.stop();
+      setSleepTimer(null);
+    }, sleepTimer * 60 * 1000);
+    return () => clearTimeout(t);
+  }, [sleepTimer, tts]);
 
   const playFullStory = () => {
-    if (!story) return;
     const fullText = story.paragraphs.join("\n\n");
     tts.generateAndPlay(fullText, {
       trackKey: `sleep-story-${story.id}`,
@@ -42,188 +207,336 @@ function SleepStoriesPageInner() {
     });
   };
 
+  const related = sleepStories
+    .filter((s) => s.id !== story.id && (s.category === story.category || s.flagship))
+    .slice(0, 3);
+
   return (
-    <AppLayout>
-      <div className="space-y-6 animate-fade-in">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-charcoal/20 to-gold-dark/15 flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-charcoal dark:text-cream-dark" />
-          </div>
-          <div>
-            <h1 className="font-display text-3xl font-bold text-foreground">Sleep Stories</h1>
-            <p className="text-sm font-body text-muted-foreground">Narrated tales to guide you gently into deep sleep</p>
+    <div className="space-y-8 animate-fade-in">
+      <button
+        onClick={() => {
+          onBack();
+          tts.stop();
+        }}
+        className="flex items-center gap-2 text-sm font-body text-white/70 hover:text-white transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" /> Back to Sleep Stories
+      </button>
+
+      {/* Hero artwork */}
+      <div className="relative overflow-hidden rounded-3xl shadow-elevated" style={{ aspectRatio: "16 / 9" }}>
+        {story.cover ? (
+          <img src={story.cover} alt={story.title} className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0b1530] via-[#1a2150] to-[#2a1f4d]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <Mist />
+        <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 max-w-3xl">
+          {story.mood && (
+            <span className="inline-block text-[10px] uppercase tracking-[0.2em] text-gold mb-2 font-body">
+              {story.mood}
+            </span>
+          )}
+          <h1 className="font-display text-3xl sm:text-5xl font-semibold text-white drop-shadow">
+            {story.title}
+          </h1>
+          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs font-body text-white/80">
+            <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {story.duration} min</span>
+            <span className="inline-flex items-center gap-1"><Headphones className="w-3 h-3" /> Narrated by {story.narrator}</span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
+              <Download className="w-3 h-3" /> Offline ready
+            </span>
           </div>
         </div>
+      </div>
 
-        {!story && (
-          <>
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              <button
-                onClick={() => setActiveCategory("all")}
-                className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition-all ${
-                  activeCategory === "all" ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-soft" : "bg-secondary text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                All Stories
-              </button>
-              {sleepStoryCategories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                    activeCategory === cat.id ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-soft" : "bg-secondary text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span>{cat.icon}</span> {cat.name}
-                </button>
-              ))}
-            </div>
+      {/* Player panel */}
+      <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 sm:p-8 shadow-elevated">
+        <p className="font-body text-base text-white/85 leading-[2] max-w-3xl mx-auto text-center">
+          {story.paragraphs[paragraphIndex]}
+        </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {filtered.map((s, i) => (
-                <button
-                  key={s.id}
-                  onClick={() => { setActiveStory(s.id); setParagraphIndex(0); }}
-                  className={`group text-left relative overflow-hidden bg-gradient-to-br ${storyGradients[i % storyGradients.length]} dark:from-forest-deep/30 dark:via-forest/20 dark:to-charcoal/10 rounded-2xl border border-border/50 p-5 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all duration-300`}
-                >
-                  <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-bl from-card/30 to-transparent" />
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between">
-                      <span className="text-3xl group-hover:scale-110 transition-transform">{s.icon}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] font-body text-muted-foreground bg-card/60 px-2 py-1 rounded-full">
-                        <Clock className="w-3 h-3" /> {s.duration} min
-                      </span>
-                    </div>
-                    <h3 className="font-display text-base font-semibold text-foreground mt-3">{s.title}</h3>
-                    <p className="text-xs font-body text-muted-foreground mt-1 leading-relaxed">{s.description}</p>
-                    <div className="flex items-center gap-1.5 mt-3 text-primary text-xs font-body font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Play className="w-3 h-3" /> Begin Story <ChevronRight className="w-3 h-3" />
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
+        <div className="flex items-center justify-center gap-1.5 mt-6">
+          {story.paragraphs.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setParagraphIndex(i)}
+              aria-label={`Paragraph ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${
+                i === paragraphIndex ? "w-8 bg-gold" : i < paragraphIndex ? "w-4 bg-gold/40" : "w-4 bg-white/15"
+              }`}
+            />
+          ))}
+        </div>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/30 to-cream/20 dark:from-forest-deep/30 dark:via-forest/20 dark:to-charcoal/10 rounded-2xl p-6 border border-forest-deep/10 shadow-soft">
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-gradient-to-tl from-gold/20 to-transparent" />
-              <h3 className="font-display text-base font-semibold text-foreground mb-2">How Sleep Stories Work</h3>
-              <p className="text-sm font-body text-muted-foreground leading-relaxed">
-                Sleep stories combine gentle narration, calming imagery, and progressive relaxation to quiet your mind and guide you into deep sleep. 
-                Listen in bed with the lights off. Don't try to follow the story — let the words wash over you like waves. 
-                Most people fall asleep before the story ends, and that's exactly the point.
-              </p>
+        <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
+          {paragraphIndex > 0 && (
+            <button
+              onClick={() => { tts.stop(); setParagraphIndex((p) => p - 1); }}
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+            >
+              ← Previous
+            </button>
+          )}
+
+          <button
+            onClick={() =>
+              tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(story.paragraphs[paragraphIndex])
+            }
+            disabled={tts.isLoading}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-gold to-gold-dark text-charcoal text-sm font-body font-semibold shadow-gold hover:shadow-lg transition disabled:opacity-50"
+          >
+            {tts.isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : tts.isPlaying ? (
+              <Pause className="w-4 h-4" />
+            ) : (
+              <Play className="w-4 h-4" />
+            )}
+            {tts.isLoading ? "Preparing..." : tts.isPlaying ? "Pause" : "Listen"}
+          </button>
+
+          {paragraphIndex < story.paragraphs.length - 1 ? (
+            <button
+              onClick={() => { tts.stop(); setParagraphIndex((p) => p + 1); }}
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+            >
+              Next →
+            </button>
+          ) : (
+            <button
+              onClick={() => { tts.stop(); onBack(); }}
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+            >
+              Sweet Dreams ✓
+            </button>
+          )}
+
+          <button
+            onClick={playFullStory}
+            disabled={tts.isLoading}
+            className="px-4 py-2.5 rounded-xl text-sm font-body text-white/85 bg-white/5 border border-white/10 hover:bg-white/10 transition disabled:opacity-50"
+          >
+            ▶ Play Full Story
+          </button>
+
+          {tts.isPlaying && (
+            <button
+              onClick={tts.stop}
+              aria-label="Stop"
+              className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:bg-white/10"
+            >
+              <Square className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {tts.duration > 0 && (
+          <div className="mt-6 max-w-md mx-auto">
+            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+              <div className="bg-gold h-full transition-all" style={{ width: `${tts.progress}%` }} />
             </div>
-          </>
+            <div className="flex justify-between mt-1">
+              <span className="text-[10px] font-body text-white/55">{tts.formatTime(tts.currentTime)}</span>
+              <span className="text-[10px] font-body text-white/55">{tts.formatTime(tts.duration)}</span>
+            </div>
+          </div>
         )}
 
-        {story && (
-          <div className="space-y-6">
-            <button
-              onClick={() => { setActiveStory(null); tts.stop(); setParagraphIndex(0); }}
-              className="flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back to Stories
-            </button>
+        {/* Sleep timer + volume */}
+        <div className="mt-8 grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <div className="flex items-center gap-2 text-white/85 font-body text-sm mb-3">
+              <TimerIcon className="w-4 h-4 text-gold" /> Sleep Timer
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[null, 10, 20, 30, 45].map((m) => (
+                <button
+                  key={String(m)}
+                  onClick={() => setSleepTimer(m)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-body border transition ${
+                    sleepTimer === m
+                      ? "bg-gold text-charcoal border-gold"
+                      : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                  }`}
+                >
+                  {m === null ? "Off" : `${m} min`}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <div className="flex items-center gap-2 text-white/85 font-body text-sm mb-3">
+              <Volume2 className="w-4 h-4 text-gold" /> Volume
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={volume}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
+              className="w-full accent-gold"
+              aria-label="Volume"
+            />
+          </div>
+        </div>
+      </div>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-cream via-cream-dark/40 to-cream/30 dark:from-forest-deep/40 dark:via-forest/30 dark:to-charcoal/15 rounded-2xl border border-forest-deep/15 p-6 sm:p-8 shadow-elevated">
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-bl from-gold/30 to-transparent" />
-              <div className="absolute bottom-0 left-0 w-40 h-20 bg-gradient-to-tr from-gold/20 to-transparent rounded-tr-full" />
-              <div className="relative z-10">
-                <div className="text-center mb-6">
-                  <span className="text-5xl">{story.icon}</span>
-                  <h2 className="font-display text-2xl font-bold text-foreground mt-3">{story.title}</h2>
-                  <p className="text-sm font-body text-muted-foreground mt-1">{story.description}</p>
-                  <div className="flex items-center justify-center gap-3 mt-2">
-                    <span className="text-xs font-body text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {story.duration} minutes
-                    </span>
-                    <span className="text-xs font-body text-muted-foreground">
-                      Narrated by {story.narrator}
-                    </span>
+      {/* Related */}
+      {related.length > 0 && (
+        <div>
+          <h3 className="font-display text-xl text-white mb-4">More stories like this</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {related.map((r) => (
+              <StoryCard key={r.id} s={r} onOpen={() => { onBack(); setTimeout(() => {}, 0); }} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Page ---------- */
+function SleepStoriesPageInner() {
+  const [activeStory, setActiveStory] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  const story = sleepStories.find((s) => s.id === activeStory);
+  const flagship = sleepStories.filter((s) => s.flagship);
+  const filtered =
+    activeCategory === "all"
+      ? sleepStories.filter((s) => !s.flagship)
+      : sleepStories.filter((s) => s.category === activeCategory);
+
+  return (
+    <AppLayout>
+      {/* Sanctuary canvas */}
+      <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 -mt-6 sm:-mt-8 px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-10 min-h-screen overflow-hidden bg-[#070b1a]">
+        {/* Background layers */}
+        <div className="absolute inset-0">
+          <img
+            src={heroBg}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-[80vh] object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#070b1a]/40 via-[#070b1a]/85 to-[#070b1a]" />
+          <StarField />
+        </div>
+
+        <div className="relative z-10 max-w-6xl mx-auto space-y-10 animate-fade-in">
+          {!story && (
+            <>
+              {/* HERO */}
+              <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 sm:p-12">
+                <MoonGlow />
+                <Mist />
+                <div className="relative">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/15 border border-gold/30 text-[10px] uppercase tracking-[0.2em] text-gold font-body">
+                    <Sparkles className="w-3 h-3" /> Included in Pro
+                  </div>
+                  <h1 className="font-display text-4xl sm:text-6xl font-semibold text-white mt-5 leading-[1.05] max-w-3xl">
+                    Sleep stories that quiet the mind and welcome the night.
+                  </h1>
+                  <p className="font-body text-base sm:text-lg text-white/70 mt-4 max-w-2xl leading-relaxed">
+                    Immersive bedtime journeys designed to soften tension, slow the breath,
+                    and guide you gently into deep sleep.
+                  </p>
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <button
+                      onClick={() => flagship[0] && setActiveStory(flagship[0].id)}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-gold to-gold-dark text-charcoal font-body font-semibold text-sm shadow-gold hover:shadow-lg transition"
+                    >
+                      <Play className="w-4 h-4" /> Start Listening
+                    </button>
+                    <button
+                      onClick={() => {
+                        const el = document.getElementById("sleep-story-grid");
+                        el?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/15 text-white/85 font-body text-sm hover:bg-white/10 transition"
+                    >
+                      Preview Stories
+                    </button>
                   </div>
                 </div>
+              </section>
 
-                <div className="bg-card/70 backdrop-blur-sm rounded-xl p-6 mb-6 max-w-2xl mx-auto border border-border/50 shadow-soft">
-                  <p className="font-body text-base text-foreground leading-[2] text-center">
-                    {story.paragraphs[paragraphIndex]}
-                  </p>
+              {/* Flagship cards */}
+              <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-display text-2xl text-white">Tonight's flagship journeys</h2>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-gold/80 font-body">Pro originals</span>
                 </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  {flagship.map((s) => (
+                    <FlagshipCard key={s.id} s={s} onOpen={() => setActiveStory(s.id)} />
+                  ))}
+                </div>
+              </section>
 
-                <div className="flex items-center justify-center gap-1.5 mb-4">
-                  {story.paragraphs.map((_, i) => (
+              {/* Categories */}
+              <section id="sleep-story-grid" className="space-y-4">
+                <h2 className="font-display text-2xl text-white">Explore the library</h2>
+                <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+                  <button
+                    onClick={() => setActiveCategory("all")}
+                    className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition border ${
+                      activeCategory === "all"
+                        ? "bg-gold text-charcoal border-gold shadow-gold"
+                        : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                    }`}
+                  >
+                    All Stories
+                  </button>
+                  {sleepStoryCategories.map((cat) => (
                     <button
-                      key={i}
-                      onClick={() => setParagraphIndex(i)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all ${i === paragraphIndex ? "bg-forest-deep scale-110" : i < paragraphIndex ? "bg-forest-deep/40" : "bg-secondary"}`}
-                    />
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition border flex items-center gap-1.5 ${
+                        activeCategory === cat.id
+                          ? "bg-gold text-charcoal border-gold shadow-gold"
+                          : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                      }`}
+                    >
+                      <span>{cat.icon}</span> {cat.name}
+                    </button>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-center gap-3 flex-wrap">
-                  {paragraphIndex > 0 && (
-                    <button
-                      onClick={() => { tts.stop(); setParagraphIndex(p => p - 1); }}
-                      className="px-4 py-2.5 bg-card/80 backdrop-blur-sm rounded-xl text-sm font-body border border-border/50"
-                    >
-                      ← Previous
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => tts.hasAudio ? tts.togglePlayPause() : tts.generateAndPlay(story.paragraphs[paragraphIndex])}
-                    disabled={tts.isLoading}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-charcoal/15 to-gold-dark/10 text-charcoal dark:text-cream text-sm font-body font-medium hover:from-charcoal/25 hover:to-gold-dark/20 transition-all disabled:opacity-50"
-                  >
-                    {tts.isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tts.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                    {tts.isLoading ? "Generating..." : tts.isPlaying ? "Pause" : "Listen"}
-                  </button>
-
-                  {paragraphIndex < story.paragraphs.length - 1 ? (
-                    <button
-                      onClick={() => { tts.stop(); setParagraphIndex(p => p + 1); }}
-                      className="px-5 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all"
-                    >
-                      Next →
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => { tts.stop(); setActiveStory(null); setParagraphIndex(0); }}
-                      className="px-5 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all"
-                    >
-                      Sweet Dreams ✓
-                    </button>
-                  )}
-
-                  <button
-                    onClick={playFullStory}
-                    disabled={tts.isLoading}
-                    className="px-4 py-2.5 bg-gradient-to-r from-charcoal/10 to-gold-dark/10 rounded-xl text-sm font-body text-charcoal dark:text-cream-dark hover:from-charcoal/20 hover:to-gold-dark/20 disabled:opacity-50 transition-all"
-                  >
-                    {tts.isLoading ? "..." : "▶ Play Full Story"}
-                  </button>
-
-                  {tts.isPlaying && (
-                    <button onClick={tts.stop} className="p-2.5 rounded-xl bg-secondary text-muted-foreground hover:bg-secondary/80">
-                      <Square className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-
-                {tts.isPlaying && tts.duration > 0 && (
-                  <div className="mt-4 max-w-md mx-auto">
-                    <div className="w-full bg-secondary rounded-full h-1.5">
-                      <div className="bg-forest-deep h-1.5 rounded-full transition-all" style={{ width: `${tts.progress}%` }} />
-                    </div>
-                    <div className="flex justify-between mt-1">
-                      <span className="text-[10px] font-body text-muted-foreground">{tts.formatTime(tts.currentTime)}</span>
-                      <span className="text-[10px] font-body text-muted-foreground">{tts.formatTime(tts.duration)}</span>
-                    </div>
+                {filtered.length === 0 ? (
+                  <p className="text-white/60 font-body text-sm py-10 text-center">
+                    More stories arriving soon in this collection.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filtered.map((s) => (
+                      <StoryCard key={s.id} s={s} onOpen={() => setActiveStory(s.id)} />
+                    ))}
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        )}
+              </section>
+
+              {/* How it works */}
+              <section className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 sm:p-8">
+                <div className="flex items-center gap-2 mb-2">
+                  <Moon className="w-4 h-4 text-gold" />
+                  <h3 className="font-display text-lg text-white">How Sleep Stories Work</h3>
+                </div>
+                <p className="text-sm font-body text-white/70 leading-relaxed">
+                  Listen in bed with the lights low. Don't try to follow the story — let the
+                  words wash over you like waves. Most listeners drift off before the story
+                  ends, and that is exactly the point.
+                </p>
+              </section>
+            </>
+          )}
+
+          {story && <StoryDetail story={story} onBack={() => setActiveStory(null)} />}
+        </div>
       </div>
     </AppLayout>
   );
@@ -233,16 +546,16 @@ export default function SleepStoriesPage() {
   return (
     <PremiumGate
       feature="Sleep Stories"
-      description="Drift away with cinematic narrated tales — Lavender Fields of Provence, the Enchanted Library, midnight train journeys and more, voiced for deep restorative sleep."
+      description="Drift away with cinematic narrated tales — The Lantern Path, The Ocean Room, The Garden at Twilight, and more, voiced for deep restorative sleep."
       icon={Moon}
       gradient="from-charcoal/30 to-gold-dark/20"
       previewItems={[
-        "Lavender Fields of Provence — 28 min",
-        "The Enchanted Library — 32 min",
-        "Mountain Train Journey — 25 min",
-        "Rainy Day Café — 22 min",
-        "Lighthouse at Dusk — 30 min",
-        "+ 12 more bedtime stories",
+        "The Lantern Path — 18 min",
+        "The Ocean Room — 22 min",
+        "The Garden at Twilight — 20 min",
+        "The Train to Midnight — 24 min",
+        "The Cloud House Above the Pines — 19 min",
+        "+ 8 more bedtime journeys",
       ]}
     >
       <SleepStoriesPageInner />

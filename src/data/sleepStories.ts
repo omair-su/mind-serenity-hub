@@ -1,3 +1,9 @@
+import lanternPath from "@/assets/sleep/lantern-path.jpg";
+import oceanRoom from "@/assets/sleep/ocean-room.jpg";
+import twilightGarden from "@/assets/sleep/twilight-garden.jpg";
+import midnightTrain from "@/assets/sleep/midnight-train.jpg";
+import cloudHouse from "@/assets/sleep/cloud-house.jpg";
+
 export interface SleepStory {
   id: string;
   title: string;
@@ -7,16 +13,125 @@ export interface SleepStory {
   description: string;
   narrator: string;
   paragraphs: string[];
+  teaser?: string;
+  mood?: string;
+  cover?: string;
+  flagship?: boolean;
 }
 
 export const sleepStoryCategories = [
-  { id: "nature", name: "Nature Journeys", icon: "🌿" },
-  { id: "fantasy", name: "Enchanted Worlds", icon: "✨" },
-  { id: "travel", name: "Gentle Travels", icon: "🗺️" },
-  { id: "cozy", name: "Cozy Comforts", icon: "🛋️" },
+  { id: "forest", name: "Forest", icon: "🌲" },
+  { id: "ocean", name: "Ocean", icon: "🌊" },
+  { id: "twilight", name: "Twilight", icon: "🌇" },
+  { id: "rain", name: "Rain", icon: "🌧️" },
+  { id: "cozy", name: "Cozy Home", icon: "🏡" },
+  { id: "starlight", name: "Starlight", icon: "✨" },
+  { id: "deep", name: "Deep Sleep", icon: "🌙" },
+  { id: "nature", name: "Nature", icon: "🌿" },
+  { id: "fantasy", name: "Enchanted", icon: "🪄" },
+  { id: "travel", name: "Travels", icon: "🗺️" },
 ];
 
-export const sleepStories: SleepStory[] = [
+const flagshipStories: SleepStory[] = [
+  {
+    id: "lantern-path",
+    title: "The Lantern Path",
+    icon: "🏮",
+    category: "forest",
+    duration: 18,
+    mood: "moonlit drift",
+    teaser: "A quiet forest, warm lanterns, and the softest welcome home.",
+    description: "Walk a moonlit forest path lit by warm lanterns as the night gently teaches you how to rest.",
+    narrator: "Willow",
+    cover: lanternPath,
+    flagship: true,
+    paragraphs: [
+      "Tonight, you walk a small path through a forest that feels ancient and kind. The trees are tall, but they do not loom. They stand like guardians. Ahead of you, warm lanterns glow gently, one by one, lighting the way with soft amber light. The air is cool and fresh, carrying the smell of pine, damp earth, and night rain.",
+      "With every step, your shoulders soften. Every sound becomes quieter. The world does not ask anything from you here. There is nowhere to go, nothing to solve, nothing to carry. Only the rhythm of your breath, the soft crunch of leaves beneath your feet, and the peaceful glow of the lanterns guiding you forward.",
+      "As you continue, the path becomes smoother, the light gentler, and your thoughts begin to slow like drifting smoke. The forest is teaching you how to rest. One lantern. One breath. One quiet moment at a time.",
+      "You arrive at a small wooden cottage with a warm light in the window. The door is already open. Inside is a soft chair, a wool blanket, and the deepest silence you have felt all day. You do not need to do anything now. You simply arrive. You simply rest.",
+    ],
+  },
+  {
+    id: "ocean-room",
+    title: "The Ocean Room",
+    icon: "🌊",
+    category: "ocean",
+    duration: 22,
+    mood: "ocean night",
+    teaser: "A moonlit room beside the sea, breathing in time with the tide.",
+    description: "Rest in a luxurious room beside the sea while wave reflections drift slowly across the ceiling.",
+    narrator: "Willow",
+    cover: oceanRoom,
+    flagship: true,
+    paragraphs: [
+      "You are in a beautiful room beside the sea. The walls are pale and soft, like shells touched by moonlight. The bed is wide, clean, and wrapped in smooth linen that feels cool and comforting. Through the large window, you can hear the ocean breathing in and out, steady and endless.",
+      "A gentle wave of light moves across the ceiling, as if the sea itself is resting nearby. The room is quiet, but not empty. It is full of peace. Full of space. Full of the kind of stillness that lets the body finally stop protecting itself.",
+      "With each breath, the sound of the ocean becomes a little slower. The light becomes a little softer. Your mind begins to unhook from the day. Thoughts drift like sailboats moving farther and farther away from shore. You are safe here. You are held here. The sea does the remembering. You only need to let go.",
+      "The waves continue their calm rhythm outside the window while inside, the room grows darker, softer, and quieter. Your body sinks gently into the bed, and sleep arrives like a tide that knows your name.",
+    ],
+  },
+  {
+    id: "twilight-garden",
+    title: "The Garden at Twilight",
+    icon: "🌹",
+    category: "twilight",
+    duration: 20,
+    mood: "deep calm",
+    teaser: "A hidden garden where evening softens everything you carried today.",
+    description: "Step into a hidden luxury garden at dusk where roses, fountains, and fireflies guide you into peace.",
+    narrator: "Willow",
+    cover: twilightGarden,
+    flagship: true,
+    paragraphs: [
+      "As evening arrives, you enter a hidden garden behind a tall stone wall. The path is lined with roses, lavender, and jasmine. A fountain sings softly in the center, and the last light of the day rests on every leaf like a blessing.",
+      "There is no hurry in this garden. The air feels warm and gentle, touched by flowers and dusk. Fireflies begin to appear, not rushing, only flickering quietly among the trees. Somewhere nearby, a small bell chimes once, then fades into stillness.",
+      "You sit on a stone bench and breathe in the calm. Each inhale feels like receiving something precious. Each exhale feels like letting go of what no longer needs your attention. The garden does not ask you to be more. It only invites you to be here, exactly as you are.",
+      "In this twilight space, your heart softens. Your mind loosens. Your body remembers the feeling of being cared for. The sky deepens into blue velvet. The fountain continues its quiet song. The roses close for the night. And you, too, begin to close gently into rest.",
+    ],
+  },
+  {
+    id: "midnight-train",
+    title: "The Train to Midnight",
+    icon: "🚂",
+    category: "rain",
+    duration: 24,
+    mood: "cozy surrender",
+    teaser: "A velvet night train, rain on the windows, and the world slipping away.",
+    description: "Surrender to the rhythm of a luxurious midnight train as rain streams down dark windows.",
+    narrator: "Willow",
+    cover: midnightTrain,
+    flagship: true,
+    paragraphs: [
+      "You step into a midnight train carriage that feels elegant, warm, and private. The seats are soft velvet. The lamps glow gold. Outside the window, the world is dark and moving slowly, blurred by rain.",
+      "You take your seat and feel the gentle rhythm of the train beneath you. It is steady, reassuring, almost like a lullaby made of motion. There is no destination you need to think about now. The train knows the way.",
+      "Each passing station is farther from the noise of the day. Each curve in the track helps your thoughts become less sharp, less urgent, less loud. You watch the rain slide down the glass, and with it, the tension of the day begins to slip away.",
+      "The carriage is quiet. The other passengers are asleep or nearly asleep. The world outside is a painted dark blue, full of distance and peace. You are simply being carried now, held by motion, guided by night.",
+      "The train keeps moving through the dark countryside while you sink deeper into stillness. The rhythm becomes breath. The breath becomes sleep. And sleep becomes a soft arrival.",
+    ],
+  },
+  {
+    id: "cloud-house",
+    title: "The Cloud House Above the Pines",
+    icon: "☁️",
+    category: "starlight",
+    duration: 19,
+    mood: "forest silence",
+    teaser: "A small wooden home floating gently above a quiet pine forest.",
+    description: "Drift into a wooden house resting on a cloud above a quiet pine forest, weightless and held.",
+    narrator: "Willow",
+    cover: cloudHouse,
+    flagship: true,
+    paragraphs: [
+      "High above a quiet pine forest, there is a small wooden house resting on a cloud. It is not heavy. It does not fall. It simply floats, held by the sky itself. The windows are open to a cool night breeze. The curtains move slowly, like they are breathing with you.",
+      "Inside, everything is calm. A knitted blanket lies across a chair. A lamp glows softly beside the bed. The floor is warm wood. The silence is enormous, but comforting. You can feel the stillness of the forest below, the softness of the clouds around you, and the wide open sky above.",
+      "Your body becomes lighter here. Your thoughts lose their edges. The feeling of effort begins to dissolve. There is nothing to carry in this cloud house. No pressure. No performance. No urgency. Only a soft room in the sky, a quiet night, and your own breathing becoming slower and smoother.",
+      "The cloud house drifts farther into the night until the whole world feels feather-light. Your eyes grow heavy. The bed welcomes you. The sky holds you. Sleep comes gently.",
+    ],
+  },
+];
+
+const legacyStories: SleepStory[] = [
   {
     id: "lavender-fields",
     title: "The Lavender Fields of Provence",
@@ -171,3 +286,5 @@ export const sleepStories: SleepStory[] = [
     ]
   },
 ];
+
+export const sleepStories: SleepStory[] = [...flagshipStories, ...legacyStories];
