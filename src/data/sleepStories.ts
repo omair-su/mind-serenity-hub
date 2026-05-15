@@ -131,9 +131,7 @@ const flagshipStories: SleepStory[] = [
   },
 ];
 
-const legacyStories: SleepStory[] =
-
-export const sleepStories: SleepStory[] = [
+const legacyStories: SleepStory[] = [
   {
     id: "lavender-fields",
     title: "The Lavender Fields of Provence",
@@ -288,3 +286,5 @@ export const sleepStories: SleepStory[] = [
     ]
   },
 ];
+
+export const sleepStories: SleepStory[] = [...flagshipStories, ...legacyStories];
