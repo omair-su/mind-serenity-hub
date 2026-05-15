@@ -376,11 +376,7 @@ function StoryDetail({
               max={1}
               step={0.01}
               value={volume}
-              onChange={(e) => {
-                const v = parseFloat(e.target.value);
-                setVolume(v);
-                tts.setVolume?.(v);
-              }}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
               className="w-full accent-gold"
               aria-label="Volume"
             />
