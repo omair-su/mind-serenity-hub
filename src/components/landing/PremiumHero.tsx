@@ -35,7 +35,7 @@ export default function PremiumHero() {
     <section
       id="home"
       className="relative w-full overflow-hidden min-h-[100svh] flex items-center"
-      style={{ background: "radial-gradient(120% 80% at 80% 0%, #1b3a6b 0%, #0e2a47 38%, #081a30 70%, #050f1f 100%)" }}
+      style={{ background: "radial-gradient(120% 80% at 80% 0%, #1a3c2a 0%, #0e2418 38%, #07140d 70%, #06120c 100%)" }}
     >
       {/* === 3D scene (absolutely positioned, full-bleed) === */}
       {!reducedMotion && enable3D && (
