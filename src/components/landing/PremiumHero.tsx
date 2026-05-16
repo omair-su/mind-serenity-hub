@@ -23,11 +23,11 @@ export default function PremiumHero() {
     setReducedMotion(mq.matches);
     const onChange = () => setReducedMotion(mq.matches);
     mq.addEventListener("change", onChange);
-    // Defer mounting the WebGL canvas slightly so it doesn't compete with LCP text
-    const id = window.setTimeout(() => setEnable3D(true), 250);
+    // Mount WebGL on next frame so LCP text paints first, but without a long delay
+    const raf = window.requestAnimationFrame(() => setEnable3D(true));
     return () => {
       mq.removeEventListener("change", onChange);
-      window.clearTimeout(id);
+      window.cancelAnimationFrame(raf);
     };
   }, []);
 
