@@ -106,7 +106,7 @@ export default function PremiumHero() {
             <Link to="/sign-in?redirect=/app" className="block">
               <button
                 className="group relative w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base text-white transition-transform hover:scale-[1.03] active:scale-[0.98]"
-                style={{ background: CTA_GRADIENT, boxShadow: "0 18px 48px -14px rgba(91,127,224,0.7)" }}
+                style={{ background: CTA_GRADIENT, boxShadow: "0 18px 48px -14px rgba(201,168,76,0.55)" }}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4" />
