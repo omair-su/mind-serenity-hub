@@ -7,7 +7,7 @@ import { LogoIcon } from "@/components/WillowLogo";
 // Heavy 3D scene loaded only on client, only when not reduced-motion
 const Hero3DScene = lazy(() => import("./Hero3DScene"));
 
-const CTA_GRADIENT = "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)";
+const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
 
 /**
  * Premium cinematic landing hero — calming meditation aesthetic.
