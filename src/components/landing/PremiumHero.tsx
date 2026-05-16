@@ -55,7 +55,7 @@ export default function PremiumHero() {
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 25% 50%, rgba(5,15,31,0.55) 0%, rgba(5,15,31,0.15) 45%, transparent 70%)",
+            "radial-gradient(ellipse at 25% 50%, rgba(6,18,12,0.6) 0%, rgba(6,18,12,0.18) 45%, transparent 70%)",
         }}
       />
 
