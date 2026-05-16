@@ -75,8 +75,8 @@ export default function PremiumHero() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-white/15 bg-white/[0.06] backdrop-blur-md"
           >
             <span className="relative flex w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-[#E9D9FF] animate-ping opacity-60" />
-              <span className="relative w-2 h-2 rounded-full bg-[#E9D9FF]" />
+              <span className="absolute inset-0 rounded-full bg-[#f0d78c] animate-ping opacity-60" />
+              <span className="relative w-2 h-2 rounded-full bg-[#f0d78c]" />
             </span>
             <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-white/85">
               Premium Mindfulness · 2026
@@ -91,7 +91,7 @@ export default function PremiumHero() {
           <h1 className="font-calm-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.02] tracking-[-0.025em] text-white">
             Quiet the noise.
             <br />
-            <span className="italic font-medium bg-gradient-to-r from-[#E9D9FF] via-[#C8B6F0] to-[#9FB8FF] bg-clip-text text-transparent">
+            <span className="italic font-medium bg-gradient-to-r from-[#f5f0e0] via-[#f0d78c] to-[#c9a84c] bg-clip-text text-transparent">
               Return to yourself.
             </span>
           </h1>
