@@ -123,9 +123,9 @@ export default function PremiumHero() {
 
           {/* Trust microcopy */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 mt-6 text-xs font-calm-body text-white/70">
-            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-[#E9D9FF]" /> 7-day free trial</span>
-            <span className="flex items-center gap-1.5"><Heart className="w-3.5 h-3.5 text-[#E9D9FF]" /> Cancel anytime</span>
-            <span className="hidden sm:flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-[#E9D9FF]" /> Built for busy minds</span>
+            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-[#f0d78c]" /> 7-day free trial</span>
+            <span className="flex items-center gap-1.5"><Heart className="w-3.5 h-3.5 text-[#f0d78c]" /> Cancel anytime</span>
+            <span className="hidden sm:flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-[#f0d78c]" /> Built for busy minds</span>
           </div>
 
           {/* Floating feature chips */}
