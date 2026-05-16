@@ -145,7 +145,7 @@ export default function PremiumHero() {
                 transition={{ delay: 0.5 + i * 0.06, duration: 0.5 }}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-calm-body text-white/85 border border-white/10 bg-white/[0.05] backdrop-blur-sm"
               >
-                <I className="w-3 h-3 text-[#C8B6F0]" />
+                <I className="w-3 h-3 text-[#f0d78c]" />
                 {label}
               </motion.span>
             ))}
