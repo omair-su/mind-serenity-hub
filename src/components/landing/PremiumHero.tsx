@@ -7,7 +7,7 @@ import { LogoIcon } from "@/components/WillowLogo";
 // Heavy 3D scene loaded only on client, only when not reduced-motion
 const Hero3DScene = lazy(() => import("./Hero3DScene"));
 
-const CTA_GRADIENT = "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)";
+const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
 
 /**
  * Premium cinematic landing hero — calming meditation aesthetic.
@@ -23,11 +23,11 @@ export default function PremiumHero() {
     setReducedMotion(mq.matches);
     const onChange = () => setReducedMotion(mq.matches);
     mq.addEventListener("change", onChange);
-    // Defer mounting the WebGL canvas slightly so it doesn't compete with LCP text
-    const id = window.setTimeout(() => setEnable3D(true), 250);
+    // Mount WebGL on next frame so LCP text paints first, but without a long delay
+    const raf = window.requestAnimationFrame(() => setEnable3D(true));
     return () => {
       mq.removeEventListener("change", onChange);
-      window.clearTimeout(id);
+      window.cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -35,7 +35,7 @@ export default function PremiumHero() {
     <section
       id="home"
       className="relative w-full overflow-hidden min-h-[100svh] flex items-center"
-      style={{ background: "radial-gradient(120% 80% at 80% 0%, #1b3a6b 0%, #0e2a47 38%, #081a30 70%, #050f1f 100%)" }}
+      style={{ background: "radial-gradient(120% 80% at 80% 0%, #1a3c2a 0%, #0e2418 38%, #07140d 70%, #06120c 100%)" }}
     >
       {/* === 3D scene (absolutely positioned, full-bleed) === */}
       {!reducedMotion && enable3D && (
@@ -55,7 +55,7 @@ export default function PremiumHero() {
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 25% 50%, rgba(5,15,31,0.55) 0%, rgba(5,15,31,0.15) 45%, transparent 70%)",
+            "radial-gradient(ellipse at 25% 50%, rgba(6,18,12,0.6) 0%, rgba(6,18,12,0.18) 45%, transparent 70%)",
         }}
       />
 
@@ -75,8 +75,8 @@ export default function PremiumHero() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-white/15 bg-white/[0.06] backdrop-blur-md"
           >
             <span className="relative flex w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-[#E9D9FF] animate-ping opacity-60" />
-              <span className="relative w-2 h-2 rounded-full bg-[#E9D9FF]" />
+              <span className="absolute inset-0 rounded-full bg-[#f0d78c] animate-ping opacity-60" />
+              <span className="relative w-2 h-2 rounded-full bg-[#f0d78c]" />
             </span>
             <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-white/85">
               Premium Mindfulness · 2026
@@ -91,7 +91,7 @@ export default function PremiumHero() {
           <h1 className="font-calm-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.02] tracking-[-0.025em] text-white">
             Quiet the noise.
             <br />
-            <span className="italic font-medium bg-gradient-to-r from-[#E9D9FF] via-[#C8B6F0] to-[#9FB8FF] bg-clip-text text-transparent">
+            <span className="italic font-medium bg-gradient-to-r from-[#f5f0e0] via-[#f0d78c] to-[#c9a84c] bg-clip-text text-transparent">
               Return to yourself.
             </span>
           </h1>
@@ -106,7 +106,7 @@ export default function PremiumHero() {
             <Link to="/sign-in?redirect=/app" className="block">
               <button
                 className="group relative w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base text-white transition-transform hover:scale-[1.03] active:scale-[0.98]"
-                style={{ background: CTA_GRADIENT, boxShadow: "0 18px 48px -14px rgba(91,127,224,0.7)" }}
+                style={{ background: CTA_GRADIENT, boxShadow: "0 18px 48px -14px rgba(201,168,76,0.55)" }}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4" />
@@ -123,9 +123,9 @@ export default function PremiumHero() {
 
           {/* Trust microcopy */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 mt-6 text-xs font-calm-body text-white/70">
-            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-[#E9D9FF]" /> 7-day free trial</span>
-            <span className="flex items-center gap-1.5"><Heart className="w-3.5 h-3.5 text-[#E9D9FF]" /> Cancel anytime</span>
-            <span className="hidden sm:flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-[#E9D9FF]" /> Built for busy minds</span>
+            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-[#f0d78c]" /> 7-day free trial</span>
+            <span className="flex items-center gap-1.5"><Heart className="w-3.5 h-3.5 text-[#f0d78c]" /> Cancel anytime</span>
+            <span className="hidden sm:flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-[#f0d78c]" /> Built for busy minds</span>
           </div>
 
           {/* Floating feature chips */}
@@ -145,7 +145,7 @@ export default function PremiumHero() {
                 transition={{ delay: 0.5 + i * 0.06, duration: 0.5 }}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-calm-body text-white/85 border border-white/10 bg-white/[0.05] backdrop-blur-sm"
               >
-                <I className="w-3 h-3 text-[#C8B6F0]" />
+                <I className="w-3 h-3 text-[#f0d78c]" />
                 {label}
               </motion.span>
             ))}
@@ -180,7 +180,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute -top-[20%] -left-[10%] w-[60vw] h-[60vw] max-w-[900px] max-h-[900px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(130,103,214,0.35) 0%, rgba(130,103,214,0) 60%)",
+          background: "radial-gradient(circle, rgba(26,60,42,0.55) 0%, rgba(26,60,42,0) 60%)",
           filter: "blur(40px)",
         }}
         animate={{ scale: [1, 1.15, 1], opacity: [0.45, 0.7, 0.45] }}
@@ -190,7 +190,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute top-[10%] -right-[15%] w-[55vw] h-[55vw] max-w-[800px] max-h-[800px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(91,127,224,0.32) 0%, rgba(91,127,224,0) 60%)",
+          background: "radial-gradient(circle, rgba(201,168,76,0.28) 0%, rgba(201,168,76,0) 60%)",
           filter: "blur(40px)",
         }}
         animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.65, 0.4] }}
@@ -200,7 +200,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(159,184,255,0.25) 0%, rgba(159,184,255,0) 60%)",
+          background: "radial-gradient(circle, rgba(168,192,160,0.25) 0%, rgba(168,192,160,0) 60%)",
           filter: "blur(50px)",
         }}
         animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.55, 0.35] }}
