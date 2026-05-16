@@ -4,7 +4,6 @@ import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles
 import { Link } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
 import PremiumHero from "@/components/landing/PremiumHero";
-import WatchDemoModal from "@/components/landing/WatchDemoModal";
 
 // Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
 const AboutSection = lazy(() => import("@/components/AboutSection"));
@@ -39,7 +38,7 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [showStickyCTA, setShowStickyCTA] = useState(false);
-  const [demoOpen, setDemoOpen] = useState(false);
+  
 
   useEffect(() => {
     // Throttle scroll work via rAF and only read window.scrollY (no layout-forcing reads)
@@ -199,8 +198,7 @@ export default function LandingPage() {
       </AnimatePresence>
 
       {/* Hero — premium cinematic */}
-      <PremiumHero onWatchDemo={() => setDemoOpen(true)} />
-      <WatchDemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      <PremiumHero />
 
       {/* Features overview — placed high so visitors see breadth immediately */}
       <section id="features" className="py-16 md:py-24 bg-white">
