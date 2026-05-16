@@ -180,7 +180,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute -top-[20%] -left-[10%] w-[60vw] h-[60vw] max-w-[900px] max-h-[900px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(130,103,214,0.35) 0%, rgba(130,103,214,0) 60%)",
+          background: "radial-gradient(circle, rgba(26,60,42,0.55) 0%, rgba(26,60,42,0) 60%)",
           filter: "blur(40px)",
         }}
         animate={{ scale: [1, 1.15, 1], opacity: [0.45, 0.7, 0.45] }}
@@ -190,7 +190,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute top-[10%] -right-[15%] w-[55vw] h-[55vw] max-w-[800px] max-h-[800px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(91,127,224,0.32) 0%, rgba(91,127,224,0) 60%)",
+          background: "radial-gradient(circle, rgba(201,168,76,0.28) 0%, rgba(201,168,76,0) 60%)",
           filter: "blur(40px)",
         }}
         animate={{ scale: [1.1, 1, 1.1], opacity: [0.4, 0.65, 0.4] }}
@@ -200,7 +200,7 @@ function CinematicBackground() {
         aria-hidden
         className="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full z-0"
         style={{
-          background: "radial-gradient(circle, rgba(159,184,255,0.25) 0%, rgba(159,184,255,0) 60%)",
+          background: "radial-gradient(circle, rgba(168,192,160,0.25) 0%, rgba(168,192,160,0) 60%)",
           filter: "blur(50px)",
         }}
         animate={{ scale: [1, 1.18, 1], opacity: [0.35, 0.55, 0.35] }}
