@@ -61,8 +61,8 @@ export default function PremiumHero() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-white/15 bg-white/[0.06] backdrop-blur-md"
           >
             <span className="relative flex w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-[#f0d78c] animate-ping opacity-60" />
-              <span className="relative w-2 h-2 rounded-full bg-[#f0d78c]" />
+              <span className="absolute inset-0 rounded-full bg-[#C9A87C] animate-ping opacity-60" />
+              <span className="relative w-2 h-2 rounded-full bg-[#C9A87C]" />
             </span>
             <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-white/85">
               Premium Mindfulness · 2026
