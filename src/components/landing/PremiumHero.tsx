@@ -1,11 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Shield, Sparkles, Wind, Moon, Music2, Brain, Flower2, Heart } from "lucide-react";
 import { LogoIcon } from "@/components/WillowLogo";
-
-// Heavy 3D scene loaded only on client, only when not reduced-motion
-const Hero3DScene = lazy(() => import("./Hero3DScene"));
+import HeroCosmicScene from "./HeroCosmicScene";
 
 const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
 
