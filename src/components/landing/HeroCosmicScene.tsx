@@ -230,7 +230,6 @@ export default function HeroCosmicScene() {
         .hc-particle-dot {
           display: block; border-radius: 50%;
           animation: hc-sway ease-in-out infinite;
-          animation-duration: inherit;
           will-change: transform;
         }
         @keyframes hc-rise {
