@@ -5,7 +5,7 @@ import { Shield, Sparkles, Wind, Moon, Music2, Brain, Flower2, Heart } from "luc
 import { LogoIcon } from "@/components/WillowLogo";
 import HeroCosmicScene from "./HeroCosmicScene";
 
-const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
+const CTA_GRADIENT = "linear-gradient(135deg, #C9A87C 0%, #E8C98A 50%, #C9A87C 100%)";
 
 /**
  * Premium cinematic landing hero — calming meditation aesthetic.
@@ -61,8 +61,8 @@ export default function PremiumHero() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-white/15 bg-white/[0.06] backdrop-blur-md"
           >
             <span className="relative flex w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-[#f0d78c] animate-ping opacity-60" />
-              <span className="relative w-2 h-2 rounded-full bg-[#f0d78c]" />
+              <span className="absolute inset-0 rounded-full bg-[#C9A87C] animate-ping opacity-60" />
+              <span className="relative w-2 h-2 rounded-full bg-[#C9A87C]" />
             </span>
             <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-white/85">
               Premium Mindfulness · 2026
@@ -82,7 +82,7 @@ export default function PremiumHero() {
             </span>
           </h1>
 
-          <p className="font-calm-body text-base sm:text-lg md:text-xl mt-6 max-w-xl mx-auto lg:mx-0 leading-relaxed text-white/80">
+          <p className="font-calm-body text-base sm:text-lg md:text-xl mt-6 max-w-xl mx-auto lg:mx-0 leading-relaxed" style={{ color: "rgba(255,255,255,0.90)" }}>
             A cinematic 30-day journey of guided meditation, breathwork, sleep stories,
             and ambient sound — designed for stressed, busy minds.
           </p>
@@ -91,8 +91,13 @@ export default function PremiumHero() {
           <div className="flex flex-col sm:flex-row gap-3 mt-9 justify-center lg:justify-start">
             <Link to="/sign-in?redirect=/app" className="block">
               <button
-                className="group relative w-full sm:w-auto px-10 py-4 rounded-full font-calm-body font-semibold text-base text-white transition-transform hover:scale-[1.03] active:scale-[0.98]"
-                style={{ background: CTA_GRADIENT, boxShadow: "0 18px 48px -14px rgba(201,168,76,0.55)" }}
+                className="group relative w-full sm:w-auto px-10 py-4 rounded-full font-calm-body text-base transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                style={{
+                  background: CTA_GRADIENT,
+                  color: "#1a1230",
+                  fontWeight: 700,
+                  boxShadow: "0 8px 32px rgba(201,168,124,0.4)",
+                }}
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4" />
@@ -101,7 +106,16 @@ export default function PremiumHero() {
               </button>
             </Link>
             <Link to="/pricing" className="block">
-              <button className="w-full sm:w-auto px-8 py-4 rounded-full font-calm-body font-semibold text-base text-white border border-white/20 bg-white/[0.06] backdrop-blur-md hover:bg-white/[0.12] transition-colors">
+              <button
+                className="w-full sm:w-auto px-8 py-4 rounded-full font-calm-body font-semibold text-base transition-colors hover:bg-white/[0.14]"
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "rgba(255,255,255,0.9)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                }}
+              >
                 See Plans
               </button>
             </Link>
