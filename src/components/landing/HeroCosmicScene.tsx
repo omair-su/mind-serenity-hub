@@ -218,21 +218,24 @@ export default function HeroCosmicScene() {
         .hc-ring-2 .hc-dot { transform-origin: center; }
 
         .hc-particle {
-          position: absolute; bottom: -10px; border-radius: 50%;
+          position: absolute; bottom: -10px;
           animation-name: hc-rise, hc-sway;
           animation-timing-function: linear, ease-in-out;
           animation-iteration-count: infinite, infinite;
           will-change: transform, opacity;
         }
+        .hc-particle-dot {
+          display: block; border-radius: 50%;
+        }
         @keyframes hc-rise {
-          0%   { transform: translateY(0);     opacity: 0; }
+          0%   { transform: translate3d(0,0,0);       opacity: 0; }
           10%  { opacity: 1; }
           90%  { opacity: 1; }
-          100% { transform: translateY(-110vh); opacity: 0; }
+          100% { transform: translate3d(0,-110vh,0);  opacity: 0; }
         }
         @keyframes hc-sway {
-          0%,100% { margin-left: calc(var(--sway) * -1); }
-          50%     { margin-left: var(--sway); }
+          0%,100% { transform: translate3d(calc(var(--sway) * -1),0,0); }
+          50%     { transform: translate3d(var(--sway),0,0); }
         }
 
         @media (prefers-reduced-motion: reduce) {
