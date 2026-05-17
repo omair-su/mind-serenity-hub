@@ -128,14 +128,19 @@ export default function HeroCosmicScene() {
             className="hc-particle"
             style={{
               left: `${p.left}%`,
-              animationDuration: `${p.duration}s, ${p.duration / 3}s`,
-              animationDelay: `${p.delay}s, ${p.delay}s`,
-              ["--sway" as never]: `${p.sway}px`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
             }}
           >
             <span
               className="hc-particle-dot"
-              style={{ width: p.size, height: p.size, background: p.color }}
+              style={{
+                width: p.size,
+                height: p.size,
+                background: p.color,
+                animationDuration: `${p.duration / 3}s`,
+                ["--sway" as never]: `${p.sway}px`,
+              }}
             />
           </span>
         ))}
