@@ -219,13 +219,14 @@ export default function HeroCosmicScene() {
 
         .hc-particle {
           position: absolute; bottom: -10px;
-          animation-name: hc-rise, hc-sway;
-          animation-timing-function: linear, ease-in-out;
-          animation-iteration-count: infinite, infinite;
+          animation: hc-rise linear infinite;
           will-change: transform, opacity;
         }
         .hc-particle-dot {
           display: block; border-radius: 50%;
+          animation: hc-sway ease-in-out infinite;
+          animation-duration: inherit;
+          will-change: transform;
         }
         @keyframes hc-rise {
           0%   { transform: translate3d(0,0,0);       opacity: 0; }
