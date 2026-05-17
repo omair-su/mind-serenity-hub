@@ -1,11 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Shield, Sparkles, Wind, Moon, Music2, Brain, Flower2, Heart } from "lucide-react";
 import { LogoIcon } from "@/components/WillowLogo";
-
-// Heavy 3D scene loaded only on client, only when not reduced-motion
-const Hero3DScene = lazy(() => import("./Hero3DScene"));
+import HeroCosmicScene from "./HeroCosmicScene";
 
 const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
 
@@ -16,38 +14,26 @@ const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
  */
 export default function PremiumHero() {
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [enable3D, setEnable3D] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
     const onChange = () => setReducedMotion(mq.matches);
     mq.addEventListener("change", onChange);
-    // Mount WebGL on next frame so LCP text paints first, but without a long delay
-    const raf = window.requestAnimationFrame(() => setEnable3D(true));
-    return () => {
-      mq.removeEventListener("change", onChange);
-      window.cancelAnimationFrame(raf);
-    };
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
   return (
     <section
       id="home"
       className="relative w-full overflow-hidden min-h-[100svh] flex items-center"
-      style={{ background: "radial-gradient(120% 80% at 80% 0%, #1a3c2a 0%, #0e2418 38%, #07140d 70%, #06120c 100%)" }}
+      style={{ background: "#0D0B1A" }}
     >
-      {/* === 3D scene (absolutely positioned, full-bleed) === */}
-      {!reducedMotion && enable3D && (
-        <div className="absolute inset-0 z-0">
-          <Suspense fallback={null}>
-            <Hero3DScene />
-          </Suspense>
-        </div>
-      )}
+      {/* === Cosmic CSS/SVG hero scene === */}
+      <HeroCosmicScene />
 
-      {/* === Static cinematic background layers (always on, soft fallback) === */}
-      <CinematicBackground />
+      {/* Subtle aurora fallback for reduced-motion users */}
+      {reducedMotion && <CinematicBackground />}
 
       {/* Vignette + bottom fade so text stays readable on top of 3D */}
       <div
