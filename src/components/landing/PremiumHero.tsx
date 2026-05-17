@@ -5,7 +5,7 @@ import { Shield, Sparkles, Wind, Moon, Music2, Brain, Flower2, Heart } from "luc
 import { LogoIcon } from "@/components/WillowLogo";
 import HeroCosmicScene from "./HeroCosmicScene";
 
-const CTA_GRADIENT = "linear-gradient(90deg, #1a3c2a 0%, #c9a84c 100%)";
+const CTA_GRADIENT = "linear-gradient(135deg, #C9A87C 0%, #E8C98A 50%, #C9A87C 100%)";
 
 /**
  * Premium cinematic landing hero — calming meditation aesthetic.
