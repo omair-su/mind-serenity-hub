@@ -539,7 +539,14 @@ export default function DayPage() {
                   tts.togglePlayPause();
                 } else {
                   const fullScript = day.guidedPractice.join("\n\n");
-                  tts.generateAndPlay(fullScript);
+                  tts.generateAndPlay(fullScript, {
+                    trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
+                    category: "daily_meditation",
+                    title: `Day ${dayNumber} · ${day.title}`,
+                    voice: selectedVoice,
+                    ambientBed: null,
+                    isPremium: !FREE_VOICES.includes(selectedVoice),
+                  });
                 }
               }}
               disabled={tts.isLoading}
