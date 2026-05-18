@@ -102,6 +102,13 @@ export default function DayPage() {
     tts.stop();
   }, [dayNumber]);
 
+  // Flush cached narration when the user picks a different voice, so the
+  // next play actually downloads the new voice instead of replaying Sarah.
+  useEffect(() => {
+    tts.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVoice]);
+
   // Tracks the linked mood_entries row for idempotent syncing (Phase 3 coherence)
   const syncMetaRef = useRef<{ moodEntryId?: string; moodSyncedAt?: string }>({});
   // Prevents the 2s autoSave from writing previous-day state into the new day
