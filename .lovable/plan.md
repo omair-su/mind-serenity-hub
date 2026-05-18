@@ -1,204 +1,114 @@
+# Willow Vibes — Comprehensive Quality Audit & Premium Polish Plan
 
-# Willow Vibes — Comprehensive Audit & Premium Refinement Plan
-
-I reviewed every page, feature, component, edge function, design tokens, routing, and the database schema. Below is a complete state-of-the-app assessment followed by a prioritized roadmap.
-
----
-
-## PART 1 — State of Each Page (Audit)
-
-### A. Public / Marketing
-| Page | Status | Issues |
-|---|---|---|
-| LandingPage | Good — branded forest+gold | Sticky CTA logic OK; minor: needs a "social proof" strip near hero |
-| AboutPage | OK | Uses some raw colors in inner sections |
-| PricingPage | Functional | Plan cards lack the gold luxe treatment; no annual/lifetime visual differentiation |
-| SignInPage | Works | Visual is fine; password rules messaging could be friendlier |
-| OnboardingPage | Functional (10 steps) | Goal cards still use raw HSL gradients (purple/blue/teal) — off-brand |
-| Legal pages | OK | Use raw `slate-*` colors |
-
-### B. Course Foundation (`/course/*`)
-| Page | Status | Issues |
-|---|---|---|
-| WelcomePage | OK | Some emerald/teal raw colors |
-| HowToUsePage | OK | Raw blue/indigo accents |
-| SciencePage | OK | Raw amber/violet |
-| ExpectationsPage | OK | Raw rose/orange |
-| AssessmentPage | OK | Raw color scale (red→green) |
-
-### C. The 30-Day Core (`/day/:n`, `/week/:n`)
-| Page | Status | Issues |
-|---|---|---|
-| DayPage | Recently rebranded ✅ | Mood Delta now interactive, gold/forest tokens applied. Still 934 lines — could be split into sub-components for maintenance. |
-| WeekPage | OK | Could use a stronger "week recap" hero |
-| WeekReviewPage | OK | Charts use defaults |
-
-### D. Dashboard & Authenticated (`/app/*`)
-| Page | Status | Issues |
-|---|---|---|
-| DashboardPage | Good | Today's Focus card is solid; Hero/Triptych branded. |
-| ExplorePage | Needs review | Likely a content discovery page — verify it actually has value |
-| ProfilePage | Functional but long (512 lines) | Settings cards inconsistent spacing; avatar uploader works |
-| AnalyticsPage | OK | Charts use stock recharts theme — needs gold/forest stroke colors |
-| AdvancedAnalyticsPage | **OFF-BRAND** | Cyan/blue/indigo gradients throughout; chart `COLORS = ['#139A3A', ..., '#FF6B6B', '#4ECDC4']` mixes random hexes |
-| JournalPage | OK | Hero uses `stone-950` (off-token); search OK |
-| LibraryPage | Good — branded gradients ✅ | Functional |
-| AchievementsPage | Unknown | Need to verify badges are visually premium |
-| SOSPage | **OFF-BRAND** | Heavy raw color use (emerald/rose/blue/pink for each session card); 465 lines |
-| BreathingPage | OK | Verify orb animation is buttery |
-| SleepPage | Good — branded gradients ✅ | Many scripts; works |
-| TimerPage | OK | Could use a circular dial UI |
-| MoodTrackerPage | Good | Wheel interaction works; insights card OK |
-| ResourcesPage | **MASSIVE — 1510 lines!** | Likely needs to be split + audited for stale content |
-| AffirmationPage | OK | |
-| **CoachPage** | Recently fixed ✅ | Slow first response (Anthropic warm-up); branded |
-| HelpPage | OK | |
-| CertificatePage | OK | |
-| SleepStoriesPage | OK | Verify audio playback |
-| SoundBathPage | OK | Raw color sliders |
-| ChallengesPage | Good | Branded, leaf animation nice |
-| RitualsPage | OK | |
-| FocusModePage | **741 lines** | Audit for bloat |
-| BodyScanPage | Off-brand colors in some zones | |
-| GratitudePage | OK — Living Garden component | Some raw colors in garden |
-| WalkingMeditationPage | 467 lines | Pedometer/pace orb — verify mobile permissions |
-| SoundscapeBuilderPage | OK | Premium gate present |
-| AIRecommendationsPage | OK — already brand-tokenized | |
-| OfflineDownloadsPage | OK | |
-| PaddleChecklistPage | Internal/dev | Should hide from regular users |
-
-### E. Backend / Edge Functions (8 total)
-- `ai-coach-chat` — works (slow first response) ✅
-- `ai-companion-chat` — SOS chat
-- `ai-gratitude-reflect`, `ai-mood-insights` — used
-- `daily-day-framing`, `personalize-feed` — used by HomeFeed
-- `generate-gratitude-letter`, `generate-narration` — TTS/letter
-- `paddle-customer-portal`, `payments-webhook`, `get-paddle-price` — billing
-- `send-daily-reminders`, `send-push` — notifications
-- `delete-account` — account deletion
-
-All have correct `verify_jwt` config. No issues identified at the function layer.
-
-### F. Database (12 tables)
-Schema is solid. RLS in place. **`coach_usage` table has SELECT-only RLS** — the edge function uses service role to insert/update which is correct, but worth confirming the rate-limit logic actually works.
+I went through the meditation app end-to-end (DayPage, narration edge function, audio library, hooks, service worker, console logs). Below are the **confirmed bugs**, the **rough edges**, and a **phased plan** to close the gap with Headspace / Calm / Insight Timer / Balance.
 
 ---
 
-## PART 2 — Cross-Cutting Issues
+## A. Confirmed bugs (must fix)
 
-### Critical (breaks brand or function)
-1. **Off-brand colors in 40+ files** — emerald/cyan/indigo/rose/blue Tailwind classes still used in `AdvancedAnalyticsPage`, `SOSPage`, `OnboardingPage`, `WelcomePage`, `SciencePage`, `AssessmentPage`, `ExpectationsPage`, `HowToUsePage`, `BodyScanPage`, `SoundscapeBuilderPage`, `SoundBathPage`, `SignInPage`, `ProfilePage`, `PremiumGate`, `PremiumLockModal`, `FAQSection`, `ScienceSection`, `TestimonialsSection`, `CoachBox`, `EmergencyContacts`, `LivingGarden`, `Sidebar` (amber-500), `PracticeMode`, `SoundBedDesigner`, plus data files (`dayHeroImages`, `bodyScanScripts`, `extraSOS`, `extraRituals`, `walkingTechniques`).
-2. **Recharts colors hardcoded** in `AdvancedAnalyticsPage` — cyan/red/teal hexes instead of brand tokens.
-3. **`ResourcesPage` is 1510 lines** — almost certainly contains a lot of dead or duplicated content.
-4. **No global design-system primitives** — pages independently rebuild "hero" patterns; gradients defined inline 50+ times.
-5. **No dark mode parity check** — `.dark` tokens exist but most pages use `bg-[hsl(var(--cream))]` literally and won't switch.
-6. **PaddleChecklistPage exposed to all signed-in users** — dev tool should be gated by admin role or env flag.
-7. **`HomeFeed` and `BentoTools`** — verify content actually personalizes; otherwise it's just a static grid.
+### 1. "All four guided voices sound the same" — root cause found
+`src/pages/DayPage.tsx` has **two** play buttons:
 
-### Medium
-8. **Achievements page** — needs review for badge visual quality (likely emoji + plain card).
-9. **TimerPage** — opportunity for a signature circular timer (Headspace-level interaction).
-10. **Streak system** — has freeze tokens & garden, but no streak-broken recovery flow shown to user.
-11. **No global search** — discovery relies on sidebar; users can't search "anxiety" across content.
-12. **Notifications** — VAPID configured, but UX for granting permission is a one-time prompt (`PushPrefsPrompt`) that disappears.
-13. **No offline-first treatment** for completed audio (downloads exist but UX is buried).
-14. **Mood + Journal disconnected** from the 30-day flow — user inputs in DayPage don't appear in Mood or Journal pages.
+- **Hero "Listen Only"** (line 363) correctly passes `voice: selectedVoice` and a voice-scoped `trackKey: day-${dayNumber}-listen-${selectedVoice}`.
+- **Inline "Audio Player"** (line 542) calls `tts.generateAndPlay(fullScript)` with **no options at all**.
 
-### Low / Polish
-15. Bottom nav only has 5 tabs — "Coach" deserves a primary slot for premium users.
-16. Sidebar uses `amber-500` for the PRO badge — should be `gold`.
-17. No haptic feedback on mobile interactions.
-18. Loading skeletons inconsistent; some pages use spinner, others blank.
-19. No empty-state illustrations for first-time users on Journal/Mood/Achievements.
+When no options are passed, `useTextToSpeech` falls into legacy mode and derives a trackKey from the text hash alone — the edge function then uses `defaultVoiceFor('daily_meditation')` → **always Sarah**. So changing the voice picker has zero effect on the inline player, and once Sarah's audio is cached the same MP3 plays for every voice forever.
 
----
+**Fix:** the inline button must pass the same `{ trackKey, category, title, voice, isPremium }` options as the hero button. Also flush the cached `audioRef` when `selectedVoice` changes so the new voice actually downloads.
 
-## PART 3 — Phased Refinement Roadmap
+### 2. Broken thumbnails in Audio Library (the two cards in the screenshots)
+`src/data/audioLibrary.ts` uses raw Unsplash hot-link URLs. Two specific images render blank in your screenshots:
 
-```text
-Phase 1  ──  Brand Color Cleanup (foundational)
-Phase 2  ──  Premium UI Primitives + Page Polish
-Phase 3  ──  30-Day Coherence (Day ↔ Mood ↔ Journal)
-Phase 4  ──  Signature Premium Features
-Phase 5  ──  Engagement & Retention Layer
-Phase 6  ──  Performance, Offline, Final QA
-```
+- `s-prem-4` Atmospheric Dissolution → `photo-1499209974431-9dac3adaf471`
+- `c2` Precision Focus Protocol → `photo-1493246507139-91e8bef99c02`
 
-### Phase 1 — Brand Color Cleanup (1 pass, high impact)
-Goal: zero raw Tailwind color classes outside of brand tokens.
-- Sweep all 40+ files; replace `emerald/cyan/blue/indigo/violet/rose/pink/amber/teal/lime/orange/yellow` with `forest`, `sage`, `gold`, `cream`, `charcoal` tokens.
-- Replace `AdvancedAnalyticsPage` chart `COLORS` array with `[forest, sage, gold, gold-dark, charcoal]`.
-- Update `SOSPage` so each session uses subtle gold/sage/forest variations instead of rainbow gradients.
-- Fix `OnboardingPage` goal cards to use brand-token gradients.
-- Replace `JournalPage` hero overlay `stone-950` with `forest-deep`.
-- Sidebar PRO badge: `amber-500` → `gold`.
-- Audit `index.css` `.dark` variants so dark mode works on rebranded pages.
+These are 404 / hot-link-blocked. There is **no `onError` fallback** in `AudioLibraryPage.tsx` (lines 146, 251), so the broken image just leaves an empty card with the title floating outside the frame (exactly what your screenshots show).
 
-### Phase 2 — Premium UI Primitives + Page Polish
-Build shared components so future pages stay consistent.
-- New primitives in `src/components/ui-premium/`:
-  - `<PageHero>` — unified hero (image + title + breadcrumb + optional CTA)
-  - `<LuxeCard>` — replaces ad-hoc rounded-3xl divs
-  - `<StatTile>` — replaces 4–5 different stat-card implementations
-  - `<SectionHeader>` — eyebrow + title + optional action
-  - `<EmptyState>` — illustration + headline + CTA
-- Refactor `DashboardPage`, `ProfilePage`, `AnalyticsPage`, `AdvancedAnalyticsPage`, `SOSPage`, `JournalPage`, `MoodTrackerPage` to use them.
-- Apply gold-divider treatment between major sections.
-- Standardize loading states (use a single `<Skeleton>` shape per layout).
+**Fix:** replace external Unsplash URLs with locally generated `src/assets/audio-library/*.jpg` (same approach you already used for Sleep Stories), and add an `onError` swap-to-fallback handler.
 
-### Phase 3 — 30-Day Coherence
-Make the 30-day program the connected spine of the app.
-- DayPage mood-delta entries auto-write to `mood_entries` table (so Mood Tracker shows them).
-- DayPage reflection auto-creates a Journal entry tagged with the day number.
-- Journal page filter by week/day already exists — surface day-source entries with a small day badge.
-- Add a "Today's Practice → Journal Entry" link on DayPage completion.
-- Add `WeekReviewPage` enhancements: aggregate mood delta, top reflections, audio minutes, gold "Week N Sealed" badge.
+### 3. Placeholder audio everywhere in Audio Library
+Every `audioUrl` in `audioLibrary.ts` is `SoundHelix-Song-N.mp3` — a generic rock instrumental. Tapping any session in the library plays rock music instead of meditation. This is the single biggest "this feels like a demo, not a real app" signal.
 
-### Phase 4 — Signature Premium Features
-Add the things Calm/Headspace do that this app currently fakes.
-- **Signature Timer**: full-screen circular dial, soft chimes, ambient bed pre-baked. Replaces `TimerPage` body.
-- **Achievements Overhaul**: SVG badges (forest/gold treatment), hero "next badge" card, share-sheet PNG export.
-- **Global Search** (Cmd-K + mobile bar): searches days, rituals, sleep stories, sound baths, FAQs.
-- **Coach v2**: streaming responses, suggested prompts that adapt to recent mood, conversation history persisted to a new `coach_messages` table (currently only `coach_usage` is tracked).
-- **Sound Bath Premium**: visual waveform reactive to playback, layered ambient mixer (already partial in `SoundMixer`).
+**Fix:** route the Audio Library through the same `generate-narration` edge function used by DayPage. Add a real `script` field per session/course-step and stream ElevenLabs narration into the existing `AudioPlayer` instead of the SoundHelix URLs.
 
-### Phase 5 — Engagement & Retention
-- **Streak recovery flow**: when streak breaks, show a gentle "Use 1 freeze token to keep your streak?" modal instead of silent reset.
-- **Daily push reminders**: re-prompt for permission after day 3 if dismissed; preset send time from profile.
-- **Weekly recap email** via `send-daily-reminders` extension — minutes practiced, mood trend, next week preview.
-- **Personalized feed v2**: `personalize-feed` edge fn already exists — verify it actually returns dynamic items based on recent moods/last day completed; otherwise rebuild.
-- **First-run empty states**: illustrations on Journal/Mood/Achievements/Library when empty.
+### 4. Service Worker push registration fails
+Console log: `Failed to register a ServiceWorker for scope … The script resource is behind a redirect`. `public/sw.js` is being served through a redirect on the preview domain. Push notifications are silently dead.
 
-### Phase 6 — Performance, Offline, Final QA
-- Split `ResourcesPage` (1510 lines) into a tabbed structure or paginated content.
-- Split `DayPage` (934 lines) into `<DayHero>`, `<DayPractice>`, `<DayReflection>`, `<DayProgressStrip>`.
-- Audit all images: convert hero JPGs > 200 KB to WebP.
-- Service worker (`public/sw.js`) — verify it caches audio properly for "Offline Downloads".
-- Hide `PaddleChecklistPage` route behind an env flag or `is_admin` role.
-- Lighthouse pass on mobile: target ≥90 on Performance, 100 on Accessibility.
-- Cross-browser test on Safari iOS (audio + push are the usual breakers).
+**Fix:** stop registering `sw.js` on `*.lovable.app` previews (only on the production `willowvibes.com` domain), or move the SW registration behind a feature flag.
 
 ---
 
-## Recommended Execution Order (so the user sees value fast)
+## B. Rough edges & refinement opportunities
 
-| Order | Work | Visible payoff |
-|---|---|---|
-| 1 | Phase 1 (color cleanup) | Whole app instantly looks unified & luxury |
-| 2 | Phase 2 (UI primitives + Dashboard/Profile/Analytics polish) | Top traffic pages feel premium |
-| 3 | Phase 4 partial — Signature Timer + Achievements visuals | Two big "wow" features |
-| 4 | Phase 3 (30-day coherence) | App finally feels like one product, not a collection of pages |
-| 5 | Phase 5 (retention) + Phase 4 remaining | Drives repeat usage |
-| 6 | Phase 6 (perf/QA) | Production-ready quality bar |
+### DayPage / Guided Practice
+- Two redundant play controls (hero "Listen Only" + inline player) confuse users. Consolidate into one bar.
+- No "next sentence" highlighting while narration plays — Calm and Headspace both highlight the line being spoken.
+- No voice-preview snippet on the voice picker — users can't sample Aria vs George before generating a full track.
+- "Read first" scroll target is silent — no visual cue when scroll lands on the practice section.
+
+### Audio Library
+- No search debounce, no skeletons during filter changes, no empty-state illustration.
+- Course cards mix "play step" + "queue step" in a cramped row — hard to tap on mobile.
+- No download / offline indication despite the `OfflineDownloadsPage` existing elsewhere.
+
+### Sleep Stories
+- Hero is now premium (recent work), but cards still don't show narrator avatar / chapter count.
+- No "continue where you left off" — sleep listeners always drift, so resume position matters more than anywhere else.
+
+### Landing page hero
+- 3D cosmic scene is good now, but the rest of the page (features, pricing, testimonials) is still standard — disconnect in polish level.
+
+### Cross-cutting
+- ElevenLabs hook has no UI for the "fallback to browser TTS" case beyond a tiny error string — users get robotic SpeechSynthesis with no warning.
+- `useAmbientBed` and `useTextToSpeech` are not bridged — narration plays without the ambient bed underneath unless the user manually opens the mixer.
+- No global "now playing" mini-bar persists across navigation — switching pages kills audio.
+- Pricing page mentions "Aria" as a premium voice but `VOICE_LIBRARY` in the edge function only defines sarah/george/matilda/charlie. Name mismatch.
+- Mood tracker fix from last turn should be regression-tested on Week + Day pages.
 
 ---
 
-## What I will NOT change without your direction
-- Pricing, copy, course content (days, scripts, FAQs)
-- Brand identity (forest + gold + cream stays)
-- Database schema (only additive — new tables for `coach_messages`, etc.)
-- Auth flow (already solid)
+## C. Phased rollout
+
+### Phase 1 — Critical fixes (this turn after approval)
+1. Fix DayPage inline player to honor `selectedVoice` + flush audio on voice change.
+2. Replace broken Unsplash thumbnails with local generated images for all 8 courses/sessions; add `onError` fallback to the library page.
+3. Disable `sw.js` registration on preview subdomains to silence the console error.
+4. Rename "Aria" → "Matilda" (or add Aria to `VOICE_LIBRARY`) so the pricing page and the actual voice library match.
+
+### Phase 2 — Real audio across the Audio Library
+1. Add `script` field to each `MeditationSession` / `CourseStep`.
+2. Refactor `AudioPlayer.tsx` to call `useTextToSpeech` with proper `trackKey`/`category`/`voice` per session, replacing the raw `<audio src=audioUrl>` path.
+3. Cache hits will make repeat plays instant (already supported by the edge function).
+4. Add narrator-voice badge on each card.
+
+### Phase 3 — Premium narration UX
+1. Single unified narration bar on DayPage (kill the duplicate inline player).
+2. Active-sentence highlighting synced to `currentTime` / estimated WPM.
+3. Voice picker shows a 6-second preview snippet per voice (pre-generated, cached).
+4. Auto-pair ambient bed with narration via `useAmbientBed` — open the mixer with a sensible default per category.
+
+### Phase 4 — Continuity & retention features
+1. Global mini-player that survives route changes (portal-mounted, reads from a Zustand store).
+2. "Resume where you left off" for sleep stories — persist `currentTime` per `trackKey` in `localStorage`.
+3. Offline downloads wired to the existing `OfflineDownloadsPage` using `caches.put()` for cached MP3s.
+4. Real haptics + subtle audio cues on completion (web vibration API + a single soft chime).
+
+### Phase 5 — Audit pass & QA
+1. Manual walk-through of every page in the browser tool, mobile viewport, with screenshots.
+2. Verify all 4 voices produce distinct audio (delete cache rows, re-trigger, listen).
+3. Verify every Audio Library card renders an image and plays meditation audio (not rock music).
+4. Lighthouse run on landing page to confirm 3D hero didn't regress LCP.
 
 ---
 
-**Approve this plan and I'll start with Phase 1 (full brand-color sweep across all 40+ files, plus chart token replacement, dark-mode audit, and the Sidebar/JournalPage fixes).** Each subsequent phase will be a separate approved batch so the app stays stable between releases.
+## Technical notes (for the implementation turn)
+
+- **Voice fix:** in `DayPage.tsx`, wrap the inline-player click in the same options object used for the hero button, AND add `useEffect(() => { tts.stop(); }, [selectedVoice])` so the cached `audioRef` is dropped when the user switches voice.
+- **Thumbnails:** generate via `imagegen` at 800×600 to `src/assets/audio-library/{slug}.jpg`, then import each as an ES6 module and assign to `thumbnail`. Add `onError={(e) => (e.currentTarget.src = fallback)}` on the two `<img>` tags in `AudioLibraryPage.tsx`.
+- **SW guard:** in `webPush.ts`, early-return when `location.hostname.endsWith('lovable.app')`.
+- **Audio Library narration:** add an optional `narrationScript?: string` to `MeditationSession`. When present, `AudioPlayer` uses `useTextToSpeech.generateAndPlay(narrationScript, { trackKey: session.id, category: 'daily_meditation', title: session.title, voice: 'sarah' })` and ignores `audioUrl`. Fall back to `audioUrl` if no script.
+- **Mini-player store:** new `src/lib/playerStore.ts` (Zustand) holding `{ track, isPlaying, currentTime }`; mounted at `App.tsx` level so it persists across `<Routes>`.
+
+---
+
+Approve and I will start with **Phase 1** (the four critical fixes) in the next turn, then we iterate phase by phase.

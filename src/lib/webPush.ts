@@ -33,6 +33,11 @@ export function isPushSupported(): boolean {
 
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!("serviceWorker" in navigator)) return null;
+  // Skip on Lovable preview subdomains — the preview proxy serves /sw.js
+  // behind a redirect, which the browser disallows for service workers.
+  if (typeof window !== "undefined" && /\.lovable\.(app|dev)$/.test(window.location.hostname)) {
+    return null;
+  }
   try {
     const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
     await navigator.serviceWorker.ready;

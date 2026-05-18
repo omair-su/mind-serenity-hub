@@ -1,6 +1,9 @@
 // Premium Audio Library data — preserved verbatim from product spec.
 // Provides SLEEP_STORIES, COURSES, SESSIONS plus shared types used by the
 // Audio Library page and AudioPlayer component.
+import precisionFocusImg from "@/assets/audio-library/precision-focus.jpg";
+import atmosphericDissolutionImg from "@/assets/audio-library/atmospheric-dissolution.jpg";
+export { default as AUDIO_LIBRARY_FALLBACK_IMG } from "@/assets/audio-library/fallback.jpg";
 
 export type SessionCategory = 'Sleep' | 'Focus' | 'Anxiety' | 'Basics' | 'Nature' | 'Stories';
 
@@ -132,7 +135,7 @@ export const COURSES: MeditationCourse[] = [
     goal: 'Performance',
     author: 'Marcus Thorne',
     description: 'Developed for high-stakes environments, this protocol uses neurological sharpening techniques to eliminate alpha-wave interference and optimize executive function.',
-    thumbnail: 'https://images.unsplash.com/photo-1493246507139-91e8bef99c02?auto=format&fit=crop&q=80&w=1200',
+    thumbnail: precisionFocusImg,
     expertInsight: 'Focus is a muscle that requires both isometric tension and rhythmic release. We train the attention to hit a target and hold with zero drift.',
     testimonial: {
       text: "The singular focus point technique is now my go-to before board meetings.",
@@ -225,7 +228,7 @@ export const SESSIONS: MeditationSession[] = [
     description: 'Dissolve the boundaries between self and environment. A technical awareness session focused on peripheral auditory and spatial resonance.',
     duration: '15 min',
     category: 'Basics',
-    thumbnail: 'https://images.unsplash.com/photo-1499209974431-9dac3adaf471?auto=format&fit=crop&q=80&w=800',
+    thumbnail: atmosphericDissolutionImg,
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
     author: 'Elena Vance'
   },

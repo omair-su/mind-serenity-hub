@@ -9,6 +9,7 @@ import {
   SESSIONS,
   SLEEP_STORIES,
   COURSES,
+  AUDIO_LIBRARY_FALLBACK_IMG,
   type MeditationSession,
   type SessionCategory,
 } from "@/data/audioLibrary";
@@ -146,8 +147,13 @@ export default function AudioLibraryPage() {
                 <img
                   src={course.thumbnail}
                   alt={course.title}
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale-[20%] group-hover:scale-105 transition-transform duration-700"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    if (t.src !== AUDIO_LIBRARY_FALLBACK_IMG) t.src = AUDIO_LIBRARY_FALLBACK_IMG;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />
                 <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur-md text-[10px] uppercase tracking-[0.2em] font-bold text-foreground border border-border">
@@ -251,8 +257,13 @@ export default function AudioLibraryPage() {
                     <img
                       src={s.thumbnail}
                       alt={s.title}
+                      loading="lazy"
                       className="w-full h-full object-cover grayscale-[15%] group-hover:scale-105 transition-transform duration-700"
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        if (t.src !== AUDIO_LIBRARY_FALLBACK_IMG) t.src = AUDIO_LIBRARY_FALLBACK_IMG;
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                     <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur-md text-[10px] uppercase tracking-[0.2em] font-bold text-foreground border border-border">
