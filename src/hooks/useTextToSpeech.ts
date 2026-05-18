@@ -35,9 +35,14 @@ export function useTextToSpeech() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    // Drop the cached audio element so `hasAudio` flips false and the next
+    // `generateAndPlay` call re-fetches with the freshly-selected voice
+    // instead of just toggling the previous voice's MP3.
+    audioRef.current = null;
     setIsPlaying(false);
     setProgress(0);
     setCurrentTime(0);
+    setDuration(0);
   }, []);
 
   useEffect(() => {
