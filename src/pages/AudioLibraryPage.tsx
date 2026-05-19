@@ -179,6 +179,8 @@ export default function AudioLibraryPage() {
                       thumbnail: course.thumbnail,
                       audioUrl: step.audioUrl,
                       author: course.author,
+                      script: step.script,
+                      voice: step.voice,
                     };
                     return (
                       <div
