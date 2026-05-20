@@ -1,13 +1,15 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { weeks } from "@/data/courseData";
 import {
   ChevronLeft, ChevronRight, Heart, Play, Pause, Volume2, Check,
-  Timer, Loader2, Square, Music, X
+  Timer, Loader2, Square, Music, X, Headphones
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useAmbientBed } from "@/hooks/useAmbientBed";
+import NarrationBar from "@/components/NarrationBar";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackForDay } from "@/lib/realAmbientTracks";
 import DayHeroCinema from "@/components/day/DayHeroCinema";
