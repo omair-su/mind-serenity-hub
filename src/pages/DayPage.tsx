@@ -99,6 +99,27 @@ export default function DayPage() {
   const { isPremium } = useIsPremium();
   const isLockedDay = dayNumber >= 8 && !isPremium;
 
+  // Ambient bed auto-paired with day's recommended soundscape
+  const recommendedBed = getDayHero(dayNumber).ambientBed;
+  const ambientBed = useAmbientBed(recommendedBed, 30);
+  useEffect(() => {
+    ambientBed.setBed(recommendedBed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayNumber]);
+
+  // 6-second voice preview snippet (cached per voice via trackKey)
+  const previewVoice = useCallback((voice: VoiceKey) => {
+    const snippet = "Welcome. Take a slow breath in… and gently let it go. You are exactly where you need to be.";
+    tts.generateAndPlay(snippet, {
+      trackKey: `voice-preview-${voice}`,
+      category: "daily_meditation",
+      title: `Voice preview · ${voice}`,
+      voice,
+      ambientBed: null,
+      isPremium: !FREE_VOICES.includes(voice),
+    });
+  }, [tts]);
+
   // Reset TTS when navigating to a different day
   useEffect(() => {
     tts.stop();
