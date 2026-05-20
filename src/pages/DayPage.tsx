@@ -895,6 +895,25 @@ export default function DayPage() {
         feature={premiumGate?.feature ?? ""}
         description={premiumGate?.description}
       />
+
+      {/* ─── UNIFIED NARRATION BAR (fixed at bottom; appears when audio is active) ─── */}
+      {(tts.hasAudio || tts.isLoading) && (
+        <NarrationBar
+          title={`Day ${dayNumber} · ${day.title}`}
+          subtitle={PREMIUM_VOICES.find(v => v.key === selectedVoice)?.label}
+          isLoading={tts.isLoading}
+          isPlaying={tts.isPlaying}
+          currentTime={tts.currentTime}
+          duration={tts.duration}
+          formatTime={tts.formatTime}
+          onTogglePlay={playFullNarration}
+          onClose={() => { tts.stop(); ambientBed.stopBed(); }}
+          bed={ambientBed.bed}
+          bedVolume={ambientBed.volume}
+          onBedChange={ambientBed.setBed}
+          onBedVolumeChange={ambientBed.setVolume}
+        />
+      )}
     </div>
   );
 }
