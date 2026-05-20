@@ -529,13 +529,18 @@ export default function DayPage() {
             <div className="absolute bottom-0 right-0 w-32 h-16 bg-gradient-to-tl from-sage/10 to-transparent rounded-tl-full" />
             {day.guidedPractice.map((para, i) => {
               const isPause = para.startsWith("[");
+              const isActive = i === activeParaIdx;
               return (
                 <p
                   key={i}
-                  className={`font-body leading-[2.2] relative z-10 ${
+                  className={`font-body leading-[2.2] relative z-10 rounded-lg transition-all duration-500 ${
                     isPause
                       ? "text-primary/60 italic text-sm pl-4 border-l-2 border-primary/20"
                       : "text-foreground/85 text-[17px]"
+                  } ${
+                    isActive
+                      ? "bg-[hsl(var(--gold))]/10 ring-1 ring-[hsl(var(--gold))]/30 text-foreground px-3 py-2 -mx-3 shadow-[0_0_24px_-8px_hsl(var(--gold)/0.5)]"
+                      : "opacity-90"
                   }`}
                 >
                   {para}
