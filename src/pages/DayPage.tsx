@@ -107,11 +107,18 @@ export default function DayPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayNumber]);
 
+  // Tracks which trackKey the shared TTS engine currently has loaded, so we
+  // don't accidentally "toggle" a voice preview when the user wants to play
+  // the full narration (and vice-versa).
+  const [loadedTrackKey, setLoadedTrackKey] = useState<string | null>(null);
+
   // 6-second voice preview snippet (cached per voice via trackKey)
   const previewVoice = useCallback((voice: VoiceKey) => {
     const snippet = "Welcome. Take a slow breath in… and gently let it go. You are exactly where you need to be.";
+    const key = `voice-preview-${voice}`;
+    setLoadedTrackKey(key);
     tts.generateAndPlay(snippet, {
-      trackKey: `voice-preview-${voice}`,
+      trackKey: key,
       category: "daily_meditation",
       title: `Voice preview · ${voice}`,
       voice,
