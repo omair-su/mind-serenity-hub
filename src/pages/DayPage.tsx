@@ -400,10 +400,15 @@ export default function DayPage() {
       });
       return;
     }
-    if (tts.hasAudio) { tts.togglePlayPause(); return; }
     if (!day) return;
+    const fullKey = `day-${dayNumber}-listen-${selectedVoice}`;
+    if (loadedTrackKey === fullKey && tts.hasAudio) {
+      tts.togglePlayPause();
+      return;
+    }
+    setLoadedTrackKey(fullKey);
     tts.generateAndPlay(day.guidedPractice.join("\n\n"), {
-      trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
+      trackKey: fullKey,
       category: "daily_meditation",
       title: `Day ${dayNumber} · ${day.title}`,
       voice: selectedVoice,
