@@ -361,6 +361,50 @@ export default function DayPage() {
     toggleCheck(0); // Mark meditation as complete
   };
 
+  // Map narration progress → active paragraph index for sentence highlighting.
+  // Weighted by character length so a short "[pause]" line doesn't get the same
+  // share as a 200-char body paragraph.
+  const paraOffsets = useMemo(() => {
+    if (!day) return { offsets: [0], total: 0 };
+    let acc = 0;
+    const offsets = day.guidedPractice.map((p) => {
+      const start = acc;
+      acc += Math.max(20, p.length); // floor so empty pause lines still tick by
+      return start;
+    });
+    return { offsets, total: acc };
+  }, [day]);
+  const activeParaIdx = useMemo(() => {
+    if (!tts.isPlaying && !tts.hasAudio) return -1;
+    if (tts.duration <= 0 || paraOffsets.total === 0) return -1;
+    const cursor = (tts.currentTime / tts.duration) * paraOffsets.total;
+    let idx = 0;
+    for (let i = 0; i < paraOffsets.offsets.length; i++) {
+      if (paraOffsets.offsets[i] <= cursor) idx = i;
+    }
+    return idx;
+  }, [tts.currentTime, tts.duration, tts.isPlaying, tts.hasAudio, paraOffsets]);
+
+  const playFullNarration = () => {
+    if (isLockedDay) {
+      setPremiumGate({
+        feature: `Day ${dayNumber} is a Plus chapter`,
+        description: "Unlock Days 8–30 with Willow Plus to listen to the full guided narration.",
+      });
+      return;
+    }
+    if (tts.hasAudio) { tts.togglePlayPause(); return; }
+    if (!day) return;
+    tts.generateAndPlay(day.guidedPractice.join("\n\n"), {
+      trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
+      category: "daily_meditation",
+      title: `Day ${dayNumber} · ${day.title}`,
+      voice: selectedVoice,
+      ambientBed: null,
+      isPremium: !FREE_VOICES.includes(selectedVoice),
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* ─── STICKY NAVBAR ─── */}
