@@ -382,6 +382,7 @@ export default function DayPage() {
     return { offsets, total: acc };
   }, [day]);
   const activeParaIdx = useMemo(() => {
+    if (!loadedTrackKey || !loadedTrackKey.startsWith(`day-${dayNumber}-listen-`)) return -1;
     if (!tts.isPlaying && !tts.hasAudio) return -1;
     if (tts.duration <= 0 || paraOffsets.total === 0) return -1;
     const cursor = (tts.currentTime / tts.duration) * paraOffsets.total;
@@ -390,7 +391,7 @@ export default function DayPage() {
       if (paraOffsets.offsets[i] <= cursor) idx = i;
     }
     return idx;
-  }, [tts.currentTime, tts.duration, tts.isPlaying, tts.hasAudio, paraOffsets]);
+  }, [tts.currentTime, tts.duration, tts.isPlaying, tts.hasAudio, paraOffsets, loadedTrackKey, dayNumber]);
 
   const playFullNarration = () => {
     if (isLockedDay) {
