@@ -568,84 +568,73 @@ export default function DayPage() {
               const locked = v.tier === "premium" && !isPremium;
               const active = selectedVoice === v.key;
               return (
-                <button
-                  key={v.key}
-                  onClick={() => requestPremiumVoice(v.key)}
-                  className={`relative px-3 py-2.5 rounded-xl text-xs font-body font-medium transition-all border
-                    ${active
-                      ? "bg-gradient-to-r from-gold to-gold-dark text-card border-gold shadow-gold"
-                      : locked
-                        ? "bg-card/40 text-muted-foreground/70 border-border/40 hover:border-gold/40"
-                        : "bg-card text-foreground border-border hover:border-primary/40"}`}
-                >
-                  <span className="block truncate">{v.label}</span>
-                  {locked && (
-                    <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-gold" />
+                <div key={v.key} className="relative">
+                  <button
+                    onClick={() => requestPremiumVoice(v.key)}
+                    className={`relative w-full px-3 py-2.5 rounded-xl text-xs font-body font-medium transition-all border
+                      ${active
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-card border-gold shadow-gold"
+                        : locked
+                          ? "bg-card/40 text-muted-foreground/70 border-border/40 hover:border-gold/40"
+                          : "bg-card text-foreground border-border hover:border-primary/40"}`}
+                  >
+                    <span className="block truncate pr-5">{v.label}</span>
+                    {locked && (
+                      <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-gold" />
+                    )}
+                  </button>
+                  {!locked && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); previewVoice(v.key); }}
+                      disabled={tts.isLoading}
+                      title="Preview voice"
+                      className="absolute -bottom-2 -right-2 w-7 h-7 rounded-full bg-card border border-gold/40 shadow-sm flex items-center justify-center hover:scale-110 transition-transform disabled:opacity-50"
+                    >
+                      {tts.isLoading ? (
+                        <Loader2 className="w-3 h-3 text-gold animate-spin" />
+                      ) : (
+                        <Play className="w-3 h-3 text-gold ml-0.5" />
+                      )}
+                    </button>
                   )}
-                </button>
+                </div>
               );
             })}
           </div>
+          {tts.error && <p className="text-[11px] text-destructive mt-3 text-center">{tts.error}</p>}
         </div>
 
-        {/* ─── AUDIO PLAYER ─── */}
-        <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--border))] p-6 shadow-soft">
-          <div className="text-center mb-4">
-            <p className="text-xs font-body text-muted-foreground">🎙️ Narrated by Willow Vibes Coach · AI-Generated Voice</p>
-            {tts.error && <p className="text-xs text-destructive mt-1">{tts.error}</p>}
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => {
-                if (tts.hasAudio) {
-                  tts.togglePlayPause();
-                } else {
-                  const fullScript = day.guidedPractice.join("\n\n");
-                  tts.generateAndPlay(fullScript, {
-                    trackKey: `day-${dayNumber}-listen-${selectedVoice}`,
-                    category: "daily_meditation",
-                    title: `Day ${dayNumber} · ${day.title}`,
-                    voice: selectedVoice,
-                    ambientBed: null,
-                    isPremium: !FREE_VOICES.includes(selectedVoice),
-                  });
-                }
-              }}
-              disabled={tts.isLoading}
-              className="w-14 h-14 rounded-full bg-gold flex items-center justify-center shadow-lg hover:scale-105 transition-transform flex-shrink-0 disabled:opacity-60"
-            >
+        {/* ─── PLAY FULL NARRATION CTA (the unified bar mounts at the bottom) ─── */}
+        <button
+          onClick={playFullNarration}
+          disabled={tts.isLoading}
+          className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--charcoal))] border border-[hsl(var(--gold))]/30 p-6 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.4)] hover:scale-[1.005] transition-transform disabled:opacity-70"
+        >
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[hsl(var(--gold))]/15 blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex items-center gap-4 text-left">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-[0_0_24px_hsl(var(--gold)/0.4)] flex-shrink-0">
               {tts.isLoading ? (
-                <Loader2 className="w-6 h-6 text-card animate-spin" />
+                <Loader2 className="w-6 h-6 text-[hsl(var(--charcoal))] animate-spin" />
               ) : tts.isPlaying ? (
-                <Pause className="w-6 h-6 text-card" />
+                <Pause className="w-6 h-6 text-[hsl(var(--charcoal))]" />
               ) : (
-                <Play className="w-6 h-6 text-card ml-0.5" />
+                <Headphones className="w-6 h-6 text-[hsl(var(--charcoal))]" />
               )}
-            </button>
-            <div className="flex-1 space-y-2">
-              <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${tts.progress}%` }} />
-              </div>
-              <div className="flex items-center justify-between text-[11px] font-body text-muted-foreground">
-                <span>{tts.formatTime(tts.currentTime)}</span>
-                <span>{tts.duration > 0 ? tts.formatTime(tts.duration) : day.duration}</span>
-              </div>
             </div>
-            <div className="hidden sm:flex items-center gap-2">
-              {tts.isPlaying && (
-                <button onClick={tts.stop} className="text-muted-foreground hover:text-foreground p-1" title="Stop">
-                  <Square className="w-4 h-4" />
-                </button>
-              )}
-              <Volume2 className="w-4 h-4 text-muted-foreground" />
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))] mb-1">
+                {tts.isLoading ? "Composing voice…" : tts.isPlaying ? "Now playing" : "Listen to today's practice"}
+              </p>
+              <p className="font-display text-base text-white/95 truncate">
+                {day.title} · {PREMIUM_VOICES.find(v => v.key === selectedVoice)?.label}
+              </p>
+              <p className="text-[11px] font-body text-white/60 mt-1">
+                Sentences highlight above as they are spoken · Ambient bed pairs automatically
+              </p>
             </div>
           </div>
-          {tts.isLoading && (
-            <p className="text-center text-xs font-body text-muted-foreground mt-3 animate-pulse">
-              ✨ Generating calming narration for you...
-            </p>
-          )}
-        </div>
+        </button>
+
 
         {/* ─── TIMER ─── */}
         <div className="relative overflow-hidden bg-[hsl(var(--cream))]/70 rounded-2xl border border-[hsl(var(--gold))]/25 p-8 text-center shadow-soft">
