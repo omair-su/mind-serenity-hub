@@ -1,507 +1,681 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Shield, Star, Clock, Users, CheckCircle, Sparkles, Brain, HeartPulse, Moon, Wind, Headphones, LineChart, Smile, BookOpen, Flower2, Footprints, Focus, Music2, Trophy, Timer, Award, Library, ScrollText, Activity, AlertCircle } from "lucide-react";
+import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
-import PremiumHero from "@/components/landing/PremiumHero";
 
-// Below-the-fold sections are lazy-loaded so they don't bloat the initial JS bundle
-const AboutSection = lazy(() => import("@/components/AboutSection"));
-const ScienceSection = lazy(() => import("@/components/ScienceSection"));
-const CurriculumSection = lazy(() => import("@/components/CurriculumSection"));
-const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+// Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
-// Hero is preloaded directly from index.html (stable /public URL), so no JS-side preload needed.
+/**
+ * Willow Vibes — premium, minimal, editorial landing.
+ * Palette: Sage & Cream. Type: Cormorant Garamond (display) + Karla (body).
+ * Structure: stacked full-width sections, generous whitespace, no clutter.
+ */
 
-// Calm-style design tokens (inline for this page so we don't disturb the global system)
-// Deep navy text, soft pastel surfaces, blue→violet gradient CTAs, airy white sections.
-const NAVY = "#0E2A47";
-const NAVY_SOFT = "#234063";
-const SLATE = "#5B6B82";
-const CTA_GRADIENT = "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)";
+// Local design tokens (sage + cream luxury palette)
+const CREAM = "#f5f0e8";
+const CREAM_DEEP = "#ede5d7";
+const SAGE_PALE = "#dce5d4";
+const SAGE = "#a8c0a0";
+const SAGE_DEEP = "#7d9b76";
+const FOREST = "#3a4d36";
+const INK = "#1f231d";
+const MUTED = "#6b7268";
 
-// Royalty-free natural imagery from Unsplash (no copyright issues, no extra credit cost)
-const PHOTOS = {
-  woman_reading: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=1200&q=80", // woman reading by window
-  ocean_arms: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1200&q=80", // person on cliff
-  road_sunset: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80", // peaceful road
-  forest_mist: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80", // forest sun
-  ocean_wave: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1600&q=80", // ocean wave (pricing footer)
-  pebbles_zen: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80",
-  sunrise_field: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
-  flowers: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80",
-};
+const fontStyles = `
+  .ff-display { font-family: 'Cormorant Garamond', 'Fraunces', Georgia, serif; letter-spacing: -0.015em; }
+  .ff-body { font-family: 'Karla', 'Inter', system-ui, sans-serif; }
+  .ff-eyebrow { font-family: 'Karla', system-ui, sans-serif; letter-spacing: 0.32em; text-transform: uppercase; }
+`;
+
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&w=1800&q=80";
+const RITUAL_IMG =
+  "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=1400&q=80";
+const FOREST_IMG =
+  "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80";
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [showStickyCTA, setShowStickyCTA] = useState(false);
-  
 
   useEffect(() => {
-    // Throttle scroll work via rAF and only read window.scrollY (no layout-forcing reads)
-    let ticking = false;
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        setScrolled(y > 50);
-        setShowStickyCTA(y > window.innerHeight * 0.9);
-        ticking = false;
-      });
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    // Use IntersectionObserver instead of getBoundingClientRect on every scroll
-    // (which forced a layout/reflow per scroll event for 7 sections).
-    const sectionIds = ["home", "about", "science", "curriculum", "testimonials", "pricing", "faq"];
-    const elements = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => !!el);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Pick the entry closest to the top that is intersecting the 100px line
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (visible?.target.id) setActiveSection(visible.target.id);
-      },
-      { rootMargin: "-100px 0px -50% 0px", threshold: 0 }
-    );
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      observer.disconnect();
-    };
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setMenuOpen(false);
-    }
-  };
-
-  const navLinks = [
-    { label: "About", id: "about" },
-    { label: "Science", id: "science" },
-    { label: "Curriculum", id: "curriculum" },
-    { label: "Testimonials", id: "testimonials" },
-    { label: "Pricing", id: "pricing" },
+  const nav = [
+    { label: "Philosophy", id: "philosophy" },
+    { label: "Practice", id: "practice" },
+    { label: "Plans", id: "plans" },
     { label: "FAQ", id: "faq" },
   ];
 
-  return (
-    <div className="min-h-screen bg-white" style={{ color: NAVY }}>
-      {/* Calm-style display font — uses already-preloaded Plus Jakarta Sans to avoid render-blocking @import that delayed LCP. */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .font-calm-display { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif; letter-spacing: -0.01em; }
-          .font-calm-body { font-family: 'Inter', system-ui, sans-serif; }
-        `,
-      }} />
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
+  };
 
-      {/* Navigation — white when scrolled, transparent over hero */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-slate-100" : "bg-transparent"}`}>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <button onClick={() => scrollToSection("home")} className="flex items-center gap-2 font-calm-display text-2xl font-semibold">
-            <LogoIcon size={36} animated />
-            <span style={{ color: scrolled ? NAVY : "#fff" }}>Willow</span>
-            <span style={{ color: scrolled ? "#8267D6" : "#E9D9FF" }} className="italic">Vibes</span>
+  return (
+    <div className="min-h-screen" style={{ background: CREAM, color: INK }}>
+      <style dangerouslySetInnerHTML={{ __html: fontStyles }} />
+
+      {/* ─── Navigation ─────────────────────────────────────────────── */}
+      <nav
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+          scrolled ? "backdrop-blur-xl border-b" : ""
+        }`}
+        style={{
+          background: scrolled ? "rgba(245,240,232,0.85)" : "transparent",
+          borderColor: scrolled ? "rgba(125,155,118,0.18)" : "transparent",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 flex items-center justify-between">
+          <button onClick={() => scrollTo("top")} className="flex items-center gap-2.5 ff-display text-2xl">
+            <LogoIcon size={32} />
+            <span style={{ color: INK }}>Willow</span>
+            <span className="italic" style={{ color: SAGE_DEEP }}>Vibes</span>
           </button>
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+
+          <div className="hidden md:flex items-center gap-10">
+            {nav.map((l) => (
               <button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                className="text-sm font-calm-body font-medium transition-colors"
-                style={{
-                  color: scrolled
-                    ? (activeSection === link.id ? NAVY : SLATE)
-                    : (activeSection === link.id ? "#fff" : "rgba(255,255,255,0.85)"),
-                }}
+                key={l.id}
+                onClick={() => scrollTo(l.id)}
+                className="ff-body text-[13px] font-medium transition-opacity hover:opacity-60"
+                style={{ color: INK }}
               >
-                {link.label}
+                {l.label}
               </button>
             ))}
           </div>
-          <div className="hidden md:flex gap-3">
-            <Link to="/sign-in" className="px-5 py-2 text-sm font-calm-body font-medium transition-colors"
-              style={{ color: scrolled ? NAVY : "#fff" }}>
-              Log In
+
+          <div className="hidden md:flex items-center gap-2">
+            <Link
+              to="/sign-in"
+              className="ff-body text-[13px] font-medium px-4 py-2 transition-opacity hover:opacity-60"
+              style={{ color: INK }}
+            >
+              Sign In
             </Link>
-            <Link to="/pricing">
+            <Link to="/sign-in?redirect=/app">
               <button
-                className="px-6 py-2.5 rounded-full font-calm-body font-semibold text-sm text-white transition-transform hover:scale-[1.03]"
-                style={{ background: scrolled ? CTA_GRADIENT : "#fff", color: scrolled ? "#fff" : NAVY, boxShadow: scrolled ? "0 8px 24px -8px rgba(91,127,224,0.5)" : "0 4px 16px rgba(0,0,0,0.08)" }}
+                className="ff-body text-[13px] font-semibold px-5 py-2.5 rounded-full transition-transform hover:scale-[1.03]"
+                style={{ background: FOREST, color: CREAM }}
               >
-                Begin Your Journey
+                Begin Free
               </button>
             </Link>
           </div>
-          <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-            {menuOpen
-              ? <X className="w-6 h-6" style={{ color: scrolled ? NAVY : "#fff" }} />
-              : <Menu className="w-6 h-6" style={{ color: scrolled ? NAVY : "#fff" }} />}
+
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Menu"
+            style={{ color: INK }}
+          >
+            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-        {menuOpen && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="md:hidden bg-white border-t border-slate-100 p-4">
-            <div className="space-y-4">
-              {navLinks.map((link) => (
-                <button key={link.id} onClick={() => scrollToSection(link.id)} className="block w-full text-left px-4 py-2 font-calm-body font-medium" style={{ color: NAVY }}>
-                  {link.label}
+
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="md:hidden px-5 pb-6 pt-2 border-t"
+              style={{ background: CREAM, borderColor: "rgba(125,155,118,0.18)" }}
+            >
+              {nav.map((l) => (
+                <button
+                  key={l.id}
+                  onClick={() => scrollTo(l.id)}
+                  className="block w-full text-left py-3 ff-body text-[15px]"
+                  style={{ color: INK }}
+                >
+                  {l.label}
                 </button>
               ))}
-              <div className="pt-4 space-y-2 border-t border-slate-100">
-                <Link to="/sign-in" className="block w-full">
-                  <button className="w-full py-3 rounded-full border border-slate-200 font-calm-body font-medium" style={{ color: NAVY }}>Log In</button>
+              <div className="pt-3 grid grid-cols-2 gap-2">
+                <Link to="/sign-in">
+                  <button
+                    className="w-full py-3 rounded-full ff-body text-sm font-medium border"
+                    style={{ borderColor: SAGE, color: INK }}
+                  >
+                    Sign In
+                  </button>
                 </Link>
-                <Link to="/pricing" className="block w-full">
-                  <button className="w-full py-3 rounded-full font-calm-body font-semibold text-white" style={{ background: CTA_GRADIENT }}>Begin Your Journey</button>
+                <Link to="/sign-in?redirect=/app">
+                  <button
+                    className="w-full py-3 rounded-full ff-body text-sm font-semibold"
+                    style={{ background: FOREST, color: CREAM }}
+                  >
+                    Begin Free
+                  </button>
                 </Link>
               </div>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
-      {/* Sticky scroll CTA */}
-      <AnimatePresence>
-        {showStickyCTA && (
-          <motion.div
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -60, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed top-[68px] left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-sm"
-          >
-            <div className="max-w-7xl mx-auto px-4 md:px-6 py-2.5 flex items-center justify-center gap-3 sm:gap-6">
-              <div className="hidden sm:flex items-center gap-2 text-xs font-calm-body" style={{ color: SLATE }}>
-                <Sparkles className="w-3.5 h-3.5" style={{ color: "#8267D6" }} />
-                <span>Founders Lifetime · $199 (was $599)</span>
-              </div>
-              <Link to="/pricing">
-                <button className="rounded-full font-calm-body font-semibold text-white text-xs px-5 py-2 transition-transform hover:scale-[1.04]" style={{ background: CTA_GRADIENT }}>
-                  Claim Your Spot →
+      {/* ─── Hero ───────────────────────────────────────────────────── */}
+      <section id="top" className="relative w-full overflow-hidden" style={{ background: CREAM }}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10 pt-36 md:pt-44 pb-20 md:pb-32">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-20 items-center">
+            {/* Text column */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="ff-eyebrow text-[10px] mb-6" style={{ color: SAGE_DEEP }}>
+                Premium Mindfulness · Est. 2026
+              </p>
+              <h1
+                className="ff-display font-light leading-[0.98] tracking-tight"
+                style={{
+                  color: INK,
+                  fontSize: "clamp(3rem, 7.5vw, 6.5rem)",
+                }}
+              >
+                Quiet the noise.
+                <br />
+                <span className="italic" style={{ color: SAGE_DEEP }}>
+                  Return to yourself.
+                </span>
+              </h1>
+              <p
+                className="ff-body mt-7 max-w-lg text-[17px] leading-[1.65]"
+                style={{ color: MUTED }}
+              >
+                A considered practice of guided meditation, breathwork, sleep stories
+                and ambient sound — composed for the modern mind.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 mt-9">
+                <Link to="/sign-in?redirect=/app">
+                  <button
+                    className="ff-body group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:scale-[1.03]"
+                    style={{ background: FOREST, color: CREAM }}
+                  >
+                    Begin 7-Day Trial
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                </Link>
+                <button
+                  onClick={() => scrollTo("plans")}
+                  className="ff-body px-6 py-3.5 rounded-full text-[14px] font-medium transition-colors border"
+                  style={{ borderColor: "rgba(125,155,118,0.4)", color: INK }}
+                >
+                  View Plans
                 </button>
-              </Link>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-8 ff-body text-[12px]" style={{ color: MUTED }}>
+                <span className="inline-flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5" style={{ color: SAGE_DEEP }} /> 7 days complimentary
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" style={{ color: SAGE_DEEP }} /> Cancel anytime
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1.5">
+                  <Star className="w-3.5 h-3.5" style={{ color: SAGE_DEEP }} /> 4.9 / 5 · 10k+ practicing
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Image column */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              <div
+                className="relative aspect-[4/5] w-full rounded-[2px] overflow-hidden"
+                style={{ boxShadow: "0 40px 80px -30px rgba(58,77,54,0.35)" }}
+              >
+                <img
+                  src={HERO_IMG}
+                  alt="Calm sage moment"
+                  loading="eager"
+                  fetchPriority="high"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent 40%, rgba(245,240,232,0.25) 100%)",
+                  }}
+                />
+              </div>
+              {/* Floating quiet caption */}
+              <div
+                className="hidden md:flex absolute -left-6 bottom-10 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
+                style={{ background: "rgba(245,240,232,0.92)", border: `1px solid ${SAGE_PALE}` }}
+              >
+                <div>
+                  <p className="ff-display italic text-[20px] leading-tight" style={{ color: FOREST }}>
+                    "Stillness, finally on my schedule."
+                  </p>
+                  <p className="ff-eyebrow text-[9px] mt-2" style={{ color: MUTED }}>
+                    Elena R. · Member
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Hairline divider */}
+        <div className="max-w-7xl mx-auto px-5 md:px-10">
+          <div className="h-px" style={{ background: "rgba(125,155,118,0.25)" }} />
+        </div>
+      </section>
+
+      {/* ─── Philosophy / About ─────────────────────────────────────── */}
+      <section id="philosophy" className="w-full" style={{ background: CREAM }}>
+        <div className="max-w-5xl mx-auto px-5 md:px-10 py-24 md:py-36 text-center">
+          <p className="ff-eyebrow text-[10px] mb-6" style={{ color: SAGE_DEEP }}>
+            Philosophy
+          </p>
+          <h2
+            className="ff-display font-light leading-[1.05]"
+            style={{ color: INK, fontSize: "clamp(2.25rem, 5vw, 4rem)" }}
+          >
+            Less to do.{" "}
+            <span className="italic" style={{ color: SAGE_DEEP }}>
+              More to feel.
+            </span>
+          </h2>
+          <p
+            className="ff-body mt-7 max-w-2xl mx-auto text-[17px] leading-[1.75]"
+            style={{ color: MUTED }}
+          >
+            Willow Vibes is a slow, intentional studio for the inner life — drawing
+            from contemplative science, sound design, and the quiet wisdom of nature.
+            No streaks to maintain. No noise to escape. Only return.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── Practice — editorial four pillars ──────────────────────── */}
+      <section id="practice" className="w-full" style={{ background: CREAM_DEEP }}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10 py-24 md:py-32">
+          <div className="grid md:grid-cols-[1fr_2fr] gap-10 md:gap-16 mb-16">
+            <div>
+              <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
+                The Practice
+              </p>
+              <h3
+                className="ff-display font-light leading-[1.05]"
+                style={{ color: INK, fontSize: "clamp(2rem, 4.2vw, 3.5rem)" }}
+              >
+                Four pillars,{" "}
+                <span className="italic" style={{ color: SAGE_DEEP }}>
+                  one quiet ritual.
+                </span>
+              </h3>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Hero — premium cinematic */}
-      <PremiumHero />
-
-      {/* Features overview — placed high so visitors see breadth immediately */}
-      <section id="features" className="py-16 md:py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-10 md:mb-14">
-            <p className="text-[10px] md:text-xs font-calm-body tracking-[0.35em] uppercase mb-3" style={{ color: "#8267D6" }}>Everything in Willow Vibes</p>
-            <h2 className="font-calm-display text-3xl sm:text-4xl md:text-5xl font-semibold leading-[1.1] tracking-[-0.02em]" style={{ color: NAVY }}>
-              One quiet app. <span className="italic" style={{ color: NAVY_SOFT }}>Every tool you need.</span>
-            </h2>
-            <p className="font-calm-body text-base mt-4 max-w-2xl mx-auto" style={{ color: SLATE }}>
-              Twenty-plus premium practices — from AI coaching and SOS relief to sleep stories, soundscapes, and a gratitude garden — all woven into a single, beautifully calm experience.
+            <p className="ff-body text-[16px] leading-[1.75] md:pt-10" style={{ color: MUTED }}>
+              Everything in Willow Vibes is composed around four enduring pillars —
+              chosen because, together, they cover the architecture of a calm,
+              attentive life. Nothing more. Nothing fashionable.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px" style={{ background: "rgba(125,155,118,0.25)" }}>
             {[
-              { icon: Brain, label: "AI Coach" },
-              { icon: AlertCircle, label: "SOS Relief" },
-              { icon: Moon, label: "Sleep Stories" },
-              { icon: Wind, label: "Breathing" },
-              { icon: Headphones, label: "Audio Library" },
-              { icon: LineChart, label: "Progress Tracking" },
-              { icon: Smile, label: "Mood Tracker" },
-              { icon: Sparkles, label: "Daily Affirmations" },
-              { icon: Activity, label: "Advanced Analytics" },
-              { icon: Library, label: "30-Day Library" },
-              { icon: BookOpen, label: "Journal" },
-              { icon: Flower2, label: "Gratitude Garden" },
-              { icon: HeartPulse, label: "Body Scan" },
-              { icon: Footprints, label: "Walking Meditation" },
-              { icon: Focus, label: "Focus Mode" },
-              { icon: Music2, label: "Soundscapes" },
-              { icon: Trophy, label: "Challenges" },
-              { icon: Star, label: "Rituals" },
-              { icon: Award, label: "Achievements" },
-              { icon: Timer, label: "Session Timer" },
-              { icon: ScrollText, label: "Resources" },
-              { icon: CheckCircle, label: "Certificate" },
-            ].map(({ icon: I, label }, i) => (
+              { icon: Brain, title: "Meditation", body: "Guided practices for clarity, focus and equanimity. Short forms for busy mornings; longer arcs for deep weeks." },
+              { icon: Wind, title: "Breathwork", body: "Coherence, box, and physiological-sigh practices to settle the nervous system in three minutes." },
+              { icon: Moon, title: "Sleep", body: "Slow stories, soundscapes, and wind-down rituals designed by sleep researchers." },
+              { icon: Flower2, title: "Reflection", body: "Mood, gratitude, and journaling — held lightly, never gamified." },
+            ].map(({ icon: I, title, body }, i) => (
               <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 12 }}
+                key={title}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: Math.min(i * 0.025, 0.4) }}
-                className="group flex items-center gap-3 p-3 md:p-4 rounded-2xl border border-slate-100 bg-gradient-to-br from-white to-[#F7F4FF] hover:border-[#C8B6F0] hover:shadow-[0_10px_30px_-12px_rgba(130,103,214,0.35)] transition-all"
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="p-8 md:p-10"
+                style={{ background: CREAM_DEEP }}
               >
-                <span
-                  className="flex-shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, rgba(130,103,214,0.12), rgba(91,127,224,0.12))" }}
-                >
-                  <I className="w-4 h-4 md:w-5 md:h-5" style={{ color: "#8267D6" }} />
-                </span>
-                <span className="font-calm-body text-xs md:text-sm font-semibold leading-tight" style={{ color: NAVY }}>
-                  {label}
-                </span>
+                <I className="w-5 h-5 mb-6" style={{ color: SAGE_DEEP }} />
+                <h4 className="ff-display text-[26px] leading-tight mb-3" style={{ color: INK }}>
+                  {title}
+                </h4>
+                <p className="ff-body text-[14px] leading-[1.7]" style={{ color: MUTED }}>
+                  {body}
+                </p>
               </motion.div>
             ))}
           </div>
-
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 max-w-4xl mx-auto">
-            {[
-              { icon: Shield, label: "30-Day Guarantee" },
-              { icon: Clock, label: "Lifetime Access" },
-              { icon: Users, label: "10,000+ Practicing" },
-              { icon: Star, label: "4.9 / 5 Reviews" },
-            ].map(({ icon: I, label }) => (
-              <div key={label} className="flex items-center justify-center gap-2 font-calm-body text-xs sm:text-sm" style={{ color: SLATE }}>
-                <I className="w-4 h-4" style={{ color: "#8267D6" }} />
-                <span className="font-medium">{label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
-      <Suspense fallback={null}>
-        <AboutSection />
-        <ScienceSection />
-        <CurriculumSection />
-        <TestimonialsSection />
-      </Suspense>
-
-      {/* Pricing — Calm-style soft pastel sky */}
-      <section id="pricing" className="py-24 md:py-32 relative overflow-hidden" style={{ background: "linear-gradient(180deg, #F7F9FC 0%, #E8EDF6 60%, #DCE3F0 100%)" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 relative">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-14">
-            <p className="text-[10px] md:text-xs font-calm-body tracking-[0.35em] uppercase mb-4" style={{ color: "#8267D6" }}>Investment in Self</p>
-            <h3 className="font-calm-display text-4xl md:text-5xl lg:text-6xl font-semibold mb-5 leading-[1.1] tracking-[-0.02em]" style={{ color: NAVY }}>
-              Choose your <span className="italic">path forward.</span>
-            </h3>
-            <p className="font-calm-body max-w-xl mx-auto leading-relaxed" style={{ color: SLATE }}>
-              Every plan begins with a 7-day complimentary trial of Willow Plus. No card today. Cancel anytime.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6 items-stretch">
-            {/* Free */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="calm-card p-8 flex flex-col">
-              <h4 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Discover</h4>
-              <p className="font-calm-body text-sm mt-1" style={{ color: SLATE }}>A taste of the journey</p>
-              <div className="my-6">
-                <span className="font-calm-display text-5xl font-semibold" style={{ color: NAVY }}>$0</span>
-                <span className="font-calm-body ml-2" style={{ color: SLATE }}>forever</span>
-              </div>
-              <ul className="space-y-3 flex-1">
-                {["Days 1–7 of the 30-Day Program", "Basic narration voices", "Mood tracker & gratitude", "SOS protocols (3 free)"].map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm font-calm-body" style={{ color: NAVY_SOFT }}>
-                    <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#5B7FE0" }} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/sign-in" className="mt-7">
-                <button className="w-full py-3.5 rounded-full border border-slate-200 font-calm-body font-semibold hover:bg-slate-50 transition-colors" style={{ color: NAVY }}>
-                  Begin Free
-                </button>
-              </Link>
-            </motion.div>
-
-            {/* Plus Yearly — featured */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-              className="calm-card calm-card-lg relative p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white border-0"
-              style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px rgba(91,127,224,0.55)" }}
-            >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: "#8267D6" }}>
-                ✦ Most Chosen
-              </div>
-              <h4 className="font-calm-display text-xl font-semibold">Willow Plus · Yearly</h4>
-              <p className="font-calm-body text-sm mt-1 text-white/85">Best value — save 58%</p>
-              <div className="mt-6">
-                <span className="font-calm-display text-5xl font-semibold">$79.99</span>
-                <span className="font-calm-body ml-2 text-white/80">/year</span>
-              </div>
-              <p className="font-calm-body text-xs text-white/85 mb-5">Just $6.67/month, billed annually</p>
-              <ul className="space-y-3 flex-1">
-                {["All 30 days of the program", "Premium ElevenLabs voices", "AI Daily Insight & AI Coach", "Sound Bed Designer + binaurals", "Sleep stories, sound baths", "Advanced analytics & reports"].map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm font-calm-body text-white">
-                    <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-white" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/pricing" className="mt-7">
-                <button className="w-full py-3.5 rounded-full bg-white font-calm-body font-bold transition-transform hover:scale-[1.02]" style={{ color: "#5B7FE0" }}>
-                  Begin 7-Day Trial
-                </button>
-              </Link>
-              <p className="font-calm-body text-[10px] text-white/75 mt-3 text-center">Then $79.99/year. Cancel anytime.</p>
-            </motion.div>
-
-            {/* Plus Monthly */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.5 }} className="calm-card p-8 flex flex-col">
-              <h4 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Willow Plus · Monthly</h4>
-              <p className="font-calm-body text-sm mt-1" style={{ color: SLATE }}>Flexible, no commitment</p>
-              <div className="my-6">
-                <span className="font-calm-display text-5xl font-semibold" style={{ color: NAVY }}>$14.99</span>
-                <span className="font-calm-body ml-2" style={{ color: SLATE }}>/month</span>
-              </div>
-              <ul className="space-y-3 flex-1">
-                {["All 30 days of the program", "Premium ElevenLabs voices", "AI Daily Insight & AI Coach", "Sound Bed Designer", "Sleep stories, sound baths", "Cancel anytime"].map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm font-calm-body" style={{ color: NAVY_SOFT }}>
-                    <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#5B7FE0" }} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Link to="/pricing" className="mt-7">
-                <button className="w-full py-3.5 rounded-full font-calm-body font-bold text-white transition-transform hover:scale-[1.02]" style={{ background: NAVY }}>
-                  Begin 7-Day Trial
-                </button>
-              </Link>
-              <p className="font-calm-body text-[10px] mt-3 text-center" style={{ color: SLATE }}>Then $14.99/month. Cancel anytime.</p>
-            </motion.div>
-          </div>
-
-          {/* Lifetime — Founders banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="calm-card calm-card-lg mt-14 overflow-hidden relative p-8 sm:p-12"
-          >
-            <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-4" style={{ background: "rgba(130,103,214,0.12)", color: "#8267D6" }}>
-                  <Sparkles className="w-3 h-3" />
-                  <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.25em]">Founders Lifetime — Limited to 1,000</span>
-                </div>
-                <h3 className="font-calm-display text-3xl sm:text-4xl font-semibold mb-3 tracking-[-0.02em]" style={{ color: NAVY }}>
-                  Pay once. <span className="italic" style={{ color: "#8267D6" }}>Practice forever.</span>
-                </h3>
-                <p className="font-calm-body text-sm sm:text-base max-w-xl leading-relaxed" style={{ color: SLATE }}>
-                  Every feature of Willow Plus — including all future content, AI upgrades, and seasonal collections — for a single payment. Reserved for our first thousand founders.
-                </p>
-              </div>
-              <div className="md:text-right">
-                <div className="mb-4">
-                  <span className="font-calm-display text-5xl sm:text-6xl font-semibold" style={{ color: NAVY }}>$149</span>
-                  <span className="font-calm-body text-sm ml-2 line-through" style={{ color: SLATE }}>$599</span>
-                </div>
-                <Link to="/pricing">
-                  <button className="w-full md:w-auto px-8 py-4 rounded-full font-calm-body font-bold text-white transition-transform hover:scale-[1.03]" style={{ background: CTA_GRADIENT, boxShadow: "0 12px 32px -8px rgba(91,127,224,0.5)" }}>
-                    Claim Lifetime Access →
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <Suspense fallback={null}>
-        <FAQSection />
-      </Suspense>
-
-      {/* Final CTA — Calm-style ocean banner */}
-      <section className="relative overflow-hidden">
-        <div className="relative h-[420px] md:h-[520px]">
+      {/* ─── Cinematic image band ───────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden">
+        <div className="relative h-[420px] md:h-[560px]">
           <img
-            src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=60"
-            srcSet="https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=600&q=60 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=900&q=60 900w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1400&q=65 1400w"
-            sizes="100vw"
-            alt="Calm ocean wave at dusk"
+            src={FOREST_IMG}
+            alt="Sun through forest"
             loading="lazy"
-            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/40 to-transparent" />
-          <div className="absolute inset-0 flex items-center">
-            <div className="max-w-4xl mx-auto px-4 md:px-6 text-center w-full">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-                <p className="text-[10px] md:text-xs font-calm-body tracking-[0.35em] uppercase mb-4" style={{ color: "#8267D6" }}>Your Practice Begins</p>
-                <h2 className="font-calm-display text-4xl md:text-5xl lg:text-6xl font-semibold mb-6 leading-[1.1] tracking-[-0.02em]" style={{ color: NAVY }}>
-                  The mind you want <span className="italic">starts today.</span>
-                </h2>
-                <p className="font-calm-body text-base md:text-lg mb-8 max-w-xl mx-auto leading-relaxed" style={{ color: NAVY_SOFT }}>
-                  Join thousands cultivating presence, calm, and clarity with Willow Plus. Seven free days. No card today.
-                </p>
-                <Link to="/sign-in?redirect=/app">
-                  <button className="px-10 py-4 rounded-full font-calm-body font-semibold text-base text-white transition-transform hover:scale-[1.03]" style={{ background: CTA_GRADIENT, boxShadow: "0 16px 44px -10px rgba(91,127,224,0.55)" }}>
-                    Begin Your Free Trial
-                  </button>
-                </Link>
-              </motion.div>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(58,77,54,0.55) 0%, rgba(58,77,54,0.15) 60%, rgba(58,77,54,0.5) 100%)",
+            }}
+          />
+          <div className="relative h-full flex items-center">
+            <div className="max-w-4xl mx-auto px-5 md:px-10 text-center">
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="ff-display font-light leading-[1.08]"
+                style={{ color: CREAM, fontSize: "clamp(2rem, 5vw, 4rem)" }}
+              >
+                "The forest does not hurry,{" "}
+                <span className="italic">yet everything is accomplished."</span>
+              </motion.h2>
+              <p className="ff-eyebrow text-[10px] mt-6" style={{ color: CREAM }}>
+                — Lao Tzu, adapted
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer — Calm-style deep navy */}
-      <footer className="py-14 md:py-20" style={{ background: NAVY, color: "#fff" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="grid md:grid-cols-4 gap-10 mb-10">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <LogoIcon size={44} className="rounded-2xl shadow-lg shadow-black/40" />
-                <h3 className="font-calm-display text-2xl font-semibold text-white">
-                  Willow <span className="italic" style={{ color: "#E9D9FF" }}>Vibes</span>
-                </h3>
-              </div>
-              <p className="font-calm-body text-white/65 text-sm mb-4 leading-relaxed">
-                Meditation rooted in science. Designed for the rhythm of real life.
+      {/* ─── Testimonial single quote ───────────────────────────────── */}
+      <section className="w-full" style={{ background: CREAM }}>
+        <div className="max-w-4xl mx-auto px-5 md:px-10 py-24 md:py-32 text-center">
+          <p className="ff-eyebrow text-[10px] mb-8" style={{ color: SAGE_DEEP }}>
+            Member Voices
+          </p>
+          <p
+            className="ff-display italic font-light leading-[1.25]"
+            style={{ color: INK, fontSize: "clamp(1.6rem, 3.4vw, 2.6rem)" }}
+          >
+            "I've tried every meditation app. Willow is the only one that doesn't
+            feel like another thing to manage. It feels like an old friend."
+          </p>
+          <div className="flex items-center justify-center gap-3 mt-8">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center ff-body text-[12px] font-semibold"
+              style={{ background: SAGE_PALE, color: FOREST }}
+            >
+              SJ
+            </div>
+            <div className="text-left">
+              <p className="ff-body text-[13px] font-semibold" style={{ color: INK }}>
+                Sarah Jenkins
               </p>
-              <a href="mailto:support@willowvibes.com" className="font-calm-body text-sm hover:underline" style={{ color: "#E9D9FF" }}>
-                support@willowvibes.com
-              </a>
-            </div>
-            <div>
-              <h4 className="font-calm-body font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-white/70">Practice</h4>
-              <ul className="space-y-2.5 text-sm text-white/70 font-calm-body">
-                <li><button onClick={() => scrollToSection("curriculum")} className="hover:text-white transition-colors text-left">Curriculum</button></li>
-                <li><button onClick={() => scrollToSection("science")} className="hover:text-white transition-colors text-left">Science</button></li>
-                <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-calm-body font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-white/70">Company</h4>
-              <ul className="space-y-2.5 text-sm text-white/70 font-calm-body">
-                <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><a href="mailto:support@willowvibes.com" className="hover:text-white transition-colors">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-calm-body font-semibold mb-4 text-xs tracking-[0.2em] uppercase text-white/70">Legal</h4>
-              <ul className="space-y-2.5 text-sm text-white/70 font-calm-body">
-                <li><Link to="/legal/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                <li><Link to="/legal/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/legal/refund" className="hover:text-white transition-colors">Refund Policy</Link></li>
-              </ul>
+              <p className="ff-eyebrow text-[9px]" style={{ color: MUTED }}>
+                Marketing Director
+              </p>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row gap-3 justify-between items-center text-xs text-white/50 font-calm-body tracking-[0.1em]">
+        </div>
+      </section>
+
+      {/* ─── Plans / Pricing ────────────────────────────────────────── */}
+      <section id="plans" className="w-full" style={{ background: CREAM_DEEP }}>
+        <div className="max-w-6xl mx-auto px-5 md:px-10 py-24 md:py-32">
+          <div className="text-center mb-16">
+            <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
+              Plans
+            </p>
+            <h3
+              className="ff-display font-light leading-[1.05]"
+              style={{ color: INK, fontSize: "clamp(2.25rem, 5vw, 4rem)" }}
+            >
+              Begin freely.{" "}
+              <span className="italic" style={{ color: SAGE_DEEP }}>
+                Stay if it serves you.
+              </span>
+            </h3>
+            <p className="ff-body mt-5 max-w-xl mx-auto text-[15px]" style={{ color: MUTED }}>
+              Every plan opens with seven complimentary days of Willow Plus. No card today.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-px rounded-sm overflow-hidden" style={{ background: "rgba(125,155,118,0.3)" }}>
+            {/* Monthly */}
+            <PlanCard
+              eyebrow="Monthly"
+              tag="Flexible"
+              price="$14.99"
+              period="/ month"
+              note="No commitment. Cancel anytime."
+              features={[
+                "Full 30-day program",
+                "Premium narration voices",
+                "AI Coach + Daily Insight",
+                "Sleep stories & soundscapes",
+              ]}
+              ctaLabel="Begin Trial"
+              ctaTo="/pricing"
+              variant="quiet"
+            />
+
+            {/* Yearly featured */}
+            <PlanCard
+              eyebrow="Yearly · Best Value"
+              tag="Save 58%"
+              price="$79.99"
+              period="/ year"
+              note="Just $6.67 / month, billed annually."
+              features={[
+                "Everything in Monthly",
+                "Sound Bed Designer + binaurals",
+                "Advanced analytics & reports",
+                "Priority new releases",
+              ]}
+              ctaLabel="Begin Trial"
+              ctaTo="/pricing"
+              variant="featured"
+            />
+
+            {/* Lifetime */}
+            <PlanCard
+              eyebrow="Lifetime · Founders"
+              tag="Limited"
+              price="$149"
+              period="one time"
+              note="All future content forever. Limited to 1,000."
+              features={[
+                "Everything, forever",
+                "All future seasons & AI upgrades",
+                "Founder badge",
+                "No subscription, ever",
+              ]}
+              ctaLabel="Claim Lifetime"
+              ctaTo="/pricing"
+              variant="quiet"
+            />
+          </div>
+
+          <p className="text-center ff-body text-[12px] mt-8" style={{ color: MUTED }}>
+            <Shield className="inline w-3.5 h-3.5 mr-1.5" style={{ color: SAGE_DEEP }} />
+            30-day money-back guarantee · Secure payments by Paddle
+          </p>
+        </div>
+      </section>
+
+      {/* ─── FAQ ────────────────────────────────────────────────────── */}
+      <section id="faq" className="w-full" style={{ background: CREAM }}>
+        <Suspense fallback={null}>
+          <FAQSection />
+        </Suspense>
+      </section>
+
+      {/* ─── Final CTA ──────────────────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden">
+        <div className="relative">
+          <img
+            src={RITUAL_IMG}
+            alt="Sage ritual"
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(245,240,232,0.95) 0%, rgba(245,240,232,0.85) 60%, rgba(245,240,232,0.98) 100%)",
+            }}
+          />
+          <div className="relative max-w-3xl mx-auto px-5 md:px-10 py-24 md:py-36 text-center">
+            <Sparkles className="w-5 h-5 mx-auto mb-6" style={{ color: SAGE_DEEP }} />
+            <h2
+              className="ff-display font-light leading-[1.05]"
+              style={{ color: INK, fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)" }}
+            >
+              The mind you want{" "}
+              <span className="italic" style={{ color: SAGE_DEEP }}>
+                begins today.
+              </span>
+            </h2>
+            <p className="ff-body mt-6 max-w-lg mx-auto text-[16px] leading-[1.7]" style={{ color: MUTED }}>
+              Seven free days of Willow Plus. No card today. Cancel with one tap.
+            </p>
+            <Link to="/sign-in?redirect=/app" className="inline-block mt-9">
+              <button
+                className="ff-body inline-flex items-center gap-2 px-9 py-4 rounded-full text-[14px] font-semibold transition-transform hover:scale-[1.03]"
+                style={{ background: FOREST, color: CREAM }}
+              >
+                Begin Free Trial <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Footer ─────────────────────────────────────────────────── */}
+      <footer className="w-full" style={{ background: INK, color: CREAM }}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10 py-16 md:py-20">
+          <div className="grid md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 mb-12">
+            <div>
+              <div className="flex items-center gap-2.5 mb-5">
+                <LogoIcon size={32} />
+                <span className="ff-display text-2xl">
+                  Willow <span className="italic" style={{ color: SAGE }}>Vibes</span>
+                </span>
+              </div>
+              <p className="ff-body text-[13px] leading-[1.7] max-w-xs" style={{ color: "rgba(245,240,232,0.6)" }}>
+                A considered studio for meditation, breathwork, and sleep — composed for the modern mind.
+              </p>
+            </div>
+            {[
+              { title: "Practice", links: [["Plans", "/pricing"], ["About", "/about"], ["Science", "/science"]] },
+              { title: "Company", links: [["Help", "/help"], ["Contact", "mailto:support@willowvibes.com"]] },
+              { title: "Legal", links: [["Terms", "/legal/terms"], ["Privacy", "/legal/privacy"], ["Refunds", "/legal/refund"]] },
+            ].map((col) => (
+              <div key={col.title}>
+                <p className="ff-eyebrow text-[10px] mb-4" style={{ color: "rgba(245,240,232,0.5)" }}>
+                  {col.title}
+                </p>
+                <ul className="space-y-2.5">
+                  {col.links.map(([label, href]) => (
+                    <li key={label}>
+                      <Link to={href} className="ff-body text-[13px] transition-opacity hover:opacity-100" style={{ color: "rgba(245,240,232,0.75)" }}>
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-3 ff-body text-[11px]"
+            style={{ borderColor: "rgba(245,240,232,0.12)", color: "rgba(245,240,232,0.5)" }}>
             <p>© 2026 Willow Vibes™ · Cultivated with care.</p>
             <p>Secure payments by Paddle · Merchant of Record</p>
           </div>
         </div>
       </footer>
     </div>
+  );
+}
+
+/* ─── Plan card ────────────────────────────────────────────────────── */
+function PlanCard({
+  eyebrow, tag, price, period, note, features, ctaLabel, ctaTo, variant,
+}: {
+  eyebrow: string; tag: string; price: string; period: string; note: string;
+  features: string[]; ctaLabel: string; ctaTo: string; variant: "featured" | "quiet";
+}) {
+  const isFeatured = variant === "featured";
+  const bg = isFeatured ? FOREST : CREAM_DEEP;
+  const text = isFeatured ? CREAM : INK;
+  const sub = isFeatured ? "rgba(245,240,232,0.7)" : MUTED;
+  const accent = isFeatured ? SAGE : SAGE_DEEP;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="p-8 md:p-10 flex flex-col"
+      style={{ background: bg, color: text }}
+    >
+      <div className="flex items-center justify-between mb-8">
+        <p className="ff-eyebrow text-[10px]" style={{ color: accent }}>
+          {eyebrow}
+        </p>
+        <span
+          className="ff-body text-[10px] font-semibold px-2.5 py-1 rounded-full"
+          style={{
+            background: isFeatured ? "rgba(245,240,232,0.15)" : "rgba(125,155,118,0.18)",
+            color: isFeatured ? CREAM : FOREST,
+          }}
+        >
+          {tag}
+        </span>
+      </div>
+
+      <div className="mb-2 flex items-baseline gap-2">
+        <span className="ff-display font-light" style={{ fontSize: "clamp(3rem, 5vw, 4rem)", lineHeight: 1 }}>
+          {price}
+        </span>
+        <span className="ff-body text-[13px]" style={{ color: sub }}>
+          {period}
+        </span>
+      </div>
+      <p className="ff-body text-[12px] mb-8" style={{ color: sub }}>
+        {note}
+      </p>
+
+      <ul className="space-y-3 mb-10 flex-1">
+        {features.map((f) => (
+          <li key={f} className="flex items-start gap-2.5 ff-body text-[13.5px] leading-[1.55]">
+            <Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: accent }} />
+            <span style={{ color: text }}>{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <Link to={ctaTo} className="mt-auto">
+        <button
+          className="w-full ff-body text-[13px] font-semibold py-3.5 rounded-full transition-transform hover:scale-[1.02]"
+          style={{
+            background: isFeatured ? CREAM : FOREST,
+            color: isFeatured ? FOREST : CREAM,
+          }}
+        >
+          {ctaLabel}
+        </button>
+      </Link>
+    </motion.div>
   );
 }
