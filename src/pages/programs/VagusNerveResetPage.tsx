@@ -65,8 +65,9 @@ export default function VagusNerveResetPage() {
         {/* HERO */}
         <section className="relative h-[44vh] min-h-[340px] max-h-[480px] overflow-hidden">
           <video
-            src={program.videoBackdrop}
-            poster={program.posterUrl}
+            key={hero.videoUrl}
+            src={hero.videoUrl}
+            poster={hero.posterUrl}
             autoPlay
             muted
             loop
