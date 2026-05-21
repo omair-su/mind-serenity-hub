@@ -9,6 +9,7 @@ import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { getProgramById } from "@/data/programs/vagusNerveReset";
 
 const STORAGE_KEY = (programId: string) => `willow:program:${programId}:progress`;
@@ -35,6 +36,12 @@ export default function ProgramDayPage() {
 
   const tts = useTextToSpeech();
   const [completed, setCompleted] = useState(false);
+
+  const bg = useBrandedVideo(
+    day?.videoSlot ?? program?.heroVideoSlot ?? "vagus-hero",
+    program?.videoBackdrop ?? "",
+    day?.posterUrl ?? program?.posterUrl ?? "",
+  );
 
   usePageSEO({
     title: day
@@ -100,8 +107,9 @@ export default function ProgramDayPage() {
         <div className="fixed inset-0 z-0">
           {!locked && (
             <video
-              src={day.posterUrl ? program.videoBackdrop : program.videoBackdrop}
-              poster={day.posterUrl ?? program.posterUrl}
+              key={bg.videoUrl}
+              src={bg.videoUrl}
+              poster={bg.posterUrl}
               autoPlay
               muted
               loop
@@ -111,7 +119,7 @@ export default function ProgramDayPage() {
           )}
           {locked && (
             <img
-              src={day.posterUrl ?? program.posterUrl}
+              src={bg.posterUrl}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
             />

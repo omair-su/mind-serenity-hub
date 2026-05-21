@@ -7,6 +7,7 @@ import { Play, Lock, Crown, Check, Sparkles, ChevronDown } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { VAGUS_NERVE_RESET } from "@/data/programs/vagusNerveReset";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,11 @@ export default function VagusNerveResetPage() {
   const navigate = useNavigate();
   const { isPremium } = useIsPremium();
   const program = VAGUS_NERVE_RESET;
+  const hero = useBrandedVideo(
+    program.heroVideoSlot ?? "vagus-hero",
+    program.videoBackdrop,
+    program.posterUrl,
+  );
 
   const [progress, setProgress] = useState<Set<number>>(() => loadProgress());
   const [expanded, setExpanded] = useState<number | null>(null);
@@ -59,8 +65,9 @@ export default function VagusNerveResetPage() {
         {/* HERO */}
         <section className="relative h-[44vh] min-h-[340px] max-h-[480px] overflow-hidden">
           <video
-            src={program.videoBackdrop}
-            poster={program.posterUrl}
+            key={hero.videoUrl}
+            src={hero.videoUrl}
+            poster={hero.posterUrl}
             autoPlay
             muted
             loop

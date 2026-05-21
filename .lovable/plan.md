@@ -1,86 +1,80 @@
-# Phase 6.1 + 6.3 + Phase 9 starter
 
-Three deliverables in one turn. All three reuse the cinematic-loop pattern already shipped with the Video Library, so no new infrastructure — only data, one new page/route, and surgical patches.
+# Plan — Your branded videos, properly placed
 
----
+You'll upload your CapCut-edited Willow Vibes videos (audio baked in) into the existing `video` storage bucket in Cloud. I'll add a single **media manifest** that maps each filename to the exact slot in the app. No code rewrites later — you just upload a new file and refresh.
 
-## 1. Per-day cinematic intro video (Phase 6.1)
+## How it will work
 
-**Goal:** every DayPage hero plays a looping cinematic backdrop instead of (or layered over) the static Ken Burns image. Days 1-3 free, Days 4-30 premium-gated.
+1. You upload `.mp4` files to the **`video` bucket** (Cloud → Files → `video`).
+2. The app reads a small manifest (`src/data/brandedVideos.ts`) that maps each "slot" to a filename.
+3. Each slot uses a signed URL from the `video` bucket, with graceful fallback to the current placeholder if a file is missing.
+4. Since audio is baked in, the video player will **play with sound by default** (no separate ambient layer mixed on top).
 
-**Strategy — pragmatic, not 30 unique gens:**
-- Map each day to **one of 6 themed loops** based on the day's week/category. We already have 16 calm scenes in `videoLibrary.ts`; reuse 6 of them as week-themed backdrops:
-  - Week 1 (Foundation) → Misty Forest at Dawn
-  - Week 2 (Awareness) → Forest Stream
-  - Week 3 (Compassion) → Cherry Blossom Drift
-  - Week 4 (Integration) → Mountain Mist
-  - Days 29-30 (Capstone) → Aurora + Starfield
-- This gives strong visual continuity per week ("your week has a color") without expensive per-day generation. Future turns can swap in unique generated clips when budget allows.
+## Filename convention (please use exactly this)
 
-**Implementation:**
-- Add `getDayVideo(dayNumber)` helper in `src/data/dayHeroImages.ts` returning `{ videoUrl, posterUrl, isPremium }` (premium = dayNumber > 3).
-- Patch `DayHeroCinema.tsx`: replace the `<motion.img>` with a `<video autoPlay muted loop playsInline poster={...}>` layer underneath the existing Ken Burns image. The image becomes the poster/fallback. For premium-locked days the video tag is skipped (poster + lock badge shown).
-- Add a small "PREMIUM CINEMA" badge in the hero corner for locked days that links to /pricing.
-- Keep all existing parallax/blur/mood-gradient/particles intact — they layer on top of the video the same way they layered on the image.
+Since you said "Willow videos", I'll standardize so I can map them automatically:
 
-## 2. Sleep-story video backdrops (Phase 6.3)
-
-**Goal:** every sleep story plays with a slow cinematic loop behind the narration overlay. Auto-dims toward black when sleep timer expires.
-
-**Implementation:**
-- Add optional `videoBackdrop?: string` field to `SleepStory` interface in `src/data/sleepStories.ts`.
-- Map the 5 flagship + ~10 other stories to existing `CALMING_VIDEOS` entries by category (ocean → Gentle Ocean Waves, forest → Misty Forest, rain → Rain on Window, cozy → Crackling Fireplace, twilight → Aurora, starlight → Starfield, deep → Bamboo Forest, nature → Forest Stream).
-- Patch `SleepStoriesPage.tsx` reading view: render the video as a fixed full-bleed layer with a `bg-charcoal/70` overlay so the narration text stays legible. Reuse same `<video muted loop playsInline>` pattern.
-- Sleep-timer fade: when `sleepTimerRemaining === 0`, animate the overlay opacity from 0.7 → 1 over 30s using framer-motion to dim to black.
-
-## 3. Vagus Nerve Reset — 7-day mini-program (Phase 9 starter)
-
-**Goal:** brand-new content track separate from the 30-day flagship. Premium-only, science-backed, addresses the #1 trending wellness search of 2025.
-
-**Structure:**
-- New file `src/data/programs/vagusNerveReset.ts` exporting a typed `MiniProgram` with 7 days. Each day has: `title`, `duration`, `whyItWorks` (1-sentence science), `practice` (full narration script for ElevenLabs), `technique` (e.g. "humming", "cold-face splash", "physiological sigh"), `videoBackdrop` (reused from CALMING_VIDEOS).
-- The 7 days:
-  1. **Physiological Sigh** (4 min) — Stanford-backed double-inhale exhale
-  2. **Humming & Vocal Toning** (5 min) — vagal stimulation via vocal cords
-  3. **Cold-Face Protocol** (3 min) — diving reflex activation
-  4. **Half-Salamander Exercise** (5 min) — eye-position vagal reset
-  5. **4-7-8 Breath Extended** (6 min) — parasympathetic dominance
-  6. **Gargle & Gag Reflex** (4 min) — direct vagal toning
-  7. **Integration Body Scan** (10 min) — full nervous-system check-in
-- New page `src/pages/programs/VagusNerveResetPage.tsx` at route `/app/programs/vagus-nerve` — vertical timeline of 7 days, hero with cinematic video, progress saved to localStorage (`willow:program:vagus-nerve:progress`), each day expands to show "Why it works" + Begin button.
-- Each day's "Begin" routes to a shared `ProgramDayPage` (new) that uses the existing `useTextToSpeech` + `NarrationBar` infrastructure with `category: 'daily_meditation'` and a stable `trackKey: vagus-nerve-day-${n}`.
-- Add `useIsPremium` gate on day 2+ (day 1 free preview).
-- Add Sidebar entry "Programs" section with Vagus Nerve Reset listed (scaffolds for future programs: ADHD Focus Stack, Grief Companion, etc.).
-- Add a hero card on `DashboardPage` and `ExplorePage` promoting the new program ("NEW: Vagus Nerve Reset — 7 days to calm your nervous system").
-
-## Out of scope for this turn
-
-- Per-day **unique** AI-generated videos (cost-heavy — themed weekly loops give 80% of the wow at 0% of the cost).
-- Cycle-sync / Grief / ADHD programs — scaffold the `programs/` folder structure so they slot in next turn.
-- Apple Health sync, sleep-score logic, AI Coach voice — separate phases.
-
-## Technical notes
-
-- All new video usage points at existing `CALMING_VIDEOS` URLs — no new asset generation in this turn.
-- New `MiniProgram` type lives in `src/data/programs/types.ts` so future programs share one interface.
-- Premium gating uses existing `useIsPremium` hook + redirect to `/pricing`.
-- All narration scripts plain English, no SSML — `generate-narration` already handles them.
-- New Sidebar group rendered above existing "Premium" section.
-
-## Files touched
-
+**Video Library** (16 scenes):
 ```
-NEW src/data/programs/types.ts
-NEW src/data/programs/vagusNerveReset.ts
-NEW src/pages/programs/VagusNerveResetPage.tsx
-NEW src/pages/programs/ProgramDayPage.tsx
-EDIT src/data/dayHeroImages.ts        (add getDayVideo helper)
-EDIT src/components/day/DayHeroCinema.tsx  (video layer + premium badge)
-EDIT src/data/sleepStories.ts         (add videoBackdrop field + map per story)
-EDIT src/pages/SleepStoriesPage.tsx   (render video backdrop + timer fade)
-EDIT src/App.tsx                      (2 new routes)
-EDIT src/components/Sidebar.tsx       (Programs group)
-EDIT src/components/dashboard/BentoTools.tsx OR HomeFeed.tsx (promo card)
+library-01-forest-morning.mp4
+library-02-ocean-gentle.mp4
+library-03-rain-window.mp4
+library-04-fireplace.mp4
+library-05-aurora.mp4
+library-06-snowfall.mp4
+library-07-mountain-mist.mp4
+library-08-forest-stream.mp4
+library-09-candle.mp4
+library-10-cherry-blossom.mp4
+library-11-stars.mp4
+library-12-rain-leaves.mp4
+library-13-underwater.mp4
+library-14-clouds.mp4
+library-15-bamboo.mp4
+library-16-lavender.mp4
 ```
 
-Approve and I ship all three in the next turn.
+**Vagus Nerve Reset** (1 hero + 7 days):
+```
+vagus-hero.mp4
+vagus-day-01.mp4
+vagus-day-02.mp4
+vagus-day-03.mp4
+vagus-day-04.mp4
+vagus-day-05.mp4
+vagus-day-06.mp4
+vagus-day-07.mp4
+```
+
+You can upload them in any order, any time. You don't need all of them up-front — missing files just fall back to the current placeholder.
+
+## Posters (thumbnails)
+
+To fix the broken thumbnails, the manifest will **auto-generate poster frames from the video** on the client (first frame, cached). No need for you to export separate JPGs. If you'd rather upload your own posters, you can drop `library-01-forest-morning.jpg` next to the mp4 and it'll be used instead.
+
+## Premium gating (unchanged)
+
+- Video Library: first 4 free, rest premium.
+- Vagus program: Day 1 free, Days 2–7 premium.
+
+## What I'll build
+
+1. **`src/data/brandedVideos.ts`** — central manifest mapping slot IDs → bucket filenames. One place to edit.
+2. **`src/lib/brandedVideoUrl.ts`** — small helper that resolves a slot to a signed URL from the `video` bucket, with placeholder fallback and a 1-hour cache.
+3. **`useBrandedVideo(slot)` hook** — returns `{ videoUrl, posterUrl, loading }`. Auto-derives poster from the first video frame if no poster is uploaded.
+4. **Update `videoLibrary.ts`** — replace the hardcoded `VIDEO_LIBRARY_HERO` / `WILLOW_DEMO_VIDEO` repetition with per-card slot IDs (`library-01` … `library-16`).
+5. **Update `vagusNerveReset.ts` + day pages** — each day uses its slot (`vagus-day-01` … `vagus-day-07`); hero uses `vagus-hero`.
+6. **Player tweaks** — since audio is baked in, the Video Library fullscreen player will start at a sensible volume (60%) instead of muted, with a mute/unmute toggle.
+7. **Storage RLS** — make sure authenticated users can read from the `video` bucket (premium-gated files stay behind the existing `is_premium` check at the UI layer; signed URLs expire in 1h so they can't be permanently shared).
+
+## What stays out of scope (for this step)
+
+- Day pages (1–30) and Sleep Stories — not touched per your choice. Easy to extend later by adding more slots to the manifest.
+- No changes to TTS/narration audio pipeline.
+
+## After approval
+
+1. I implement the manifest + helpers + player tweaks.
+2. I confirm storage RLS is set so signed URLs work.
+3. You upload your videos to **Cloud → Files → `video`** using the filenames above.
+4. Refresh — your branded videos appear in the correct slots automatically.
