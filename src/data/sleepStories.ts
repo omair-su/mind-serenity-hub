@@ -17,6 +17,26 @@ export interface SleepStory {
   mood?: string;
   cover?: string;
   flagship?: boolean;
+  /** Optional cinematic looping video URL for the reading view backdrop */
+  videoBackdrop?: string;
+}
+
+/** Map of category → cinematic CC0 Pexels video URL (looped, muted). */
+export const CATEGORY_VIDEO_BACKDROP: Record<string, string> = {
+  forest: "https://videos.pexels.com/video-files/2491284/2491284-uhd_2560_1440_30fps.mp4",
+  ocean: "https://videos.pexels.com/video-files/1409899/1409899-hd_1920_1080_25fps.mp4",
+  rain: "https://videos.pexels.com/video-files/4763824/4763824-uhd_2560_1440_25fps.mp4",
+  cozy: "https://videos.pexels.com/video-files/3015527/3015527-hd_1920_1080_24fps.mp4",
+  twilight: "https://videos.pexels.com/video-files/9783697/9783697-uhd_2560_1440_30fps.mp4",
+  starlight: "https://videos.pexels.com/video-files/2871916/2871916-uhd_2560_1440_24fps.mp4",
+  deep: "https://videos.pexels.com/video-files/5752547/5752547-hd_1920_1080_24fps.mp4",
+  nature: "https://videos.pexels.com/video-files/2491447/2491447-uhd_2560_1440_30fps.mp4",
+  fantasy: "https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4",
+  travel: "https://videos.pexels.com/video-files/4623256/4623256-uhd_2560_1440_24fps.mp4",
+};
+
+export function getStoryBackdrop(story: SleepStory): string | undefined {
+  return story.videoBackdrop ?? CATEGORY_VIDEO_BACKDROP[story.category];
 }
 
 export const sleepStoryCategories = [
