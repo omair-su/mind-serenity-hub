@@ -78,7 +78,7 @@ export default function MonthlyReportCard() {
       const longest = getLongestStreak();
       const lifetimeDone = getCompletedDays().length;
       const lifetimeMin = getTotalMinutes();
-      const name = profile.display_name || "Willow Member";
+      const name = profile.name || "Willow Member";
 
       const doc = new jsPDF({ unit: "mm", format: "a4" });
       pdfBackground(doc);
