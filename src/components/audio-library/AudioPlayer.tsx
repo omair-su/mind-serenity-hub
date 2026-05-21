@@ -1,105 +1,84 @@
-// Premium full-screen audio player with playlist queue support.
+// Premium full-screen audio player. Reads/writes the module-level
+// globalPlayer singleton so audio survives route changes and integrates
+// with the persistent <GlobalMiniPlayer />.
 //
-// Phase 2: tracks are now generated on-demand via ElevenLabs through
-// `useTextToSpeech`, using each session's `script` + per-author `voice`.
-// Each course author and each sleep narrator therefore has a distinct
-// studio voice (Sarah / George / Matilda / Charlie) instead of a single
-// rotating placeholder track. Falls back to legacy `audioUrl` only if the
-// session has no script attached.
+// Closing this view ("X") collapses to the mini-player instead of stopping
+// playback. The chevron-down or the mini-player's expand button toggle
+// between expanded/collapsed states.
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, X, SkipBack, SkipForward, Download, ListMusic, Loader2 } from 'lucide-react';
+import { Play, Pause, X, SkipBack, SkipForward, ListMusic, Loader2, ChevronDown } from 'lucide-react';
 import { type MeditationSession, sessionCategoryToNarration } from '@/data/audioLibrary';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { useTextToSpeech } from '@/hooks/useTextToSpeech';
+import { useEffect } from 'react';
+import { usePlayer } from '@/hooks/usePlayer';
 
 interface AudioPlayerProps {
-  /** Ordered queue of sessions. When non-empty the player is visible. */
   queue: MeditationSession[];
-  /** Index of the currently playing session within the queue. */
   index?: number;
   onIndexChange?: (i: number) => void;
   onClose: () => void;
 }
 
 export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }: AudioPlayerProps) {
-  const [showQueue, setShowQueue] = useState(false);
-  // Legacy audio fallback (only used when the session has no narration script)
-  const fallbackAudioRef = useRef<HTMLAudioElement | null>(null);
-  const [fallbackProgress, setFallbackProgress] = useState(0);
-  const [fallbackPlaying, setFallbackPlaying] = useState(false);
-
-  const tts = useTextToSpeech();
-
+  const p = usePlayer();
   const session = queue[index] ?? null;
-  const usingNarration = !!session?.script;
 
-  // Auto-start narration whenever the active track changes
+  // Sync queue's active session into the global player and ensure expanded.
   useEffect(() => {
     if (!session) return;
-    setFallbackProgress(0);
-    if (session.script) {
-      void tts.generateAndPlay(session.script, {
-        trackKey: `library-${session.id}`,
-        category: sessionCategoryToNarration(session.category),
+    const trackKey = `library-${session.id}`;
+    // If a different track is loaded, swap; otherwise just re-expand.
+    if (p.track?.trackKey !== trackKey) {
+      void p.play({
+        trackKey,
         title: session.title,
-        description: session.description,
+        subtitle: session.author,
+        author: session.author,
+        thumbnail: session.thumbnail,
+        script: session.script,
         voice: session.voice,
+        category: sessionCategoryToNarration(session.category),
+        audioUrl: session.audioUrl,
         isPremium: true,
-      });
+        resumable: session.category === "Sleep" || session.category === "Stories",
+      }, { expanded: true });
     } else {
-      // Legacy fallback path — let the <audio> element auto-play
-      tts.stop();
+      p.setExpanded(true);
     }
-    // Cleanup when track changes or player closes
-    return () => {
-      tts.stop();
-      const a = fallbackAudioRef.current;
-      if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id]);
 
-  const isPlaying = usingNarration ? tts.isPlaying : fallbackPlaying;
-  const isLoading = usingNarration && tts.isLoading;
-  const progress = usingNarration ? tts.progress : fallbackProgress;
-
-  const handleClose = useCallback(() => {
-    tts.stop();
-    const a = fallbackAudioRef.current;
-    if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
-    setShowQueue(false);
-    onClose();
-  }, [onClose, tts]);
-
-  // ESC closes
+  // ESC collapses to mini-player
   useEffect(() => {
     if (!session) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') collapse();
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, handleClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
-  const togglePlay = () => {
-    if (usingNarration) {
-      tts.togglePlayPause();
-      return;
-    }
-    const a = fallbackAudioRef.current;
-    if (!a) return;
-    if (fallbackPlaying) a.pause();
-    else void a.play();
+  const collapse = () => {
+    p.setExpanded(false);
+    onClose();
   };
 
-  const goPrev = () => {
-    if (index > 0) onIndexChange?.(index - 1);
+  const stopAndClose = () => {
+    p.close();
+    onClose();
   };
+
+  const goPrev = () => { if (index > 0) onIndexChange?.(index - 1); };
   const goNext = () => {
     if (index < queue.length - 1) onIndexChange?.(index + 1);
-    else handleClose();
+    else stopAndClose();
   };
 
   if (!session) return null;
+
+  const progress = p.duration > 0 ? (p.currentTime / p.duration) * 100 : 0;
+  const showQueueBtn = queue.length > 1;
 
   return (
     <AnimatePresence>
@@ -110,26 +89,18 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-background/98 backdrop-blur-xl"
       >
-        {/* Top-right controls */}
         <div className="absolute top-6 right-6 sm:top-12 sm:right-12 z-20 flex items-center gap-3">
-          {queue.length > 1 && (
-            <button
-              type="button"
-              onClick={() => setShowQueue((v) => !v)}
-              aria-label="Toggle queue"
-              className={cn(
-                "w-12 h-12 rounded-full border flex items-center justify-center transition-all",
-                showQueue
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-border text-muted-foreground hover:bg-secondary"
-              )}
-            >
-              <ListMusic className="w-5 h-5" />
-            </button>
-          )}
           <button
             type="button"
-            onClick={handleClose}
+            onClick={collapse}
+            aria-label="Collapse to mini-player"
+            className="w-12 h-12 rounded-full border border-border bg-background flex items-center justify-center hover:bg-secondary transition-all"
+          >
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <button
+            type="button"
+            onClick={stopAndClose}
             aria-label="Close player"
             className="w-12 h-12 rounded-full border border-border bg-background flex items-center justify-center hover:bg-primary hover:border-primary transition-all group"
           >
@@ -137,14 +108,13 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
           </button>
         </div>
 
-        {/* Geometric background rings */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] border border-border rounded-full pointer-events-none opacity-40"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-border rounded-full pointer-events-none opacity-20"></div>
 
         <div className="max-w-md w-full flex flex-col items-center relative z-10">
           <div className="text-center mb-12">
             <span className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-4 block font-bold">
-              {queue.length > 1 ? `Track ${index + 1} of ${queue.length}` : 'Resonating'}
+              {showQueueBtn ? `Track ${index + 1} of ${queue.length}` : 'Resonating'}
             </span>
             <motion.h2 className="font-display text-4xl sm:text-5xl italic text-foreground mb-4 tracking-tight leading-tight">
               {session.title}
@@ -152,12 +122,11 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
             <div className="w-8 h-px bg-primary mx-auto mt-6"></div>
           </div>
 
-          {/* Visualizer */}
           <div className="relative w-64 h-64 mb-12 flex items-center justify-center">
             <motion.div
               animate={{
-                scale: isPlaying ? [1, 1.15, 1] : 1,
-                opacity: isPlaying ? [0.4, 0.7, 0.4] : 0.4
+                scale: p.isPlaying ? [1, 1.15, 1] : 1,
+                opacity: p.isPlaying ? [0.4, 0.7, 0.4] : 0.4
               }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="absolute inset-0 border border-primary rounded-full"
@@ -169,7 +138,7 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
                 className="w-full h-full object-cover rounded-full grayscale opacity-70"
                 referrerPolicy="no-referrer"
               />
-              {isLoading && (
+              {p.isLoading && (
                 <div className="absolute inset-0 rounded-full bg-background/60 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
                   <Loader2 className="w-6 h-6 text-foreground animate-spin" />
                   <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground font-bold">
@@ -180,7 +149,6 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
             </div>
           </div>
 
-          {/* Controls */}
           <div className="w-full space-y-8">
             <div className="space-y-3">
               <div className="h-0.5 w-full bg-border relative overflow-hidden">
@@ -190,8 +158,8 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
                 />
               </div>
               <div className="flex justify-between text-[10px] font-bold tracking-widest uppercase text-muted-foreground/70">
-                <span>Journey</span>
-                <span>{session.duration}</span>
+                <span>{p.formatTime(p.currentTime)}</span>
+                <span>{p.duration > 0 ? p.formatTime(p.duration) : session.duration}</span>
               </div>
             </div>
 
@@ -205,14 +173,16 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
                 <SkipBack className="w-5 h-5" />
               </button>
               <button
-                onClick={togglePlay}
-                disabled={isLoading}
-                aria-label={isPlaying ? 'Pause' : 'Play'}
-                className="w-24 h-24 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-xl disabled:opacity-60 disabled:scale-100"
+                onClick={p.togglePlayPause}
+                disabled={p.isLoading}
+                aria-label={p.isPlaying ? 'Pause' : 'Play'}
+                className={cn(
+                  "w-24 h-24 rounded-full bg-foreground text-background flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-xl disabled:opacity-60 disabled:scale-100"
+                )}
               >
-                {isLoading
+                {p.isLoading
                   ? <Loader2 className="w-8 h-8 animate-spin" />
-                  : isPlaying
+                  : p.isPlaying
                     ? <Pause className="w-8 h-8 fill-current" />
                     : <Play className="w-8 h-8 fill-current ml-1" />}
               </button>
@@ -226,98 +196,23 @@ export default function AudioPlayer({ queue, index = 0, onIndexChange, onClose }
             </div>
 
             <div className="flex flex-col items-center gap-3">
-              {!usingNarration && (
-                <a
-                  href={session.audioUrl}
-                  download
-                  className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  Download for offline
-                </a>
-              )}
               <p className="text-center text-[10px] uppercase tracking-[0.2em] text-muted-foreground italic font-display">
-                {usingNarration ? 'Narrated by' : 'A composition by'} {session.author}
+                {session.script ? 'Narrated by' : 'A composition by'} {session.author}
               </p>
-              {tts.error && usingNarration && (
+              {p.error && (
                 <p className="text-center text-[10px] text-destructive font-body max-w-xs">
-                  {tts.error}
+                  {p.error}
                 </p>
+              )}
+              {showQueueBtn && (
+                <div className="mt-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                  <ListMusic className="w-3.5 h-3.5" />
+                  {queue.length} track queue
+                </div>
               )}
             </div>
           </div>
         </div>
-
-        {/* Queue side panel */}
-        <AnimatePresence>
-          {showQueue && queue.length > 1 && (
-            <motion.aside
-              initial={{ x: '100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '100%', opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 280, damping: 32 }}
-              className="absolute right-0 top-0 bottom-0 w-full sm:w-96 bg-card border-l border-border z-30 overflow-y-auto p-6 pt-24"
-            >
-              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-bold mb-4">
-                Up Next · {queue.length} tracks
-              </p>
-              <ul className="space-y-2">
-                {queue.map((s, i) => (
-                  <li key={`${s.id}-${i}`}>
-                    <button
-                      onClick={() => onIndexChange?.(i)}
-                      className={cn(
-                        "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all",
-                        i === index
-                          ? "bg-foreground/95 text-background"
-                          : "bg-secondary/60 text-foreground hover:bg-secondary"
-                      )}
-                    >
-                      <span className={cn(
-                        "w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0",
-                        i === index ? "bg-background/20 text-background" : "bg-foreground/90 text-background"
-                      )}>
-                        {i + 1}
-                      </span>
-                      <span className="flex-1 min-w-0">
-                        <span className="block text-sm font-body font-semibold truncate">{s.title}</span>
-                        <span className={cn(
-                          "block text-[11px] truncate",
-                          i === index ? "text-background/70" : "text-muted-foreground"
-                        )}>
-                          {s.author} · {s.duration}
-                        </span>
-                      </span>
-                      {i === index && isPlaying && (
-                        <span className="w-2 h-2 rounded-full bg-background animate-pulse" />
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </motion.aside>
-          )}
-        </AnimatePresence>
-
-        {/* Legacy fallback audio — only mounted when track has no script */}
-        {!usingNarration && (
-          <audio
-            ref={fallbackAudioRef}
-            src={session.audioUrl}
-            autoPlay
-            onPlay={() => setFallbackPlaying(true)}
-            onPause={() => setFallbackPlaying(false)}
-            onEnded={() => {
-              if (index < queue.length - 1) onIndexChange?.(index + 1);
-              else setFallbackPlaying(false);
-            }}
-            onTimeUpdate={(e) => {
-              const a = e.currentTarget;
-              if (a.duration > 0) setFallbackProgress((a.currentTime / a.duration) * 100);
-            }}
-            className="hidden"
-          />
-        )}
       </motion.div>
     </AnimatePresence>
   );
