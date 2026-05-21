@@ -32,6 +32,11 @@ export default function VagusNerveResetPage() {
   const navigate = useNavigate();
   const { isPremium } = useIsPremium();
   const program = VAGUS_NERVE_RESET;
+  const hero = useBrandedVideo(
+    program.heroVideoSlot ?? "vagus-hero",
+    program.videoBackdrop,
+    program.posterUrl,
+  );
 
   const [progress, setProgress] = useState<Set<number>>(() => loadProgress());
   const [expanded, setExpanded] = useState<number | null>(null);
