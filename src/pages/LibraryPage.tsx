@@ -7,6 +7,19 @@ import { weeks } from "@/data/courseData";
 import { Search, Grid3X3, List, Clock, Check, Heart, Filter, BookOpen, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
+const featureHighlights = [
+  {
+    title: "Calming Video Library",
+    description: "Loop cinematic backdrops for sleep, focus, and breathwork.",
+    path: "/app/video-library",
+  },
+  {
+    title: "Vagus Nerve Reset",
+    description: "Start the 7-day nervous-system recovery program.",
+    path: "/app/programs/vagus-nerve",
+  },
+];
+
 type ViewMode = 'grid' | 'list';
 type FilterMode = 'all' | 'completed' | 'incomplete' | 'favorites';
 
@@ -111,6 +124,22 @@ export default function LibraryPage() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {featureHighlights.map((feature) => (
+            <Link
+              key={feature.path}
+              to={feature.path}
+              className="group rounded-2xl border border-[hsl(var(--gold))]/15 bg-gradient-to-br from-[hsl(var(--cream))] via-[hsl(var(--sage-light))]/20 to-[hsl(var(--accent))]/20 p-5 hover:shadow-[var(--shadow-card-val)] hover:-translate-y-1 transition-all duration-300"
+            >
+              <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--forest))]">Featured</p>
+              <h2 className="font-display text-xl font-semibold text-[hsl(var(--charcoal))] mt-2 group-hover:text-[hsl(var(--forest))] transition-colors">
+                {feature.title}
+              </h2>
+              <p className="text-sm font-body text-[hsl(var(--charcoal-soft))] mt-2">{feature.description}</p>
+            </Link>
+          ))}
         </div>
 
         {/* Filters */}
