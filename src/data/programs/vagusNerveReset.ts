@@ -10,9 +10,9 @@ export const VAGUS_NERVE_RESET: MiniProgram = {
     "A science-backed 7-day program drawing on polyvagal theory and somatic research. Each day teaches a different technique to stimulate the vagus nerve and shift you into a calm, parasympathetic state.",
   category: "Somatic · Nervous System",
   videoBackdrop:
-    "https://videos.pexels.com/video-files/2491447/2491447-uhd_2560_1440_30fps.mp4",
+    "/__l5e/assets-v1/4c50663c-31a4-465d-be0e-910c2aa9eb12/video-library-hero.mp4",
   posterUrl:
-    "https://images.pexels.com/videos/2491447/free-video-2491447.jpg?auto=compress&cs=tinysrgb&w=1280",
+    "/src/assets/video-library-hero-poster.jpg",
   freeDays: 1,
   voice: "matilda",
   days: [
@@ -46,8 +46,7 @@ Take three more rounds at your own pace.
 Whenever you feel anxious, overwhelmed, or simply too wired, return to this breath. Two or three rounds is enough to shift your state. This is your portable reset.
 
 Take one final, normal breath. Open your eyes when you are ready. You have just stimulated your vagus nerve.`,
-      posterUrl:
-        "https://images.pexels.com/videos/4763824/4k-clouds-grey-rain-4763824.jpeg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/video-library-hero-poster.jpg",
     },
     {
       day: 2,
@@ -85,8 +84,7 @@ Try a few rounds with Voo. Inhale. Voooo.
 Now return to your natural breath. Notice the after-buzz in your face and throat. That is your vagus nerve waking up.
 
 Whenever you feel stuck or shut down, hum for one minute. Your nervous system will thank you.`,
-      posterUrl:
-        "https://images.pexels.com/videos/4990229/4k-burning-candle-candle-flame-4990229.jpeg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/willow-demo-poster.jpg",
     },
     {
       day: 3,
@@ -118,8 +116,7 @@ When you return, notice what has changed. Your heart will feel different. Your s
 This is your nervous system in parasympathetic dominance. Welcome home.
 
 Whenever panic, anger, or overwhelm spike, use cold water on your face. Thirty seconds is enough to interrupt the cycle.`,
-      posterUrl:
-        "https://images.pexels.com/videos/2169307/free-video-2169307.jpg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/video-library-hero-poster.jpg",
     },
     {
       day: 4,
@@ -157,8 +154,7 @@ Now slowly bring your eyes back to center. Close them. Take three slow breaths.
 Notice the quality of stillness in your body and mind right now. Notice the softness in your neck and shoulders.
 
 This simple practice can be done anywhere, anytime, with no one noticing. At your desk. In a meeting. In bed before sleep. Two rounds, sixty seconds each side, and your nervous system resets.`,
-      posterUrl:
-        "https://images.pexels.com/videos/9783697/aurora-borealis-night-night-sky-northern-lights-9783697.jpeg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/willow-demo-poster.jpg",
     },
     {
       day: 5,
@@ -204,8 +200,7 @@ Continue at your own pace. Two more rounds.
 Now let the breath return to its natural rhythm. Sit quietly for a moment and feel the calm.
 
 This breath is your evening anchor. Four rounds before bed, and you will fall asleep faster than you thought possible.`,
-      posterUrl:
-        "https://images.pexels.com/videos/3015527/free-video-3015527.jpg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/video-library-hero-poster.jpg",
     },
     {
       day: 6,
@@ -237,8 +232,7 @@ This direct stimulation strengthens vagal tone over weeks of practice.
 When you are done, sit quietly. Breathe slowly. Notice the after-calm.
 
 Doing this once or twice a day for two minutes, over several weeks, measurably increases heart rate variability. That is the gold-standard marker of nervous-system health.`,
-      posterUrl:
-        "https://images.pexels.com/videos/5752547/bamboo-bamboo-forest-forest-japan-5752547.jpeg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/willow-demo-poster.jpg",
     },
     {
       day: 7,
@@ -288,8 +282,7 @@ You no longer have to wait for your nervous system to calm down. You know exactl
 Take three slow breaths. Open your eyes when you are ready.
 
 You have completed the Vagus Nerve Reset. Welcome to a more regulated life.`,
-      posterUrl:
-        "https://images.pexels.com/videos/2871916/free-video-2871916.jpg?auto=compress&cs=tinysrgb&w=1280",
+      posterUrl: "/src/assets/video-library-hero-poster.jpg",
     },
   ],
 };
