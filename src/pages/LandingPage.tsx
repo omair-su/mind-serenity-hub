@@ -332,12 +332,12 @@ export default function LandingPage() {
                 ✦ Most Chosen
               </div>
               <h4 className="font-calm-display text-xl font-semibold">Willow Plus · Yearly</h4>
-              <p className="font-calm-body text-sm mt-1 text-white/85">Best value — save 50%</p>
+              <p className="font-calm-body text-sm mt-1 text-white/85">Best value — save 58%</p>
               <div className="mt-6">
-                <span className="font-calm-display text-5xl font-semibold">$59.99</span>
+                <span className="font-calm-display text-5xl font-semibold">$79.99</span>
                 <span className="font-calm-body ml-2 text-white/80">/year</span>
               </div>
-              <p className="font-calm-body text-xs text-white/85 mb-5">Just $4.99/month, billed annually</p>
+              <p className="font-calm-body text-xs text-white/85 mb-5">Just $6.67/month, billed annually</p>
               <ul className="space-y-3 flex-1">
                 {["All 30 days of the program", "Premium ElevenLabs voices", "AI Daily Insight & AI Coach", "Sound Bed Designer + binaurals", "Sleep stories, sound baths", "Advanced analytics & reports"].map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm font-calm-body text-white">
@@ -351,7 +351,7 @@ export default function LandingPage() {
                   Begin 7-Day Trial
                 </button>
               </Link>
-              <p className="font-calm-body text-[10px] text-white/75 mt-3 text-center">Then $59.99/year. Cancel anytime.</p>
+              <p className="font-calm-body text-[10px] text-white/75 mt-3 text-center">Then $79.99/year. Cancel anytime.</p>
             </motion.div>
 
             {/* Plus Monthly */}
