@@ -37,6 +37,12 @@ export default function ProgramDayPage() {
   const tts = useTextToSpeech();
   const [completed, setCompleted] = useState(false);
 
+  const bg = useBrandedVideo(
+    day?.videoSlot ?? program?.heroVideoSlot ?? "vagus-hero",
+    program?.videoBackdrop ?? "",
+    day?.posterUrl ?? program?.posterUrl ?? "",
+  );
+
   usePageSEO({
     title: day
       ? `${program?.title} · Day ${day.day}: ${day.title} | Willow Vibes`
