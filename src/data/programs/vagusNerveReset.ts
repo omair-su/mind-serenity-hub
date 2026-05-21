@@ -19,6 +19,7 @@ export const VAGUS_NERVE_RESET: MiniProgram = {
   days: [
     {
       day: 1,
+      videoSlot: "vagus-day-01",
       title: "The Physiological Sigh",
       duration: "4 min",
       technique: "Double-inhale exhale",
@@ -51,6 +52,7 @@ Take one final, normal breath. Open your eyes when you are ready. You have just 
     },
     {
       day: 2,
+      videoSlot: "vagus-day-02",
       title: "Humming and Vocal Toning",
       duration: "5 min",
       technique: "Vocal vibration",
@@ -89,6 +91,7 @@ Whenever you feel stuck or shut down, hum for one minute. Your nervous system wi
     },
     {
       day: 3,
+      videoSlot: "vagus-day-03",
       title: "The Cold-Face Protocol",
       duration: "3 min",
       technique: "Diving reflex",
@@ -121,6 +124,7 @@ Whenever panic, anger, or overwhelm spike, use cold water on your face. Thirty s
     },
     {
       day: 4,
+      videoSlot: "vagus-day-04",
       title: "The Half-Salamander",
       duration: "5 min",
       technique: "Eye-position reset",
@@ -159,6 +163,7 @@ This simple practice can be done anywhere, anytime, with no one noticing. At you
     },
     {
       day: 5,
+      videoSlot: "vagus-day-05",
       title: "Extended 4-7-8 Breath",
       duration: "6 min",
       technique: "Parasympathetic dominance",
@@ -205,6 +210,7 @@ This breath is your evening anchor. Four rounds before bed, and you will fall as
     },
     {
       day: 6,
+      videoSlot: "vagus-day-06",
       title: "Gargle and Gag Reflex",
       duration: "4 min",
       technique: "Direct vagal toning",
@@ -237,6 +243,7 @@ Doing this once or twice a day for two minutes, over several weeks, measurably i
     },
     {
       day: 7,
+      videoSlot: "vagus-day-07",
       title: "Integration Body Scan",
       duration: "10 min",
       technique: "Full nervous-system check-in",
