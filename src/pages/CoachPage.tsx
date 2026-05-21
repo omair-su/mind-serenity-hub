@@ -4,9 +4,11 @@ import PremiumLockModal from "@/components/PremiumLockModal";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Send, Sparkles, Crown, Biohazard, Volume2, Square } from "lucide-react";
+import { Send, Sparkles, Crown, Biohazard, Volume2, Square, Mic, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
-import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { useCoachVoice } from "@/hooks/useCoachVoice";
+import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
+
 
 // ============================================================
 // Willow Coach — Editorial Luxe edition
@@ -68,7 +70,11 @@ export default function CoachPage() {
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const [showLock, setShowLock] = useState(false);
   const [usageToday, setUsageToday] = useState<number | null>(null);
-  const voice = useSpeechSynthesis();
+  const voice = useCoachVoice(isPremium);
+  const recorder = useVoiceRecorder();
+  const [transcribing, setTranscribing] = useState(false);
+  const [autoSpeakNext, setAutoSpeakNext] = useState(false);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
