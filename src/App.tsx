@@ -128,6 +128,7 @@ function AppInner() {
           <Route path="/app/programs/vagus-nerve" element={Guarded(<VagusNerveResetPage />)} />
           <Route path="/app/programs/:programId/day/:dayNum" element={Guarded(<ProgramDayPage />)} />
           <Route path="/app/programs/:programId" element={Guarded(<ProgramHomePage />)} />
+          <Route path="/app/friends" element={Guarded(<FriendsPage />)} />
           <Route path="/app/achievements" element={Guarded(<AchievementsPage />)} />
           <Route path="/app/sos" element={Guarded(<SOSPage />)} />
           <Route path="/app/breathing" element={Guarded(<BreathingPage />)} />
