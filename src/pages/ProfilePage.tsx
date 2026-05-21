@@ -285,6 +285,16 @@ export default function ProfilePage() {
           </div>
         </Section>
 
+        <Section icon={Trophy} title="Progress & Sharing" gradient="from-[hsl(var(--forest))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
+          <div className="space-y-6">
+            <StreakHeatMap />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ShareableWellnessCard />
+              <MonthlyReportCard />
+            </div>
+          </div>
+        </Section>
+
         <Section icon={Palette} title="Display" gradient="from-[hsl(var(--gold))]/12 via-[hsl(var(--gold-light))]/15 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--gold-dark))]">
           <div className="space-y-4">
             <Field label="Theme">
