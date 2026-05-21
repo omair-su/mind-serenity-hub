@@ -12,6 +12,9 @@ import NotFound from "./pages/NotFound";
 import { useApplySettings } from "./components/ThemeProvider";
 import PaymentTestModeBanner from "./components/PaymentTestModeBanner";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TrialCountdownBanner from "./components/TrialCountdownBanner";
+import WinBackModal from "./components/WinBackModal";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 // Lazy-loaded public marketing/legal pages
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
@@ -85,6 +88,7 @@ function AppInner() {
   return (
     <BrowserRouter>
       <PaymentTestModeBanner />
+      <TrialCountdownBanner />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           {/* Public */}
@@ -160,6 +164,8 @@ function AppInner() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      <WinBackModal />
+      <PWAInstallPrompt />
     </BrowserRouter>
   );
 }

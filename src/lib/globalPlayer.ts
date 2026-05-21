@@ -103,8 +103,8 @@ function ensureAudio(): HTMLAudioElement {
       }
     }
   });
-  audio.addEventListener("play", () => set({ isPlaying: true }));
-  audio.addEventListener("pause", () => set({ isPlaying: false }));
+  audio.addEventListener("play", () => { set({ isPlaying: true }); updateMediaSession(); });
+  audio.addEventListener("pause", () => { set({ isPlaying: false }); updateMediaSession(); });
   audio.addEventListener("ended", () => {
     set({ isPlaying: false, currentTime: state.duration });
     clearResume(state.track?.trackKey);
@@ -113,7 +113,53 @@ function ensureAudio(): HTMLAudioElement {
   audio.addEventListener("error", () => {
     set({ error: "Audio playback failed", isPlaying: false, isLoading: false });
   });
+  audio.addEventListener("timeupdate", () => {
+    if (!audio || !("mediaSession" in navigator)) return;
+    try {
+      (navigator.mediaSession as MediaSession & { setPositionState?: (s: object) => void }).setPositionState?.({
+        duration: audio.duration || 0,
+        playbackRate: audio.playbackRate || 1,
+        position: audio.currentTime || 0,
+      });
+    } catch { /* ignore */ }
+  });
   return audio;
+}
+
+// ── iOS / Android lockscreen MediaSession metadata ─────────────────────
+function updateMediaSession() {
+  if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+  const t = state.track;
+  if (!t) {
+    navigator.mediaSession.metadata = null;
+    return;
+  }
+  try {
+    const artwork = t.thumbnail
+      ? [96, 192, 256, 384, 512].map((s) => ({ src: t.thumbnail!, sizes: `${s}x${s}`, type: "image/png" }))
+      : [];
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: t.title,
+      artist: t.author || t.subtitle || "Willow Vibes",
+      album: "Willow Vibes",
+      artwork,
+    });
+    navigator.mediaSession.setActionHandler("play", () => { audio?.play().catch(() => {}); });
+    navigator.mediaSession.setActionHandler("pause", () => { audio?.pause(); });
+    navigator.mediaSession.setActionHandler("seekbackward", (e) => {
+      if (!audio) return;
+      audio.currentTime = Math.max(0, audio.currentTime - (e.seekOffset || 15));
+    });
+    navigator.mediaSession.setActionHandler("seekforward", (e) => {
+      if (!audio) return;
+      audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + (e.seekOffset || 15));
+    });
+    navigator.mediaSession.setActionHandler("seekto", (e) => {
+      if (!audio || e.seekTime == null) return;
+      audio.currentTime = e.seekTime;
+    });
+    navigator.mediaSession.setActionHandler("stop", () => { player.close(); });
+  } catch { /* ignore */ }
 }
 
 function startProgressTicker() {
