@@ -2,11 +2,13 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Heart, Music, Flame, BookOpen, MessageCircle, Zap, Leaf, Clock, ArrowRight, ChevronRight,
+  Heart, Music, Flame, BookOpen, MessageCircle, Zap, Leaf, Clock, ArrowRight, ChevronRight, ScanEye, Sparkles,
 } from "lucide-react";
 
 const allTools = [
   { label: "AI Coach", desc: "A personalised conversation with your guide", icon: MessageCircle, path: "/app/coach" },
+  { label: "Video Library", desc: "Cinematic loops for calm and focus", icon: ScanEye, path: "/app/video-library" },
+  { label: "Vagus Reset", desc: "A 7-day nervous system program", icon: Sparkles, path: "/app/programs/vagus-nerve" },
   { label: "Body Scan", desc: "Release tension from head to toe", icon: Heart, path: "/app/body-scan" },
   { label: "Sound Bath", desc: "Layered binaural soundscapes", icon: Music, path: "/app/sound-bath" },
   { label: "Challenges", desc: "Multi-day themed journeys", icon: Flame, path: "/app/challenges" },
