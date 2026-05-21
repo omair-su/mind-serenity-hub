@@ -121,7 +121,7 @@ export default function ProgramDayPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 pt-6">
           <Link
-            to={`/app/programs/${program.id}`}
+            to="/app/programs/vagus-nerve"
             className="inline-flex items-center gap-2 text-sm font-body text-cream/70 hover:text-cream transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" /> Back to program
