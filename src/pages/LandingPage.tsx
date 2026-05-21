@@ -359,7 +359,7 @@ export default function LandingPage() {
               <h4 className="font-calm-display text-xl font-semibold" style={{ color: NAVY }}>Willow Plus · Monthly</h4>
               <p className="font-calm-body text-sm mt-1" style={{ color: SLATE }}>Flexible, no commitment</p>
               <div className="my-6">
-                <span className="font-calm-display text-5xl font-semibold" style={{ color: NAVY }}>$9.99</span>
+                <span className="font-calm-display text-5xl font-semibold" style={{ color: NAVY }}>$14.99</span>
                 <span className="font-calm-body ml-2" style={{ color: SLATE }}>/month</span>
               </div>
               <ul className="space-y-3 flex-1">
@@ -375,7 +375,7 @@ export default function LandingPage() {
                   Begin 7-Day Trial
                 </button>
               </Link>
-              <p className="font-calm-body text-[10px] mt-3 text-center" style={{ color: SLATE }}>Then $9.99/month. Cancel anytime.</p>
+              <p className="font-calm-body text-[10px] mt-3 text-center" style={{ color: SLATE }}>Then $14.99/month. Cancel anytime.</p>
             </motion.div>
           </div>
 
