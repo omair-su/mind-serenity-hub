@@ -1,114 +1,155 @@
-# Willow Vibes — Comprehensive Quality Audit & Premium Polish Plan
+# Willow Vibes — Phase 6+ Premium Roadmap
 
-I went through the meditation app end-to-end (DayPage, narration edge function, audio library, hooks, service worker, console logs). Below are the **confirmed bugs**, the **rough edges**, and a **phased plan** to close the gap with Headspace / Calm / Insight Timer / Balance.
-
----
-
-## A. Confirmed bugs (must fix)
-
-### 1. "All four guided voices sound the same" — root cause found
-`src/pages/DayPage.tsx` has **two** play buttons:
-
-- **Hero "Listen Only"** (line 363) correctly passes `voice: selectedVoice` and a voice-scoped `trackKey: day-${dayNumber}-listen-${selectedVoice}`.
-- **Inline "Audio Player"** (line 542) calls `tts.generateAndPlay(fullScript)` with **no options at all**.
-
-When no options are passed, `useTextToSpeech` falls into legacy mode and derives a trackKey from the text hash alone — the edge function then uses `defaultVoiceFor('daily_meditation')` → **always Sarah**. So changing the voice picker has zero effect on the inline player, and once Sarah's audio is cached the same MP3 plays for every voice forever.
-
-**Fix:** the inline button must pass the same `{ trackKey, category, title, voice, isPremium }` options as the hero button. Also flush the cached `audioRef` when `selectedVoice` changes so the new voice actually downloads.
-
-### 2. Broken thumbnails in Audio Library (the two cards in the screenshots)
-`src/data/audioLibrary.ts` uses raw Unsplash hot-link URLs. Two specific images render blank in your screenshots:
-
-- `s-prem-4` Atmospheric Dissolution → `photo-1499209974431-9dac3adaf471`
-- `c2` Precision Focus Protocol → `photo-1493246507139-91e8bef99c02`
-
-These are 404 / hot-link-blocked. There is **no `onError` fallback** in `AudioLibraryPage.tsx` (lines 146, 251), so the broken image just leaves an empty card with the title floating outside the frame (exactly what your screenshots show).
-
-**Fix:** replace external Unsplash URLs with locally generated `src/assets/audio-library/*.jpg` (same approach you already used for Sleep Stories), and add an `onError` swap-to-fallback handler.
-
-### 3. Placeholder audio everywhere in Audio Library
-Every `audioUrl` in `audioLibrary.ts` is `SoundHelix-Song-N.mp3` — a generic rock instrumental. Tapping any session in the library plays rock music instead of meditation. This is the single biggest "this feels like a demo, not a real app" signal.
-
-**Fix:** route the Audio Library through the same `generate-narration` edge function used by DayPage. Add a real `script` field per session/course-step and stream ElevenLabs narration into the existing `AudioPlayer` instead of the SoundHelix URLs.
-
-### 4. Service Worker push registration fails
-Console log: `Failed to register a ServiceWorker for scope … The script resource is behind a redirect`. `public/sw.js` is being served through a redirect on the preview domain. Push notifications are silently dead.
-
-**Fix:** stop registering `sw.js` on `*.lovable.app` previews (only on the production `willowvibes.com` domain), or move the SW registration behind a feature flag.
+After re-auditing the full app (47 pages, ~17.7k LOC, 5 phases shipped: bug fixes, real narration, unified bar, mini-player + offline, QA), here's where we stand and what comes next to make Willow Vibes a high-ticket, high-demand app that can credibly compete with Calm & Headspace.
 
 ---
 
-## B. Rough edges & refinement opportunities
+## A. Current state — what's solid
 
-### DayPage / Guided Practice
-- Two redundant play controls (hero "Listen Only" + inline player) confuse users. Consolidate into one bar.
-- No "next sentence" highlighting while narration plays — Calm and Headspace both highlight the line being spoken.
-- No voice-preview snippet on the voice picker — users can't sample Aria vs George before generating a full track.
-- "Read first" scroll target is silent — no visual cue when scroll lands on the practice section.
+**Already strong:** 30-day course, 4-voice ElevenLabs narration with cache, Audio Library, Sleep Stories, SOS protocols, Breathing, Body Scan, Walking Meditation, Gratitude, Sound Bath, Soundscape Builder, Mood Tracker, Journal, Challenges, Rituals, Focus Mode, AI Coach, AI Recommendations, Achievements, Streaks, Offline Downloads, global mini-player, Paddle subscriptions, dark/light theme, premium gating.
 
-### Audio Library
-- No search debounce, no skeletons during filter changes, no empty-state illustration.
-- Course cards mix "play step" + "queue step" in a cramped row — hard to tap on mobile.
-- No download / offline indication despite the `OfflineDownloadsPage` existing elsewhere.
+## B. Bugs & rough edges found in this re-audit
 
-### Sleep Stories
-- Hero is now premium (recent work), but cards still don't show narrator avatar / chapter count.
-- No "continue where you left off" — sleep listeners always drift, so resume position matters more than anywhere else.
-
-### Landing page hero
-- 3D cosmic scene is good now, but the rest of the page (features, pricing, testimonials) is still standard — disconnect in polish level.
-
-### Cross-cutting
-- ElevenLabs hook has no UI for the "fallback to browser TTS" case beyond a tiny error string — users get robotic SpeechSynthesis with no warning.
-- `useAmbientBed` and `useTextToSpeech` are not bridged — narration plays without the ambient bed underneath unless the user manually opens the mixer.
-- No global "now playing" mini-bar persists across navigation — switching pages kills audio.
-- Pricing page mentions "Aria" as a premium voice but `VOICE_LIBRARY` in the edge function only defines sarah/george/matilda/charlie. Name mismatch.
-- Mood tracker fix from last turn should be regression-tested on Week + Day pages.
+1. **No video anywhere** — biggest gap vs. Calm/Headspace. Every guided practice is audio-only. Users can't "see" what they're about to do.
+2. **Onboarding → Day 1 friction** — assessment results don't visibly personalize the dashboard. The personalization data isn't surfaced.
+3. **AI Coach is text-only** — no voice reply, no streaming, feels like a generic chatbot vs. Headspace's "Ebb".
+4. **Mood Tracker insights** are static — no week-over-week comparisons, no correlation with practice streaks.
+5. **Sleep Stories** lack chapter markers, sleep timer auto-fade, narrator avatars.
+6. **No Apple Health / Google Fit sync** — wellness apps live or die by this.
+7. **No live/scheduled sessions** — Calm Daily Calm, Headspace daily meditation have a "today's drop" cadence that drives retention.
+8. **No community / social proof in-app** — no "12,847 people are meditating now" counter, no shared milestones.
+9. **Pricing page** lists features but no comparison table vs. Calm/Headspace, no annual savings highlight, no testimonial carousel with photos.
+10. **Profile page** has no streak heat-map, no total minutes meditated, no shareable wellness report card.
+11. **No widget/lockscreen** support (PWA install prompt is weak).
+12. **Accessibility:** narration bar has no captions toggle, no transcript view.
 
 ---
 
-## C. Phased rollout
+## C. What's exploding in the wellness AI market (research-backed)
 
-### Phase 1 — Critical fixes (this turn after approval)
-1. Fix DayPage inline player to honor `selectedVoice` + flush audio on voice change.
-2. Replace broken Unsplash thumbnails with local generated images for all 8 courses/sessions; add `onError` fallback to the library page.
-3. Disable `sw.js` registration on preview subdomains to silence the console error.
-4. Rename "Aria" → "Matilda" (or add Aria to `VOICE_LIBRARY`) so the pricing page and the actual voice library match.
-
-### Phase 2 — Real audio across the Audio Library
-1. Add `script` field to each `MeditationSession` / `CourseStep`.
-2. Refactor `AudioPlayer.tsx` to call `useTextToSpeech` with proper `trackKey`/`category`/`voice` per session, replacing the raw `<audio src=audioUrl>` path.
-3. Cache hits will make repeat plays instant (already supported by the edge function).
-4. Add narrator-voice badge on each card.
-
-### Phase 3 — Premium narration UX
-1. Single unified narration bar on DayPage (kill the duplicate inline player).
-2. Active-sentence highlighting synced to `currentTime` / estimated WPM.
-3. Voice picker shows a 6-second preview snippet per voice (pre-generated, cached).
-4. Auto-pair ambient bed with narration via `useAmbientBed` — open the mixer with a sensible default per category.
-
-### Phase 4 — Continuity & retention features
-1. Global mini-player that survives route changes (portal-mounted, reads from a Zustand store).
-2. "Resume where you left off" for sleep stories — persist `currentTime` per `trackKey` in `localStorage`.
-3. Offline downloads wired to the existing `OfflineDownloadsPage` using `caches.put()` for cached MP3s.
-4. Real haptics + subtle audio cues on completion (web vibration API + a single soft chime).
-
-### Phase 5 — Audit pass & QA
-1. Manual walk-through of every page in the browser tool, mobile viewport, with screenshots.
-2. Verify all 4 voices produce distinct audio (delete cache rows, re-trigger, listen).
-3. Verify every Audio Library card renders an image and plays meditation audio (not rock music).
-4. Lighthouse run on landing page to confirm 3D hero didn't regress LCP.
+Searches & feature demand currently surging:
+- **Somatic therapy / nervous-system regulation** (vagus nerve, polyvagal exercises)
+- **Cold-exposure & breathwork protocols** (Wim Hof, box breathing, 4-7-8 with visual coach)
+- **Sleep stories with cinematic video backdrops** (Calm just launched this Q1)
+- **AI personal wellness coach with voice** (Headspace's Ebb, Replika's wellness mode)
+- **Cycle-syncing / hormonal wellness** for women
+- **Grief & relationship-loss programs** (huge searches in 2025)
+- **ADHD-focused meditation & focus stacks** (Pomodoro + binaural + ambient)
+- **Workplace wellness packs** (B2B angle — high LTV)
+- **Sound-frequency therapy** (528 Hz, 432 Hz, solfeggio — TikTok-driven demand)
+- **Guided journaling prompts with AI reflection**
+- **Habit-stacking with morning & evening rituals**
+- **Sleep score & recovery tracking** (Oura-style without the ring)
 
 ---
 
-## Technical notes (for the implementation turn)
+## D. Phased plan to ship next
 
-- **Voice fix:** in `DayPage.tsx`, wrap the inline-player click in the same options object used for the hero button, AND add `useEffect(() => { tts.stop(); }, [selectedVoice])` so the cached `audioRef` is dropped when the user switches voice.
-- **Thumbnails:** generate via `imagegen` at 800×600 to `src/assets/audio-library/{slug}.jpg`, then import each as an ES6 module and assign to `thumbnail`. Add `onError={(e) => (e.currentTarget.src = fallback)}` on the two `<img>` tags in `AudioLibraryPage.tsx`.
-- **SW guard:** in `webPush.ts`, early-return when `location.hostname.endsWith('lovable.app')`.
-- **Audio Library narration:** add an optional `narrationScript?: string` to `MeditationSession`. When present, `AudioPlayer` uses `useTextToSpeech.generateAndPlay(narrationScript, { trackKey: session.id, category: 'daily_meditation', title: session.title, voice: 'sarah' })` and ignores `audioUrl`. Fall back to `audioUrl` if no script.
-- **Mini-player store:** new `src/lib/playerStore.ts` (Zustand) holding `{ track, isPlaying, currentTime }`; mounted at `App.tsx` level so it persists across `<Routes>`.
+### Phase 6 — Video everywhere (highest impact, what you asked for)
+
+**6.1 Guided day-practice videos**
+- Each of the 30 days gets a 60-90s cinematic intro video (nature B-roll + on-screen text + narrator voiceover).
+- Generate via `videogen--generate_video` (5-10s clips × 8-10, stitched) OR use a single longer Veo clip per day.
+- Auto-play muted on DayPage hero, full sound on tap.
+- Cache to `caches.put()` for offline.
+- **Premium gate:** Days 1-3 free preview, Days 4-30 premium.
+
+**6.2 Calming video library** (new page `/app/video-library`)
+- 24 cinematic loops: forest, ocean, rain on window, fireplace, snowfall, aurora, candle, etc.
+- Each 30-60s, designed to loop seamlessly.
+- Pair with ambient soundscape from existing `SoundscapeBuilder`.
+- Cast to TV / fullscreen mode.
+- **Premium gate:** 4 free, 20 premium.
+
+**6.3 Sleep-story video backdrops**
+- Add `videoBackdrop` field to sleep stories.
+- Cinematic ambient loop plays behind the narration with dim overlay.
+- Auto-fade to black after sleep-timer expires.
+
+### Phase 7 — AI Coach 2.0 ("Willow")
+
+- Voice replies via ElevenLabs (reuse `generate-narration` infra with a dedicated coach voice).
+- Streaming text (token-by-token like ChatGPT).
+- Context-aware: knows your last mood, last practice, current streak.
+- Daily proactive check-in notification ("It's been 2 days since your last session — want a 3-min reset?").
+- "Talk it out" mode: live voice conversation (push-to-talk, Whisper STT → GPT-5 → ElevenLabs).
+
+### Phase 8 — Wellness Intelligence
+
+- **Sleep score** computed from sleep-story usage + mood + journal sentiment.
+- **Recovery ring** (Oura-style) on dashboard combining mood + practice consistency + sleep.
+- **Weekly Insights email** auto-sent Sunday: "You meditated 47 min, mood improved 18%, longest streak in 3 weeks."
+- **Apple Health / Google Fit** read-only sync (steps, HRV, sleep hours) → factor into recommendations.
+- **Mood-Practice correlation chart**: "Box breathing improves your mood by avg 1.8 points."
+
+### Phase 9 — Trending wellness programs (new content tracks)
+
+Each is a 7-day mini-program (separate from the 30-day flagship):
+1. **Vagus Nerve Reset** — somatic exercises, humming, cold-face protocol
+2. **Box Breathing for Athletes** — performance breathwork
+3. **Grief Companion** — 7 days of guided letters + meditations
+4. **ADHD Focus Stack** — Pomodoro + binaural + body scan combo
+5. **Cycle Sync** (women) — meditations tuned to menstrual phase
+6. **Sound Frequency Therapy** — 528/432/963 Hz sessions with visual oscilloscope
+7. **Morning & Evening Ritual Pack** — habit-stacking templates
+
+### Phase 10 — Retention & social proof
+
+- "**Live Now**" pulse on dashboard: "3,247 people are meditating right now" (real count from Supabase presence).
+- **Daily Drop**: a new 5-min session published every day at 6 AM local time, push-notified.
+- **Streak Heat-Map** on profile (GitHub-style 365-day grid).
+- **Shareable Wellness Card** (PNG export of weekly stats for Instagram stories).
+- **Friends & accountability**: invite a friend, see their streak (opt-in).
+- **Wellness Report Card** (monthly PDF, premium).
+
+### Phase 11 — Conversion & pricing polish
+
+- Comparison table: Willow Vibes vs. Calm vs. Headspace (price, features, AI coach checkmarks).
+- Annual plan saves 58% badge, money-back guarantee seal.
+- Testimonial carousel with real photos + outcome metrics.
+- Free trial countdown banner once started.
+- Win-back flow for canceled users (50% off 3 months).
+- Lifetime tier ($199 one-time) to capture high-ticket buyers.
+
+### Phase 12 — Accessibility & platform reach
+
+- Live captions on every narration (transcript synced to audio).
+- Full transcript view + copy-to-clipboard.
+- Strong PWA install prompt after day 3.
+- iOS lockscreen MediaSession metadata (artwork + scrub).
+- Reduced-motion alternates for every animated component.
 
 ---
 
-Approve and I will start with **Phase 1** (the four critical fixes) in the next turn, then we iterate phase by phase.
+## E. Suggested ship order (recommend tackling 2 phases per turn)
+
+1. **Phase 6** (videos) — biggest wow factor, directly answers your ask.
+2. **Phase 7** (AI Coach voice) — single highest retention lever per industry data.
+3. **Phase 9** (trending programs) — content moat, SEO juice, social-share fuel.
+4. **Phase 8** (wellness intelligence) — turns one-time users into daily users.
+5. **Phase 10** (retention) — needed once DAU > 100.
+6. **Phase 11** (pricing polish) — once content is differentiated.
+7. **Phase 12** (a11y/platform) — polish pass.
+
+---
+
+## F. Open decisions before I build
+
+1. **Video generation budget** — Veo/Runway generations are billed. For Phase 6, do you want me to (a) generate fresh cinematic clips per day (~30 clips, costs $$), (b) use Pexels royalty-free stock loops (free, fast), or (c) a mix — generated hero loops for the landing page + stock for inner pages?
+2. **Sleep score formula** — do you want it Oura-style (numeric 0-100) or qualitative ("Restored / Recovering / Depleted")?
+3. **Which trending program** should I build first in Phase 9? My pick: **Vagus Nerve Reset** (highest search trend, lowest content cost).
+4. **Lifetime tier price** — $149, $199, or $299?
+
+Answer those four and I'll start Phase 6 (videos) immediately in the next turn.
+
+---
+
+## Technical notes
+
+- Videos: use HTML5 `<video>` with `playsinline muted loop`; cache via existing `offlineCache.ts` (add `.mp4` MIME).
+- New table `daily_drops` (id, date, session_id, push_sent_at) + cron edge function `publish-daily-drop`.
+- New edge function `coach-voice-chat` (streaming SSE: GPT-5 → ElevenLabs chunks).
+- New table `wellness_scores` (user_id, date, sleep, mood, practice, recovery, computed_at) refreshed nightly.
+- Apple Health sync: PWA can't read HealthKit directly — needs a thin iOS shortcut bridge or Capacitor wrap (defer to Phase 8.5 once iOS shell exists).
+- All new premium content gated through existing `useIsPremium` hook + `PremiumGate` component.
+- Video library page follows existing `AudioLibraryPage` patterns (filter, search, premium lock, mini-player handoff).
