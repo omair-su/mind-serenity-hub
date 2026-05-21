@@ -302,6 +302,24 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                       {msg.role === "coach" ? "Willow Coach" : "You"}
                     </span>
                     <span className="text-[10px] text-[hsl(var(--charcoal-soft))]">{msg.time}</span>
+                    {msg.role === "coach" && msg.text && voice.supported && (
+                      <button
+                        type="button"
+                        onClick={() => voice.toggle(msg.id, msg.text)}
+                        aria-label={voice.speakingId === msg.id ? "Stop voice" : "Listen to reply"}
+                        className="ml-auto inline-flex items-center gap-1 text-[10px] font-medium tracking-wide px-2 py-0.5 rounded-full border border-[hsl(var(--gold))]/40 text-[hsl(var(--forest-deep))] hover:bg-[hsl(var(--cream-dark))]/60 transition-all"
+                      >
+                        {voice.speakingId === msg.id ? (
+                          <>
+                            <Square className="w-2.5 h-2.5 fill-current" /> Stop
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-2.5 h-2.5" /> Listen
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                   <div className="text-sm font-body leading-relaxed space-y-1.5 text-muted-foreground">
                     {msg.role === "coach"
