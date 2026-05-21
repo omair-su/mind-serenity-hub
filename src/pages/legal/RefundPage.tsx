@@ -15,9 +15,9 @@ export default function RefundPage() {
         If you are not satisfied with Willow Plus, you may request a full refund within <strong>14 days of your initial purchase</strong> — no questions asked. This applies to:
       </p>
       <ul>
-        <li>Plus Monthly subscriptions ($9.99/month)</li>
-        <li>Plus Yearly subscriptions ($59.99/year)</li>
-        <li>Lifetime access ($199 one-time)</li>
+        <li>Plus Monthly subscriptions ($14.99/month)</li>
+        <li>Plus Yearly subscriptions ($79.99/year)</li>
+        <li>Lifetime access ($149 one-time)</li>
       </ul>
 
       <h2>3. Subscription Renewals</h2>
