@@ -10,7 +10,7 @@ import { usePageSEO } from "@/hooks/usePageSEO";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useBrandedVideo } from "@/hooks/useBrandedVideo";
-import { getProgramById } from "@/data/programs/vagusNerveReset";
+import { getProgramById } from "@/data/programs";
 
 const STORAGE_KEY = (programId: string) => `willow:program:${programId}:progress`;
 
@@ -72,7 +72,7 @@ export default function ProgramDayPage() {
         <div className="min-h-screen flex items-center justify-center px-6">
           <div className="text-center">
             <p className="font-body text-muted-foreground mb-4">Program day not found.</p>
-            <Link to="/app/programs/vagus-nerve" className="text-gold underline">Back to program</Link>
+            <Link to={`/app/programs/${programId}`} className="text-gold underline">Back to program</Link>
           </div>
         </div>
       </AppLayout>
@@ -129,7 +129,7 @@ export default function ProgramDayPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 pt-6">
           <Link
-            to="/app/programs/vagus-nerve"
+            to={`/app/programs/${program.id}`}
             className="inline-flex items-center gap-2 text-sm font-body text-cream/70 hover:text-cream transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" /> Back to program
