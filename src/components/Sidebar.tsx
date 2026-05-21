@@ -25,6 +25,7 @@ const coreItems = [
   { label: "Journal", path: "/app/journal", icon: BookOpen },
   { label: "Achievements", path: "/app/achievements", icon: Trophy },
   { label: "Mood Tracker", path: "/app/mood", icon: Smile },
+  { label: "Friends", path: "/app/friends", icon: Users },
   { label: "SOS Relief", path: "/app/sos", icon: Zap },
   { label: "Breathing", path: "/app/breathing", icon: Wind },
   { label: "Sleep", path: "/app/sleep", icon: Moon },
