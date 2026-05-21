@@ -72,13 +72,33 @@ serve(async (req) => {
       const { data: subs } = await admin.from("push_subscriptions").select("*").eq("user_id", p.user_id);
       if (!subs?.length) continue;
 
+      // Proactive check-in: if it's been 2+ days since the last practice,
+      // send a warmer "we miss you" nudge instead of the default reminder.
+      const { data: progress } = await admin
+        .from("user_progress")
+        .select("last_session_date")
+        .eq("user_id", p.user_id)
+        .maybeSingle();
+      let daysSince: number | null = null;
+      if (progress?.last_session_date) {
+        const last = new Date(progress.last_session_date as string);
+        daysSince = Math.floor((Date.now() - last.getTime()) / 86_400_000);
+      }
+
       const greeting = p.display_name ? `Hi ${p.display_name}, ` : "";
-      const payload = {
-        title: "Time for your Willow practice 🌿",
-        body: `${greeting}take 10 minutes to breathe and reset.`,
-        url: "/app",
-        tag: "wv-daily-reminder",
-      };
+      const payload = daysSince !== null && daysSince >= 2
+        ? {
+            title: "Your coach is thinking of you 🌿",
+            body: `${greeting}it's been ${daysSince} days — want a 3-min reset together?`,
+            url: "/app/coach",
+            tag: "wv-coach-checkin",
+          }
+        : {
+            title: "Time for your Willow practice 🌿",
+            body: `${greeting}take 10 minutes to breathe and reset.`,
+            url: "/app",
+            tag: "wv-daily-reminder",
+          };
 
       for (const s of subs) {
         try {
@@ -93,6 +113,7 @@ serve(async (req) => {
         }
       }
     }
+
 
     return new Response(JSON.stringify({ candidates, pushed, removed }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
