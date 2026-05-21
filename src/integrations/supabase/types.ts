@@ -128,6 +128,39 @@ export type Database = {
         }
         Relationships: []
       }
+      friendships: {
+        Row: {
+          created_at: string
+          friend_user_id: string | null
+          id: string
+          invited_email: string | null
+          share_streak: boolean
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_user_id?: string | null
+          id?: string
+          invited_email?: string | null
+          share_streak?: boolean
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_user_id?: string | null
+          id?: string
+          invited_email?: string | null
+          share_streak?: boolean
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       gratitude_entries: {
         Row: {
           ai_reflection: string | null
@@ -463,6 +496,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_friend_stats: {
+        Args: { _friend_user_id: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          last_session_date: string
+          streak_days: number
+          total_minutes: number
+          user_id: string
+        }[]
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
