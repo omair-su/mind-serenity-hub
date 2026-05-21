@@ -135,10 +135,50 @@ serve(async (req) => {
     );
     const { data: profile } = await admin
       .from("profiles")
-      .select("is_premium")
+      .select("is_premium, display_name")
       .eq("user_id", userId)
       .maybeSingle();
     const isPremium = !!profile?.is_premium;
+
+    // 2b. Build per-user context (mood, streak, last practice) so the coach
+    // can reference real signals like "I see you've been on a 4-day streak".
+    let userContextBlock = "";
+    try {
+      const [{ data: lastMood }, { data: progress }] = await Promise.all([
+        admin.from("mood_entries")
+          .select("emotion_primary, energy, focus, created_at")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(1).maybeSingle(),
+        admin.from("user_progress")
+          .select("streak_days, last_session_date, total_minutes, completed_sessions")
+          .eq("user_id", userId)
+          .maybeSingle(),
+      ]);
+      const lines: string[] = [];
+      if (profile?.display_name) lines.push(`- Name: ${profile.display_name}`);
+      if (lastMood?.emotion_primary) {
+        const ago = lastMood.created_at
+          ? Math.round((Date.now() - new Date(lastMood.created_at as string).getTime()) / 86_400_000)
+          : null;
+        lines.push(`- Last mood: ${lastMood.emotion_primary}${ago !== null ? ` (${ago}d ago)` : ""}`);
+      }
+      if (progress?.streak_days != null) lines.push(`- Current streak: ${progress.streak_days} day(s)`);
+      if (progress?.last_session_date) lines.push(`- Last practice: ${progress.last_session_date}`);
+      if (Array.isArray(progress?.completed_sessions)) {
+        const last = (progress!.completed_sessions as unknown[]).slice(-1)[0];
+        if (last && typeof last === "object") {
+          const day = (last as Record<string, unknown>).day;
+          if (day) lines.push(`- Most recent day completed: Day ${day}`);
+        }
+      }
+      if (lines.length) {
+        userContextBlock = `\n\nCURRENT USER CONTEXT (use sparingly, only when it adds warmth or relevance — never recite it verbatim):\n${lines.join("\n")}`;
+      }
+    } catch (e) {
+      console.warn("[coach] context load failed", e);
+    }
+
 
     // 3. Validate input
     const { messages, stream: streamRequested = false } = await req.json();
@@ -206,7 +246,7 @@ serve(async (req) => {
       });
     }
 
-    const systemPrompt = isPremium ? PREMIUM_SYSTEM_PROMPT : FREE_SYSTEM_PROMPT;
+    const systemPrompt = (isPremium ? PREMIUM_SYSTEM_PROMPT : FREE_SYSTEM_PROMPT) + userContextBlock;
     // Free tier: Claude Haiku (~3x faster, much lower latency, perfect for short replies).
     // Premium: Claude Sonnet 4.5 for deeper, longer answers.
     const model = isPremium ? "claude-sonnet-4-5-20250929" : "claude-haiku-4-5-20251001";

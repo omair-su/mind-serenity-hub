@@ -18,3 +18,11 @@ verify_jwt = false
 [functions.send-daily-reminders]
 verify_jwt = false
 
+[functions.coach-tts]
+verify_jwt = false
+
+[functions.coach-stt]
+verify_jwt = false
+
+
+

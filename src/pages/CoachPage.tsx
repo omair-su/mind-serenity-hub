@@ -4,9 +4,11 @@ import PremiumLockModal from "@/components/PremiumLockModal";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Send, Sparkles, Crown, Biohazard, Volume2, Square } from "lucide-react";
+import { Send, Sparkles, Crown, Biohazard, Volume2, Square, Mic, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
-import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { useCoachVoice } from "@/hooks/useCoachVoice";
+import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
+
 
 // ============================================================
 // Willow Coach — Editorial Luxe edition
@@ -68,7 +70,11 @@ export default function CoachPage() {
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const [showLock, setShowLock] = useState(false);
   const [usageToday, setUsageToday] = useState<number | null>(null);
-  const voice = useSpeechSynthesis();
+  const voice = useCoachVoice(isPremium);
+  const recorder = useVoiceRecorder();
+  const [transcribing, setTranscribing] = useState(false);
+  const [autoSpeakNext, setAutoSpeakNext] = useState(false);
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -106,7 +112,7 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isStreaming]);
 
-  const send = async (text?: string) => {
+  const send = async (text?: string, opts?: { autoSpeak?: boolean }) => {
     const msg = (text || input).trim();
     if (!msg || isStreaming) return;
     setInput("");
@@ -119,88 +125,151 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
     const assistantId = Date.now().toString() + "r";
     setMessages(prev => [...prev, { id: assistantId, role: "coach", text: "", time: now() }]);
 
+    const controller = new AbortController();
+    const watchdog = window.setTimeout(() => controller.abort(), 60_000);
+
     try {
-      // Client-side safety net: never let the UI hang more than 45s.
-      // Premium Sonnet replies can take 25-35s; previous 25s cap was killing valid replies.
-      const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
-        setTimeout(
-          () => resolve({ data: null, error: new Error("CLIENT_TIMEOUT") }),
-          45_000,
-        ),
-      );
-      const invokePromise = supabase.functions.invoke("ai-coach-chat", {
-        body: {
-          messages: history.filter(m => m.id !== "welcome").map(m => ({ role: m.role, content: m.text })),
-          stream: false,
+      const { data: sess } = await supabase.auth.getSession();
+      const accessToken = sess?.session?.access_token;
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach-chat`;
+
+      const r = await fetch(url, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         },
+        body: JSON.stringify({
+          messages: history.filter(m => m.id !== "welcome").map(m => ({ role: m.role, content: m.text })),
+          stream: true,
+        }),
       });
-      const { data, error } = (await Promise.race([invokePromise, timeoutPromise])) as
-        { data: any; error: any };
 
-      if (error) {
-        const message = error.message || "Coach unavailable";
-        if (message === "CLIENT_TIMEOUT") {
-          toast({ title: "Coach is taking too long", description: "The connection timed out. Please try again.", variant: "destructive" });
-          setMessages(prev => prev.filter(m => m.id !== assistantId));
-          return;
-        }
-        if (message.includes("402") || message.includes("FREE_LIMIT_REACHED")) {
+      // Handle non-streaming JSON error envelopes (limits, auth, etc.).
+      const contentType = r.headers.get("content-type") || "";
+      if (r.status === 402 || (contentType.includes("application/json") && r.status !== 200)) {
+        const payload = await r.json().catch(() => ({}));
+        if (payload?.error === "FREE_LIMIT_REACHED" || r.status === 402) {
           setShowLock(true);
-          setMessages(prev => prev.filter(m => m.id !== assistantId));
           if (!isPremium) setUsageToday(FREE_DAILY_LIMIT);
-          return;
+        } else if (payload?.error === "UNAUTHORIZED" || r.status === 401) {
+          toast({ title: "Please sign in", description: "Sign in to chat with your coach.", variant: "destructive" });
+          setShowLock(true);
+        } else {
+          toast({ title: "Coach unavailable", description: payload?.message || "Please try again.", variant: "destructive" });
         }
-        if (message.includes("429") || message.toLowerCase().includes("rate")) {
-          toast({ title: "Slow down a moment", description: "Too many messages — please try again shortly.", variant: "destructive" });
-          setMessages(prev => prev.filter(m => m.id !== assistantId));
-          return;
-        }
-        throw error;
+        setMessages(prev => prev.filter(m => m.id !== assistantId));
+        return;
       }
 
-      if (!data?.ok && data?.error === "FREE_LIMIT_REACHED") {
-        setShowLock(true);
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        if (!isPremium) setUsageToday(FREE_DAILY_LIMIT);
-        return;
-      }
-      if (!data?.ok && data?.error === "RATE_LIMITED") {
-        toast({ title: "Slow down a moment", description: "Too many messages — please try again shortly.", variant: "destructive" });
+      if (contentType.includes("application/json")) {
+        // Server returned a JSON error envelope at status 200.
+        const payload = await r.json().catch(() => ({}));
+        toast({ title: "Coach unavailable", description: payload?.message || "Please try again.", variant: "destructive" });
         setMessages(prev => prev.filter(m => m.id !== assistantId));
         return;
       }
-      if (!data?.ok && data?.error === "AI_MODEL_TIMEOUT") {
-        toast({ title: "Coach took too long", description: data?.message || "The model timed out. Please try again.", variant: "destructive" });
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        return;
+
+      if (!r.body) throw new Error("No response stream");
+
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = "";
+      let accumulated = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buf.indexOf("\n")) !== -1) {
+          const line = buf.slice(0, nl).trim();
+          buf = buf.slice(nl + 1);
+          if (!line.startsWith("data:")) continue;
+          const json = line.slice(5).trim();
+          if (!json || json === "[DONE]") continue;
+          try {
+            const evt = JSON.parse(json);
+            if (typeof evt.text === "string") {
+              accumulated += evt.text;
+              setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, text: accumulated } : m));
+            }
+          } catch { /* partial */ }
+        }
       }
-      if (!data?.ok && (data?.error === "SERVICE_UNAVAILABLE" || data?.error === "COACH_NOT_CONFIGURED")) {
-        toast({ title: "Coach unavailable", description: data?.message || "Please try again in a moment.", variant: "destructive" });
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        return;
-      }
-      if (!data?.ok && data?.error === "UNAUTHORIZED") {
-        toast({ title: "Please sign in", description: "Sign in to chat with your coach.", variant: "destructive" });
-        setShowLock(true);
-        setMessages(prev => prev.filter(m => m.id !== assistantId));
-        return;
-      }
-      if (!data?.ok || !data?.reply) {
-        toast({ title: "Coach unavailable", description: data?.message || "Please try again in a moment.", variant: "destructive" });
+
+      if (!accumulated) {
+        toast({ title: "Coach unavailable", description: "Empty response — please try again.", variant: "destructive" });
         setMessages(prev => prev.filter(m => m.id !== assistantId));
         return;
       }
 
       if (!isPremium) setUsageToday(u => (u ?? 0) + 1);
-      setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, text: data.reply } : m));
+
+      // Auto-play voice reply if user spoke their message ("Talk it out").
+      if (opts?.autoSpeak || autoSpeakNext) {
+        setAutoSpeakNext(false);
+        voice.toggle(assistantId, accumulated);
+      }
     } catch (e) {
+      const aborted = (e as Error)?.name === "AbortError";
       console.error("coach error:", e);
-      toast({ title: "Connection issue", description: "Couldn't reach your coach. Please try again.", variant: "destructive" });
+      toast({
+        title: aborted ? "Coach is taking too long" : "Connection issue",
+        description: aborted ? "Connection timed out. Please try again." : "Couldn't reach your coach.",
+        variant: "destructive",
+      });
       setMessages(prev => prev.filter(m => m.id !== assistantId));
     } finally {
+      window.clearTimeout(watchdog);
       setIsStreaming(false);
     }
   };
+
+  // "Talk it out" — record mic, transcribe via coach-stt, send as message.
+  const handleMicPress = async () => {
+    if (isStreaming || transcribing) return;
+    if (!isPremium) { setShowLock(true); return; }
+
+    if (recorder.state === "recording") {
+      const blob = await recorder.stop();
+      if (!blob) return;
+      setTranscribing(true);
+      try {
+        const form = new FormData();
+        form.append("audio", blob, "voice.webm");
+        const { data: sess } = await supabase.auth.getSession();
+        const accessToken = sess?.session?.access_token;
+        const r = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/coach-stt`, {
+          method: "POST",
+          headers: {
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          },
+          body: form,
+        });
+        const data = await r.json().catch(() => ({}));
+        if (data?.error === "PREMIUM_REQUIRED") { setShowLock(true); return; }
+        const transcript = (data?.text || "").trim();
+        if (!transcript) {
+          toast({ title: "Didn't catch that", description: "Try speaking a little louder.", variant: "destructive" });
+          return;
+        }
+        await send(transcript, { autoSpeak: true });
+      } catch (e) {
+        console.error("stt error", e);
+        toast({ title: "Transcription failed", description: "Please try again.", variant: "destructive" });
+      } finally {
+        setTranscribing(false);
+      }
+    } else {
+      await recorder.start();
+    }
+  };
+
+
 
   const remaining = usageToday !== null ? Math.max(0, FREE_DAILY_LIMIT - usageToday) : FREE_DAILY_LIMIT;
 
@@ -366,9 +435,27 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-                placeholder="Ask your coach anything…"
-                className="flex-1 px-3 py-2.5 rounded-xl bg-transparent text-sm font-body text-foreground placeholder:text-[hsl(var(--charcoal-soft))] focus:outline-none"
+                placeholder={recorder.state === "recording" ? "Listening…" : "Ask your coach anything…"}
+                disabled={recorder.state === "recording" || transcribing}
+                className="flex-1 px-3 py-2.5 rounded-xl bg-transparent text-sm font-body text-foreground placeholder:text-[hsl(var(--charcoal-soft))] focus:outline-none disabled:opacity-50"
               />
+              <button
+                onClick={handleMicPress}
+                disabled={isStreaming || transcribing}
+                aria-label={recorder.state === "recording" ? "Stop recording" : "Talk it out"}
+                title={isPremium ? "Talk it out" : "Premium — voice conversation"}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${
+                  recorder.state === "recording"
+                    ? "bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/60 animate-pulse"
+                    : "bg-transparent border-[hsl(var(--border))] hover:border-[hsl(var(--gold))]/50"
+                } disabled:opacity-30 disabled:cursor-not-allowed`}
+              >
+                {transcribing
+                  ? <Loader2 className="w-4 h-4 text-[hsl(var(--forest))] animate-spin" />
+                  : recorder.state === "recording"
+                    ? <Square className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] fill-current" />
+                    : <Mic className="w-4 h-4 text-[hsl(var(--forest))]" />}
+              </button>
               <button
                 onClick={() => send()}
                 disabled={!input.trim() || isStreaming}
@@ -379,8 +466,12 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
               </button>
             </div>
             <p className="text-[10px] text-[hsl(var(--charcoal-soft))] text-center mt-2 tracking-wide">
-              {isPremium ? "Unlimited Premium coaching" : `${remaining} of ${FREE_DAILY_LIMIT} free messages remaining today`}
+              {transcribing ? "Transcribing…" :
+                recorder.state === "recording" ? "Recording — tap the square to send" :
+                isPremium ? "Unlimited Premium coaching · tap the mic to talk it out" :
+                `${remaining} of ${FREE_DAILY_LIMIT} free messages remaining today`}
             </p>
+
           </div>
         </div>
       </div>
