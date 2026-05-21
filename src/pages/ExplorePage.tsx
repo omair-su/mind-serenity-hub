@@ -5,7 +5,7 @@ import {
   BookOpen, Wind, Moon, Brain, Heart, Flame, Trophy, Target,
   Music, Headphones, Zap, Clock, MessageCircle, Leaf, Sparkles,
   Download, HelpCircle, Award, BarChart3, Compass, Palette, ScanEye,
-  AlertTriangle, BookHeart, Sunrise
+  AlertTriangle, BookHeart, Sunrise, Users
 } from "lucide-react";
 
 const categories = [
