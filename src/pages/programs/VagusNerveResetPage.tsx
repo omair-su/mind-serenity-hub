@@ -7,6 +7,7 @@ import { Play, Lock, Crown, Check, Sparkles, ChevronDown } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { VAGUS_NERVE_RESET } from "@/data/programs/vagusNerveReset";
 import { cn } from "@/lib/utils";
 
