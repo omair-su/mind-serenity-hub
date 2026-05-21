@@ -24,7 +24,7 @@ export default function TermsPage() {
 
       <h2>4. Subscriptions & Billing</h2>
       <p>
-        Willow Plus is offered as a monthly subscription ($9.99/month), an annual subscription ($59.99/year), or a one-time lifetime purchase ($199). Subscriptions automatically renew until cancelled. Payments are processed by Paddle.com Market Limited, our Merchant of Record, who handles billing, taxes, and receipts on our behalf.
+        Willow Plus is offered as a monthly subscription ($14.99/month), an annual subscription ($79.99/year — save 58%), or a one-time lifetime purchase ($149). Subscriptions automatically renew until cancelled. Payments are processed by Paddle.com Market Limited, our Merchant of Record, who handles billing, taxes, and receipts on our behalf.
       </p>
       <ul>
         <li>You may start a 7-day free trial. If you do not cancel before the trial ends, your selected plan will be charged.</li>
