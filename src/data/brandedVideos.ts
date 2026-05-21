@@ -32,7 +32,14 @@ export type BrandedVideoSlot =
   | "vagus-day-04"
   | "vagus-day-05"
   | "vagus-day-06"
-  | "vagus-day-07";
+  | "vagus-day-07"
+  // Phase 9 — Trending wellness programs (hero only; per-day fallback for now)
+  | "box-breathing-hero"
+  | "grief-companion-hero"
+  | "adhd-focus-hero"
+  | "cycle-sync-hero"
+  | "sound-frequency-hero"
+  | "ritual-pack-hero";
 
 export const BRANDED_VIDEO_BUCKET = "video";
 
@@ -62,4 +69,10 @@ export const BRANDED_VIDEO_FILES: Record<BrandedVideoSlot, string> = {
   "vagus-day-05": "vagus-day-05.mp4",
   "vagus-day-06": "vagus-day-06.mp4",
   "vagus-day-07": "vagus-day-07.mp4",
+  "box-breathing-hero": "box-breathing-hero.mp4",
+  "grief-companion-hero": "grief-companion-hero.mp4",
+  "adhd-focus-hero": "adhd-focus-hero.mp4",
+  "cycle-sync-hero": "cycle-sync-hero.mp4",
+  "sound-frequency-hero": "sound-frequency-hero.mp4",
+  "ritual-pack-hero": "ritual-pack-hero.mp4",
 };

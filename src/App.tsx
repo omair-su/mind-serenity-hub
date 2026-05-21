@@ -65,6 +65,7 @@ const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const AudioLibraryPage = lazy(() => import("./pages/AudioLibraryPage"));
 const VideoLibraryPage = lazy(() => import("./pages/VideoLibraryPage"));
 const VagusNerveResetPage = lazy(() => import("./pages/programs/VagusNerveResetPage"));
+const ProgramHomePage = lazy(() => import("./pages/programs/ProgramHomePage"));
 const ProgramDayPage = lazy(() => import("./pages/programs/ProgramDayPage"));
 const PaddleChecklistPage = lazy(() => import("./pages/PaddleChecklistPage"));
 
@@ -125,6 +126,7 @@ function AppInner() {
           <Route path="/app/video-library" element={Guarded(<VideoLibraryPage />)} />
           <Route path="/app/programs/vagus-nerve" element={Guarded(<VagusNerveResetPage />)} />
           <Route path="/app/programs/:programId/day/:dayNum" element={Guarded(<ProgramDayPage />)} />
+          <Route path="/app/programs/:programId" element={Guarded(<ProgramHomePage />)} />
           <Route path="/app/achievements" element={Guarded(<AchievementsPage />)} />
           <Route path="/app/sos" element={Guarded(<SOSPage />)} />
           <Route path="/app/breathing" element={Guarded(<BreathingPage />)} />
