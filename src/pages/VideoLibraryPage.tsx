@@ -1,14 +1,14 @@
 // Calming Video Library — cinematic, looping backdrops for meditation and ambient
-// presence. Mirrors AudioLibraryPage UX: hero, category chips, search, grid, and
-// fullscreen player. Premium-gated past the 4 free previews.
+// presence. Each card pulls its video from the Cloud `video` bucket via the
+// branded-video slot system, with a graceful fallback while uploads are pending.
 import { useMemo, useState, useEffect, useRef } from "react";
-import { Play, Lock, Search, Maximize2, X, Sparkles, Crown } from "lucide-react";
+import { Play, Lock, Search, Maximize2, X, Sparkles, Crown, Volume2, VolumeX } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import PremiumLockModal from "@/components/PremiumLockModal";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { CALMING_VIDEOS, VIDEO_CATEGORIES, type CalmingVideo } from "@/data/videoLibrary";
 import heroVideoAsset from "@/assets/video-library-hero.mp4.asset.json";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,6 @@ export default function VideoLibraryPage() {
       "Stream looping cinematic nature scenes — forest, ocean, fireplace, aurora — paired with ambient soundscapes for meditation, focus, and sleep.",
   });
 
-  const navigate = useNavigate();
   const { isPremium } = useIsPremium();
   const [filter, setFilter] = useState<(typeof VIDEO_CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
@@ -74,7 +73,7 @@ export default function VideoLibraryPage() {
               Calming Video Backdrops
             </h1>
             <p className="font-body text-sm md:text-base text-cream/80 mt-2 max-w-xl">
-              Loop a forest, an ocean, a fireplace. Pair with ambient sound. Drift into focus or sleep.
+              Loop a forest, an ocean, a fireplace. Your branded scenes with calming audio.
             </p>
           </div>
         </section>
@@ -112,86 +111,14 @@ export default function VideoLibraryPage() {
         {/* GRID */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((v) => {
-              const locked = !canPlay(v);
-              return (
-                <motion.button
-                  key={v.id}
-                  layout
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -4 }}
-                  onClick={() => handlePlay(v)}
-                  className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 shadow-soft text-left aspect-video"
-                >
-                  <img
-                    src={v.posterUrl}
-                    alt={v.title}
-                    loading="lazy"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src =
-                        "/placeholder.svg";
-                    }}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent" />
-
-                  {/* Top-right badge */}
-                  <div className="absolute top-3 right-3 z-10">
-                    {locked ? (
-                      <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gold/90 backdrop-blur-sm">
-                        <Crown className="w-3 h-3 text-charcoal" />
-                        <span className="text-[10px] font-bold text-charcoal tracking-wide">
-                          PREMIUM
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="px-2 py-1 rounded-full bg-cream/20 backdrop-blur-sm border border-cream/30">
-                        <span className="text-[10px] font-bold text-cream tracking-wide">
-                          FREE
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Play icon */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div
-                      className={cn(
-                        "w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center border-2 transition-all duration-300 group-hover:scale-110",
-                        locked
-                          ? "bg-charcoal/40 border-gold/50"
-                          : "bg-cream/20 border-cream/40"
-                      )}
-                    >
-                      {locked ? (
-                        <Lock className="w-5 h-5 text-gold" />
-                      ) : (
-                        <Play className="w-5 h-5 text-cream fill-cream ml-0.5" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Bottom info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-body font-semibold uppercase tracking-wider text-gold">
-                        {v.category}
-                      </span>
-                      <span className="text-[10px] font-body text-cream/60">
-                        · {v.durationSec}s loop
-                      </span>
-                    </div>
-                    <h3 className="font-display text-base font-bold text-cream leading-tight">
-                      {v.title}
-                    </h3>
-                    <p className="font-body text-xs text-cream/70 mt-1 line-clamp-1">
-                      {v.description}
-                    </p>
-                  </div>
-                </motion.button>
-              );
-            })}
+            {filtered.map((v) => (
+              <VideoCard
+                key={v.id}
+                video={v}
+                locked={!canPlay(v)}
+                onPlay={() => handlePlay(v)}
+              />
+            ))}
           </div>
 
           {filtered.length === 0 && (
@@ -220,6 +147,86 @@ export default function VideoLibraryPage() {
   );
 }
 
+/* ------------------------------- Video card -------------------------------- */
+
+function VideoCard({
+  video,
+  locked,
+  onPlay,
+}: {
+  video: CalmingVideo;
+  locked: boolean;
+  onPlay: () => void;
+}) {
+  const { posterUrl } = useBrandedVideo(video.slot, video.fallbackVideoUrl, video.fallbackPosterUrl);
+  return (
+    <motion.button
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      onClick={onPlay}
+      className="group relative overflow-hidden rounded-2xl bg-card border border-border/50 shadow-soft text-left aspect-video"
+    >
+      <img
+        src={posterUrl}
+        alt={video.title}
+        loading="lazy"
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = video.fallbackPosterUrl;
+        }}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent" />
+
+      <div className="absolute top-3 right-3 z-10">
+        {locked ? (
+          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gold/90 backdrop-blur-sm">
+            <Crown className="w-3 h-3 text-charcoal" />
+            <span className="text-[10px] font-bold text-charcoal tracking-wide">PREMIUM</span>
+          </div>
+        ) : (
+          <div className="px-2 py-1 rounded-full bg-cream/20 backdrop-blur-sm border border-cream/30">
+            <span className="text-[10px] font-bold text-cream tracking-wide">FREE</span>
+          </div>
+        )}
+      </div>
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className={cn(
+            "w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center border-2 transition-all duration-300 group-hover:scale-110",
+            locked ? "bg-charcoal/40 border-gold/50" : "bg-cream/20 border-cream/40",
+          )}
+        >
+          {locked ? (
+            <Lock className="w-5 h-5 text-gold" />
+          ) : (
+            <Play className="w-5 h-5 text-cream fill-cream ml-0.5" />
+          )}
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[10px] font-body font-semibold uppercase tracking-wider text-gold">
+            {video.category}
+          </span>
+          <span className="text-[10px] font-body text-cream/60">
+            · {video.durationSec}s loop
+          </span>
+        </div>
+        <h3 className="font-display text-base font-bold text-cream leading-tight">
+          {video.title}
+        </h3>
+        <p className="font-body text-xs text-cream/70 mt-1 line-clamp-1">
+          {video.description}
+        </p>
+      </div>
+    </motion.button>
+  );
+}
+
 /* ----------------------------- Fullscreen player ----------------------------- */
 
 function VideoPlayerOverlay({
@@ -229,8 +236,15 @@ function VideoPlayerOverlay({
   video: CalmingVideo;
   onClose: () => void;
 }) {
+  const { videoUrl, posterUrl } = useBrandedVideo(
+    video.slot,
+    video.fallbackVideoUrl,
+    video.fallbackPosterUrl,
+  );
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [volume, setVolume] = useState(0);
+  // Audio is baked into branded videos — start at a calm 60% volume.
+  const [volume, setVolume] = useState(0.6);
+  const [muted, setMuted] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -245,8 +259,11 @@ function VideoPlayerOverlay({
   }, [onClose]);
 
   useEffect(() => {
-    if (videoRef.current) videoRef.current.volume = volume;
-  }, [volume]);
+    if (videoRef.current) {
+      videoRef.current.volume = volume;
+      videoRef.current.muted = muted;
+    }
+  }, [volume, muted]);
 
   const requestFs = () => {
     const el = videoRef.current?.parentElement;
@@ -268,12 +285,11 @@ function VideoPlayerOverlay({
       <div className="relative w-full h-full md:w-[92vw] md:h-[88vh] md:rounded-3xl overflow-hidden bg-black flex items-center justify-center">
         <video
           ref={videoRef}
-          src={video.videoUrl}
-          poster={video.posterUrl}
+          src={videoUrl}
+          poster={posterUrl}
           autoPlay
           loop
           playsInline
-          muted={volume === 0}
           className="absolute inset-0 w-full h-full object-cover"
         />
 
@@ -288,6 +304,13 @@ function VideoPlayerOverlay({
             </h2>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setMuted((m) => !m)}
+              className="p-2.5 rounded-full bg-cream/10 hover:bg-cream/20 transition-colors backdrop-blur-md"
+              aria-label={muted ? "Unmute" : "Mute"}
+            >
+              {muted ? <VolumeX className="w-4 h-4 text-cream" /> : <Volume2 className="w-4 h-4 text-cream" />}
+            </button>
             <button
               onClick={requestFs}
               className="p-2.5 rounded-full bg-cream/10 hover:bg-cream/20 transition-colors backdrop-blur-md"
@@ -315,12 +338,15 @@ function VideoPlayerOverlay({
                 min={0}
                 max={1}
                 step={0.01}
-                value={volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
+                value={muted ? 0 : volume}
+                onChange={(e) => {
+                  setMuted(false);
+                  setVolume(parseFloat(e.target.value));
+                }}
                 className="flex-1 accent-gold"
               />
               <span className="text-xs font-body font-semibold text-cream w-8 text-right">
-                {Math.round(volume * 100)}
+                {Math.round((muted ? 0 : volume) * 100)}
               </span>
             </div>
             <p className="text-center text-[10px] font-body text-cream/50 mt-3">
