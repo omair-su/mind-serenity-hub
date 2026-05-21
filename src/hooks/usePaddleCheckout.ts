@@ -7,13 +7,15 @@ import { useNavigate } from "react-router-dom";
 export interface CheckoutOptions {
   priceId: string;
   successPath?: string;
+  /** Optional Paddle discount code (e.g. "COMEBACK50"). */
+  discountCode?: string;
 }
 
 export function usePaddleCheckout() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const openCheckout = async ({ priceId, successPath = "/app" }: CheckoutOptions) => {
+  const openCheckout = async ({ priceId, successPath = "/app", discountCode }: CheckoutOptions) => {
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -30,6 +32,7 @@ export function usePaddleCheckout() {
         items: [{ priceId: paddlePriceId, quantity: 1 }],
         customer: user.email ? { email: user.email } : undefined,
         customData: { userId: user.id },
+        ...(discountCode ? { discountCode } : {}),
         settings: {
           displayMode: "overlay",
           variant: "one-page",
