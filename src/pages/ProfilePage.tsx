@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import {
   Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown,
-  ExternalLink, Loader2, LogOut, KeyRound, ShieldAlert, Mail
+  ExternalLink, Loader2, LogOut, KeyRound, ShieldAlert, Mail, Trophy, Share2, FileText
 } from "lucide-react";
 import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
@@ -16,6 +16,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AvatarUploader from "@/components/AvatarUploader";
 import { subscribeToPush, unsubscribeFromPush, isPushSupported } from "@/lib/webPush";
+import StreakHeatMap from "@/components/profile/StreakHeatMap";
+import ShareableWellnessCard from "@/components/profile/ShareableWellnessCard";
+import MonthlyReportCard from "@/components/profile/MonthlyReportCard";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
