@@ -5,7 +5,7 @@
 // stack visually.
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Pause, X, ChevronUp, Loader2 } from "lucide-react";
+import { Play, Pause, X, Loader2 } from "lucide-react";
 import { usePlayer } from "@/hooks/usePlayer";
 
 export default function GlobalMiniPlayer() {
@@ -42,11 +42,7 @@ export default function GlobalMiniPlayer() {
                   className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
                 />
               )}
-              <button
-                onClick={() => p.setExpanded(true)}
-                className="flex-1 min-w-0 text-left"
-                aria-label="Open player"
-              >
+              <div className="flex-1 min-w-0">
                 <p className="font-display text-sm font-semibold text-white truncate leading-tight">
                   {p.track?.title}
                 </p>
@@ -55,7 +51,7 @@ export default function GlobalMiniPlayer() {
                     {p.track.subtitle}
                   </p>
                 )}
-              </button>
+              </div>
               <button
                 onClick={p.togglePlayPause}
                 disabled={p.isLoading}
@@ -69,13 +65,6 @@ export default function GlobalMiniPlayer() {
                 ) : (
                   <Play className="w-4 h-4 text-[hsl(var(--charcoal))] ml-0.5" />
                 )}
-              </button>
-              <button
-                onClick={() => p.setExpanded(true)}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 transition-all"
-                aria-label="Expand"
-              >
-                <ChevronUp className="w-4 h-4" />
               </button>
               <button
                 onClick={p.close}
