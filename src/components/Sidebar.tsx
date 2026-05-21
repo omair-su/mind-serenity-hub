@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Library, BarChart3, Trophy, Smile, Zap, Wind, Moon, Timer,
   Settings, HelpCircle, FolderOpen, Award, Sparkles, MessageCircle,
   Headphones, Target, Sun, Footprints, Flower2, ScanEye,
-  Download
+  Download, Users
 } from "lucide-react";
 import WillowLogo from "@/components/WillowLogo";
 
