@@ -25,6 +25,8 @@ import WelcomeModal from "@/components/dashboard/WelcomeModal";
 import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
 import WeeklyRecapCard from "@/components/dashboard/WeeklyRecapCard";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
+import LiveNowPulse from "@/components/dashboard/LiveNowPulse";
+import DailyDropCard from "@/components/dashboard/DailyDropCard";
 
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
@@ -80,6 +82,11 @@ export default function DashboardPage() {
         initial="hidden"
         animate="visible"
       >
+        {/* Live presence pulse */}
+        <motion.div variants={itemVariants} className="flex justify-center sm:justify-start">
+          <LiveNowPulse />
+        </motion.div>
+
         {/* Hero */}
         <motion.div variants={itemVariants}>
           <HeroCinema
@@ -90,6 +97,11 @@ export default function DashboardPage() {
             todayPracticed={!!todayPracticed}
             onQuickSession={() => setShowPlayer(true)}
           />
+        </motion.div>
+
+        {/* Daily Drop */}
+        <motion.div variants={itemVariants}>
+          <DailyDropCard />
         </motion.div>
 
         {/* Wellness ring + compact stat strip */}
