@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import {
   Check, User, Bell, Palette, Database, Download, Trash2, Sparkles, Crown,
-  ExternalLink, Loader2, LogOut, KeyRound, ShieldAlert, Mail
+  ExternalLink, Loader2, LogOut, KeyRound, ShieldAlert, Mail, Trophy, Share2, FileText
 } from "lucide-react";
 import { toast } from "sonner";
 import { useIsPremium } from "@/hooks/useIsPremium";
@@ -16,6 +16,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AvatarUploader from "@/components/AvatarUploader";
 import { subscribeToPush, unsubscribeFromPush, isPushSupported } from "@/lib/webPush";
+import StreakHeatMap from "@/components/profile/StreakHeatMap";
+import ShareableWellnessCard from "@/components/profile/ShareableWellnessCard";
+import MonthlyReportCard from "@/components/profile/MonthlyReportCard";
 
 const goalOptions = ["Better Sleep", "Less Stress", "Anxiety Management", "Improve Focus", "Emotional Regulation", "Spiritual Growth", "Curiosity"];
 const avatarOptions = ["🧘", "🌿", "🌸", "🦋", "🌊", "🔥", "⭐", "💎", "🌙", "🌺", "🍃", "✨"];
@@ -279,6 +282,16 @@ export default function ProfilePage() {
             <Field label={`Daily Time: ${profile.dailyMinutes} minutes`}>
               <Slider value={[profile.dailyMinutes]} onValueChange={v => handleUpdate({ dailyMinutes: v[0] })} min={5} max={60} step={5} />
             </Field>
+          </div>
+        </Section>
+
+        <Section icon={Trophy} title="Progress & Sharing" gradient="from-[hsl(var(--forest))]/10 via-[hsl(var(--sage-light))]/30 to-[hsl(var(--cream))]" iconColor="text-[hsl(var(--forest))]">
+          <div className="space-y-6">
+            <StreakHeatMap />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ShareableWellnessCard />
+              <MonthlyReportCard />
+            </div>
           </div>
         </Section>
 

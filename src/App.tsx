@@ -67,6 +67,7 @@ const VideoLibraryPage = lazy(() => import("./pages/VideoLibraryPage"));
 const VagusNerveResetPage = lazy(() => import("./pages/programs/VagusNerveResetPage"));
 const ProgramHomePage = lazy(() => import("./pages/programs/ProgramHomePage"));
 const ProgramDayPage = lazy(() => import("./pages/programs/ProgramDayPage"));
+const FriendsPage = lazy(() => import("./pages/FriendsPage"));
 const PaddleChecklistPage = lazy(() => import("./pages/PaddleChecklistPage"));
 
 // Wrap a page in the auth guard so unauthenticated users are redirected to sign-in.
@@ -127,6 +128,7 @@ function AppInner() {
           <Route path="/app/programs/vagus-nerve" element={Guarded(<VagusNerveResetPage />)} />
           <Route path="/app/programs/:programId/day/:dayNum" element={Guarded(<ProgramDayPage />)} />
           <Route path="/app/programs/:programId" element={Guarded(<ProgramHomePage />)} />
+          <Route path="/app/friends" element={Guarded(<FriendsPage />)} />
           <Route path="/app/achievements" element={Guarded(<AchievementsPage />)} />
           <Route path="/app/sos" element={Guarded(<SOSPage />)} />
           <Route path="/app/breathing" element={Guarded(<BreathingPage />)} />

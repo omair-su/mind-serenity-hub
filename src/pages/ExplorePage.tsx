@@ -5,7 +5,7 @@ import {
   BookOpen, Wind, Moon, Brain, Heart, Flame, Trophy, Target,
   Music, Headphones, Zap, Clock, MessageCircle, Leaf, Sparkles,
   Download, HelpCircle, Award, BarChart3, Compass, Palette, ScanEye,
-  AlertTriangle, BookHeart, Sunrise
+  AlertTriangle, BookHeart, Sunrise, Users
 } from "lucide-react";
 
 const categories = [
@@ -47,6 +47,7 @@ const categories = [
     accent: "from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/25",
     items: [
       { label: "Challenges", desc: "Weekly goals", icon: Flame, path: "/app/challenges" },
+      { label: "Friends", desc: "Accountability circle", icon: Users, path: "/app/friends" },
       { label: "Vagus Reset", desc: "7-day nervous system program", icon: Sparkles, path: "/app/programs/vagus-nerve" },
       { label: "Box Breathing", desc: "7-day performance breathwork", icon: Wind, path: "/app/programs/box-breathing-athletes" },
       { label: "Grief Companion", desc: "7 days of letters & meditation", icon: Heart, path: "/app/programs/grief-companion" },
