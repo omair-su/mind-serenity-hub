@@ -402,7 +402,7 @@ export default function LandingPage() {
               </div>
               <div className="md:text-right">
                 <div className="mb-4">
-                  <span className="font-calm-display text-5xl sm:text-6xl font-semibold" style={{ color: NAVY }}>$199</span>
+                  <span className="font-calm-display text-5xl sm:text-6xl font-semibold" style={{ color: NAVY }}>$149</span>
                   <span className="font-calm-body text-sm ml-2 line-through" style={{ color: SLATE }}>$599</span>
                 </div>
                 <Link to="/pricing">
