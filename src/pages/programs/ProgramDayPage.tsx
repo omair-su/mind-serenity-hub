@@ -9,6 +9,7 @@ import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { getProgramById } from "@/data/programs/vagusNerveReset";
 
 const STORAGE_KEY = (programId: string) => `willow:program:${programId}:progress`;
