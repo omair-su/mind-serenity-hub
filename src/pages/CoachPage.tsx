@@ -435,9 +435,27 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
-                placeholder="Ask your coach anything…"
-                className="flex-1 px-3 py-2.5 rounded-xl bg-transparent text-sm font-body text-foreground placeholder:text-[hsl(var(--charcoal-soft))] focus:outline-none"
+                placeholder={recorder.state === "recording" ? "Listening…" : "Ask your coach anything…"}
+                disabled={recorder.state === "recording" || transcribing}
+                className="flex-1 px-3 py-2.5 rounded-xl bg-transparent text-sm font-body text-foreground placeholder:text-[hsl(var(--charcoal-soft))] focus:outline-none disabled:opacity-50"
               />
+              <button
+                onClick={handleMicPress}
+                disabled={isStreaming || transcribing}
+                aria-label={recorder.state === "recording" ? "Stop recording" : "Talk it out"}
+                title={isPremium ? "Talk it out" : "Premium — voice conversation"}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${
+                  recorder.state === "recording"
+                    ? "bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/60 animate-pulse"
+                    : "bg-transparent border-[hsl(var(--border))] hover:border-[hsl(var(--gold))]/50"
+                } disabled:opacity-30 disabled:cursor-not-allowed`}
+              >
+                {transcribing
+                  ? <Loader2 className="w-4 h-4 text-[hsl(var(--forest))] animate-spin" />
+                  : recorder.state === "recording"
+                    ? <Square className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] fill-current" />
+                    : <Mic className="w-4 h-4 text-[hsl(var(--forest))]" />}
+              </button>
               <button
                 onClick={() => send()}
                 disabled={!input.trim() || isStreaming}
@@ -448,8 +466,12 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
               </button>
             </div>
             <p className="text-[10px] text-[hsl(var(--charcoal-soft))] text-center mt-2 tracking-wide">
-              {isPremium ? "Unlimited Premium coaching" : `${remaining} of ${FREE_DAILY_LIMIT} free messages remaining today`}
+              {transcribing ? "Transcribing…" :
+                recorder.state === "recording" ? "Recording — tap the square to send" :
+                isPremium ? "Unlimited Premium coaching · tap the mic to talk it out" :
+                `${remaining} of ${FREE_DAILY_LIMIT} free messages remaining today`}
             </p>
+
           </div>
         </div>
       </div>
