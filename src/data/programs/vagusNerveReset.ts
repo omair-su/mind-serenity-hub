@@ -9,6 +9,7 @@ export const VAGUS_NERVE_RESET: MiniProgram = {
   description:
     "A science-backed 7-day program drawing on polyvagal theory and somatic research. Each day teaches a different technique to stimulate the vagus nerve and shift you into a calm, parasympathetic state.",
   category: "Somatic · Nervous System",
+  heroVideoSlot: "vagus-hero",
   videoBackdrop:
     "/__l5e/assets-v1/4c50663c-31a4-465d-be0e-910c2aa9eb12/video-library-hero.mp4",
   posterUrl:
