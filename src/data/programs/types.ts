@@ -2,6 +2,8 @@
 // Stack, Grief Companion, etc.). One interface so future programs slot in without
 // refactoring the program day page or sidebar.
 
+import type { BrandedVideoSlot } from "@/data/brandedVideos";
+
 export interface ProgramDay {
   /** 1-based day number inside this program */
   day: number;
@@ -14,7 +16,9 @@ export interface ProgramDay {
   whyItWorks: string;
   /** Full narration script piped to ElevenLabs */
   practice: string;
-  /** Optional poster image URL for the day card */
+  /** Branded-video slot for this day's cinematic backdrop */
+  videoSlot?: BrandedVideoSlot;
+  /** Optional poster image URL for the day card (legacy fallback) */
   posterUrl?: string;
 }
 
@@ -28,7 +32,9 @@ export interface MiniProgram {
   description: string;
   /** Category label shown on hero */
   category: string;
-  /** Cinematic video backdrop URL (looped) used on the program hero + day pages */
+  /** Branded-video slot for the program hero backdrop */
+  heroVideoSlot?: BrandedVideoSlot;
+  /** Cinematic video backdrop URL (looped) — fallback until heroVideoSlot uploads */
   videoBackdrop: string;
   /** Poster image fallback for the video */
   posterUrl: string;
