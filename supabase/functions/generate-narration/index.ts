@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
 
     // Restrict category to known values to reduce attack surface.
     const ALLOWED_CATEGORIES = new Set([
-      'meditation', 'sleep_story', 'affirmation', 'sound_bath', 'body_scan', 'breathing', 'walking',
+      'meditation', 'daily_meditation', 'sleep_story', 'affirmation', 'sound_bath', 'body_scan', 'breathing', 'walking',
     ]);
     if (!ALLOWED_CATEGORIES.has(category)) {
       return new Response(JSON.stringify({ error: 'Invalid category' }), {
