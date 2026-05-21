@@ -6,6 +6,7 @@ import { Play, Lock, Search, Maximize2, X, Sparkles, Crown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
+import PremiumLockModal from "@/components/PremiumLockModal";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { CALMING_VIDEOS, VIDEO_CATEGORIES, type CalmingVideo } from "@/data/videoLibrary";
@@ -24,6 +25,7 @@ export default function VideoLibraryPage() {
   const [filter, setFilter] = useState<(typeof VIDEO_CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
   const [playing, setPlaying] = useState<CalmingVideo | null>(null);
+  const [premiumLocked, setPremiumLocked] = useState(false);
 
   const filtered = useMemo(() => {
     return CALMING_VIDEOS.filter((v) => {
@@ -41,7 +43,7 @@ export default function VideoLibraryPage() {
 
   const handlePlay = (v: CalmingVideo) => {
     if (!canPlay(v)) {
-      navigate("/pricing");
+      setPremiumLocked(true);
       return;
     }
     setPlaying(v);
@@ -208,6 +210,12 @@ export default function VideoLibraryPage() {
           <VideoPlayerOverlay video={playing} onClose={() => setPlaying(null)} />
         )}
       </AnimatePresence>
+      <PremiumLockModal
+        open={premiumLocked}
+        onClose={() => setPremiumLocked(false)}
+        feature="Calming Video Library"
+        description="Unlock the full cinematic backdrop library with premium-only scenes and fullscreen playback."
+      />
     </AppLayout>
   );
 }
