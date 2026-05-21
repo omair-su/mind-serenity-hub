@@ -1,9 +1,11 @@
-// Cinematic hero with Ken Burns zoom, mood gradient overlay, floating particles,
-// and scroll-driven parallax. Replaces the static per-week hero on DayPage.
+// Cinematic hero with looping video backdrop (Phase 6.1), Ken Burns fallback,
+// mood gradient overlay, floating particles, and scroll-driven parallax.
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Clock, Gauge, Play, Headphones, BookOpen } from "lucide-react";
+import { Clock, Gauge, Play, Headphones, BookOpen, Crown } from "lucide-react";
 import { useRef } from "react";
-import { getDayHero, moodGradient } from "@/data/dayHeroImages";
+import { Link } from "react-router-dom";
+import { getDayHero, getDayVideo, moodGradient } from "@/data/dayHeroImages";
+import { useIsPremium } from "@/hooks/useIsPremium";
 
 interface DayHeroCinemaProps {
   dayNumber: number;
@@ -23,6 +25,11 @@ export default function DayHeroCinema({
   onBegin, onListenOnly, onReadFirst,
 }: DayHeroCinemaProps) {
   const hero = getDayHero(dayNumber);
+  const dayVideo = getDayVideo(dayNumber);
+  const { isPremium } = useIsPremium();
+  const showVideo = !dayVideo.isPremium || isPremium;
+  const showPremiumBadge = dayVideo.isPremium && !isPremium;
+
   const ref = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 600], [0, 140]);
@@ -34,7 +41,7 @@ export default function DayHeroCinema({
       ref={ref}
       className="relative w-full h-[460px] md:h-[560px] overflow-hidden bg-[hsl(var(--charcoal))]"
     >
-      {/* Ken Burns image */}
+      {/* Ken Burns image (always present as instant paint + video poster fallback) */}
       <motion.div
         className="absolute inset-0"
         style={{ y, filter }}
@@ -51,7 +58,30 @@ export default function DayHeroCinema({
           transition={{ duration: 22, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
           className="w-full h-full object-cover"
         />
+        {showVideo && (
+          <video
+            src={dayVideo.videoUrl}
+            poster={dayVideo.posterUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
       </motion.div>
+
+      {/* Premium cinema badge for locked days */}
+      {showPremiumBadge && (
+        <Link
+          to="/pricing"
+          className="absolute top-20 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/95 backdrop-blur-md text-charcoal text-[10px] font-body font-bold tracking-wider uppercase shadow-lg hover:scale-105 transition-transform"
+        >
+          <Crown className="w-3 h-3" />
+          Premium Cinema
+        </Link>
+      )}
+
 
       {/* Mood gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${moodGradient(hero.moodTint)}`} />
