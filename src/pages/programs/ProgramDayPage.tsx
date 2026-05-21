@@ -107,8 +107,9 @@ export default function ProgramDayPage() {
         <div className="fixed inset-0 z-0">
           {!locked && (
             <video
-              src={day.posterUrl ? program.videoBackdrop : program.videoBackdrop}
-              poster={day.posterUrl ?? program.posterUrl}
+              key={bg.videoUrl}
+              src={bg.videoUrl}
+              poster={bg.posterUrl}
               autoPlay
               muted
               loop
@@ -118,7 +119,7 @@ export default function ProgramDayPage() {
           )}
           {locked && (
             <img
-              src={day.posterUrl ?? program.posterUrl}
+              src={bg.posterUrl}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
             />
