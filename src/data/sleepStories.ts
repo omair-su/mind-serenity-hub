@@ -21,18 +21,21 @@ export interface SleepStory {
   videoBackdrop?: string;
 }
 
-/** Map of category → cinematic CC0 Pexels video URL (looped, muted). */
+const PRIMARY_BACKDROP = "/__l5e/assets-v1/4c50663c-31a4-465d-be0e-910c2aa9eb12/video-library-hero.mp4";
+const SECONDARY_BACKDROP = "/__l5e/assets-v1/2bc5e804-4212-4b3a-8159-38ccf74dd381/willow-demo.mp4";
+
+/** Map of category → cinematic hosted video URL (looped, muted). */
 export const CATEGORY_VIDEO_BACKDROP: Record<string, string> = {
-  forest: "https://videos.pexels.com/video-files/2491284/2491284-uhd_2560_1440_30fps.mp4",
-  ocean: "https://videos.pexels.com/video-files/1409899/1409899-hd_1920_1080_25fps.mp4",
-  rain: "https://videos.pexels.com/video-files/4763824/4763824-uhd_2560_1440_25fps.mp4",
-  cozy: "https://videos.pexels.com/video-files/3015527/3015527-hd_1920_1080_24fps.mp4",
-  twilight: "https://videos.pexels.com/video-files/9783697/9783697-uhd_2560_1440_30fps.mp4",
-  starlight: "https://videos.pexels.com/video-files/2871916/2871916-uhd_2560_1440_24fps.mp4",
-  deep: "https://videos.pexels.com/video-files/5752547/5752547-hd_1920_1080_24fps.mp4",
-  nature: "https://videos.pexels.com/video-files/2491447/2491447-uhd_2560_1440_30fps.mp4",
-  fantasy: "https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4",
-  travel: "https://videos.pexels.com/video-files/4623256/4623256-uhd_2560_1440_24fps.mp4",
+  forest: PRIMARY_BACKDROP,
+  ocean: SECONDARY_BACKDROP,
+  rain: PRIMARY_BACKDROP,
+  cozy: SECONDARY_BACKDROP,
+  twilight: PRIMARY_BACKDROP,
+  starlight: SECONDARY_BACKDROP,
+  deep: PRIMARY_BACKDROP,
+  nature: SECONDARY_BACKDROP,
+  fantasy: PRIMARY_BACKDROP,
+  travel: SECONDARY_BACKDROP,
 };
 
 export function getStoryBackdrop(story: SleepStory): string | undefined {

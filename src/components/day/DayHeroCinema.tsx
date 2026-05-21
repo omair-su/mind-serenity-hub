@@ -66,6 +66,7 @@ export default function DayHeroCinema({
             muted
             loop
             playsInline
+            preload="metadata"
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
@@ -160,25 +161,49 @@ export default function DayHeroCinema({
           transition={{ duration: 0.7, delay: 0.4 }}
           className="flex flex-wrap items-center justify-center gap-2.5"
         >
-          <button
+          <div
             onClick={onBegin}
-            className="group flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[0_12px_36px_-8px_hsl(var(--gold)/0.6)] hover:scale-105 active:scale-95 transition-transform"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onBegin();
+              }
+            }}
+            className="group flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[0_12px_36px_-8px_hsl(var(--gold)/0.6)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
           >
             <Play className="w-4 h-4 fill-current" />
             Begin Practice
-          </button>
-          <button
+          </div>
+          <div
             onClick={onListenOnly}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/12 backdrop-blur-md text-white font-body font-medium text-sm ring-1 ring-white/25 hover:bg-white/20 transition-colors"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onListenOnly();
+              }
+            }}
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/12 backdrop-blur-md text-white font-body font-medium text-sm ring-1 ring-white/25 hover:bg-white/20 transition-colors cursor-pointer"
           >
             <Headphones className="w-4 h-4" /> Listen Only
-          </button>
-          <button
+          </div>
+          <div
             onClick={onReadFirst}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-transparent text-white/90 font-body font-medium text-sm ring-1 ring-white/20 hover:bg-white/10 transition-colors"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onReadFirst();
+              }
+            }}
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-transparent text-white/90 font-body font-medium text-sm ring-1 ring-white/20 hover:bg-white/10 transition-colors cursor-pointer"
           >
             <BookOpen className="w-4 h-4" /> Read First
-          </button>
+          </div>
         </motion.div>
       </div>
     </section>

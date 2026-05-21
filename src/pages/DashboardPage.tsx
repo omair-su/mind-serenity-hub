@@ -8,7 +8,7 @@ import {
 } from "@/lib/userStore";
 import { weeks } from "@/data/courseData";
 import {
-  ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf, Headphones,
+  ArrowRight, Trophy, Flame, Clock, Target, Play, Leaf, Headphones, ScanEye, Sparkles,
 } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero-premium.webp";
 import { getWellnessScore, getWellnessLevel } from "@/lib/wellnessScore";
@@ -202,6 +202,50 @@ export default function DashboardPage() {
                 </h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">
                   Stream sleep stories, masterclasses & focus sessions back-to-back.
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
+            </div>
+          </Link>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link
+            to="/app/video-library"
+            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--accent))]/30 via-[hsl(var(--primary))]/8 to-[hsl(var(--sage))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-card text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <ScanEye className="w-7 h-7" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">New visual ritual</p>
+                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
+                  Open the calming video library
+                </h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  Play cinematic backdrops for breathwork, sleep, or focus — with premium scenes locked correctly.
+                </p>
+              </div>
+              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
+            </div>
+          </Link>
+
+          <Link
+            to="/app/programs/vagus-nerve"
+            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/20 to-[hsl(var(--accent))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-card text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Sparkles className="w-7 h-7" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Trending program</p>
+                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
+                  Start Vagus Nerve Reset
+                </h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  A guided 7-day program built around fast nervous-system regulation techniques.
                 </p>
               </div>
               <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />

@@ -4,7 +4,7 @@ import AppLayout from "@/components/AppLayout";
 import {
   BookOpen, Wind, Moon, Brain, Heart, Flame, Trophy, Target,
   Music, Headphones, Zap, Clock, MessageCircle, Leaf, Sparkles,
-  Download, HelpCircle, Award, BarChart3, Compass, Palette,
+  Download, HelpCircle, Award, BarChart3, Compass, Palette, ScanEye,
   AlertTriangle, BookHeart, Sunrise
 } from "lucide-react";
 
@@ -36,6 +36,7 @@ const categories = [
     items: [
       { label: "Sleep", desc: "Sleep meditations", icon: Moon, path: "/app/sleep" },
       { label: "Sleep Stories", desc: "Narrated tales", icon: BookOpen, path: "/app/sleep-stories" },
+        { label: "Video Library", desc: "Cinematic backdrops", icon: ScanEye, path: "/app/video-library" },
       { label: "Sound Bath", desc: "Healing sounds", icon: Music, path: "/app/sound-bath" },
       { label: "Soundscapes", desc: "Build your mix", icon: Palette, path: "/app/soundscape-builder" },
       { label: "Focus Mode", desc: "Deep work", icon: Zap, path: "/app/focus" },
@@ -46,6 +47,7 @@ const categories = [
     accent: "from-[hsl(var(--gold))]/15 to-[hsl(var(--gold-light))]/25",
     items: [
       { label: "Challenges", desc: "Weekly goals", icon: Flame, path: "/app/challenges" },
+        { label: "Vagus Reset", desc: "7-day nervous system program", icon: Sparkles, path: "/app/programs/vagus-nerve" },
       { label: "Rituals", desc: "Daily routines", icon: Compass, path: "/app/rituals" },
       { label: "AI Coach", desc: "Personal guide", icon: MessageCircle, path: "/app/coach" },
       { label: "Achievements", desc: "Your badges", icon: Trophy, path: "/app/achievements" },

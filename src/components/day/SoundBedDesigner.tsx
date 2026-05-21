@@ -135,12 +135,21 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
         </div>
         <div className="flex items-center gap-2">
           {anyActive && (
-            <button
+            <span
+              role="button"
+              tabIndex={0}
               onClick={(e) => { e.stopPropagation(); stopAll(); }}
-              className="text-[10px] font-body uppercase tracking-wider text-[hsl(var(--gold))]/80 hover:text-[hsl(var(--gold))] px-2 py-1"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  stopAll();
+                }
+              }}
+              className="text-[10px] font-body uppercase tracking-wider text-[hsl(var(--gold))]/80 hover:text-[hsl(var(--gold))] px-2 py-1 cursor-pointer"
             >
               Stop All
-            </button>
+            </span>
           )}
           <ChevronDown className={`w-4 h-4 text-white/60 transition-transform ${open ? "rotate-180" : ""}`} />
         </div>
