@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Loader2, Download, Trash2, WifiOff, HardDrive, Moon, Wind, ScanEye, Headphones, Brain, Footprints, BookOpen, Sparkles } from "lucide-react";
@@ -6,6 +6,12 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import AppLayout from "@/components/AppLayout";
 import PremiumGate from "@/components/PremiumGate";
+import {
+  downloadPack,
+  removePack,
+  isPackDownloaded,
+  getCacheUsageMB,
+} from "@/lib/offlineCache";
 
 // Real app content available for offline caching
 const offlineContent = [
@@ -104,17 +110,37 @@ function OfflineDownloadsPageInner() {
     try { return JSON.parse(localStorage.getItem("willow_offline_downloads") || "[]"); } catch { return []; }
   });
   const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
+  const [cacheMB, setCacheMB] = useState<number>(0);
 
   const persist = (items: DownloadedItem[]) => {
     setDownloads(items);
     localStorage.setItem("willow_offline_downloads", JSON.stringify(items));
   };
 
-  const totalMB = downloads.reduce((s, d) => s + d.fileSize, 0);
+  // Reconcile localStorage with the actual SW cache on mount, then poll usage.
+  useEffect(() => {
+    (async () => {
+      const verified: DownloadedItem[] = [];
+      for (const content of offlineContent) {
+        const stored = downloads.find((d) => d.contentId === content.id);
+        if (stored && (await isPackDownloaded(content.id))) verified.push(stored);
+      }
+      if (verified.length !== downloads.length) persist(verified);
+      setCacheMB(await getCacheUsageMB());
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const totalMB = cacheMB || downloads.reduce((s, d) => s + d.fileSize, 0);
 
   const handleDownload = async (content: typeof offlineContent[0]) => {
     setDownloadingIds((prev) => new Set(prev).add(content.id));
-    await new Promise((r) => setTimeout(r, 1500 + Math.random() * 1500));
+    const ok = await downloadPack(content.id);
+    if (!ok) {
+      toast.error("Offline cache unavailable in this preview. Try the published app.");
+      setDownloadingIds((prev) => { const n = new Set(prev); n.delete(content.id); return n; });
+      return;
+    }
     const item: DownloadedItem = {
       id: crypto.randomUUID(),
       contentId: content.id,
@@ -123,12 +149,15 @@ function OfflineDownloadsPageInner() {
       downloadedAt: new Date().toISOString(),
     };
     persist([...downloads, item]);
+    setCacheMB(await getCacheUsageMB());
     toast.success(`${content.title} saved for offline use!`);
     setDownloadingIds((prev) => { const n = new Set(prev); n.delete(content.id); return n; });
   };
 
-  const handleDelete = (contentId: string) => {
+  const handleDelete = async (contentId: string) => {
+    await removePack(contentId);
     persist(downloads.filter((d) => d.contentId !== contentId));
+    setCacheMB(await getCacheUsageMB());
     toast.success("Removed from offline storage");
   };
 

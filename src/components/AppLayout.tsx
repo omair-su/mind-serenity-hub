@@ -4,6 +4,7 @@ import SoundMixer from "@/components/SoundMixer";
 import CommandPalette from "@/components/CommandPalette";
 import ThemeToggle from "@/components/ThemeToggle";
 import StreakRecoveryModal from "@/components/dashboard/StreakRecoveryModal";
+import GlobalMiniPlayer from "@/components/GlobalMiniPlayer";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <CommandPalette />
       <ThemeToggle />
       <StreakRecoveryModal />
+      <GlobalMiniPlayer />
     </div>
   );
 }
