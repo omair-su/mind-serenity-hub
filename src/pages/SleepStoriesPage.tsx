@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import AppLayout from "@/components/AppLayout";
-import { sleepStories, sleepStoryCategories, SleepStory } from "@/data/sleepStories";
+import { sleepStories, sleepStoryCategories, SleepStory, getStoryBackdrop } from "@/data/sleepStories";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { useAmbientBed } from "@/hooks/useAmbientBed";
 import {
@@ -182,14 +182,21 @@ function StoryDetail({
   const [paragraphIndex, setParagraphIndex] = useState(0);
   const [volume, setVolume] = useState(0.8);
   const [sleepTimer, setSleepTimer] = useState<number | null>(null);
+  const [timerExpired, setTimerExpired] = useState(false);
   const tts = useTextToSpeech();
   const ambient = useAmbientBed("silence", 40);
 
+  const backdrop = getStoryBackdrop(story);
+
   useEffect(() => {
-    if (sleepTimer === null) return;
+    if (sleepTimer === null) {
+      setTimerExpired(false);
+      return;
+    }
     const t = setTimeout(() => {
       tts.stop();
       setSleepTimer(null);
+      setTimerExpired(true);
     }, sleepTimer * 60 * 1000);
     return () => clearTimeout(t);
   }, [sleepTimer, tts]);
@@ -212,7 +219,28 @@ function StoryDetail({
     .slice(0, 3);
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="relative space-y-8 animate-fade-in">
+      {/* Cinematic video backdrop (fixed, behind everything) */}
+      {backdrop && (
+        <div className="fixed inset-0 -z-10 pointer-events-none">
+          <video
+            src={backdrop}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Base dim overlay so text stays legible */}
+          <div className="absolute inset-0 bg-charcoal/70" />
+          {/* Sleep-timer fade — animates to full black over 30s when timer expires */}
+          <div
+            className="absolute inset-0 bg-black transition-opacity duration-[30000ms] ease-linear"
+            style={{ opacity: timerExpired ? 1 : 0 }}
+          />
+        </div>
+      )}
+
       <button
         onClick={() => {
           onBack();

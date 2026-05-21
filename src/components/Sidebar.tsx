@@ -36,6 +36,7 @@ const premiumItems = [
   { label: "Coach", path: "/app/coach", icon: MessageCircle },
   { label: "Audio Library", path: "/app/audio-library", icon: Headphones },
   { label: "Video Library", path: "/app/video-library", icon: ScanEye },
+  { label: "Vagus Nerve Reset", path: "/app/programs/vagus-nerve", icon: Sparkles },
   { label: "Sleep Stories", path: "/app/sleep-stories", icon: BookOpen },
   { label: "Sound Bath", path: "/app/sound-bath", icon: Headphones },
   { label: "Challenges", path: "/app/challenges", icon: Target },

@@ -81,3 +81,60 @@ export function moodGradient(tint: DayHero["moodTint"]): string {
     case "sage":   return "from-forest-deep/75 via-forest/45 to-[hsl(var(--sage))]/30";
   }
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * Per-day cinematic video backdrop. Reuses 6 CC0 Pexels loops keyed by week to
+ * give each week a unified visual identity. Days 1-3 free preview, Days 4-30
+ * premium-gated (the DayHeroCinema component shows a "PREMIUM CINEMA" badge and
+ * falls back to the static image when locked).
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+const WEEK_VIDEO: Record<number, { videoUrl: string; posterUrl: string }> = {
+  // Week 1 — Foundation: Misty forest at dawn
+  1: {
+    videoUrl: "https://videos.pexels.com/video-files/2491284/2491284-uhd_2560_1440_30fps.mp4",
+    posterUrl: "https://images.pexels.com/videos/2491284/free-video-2491284.jpg?auto=compress&cs=tinysrgb&w=1280",
+  },
+  // Week 2 — Awareness: Forest stream
+  2: {
+    videoUrl: "https://videos.pexels.com/video-files/2491447/2491447-uhd_2560_1440_30fps.mp4",
+    posterUrl: "https://images.pexels.com/videos/2491447/free-video-2491447.jpg?auto=compress&cs=tinysrgb&w=1280",
+  },
+  // Week 3 — Compassion: Cherry blossom drift
+  3: {
+    videoUrl: "https://videos.pexels.com/video-files/6981411/6981411-uhd_2560_1440_25fps.mp4",
+    posterUrl: "https://images.pexels.com/videos/6981411/cherry-blossom-cherry-blossom-tree-flower-flowering-tree-6981411.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  },
+  // Week 4 — Integration: Mountain mist
+  4: {
+    videoUrl: "https://videos.pexels.com/video-files/4623256/4623256-uhd_2560_1440_24fps.mp4",
+    posterUrl: "https://images.pexels.com/videos/4623256/4k-mountain-mountains-nature-4623256.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  },
+  // Days 29-30 capstone: Aurora
+  5: {
+    videoUrl: "https://videos.pexels.com/video-files/9783697/9783697-uhd_2560_1440_30fps.mp4",
+    posterUrl: "https://images.pexels.com/videos/9783697/aurora-borealis-night-night-sky-northern-lights-9783697.jpeg?auto=compress&cs=tinysrgb&w=1280",
+  },
+};
+
+export interface DayVideo {
+  videoUrl: string;
+  posterUrl: string;
+  /** True for days 4+ — caller should show a paywall badge unless user is premium */
+  isPremium: boolean;
+}
+
+export function getDayVideo(day: number): DayVideo {
+  let weekKey: number;
+  if (day <= 7) weekKey = 1;
+  else if (day <= 14) weekKey = 2;
+  else if (day <= 21) weekKey = 3;
+  else if (day <= 28) weekKey = 4;
+  else weekKey = 5;
+  const v = WEEK_VIDEO[weekKey];
+  return {
+    videoUrl: v.videoUrl,
+    posterUrl: v.posterUrl,
+    isPremium: day > 3,
+  };
+}
