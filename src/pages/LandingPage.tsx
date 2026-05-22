@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star } from "lucide-react";
+import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star, Heart, BookOpen, MessageCircle, Activity, Music2, Timer, Sun, LineChart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
+const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
@@ -228,35 +229,36 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Image column */}
+            {/* 3D Orb column */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
               <div
-                className="relative aspect-[4/5] w-full rounded-[2px] overflow-hidden"
-                style={{ boxShadow: "0 40px 80px -30px rgba(58,77,54,0.35)" }}
+                className="relative aspect-square w-full rounded-full overflow-hidden"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 45%, rgba(168,192,160,0.35) 0%, rgba(245,240,232,0) 65%)",
+                }}
               >
-                <img
-                  src={HERO_IMG}
-                  alt="Calm sage moment"
-                  loading="eager"
-                  fetchPriority="high"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                <Suspense fallback={<div className="absolute inset-0" />}>
+                  <SageOrb3D />
+                </Suspense>
+                {/* Soft cream vignette so it blends into page */}
                 <div
-                  className="absolute inset-0"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(180deg, transparent 40%, rgba(245,240,232,0.25) 100%)",
+                      "radial-gradient(circle at 50% 50%, transparent 55%, rgba(245,240,232,0.85) 100%)",
                   }}
                 />
               </div>
               {/* Floating quiet caption */}
               <div
-                className="hidden md:flex absolute -left-6 bottom-10 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
+                className="hidden md:flex absolute -left-2 bottom-6 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
                 style={{ background: "rgba(245,240,232,0.92)", border: `1px solid ${SAGE_PALE}` }}
               >
                 <div>
@@ -357,6 +359,95 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Inside the App — feature cards ─────────────────────────── */}
+      <section id="features" className="w-full" style={{ background: CREAM }}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10 py-24 md:py-32">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
+              Inside Willow
+            </p>
+            <h3
+              className="ff-display font-light leading-[1.05]"
+              style={{ color: INK, fontSize: "clamp(2rem, 4.5vw, 3.6rem)" }}
+            >
+              A complete sanctuary,{" "}
+              <span className="italic" style={{ color: SAGE_DEEP }}>
+                in your pocket.
+              </span>
+            </h3>
+            <p className="ff-body mt-5 text-[16px] leading-[1.75]" style={{ color: MUTED }}>
+              Twelve crafted tools, working as one. Each one designed by therapists,
+              sound engineers, and contemplative teachers.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: Brain, title: "30-Day Journey", body: "A guided arc from anxious to anchored — one short session a day.", tag: "Signature" },
+              { icon: MessageCircle, title: "AI Coach", body: "A private, voice-enabled companion that listens, reflects, and guides.", tag: "Intelligent" },
+              { icon: Moon, title: "Sleep Stories", body: "Slow, cinematic narratives composed to carry you into deep rest.", tag: "Nightly" },
+              { icon: Wind, title: "Breathwork Studio", body: "Box, coherence, 4-7-8, and physiological sigh — paced visually.", tag: "Nervous System" },
+              { icon: Music2, title: "Sound Bed Designer", body: "Layer rain, ocean, forest, binaurals and solfeggio into your own mix.", tag: "Custom" },
+              { icon: Activity, title: "Body Scan", body: "Interactive zone-by-zone release — tension found, tension freed.", tag: "Somatic" },
+              { icon: Heart, title: "Mood & Gratitude", body: "Track the shape of your inner weather. Held lightly, never gamified.", tag: "Reflective" },
+              { icon: BookOpen, title: "Living Journal", body: "Voice or text. AI gently reflects patterns back when you want them.", tag: "Private" },
+              { icon: Timer, title: "Signature Timer", body: "Open meditation with chimes, intervals, and ambient beds.", tag: "Flexible" },
+              { icon: Sun, title: "Morning Rituals", body: "Intention-setting, affirmations, and a daily wisdom drop.", tag: "Daily" },
+              { icon: LineChart, title: "Advanced Analytics", body: "See how practice changes mood, sleep quality, and resilience.", tag: "Insightful" },
+              { icon: Sparkles, title: "SOS Rescue", body: "One-tap panic protocol, grounding tools, and trusted contacts.", tag: "Emergency" },
+            ].map(({ icon: I, title, body, tag }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: (i % 6) * 0.06 }}
+                className="group relative p-7 rounded-sm border transition-all duration-500 hover:-translate-y-1"
+                style={{
+                  background: CREAM_DEEP,
+                  borderColor: "rgba(125,155,118,0.18)",
+                  boxShadow: "0 1px 0 rgba(58,77,54,0.04)",
+                }}
+              >
+                <div className="flex items-start justify-between mb-5">
+                  <div
+                    className="w-11 h-11 rounded-full flex items-center justify-center"
+                    style={{ background: SAGE_PALE }}
+                  >
+                    <I className="w-5 h-5" style={{ color: FOREST }} />
+                  </div>
+                  <span
+                    className="ff-eyebrow text-[9px] px-2 py-1"
+                    style={{ color: SAGE_DEEP }}
+                  >
+                    {tag}
+                  </span>
+                </div>
+                <h4 className="ff-display text-[22px] leading-tight mb-2" style={{ color: INK }}>
+                  {title}
+                </h4>
+                <p className="ff-body text-[13.5px] leading-[1.65]" style={{ color: MUTED }}>
+                  {body}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-14">
+            <Link to="/sign-in?redirect=/app">
+              <button
+                className="ff-body inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:scale-[1.03]"
+                style={{ background: FOREST, color: CREAM }}
+              >
+                Step inside Willow <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* ─── Cinematic image band ───────────────────────────────────── */}
       <section className="relative w-full overflow-hidden">
