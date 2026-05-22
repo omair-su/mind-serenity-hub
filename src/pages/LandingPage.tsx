@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star } from "lucide-react";
+import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star, Heart, BookOpen, MessageCircle, Activity, Music2, Timer, Sun, LineChart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
+const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
