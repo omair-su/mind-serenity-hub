@@ -229,35 +229,36 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Image column */}
+            {/* 3D Orb column */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
               <div
-                className="relative aspect-[4/5] w-full rounded-[2px] overflow-hidden"
-                style={{ boxShadow: "0 40px 80px -30px rgba(58,77,54,0.35)" }}
+                className="relative aspect-square w-full rounded-full overflow-hidden"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 45%, rgba(168,192,160,0.35) 0%, rgba(245,240,232,0) 65%)",
+                }}
               >
-                <img
-                  src={HERO_IMG}
-                  alt="Calm sage moment"
-                  loading="eager"
-                  fetchPriority="high"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                <Suspense fallback={<div className="absolute inset-0" />}>
+                  <SageOrb3D />
+                </Suspense>
+                {/* Soft cream vignette so it blends into page */}
                 <div
-                  className="absolute inset-0"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(180deg, transparent 40%, rgba(245,240,232,0.25) 100%)",
+                      "radial-gradient(circle at 50% 50%, transparent 55%, rgba(245,240,232,0.85) 100%)",
                   }}
                 />
               </div>
               {/* Floating quiet caption */}
               <div
-                className="hidden md:flex absolute -left-6 bottom-10 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
+                className="hidden md:flex absolute -left-2 bottom-6 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
                 style={{ background: "rgba(245,240,232,0.92)", border: `1px solid ${SAGE_PALE}` }}
               >
                 <div>
