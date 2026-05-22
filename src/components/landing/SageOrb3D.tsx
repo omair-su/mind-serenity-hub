@@ -1,18 +1,24 @@
-import { Suspense, useRef, useMemo, useEffect } from "react";
+import { Suspense, useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, Sparkles, Trail } from "@react-three/drei";
 import * as THREE from "three";
-
-/**
- * Sage & Cream branded 3D breathing orb for the landing hero.
- * Light cream backdrop, sage/forest iridescent orb with gold accents.
- */
 
 const FOREST = "#3a4d36";
 const SAGE = "#a8c0a0";
 const SAGE_DEEP = "#7d9b76";
 const GOLD = "#c9a84c";
 const CREAM = "#f5f0e8";
+
+function detectWebGL(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    return !!gl;
+  } catch {
+    return false;
+  }
+}
 
 function BreathingOrb() {
   const mesh = useRef<THREE.Mesh>(null);
@@ -109,13 +115,49 @@ function Scene() {
   );
 }
 
+function CSSFallback() {
+  return (
+    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+      <div
+        className="absolute rounded-full animate-pulse"
+        style={{
+          width: "60%",
+          height: "60%",
+          background: `radial-gradient(circle at 35% 35%, ${SAGE} 0%, ${SAGE_DEEP} 45%, ${FOREST} 100%)`,
+          boxShadow: `0 0 80px 20px ${GOLD}33, inset -20px -20px 60px ${FOREST}`,
+          animation: "breathe 6s ease-in-out infinite",
+        }}
+      />
+      <div
+        className="absolute rounded-full border opacity-60"
+        style={{ width: "75%", height: "75%", borderColor: `${GOLD}66`, transform: "rotate(15deg)" }}
+      />
+      <div
+        className="absolute rounded-full border opacity-40"
+        style={{ width: "90%", height: "90%", borderColor: `${GOLD}44`, transform: "rotate(-25deg)" }}
+      />
+      <style>{`@keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }`}</style>
+    </div>
+  );
+}
+
 export default function SageOrb3D() {
+  const [webgl, setWebgl] = useState<boolean | null>(null);
+  useEffect(() => {
+    setWebgl(detectWebGL());
+  }, []);
+
+  if (webgl === null) return null;
+  if (!webgl) return <CSSFallback />;
+
   return (
     <Canvas
       dpr={[1, 1.75]}
       camera={{ position: [0, 0, 4.2], fov: 45 }}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      gl={{ antialias: true, alpha: true, powerPreference: "high-performance", failIfMajorPerformanceCaveat: false }}
       style={{ width: "100%", height: "100%" }}
+      onCreated={() => {}}
+      fallback={<CSSFallback />}
     >
       <Suspense fallback={null}>
         <Scene />
