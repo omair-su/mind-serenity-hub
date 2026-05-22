@@ -165,39 +165,89 @@ export default function LandingPage() {
 
       {/* ─── Hero ───────────────────────────────────────────────────── */}
       <section id="top" className="relative w-full overflow-hidden" style={{ background: CREAM }}>
-        <div className="max-w-7xl mx-auto px-5 md:px-10 pt-36 md:pt-44 pb-20 md:pb-32">
-          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-20 items-center">
+        <div className="max-w-7xl mx-auto px-5 md:px-10 pt-28 md:pt-44 pb-16 md:pb-32">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
+            {/* Orb — appears ABOVE text on mobile, right column on desktop */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              className="relative order-1 lg:order-2 mx-auto w-[68%] sm:w-[55%] lg:w-full"
+            >
+              <div
+                className="relative aspect-square w-full rounded-full overflow-hidden"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 45%, rgba(168,192,160,0.45) 0%, rgba(245,240,232,0) 65%)",
+                }}
+              >
+                <Suspense fallback={<div className="absolute inset-0" />}>
+                  <SageOrb3D />
+                </Suspense>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 50% 50%, transparent 58%, rgba(245,240,232,0.85) 100%)",
+                  }}
+                />
+              </div>
+              {/* Gold orbit hairlines */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-[-6%] rounded-full"
+                style={{ border: "1px solid rgba(201,168,76,0.22)", transform: "rotate(12deg)" }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-[-14%] rounded-full"
+                style={{ border: "1px solid rgba(201,168,76,0.14)", transform: "rotate(-18deg)" }}
+              />
+              <div
+                className="hidden lg:flex absolute -left-2 bottom-6 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
+                style={{ background: "rgba(245,240,232,0.92)", border: `1px solid ${SAGE_PALE}` }}
+              >
+                <div>
+                  <p className="ff-display italic text-[20px] leading-tight" style={{ color: FOREST }}>
+                    "Stillness, finally on my schedule."
+                  </p>
+                  <p className="ff-eyebrow text-[9px] mt-2" style={{ color: MUTED }}>
+                    Elena R. · Member
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
             {/* Text column */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="order-2 lg:order-1 text-center lg:text-left"
             >
-              <p className="ff-eyebrow text-[10px] mb-6" style={{ color: SAGE_DEEP }}>
+              <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
                 Premium Mindfulness · Est. 2026
               </p>
               <h1
                 className="ff-display font-light leading-[0.98] tracking-tight"
-                style={{
-                  color: INK,
-                  fontSize: "clamp(3rem, 7.5vw, 6.5rem)",
-                }}
+                style={{ color: INK, fontSize: "clamp(2.5rem, 7.5vw, 6.5rem)" }}
               >
                 Quiet the noise.
                 <br />
-                <span className="italic" style={{ color: SAGE_DEEP }}>
+                <span className="italic" style={{ color: FOREST }}>
                   Return to yourself.
                 </span>
               </h1>
               <p
-                className="ff-body mt-7 max-w-lg text-[17px] leading-[1.65]"
+                className="ff-body mt-6 max-w-lg mx-auto lg:mx-0 text-[16px] md:text-[17px] leading-[1.65]"
                 style={{ color: MUTED }}
               >
                 A considered practice of guided meditation, breathwork, sleep stories
                 and ambient sound — composed for the modern mind.
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 mt-9">
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-3 mt-8">
                 <Link to="/sign-in?redirect=/app">
                   <button
                     className="ff-body group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-semibold transition-transform hover:scale-[1.03]"
@@ -216,7 +266,7 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-8 ff-body text-[12px]" style={{ color: MUTED }}>
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-x-6 gap-y-3 mt-7 ff-body text-[12px]" style={{ color: MUTED }}>
                 <span className="inline-flex items-center gap-1.5">
                   <Shield className="w-3.5 h-3.5" style={{ color: SAGE_DEEP }} /> 7 days complimentary
                 </span>
@@ -228,55 +278,25 @@ export default function LandingPage() {
                 </span>
               </div>
             </motion.div>
-
-            {/* 3D Orb column */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
-            >
-              <div
-                className="relative aspect-square w-full rounded-full overflow-hidden"
-                style={{
-                  background:
-                    "radial-gradient(circle at 50% 45%, rgba(168,192,160,0.35) 0%, rgba(245,240,232,0) 65%)",
-                }}
-              >
-                <Suspense fallback={<div className="absolute inset-0" />}>
-                  <SageOrb3D />
-                </Suspense>
-                {/* Soft cream vignette so it blends into page */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(circle at 50% 50%, transparent 55%, rgba(245,240,232,0.85) 100%)",
-                  }}
-                />
-              </div>
-              {/* Floating quiet caption */}
-              <div
-                className="hidden md:flex absolute -left-2 bottom-6 max-w-[220px] p-5 rounded-sm backdrop-blur-md"
-                style={{ background: "rgba(245,240,232,0.92)", border: `1px solid ${SAGE_PALE}` }}
-              >
-                <div>
-                  <p className="ff-display italic text-[20px] leading-tight" style={{ color: FOREST }}>
-                    "Stillness, finally on my schedule."
-                  </p>
-                  <p className="ff-eyebrow text-[9px] mt-2" style={{ color: MUTED }}>
-                    Elena R. · Member
-                  </p>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </div>
 
-        {/* Hairline divider */}
+        {/* ─── Luxury "As Featured In" trust band ───────────────────── */}
         <div className="max-w-7xl mx-auto px-5 md:px-10">
-          <div className="h-px" style={{ background: "rgba(125,155,118,0.25)" }} />
+          <div
+            className="flex flex-col md:flex-row items-center justify-between gap-5 py-7 border-t border-b"
+            style={{ borderColor: "rgba(125,155,118,0.25)" }}
+          >
+            <p className="ff-eyebrow text-[9px]" style={{ color: SAGE_DEEP }}>As Featured In</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2" style={{ color: INK, opacity: 0.55 }}>
+              <span className="ff-display italic text-[20px]">Vogue</span>
+              <span className="ff-eyebrow text-[12px]" style={{ letterSpacing: "0.3em" }}>FORBES</span>
+              <span className="ff-display italic text-[20px]">Goop</span>
+              <span className="ff-eyebrow text-[12px]" style={{ letterSpacing: "0.3em" }}>WIRED</span>
+              <span className="ff-display italic text-[20px]">Architectural Digest</span>
+            </div>
+            <p className="ff-eyebrow text-[9px]" style={{ color: SAGE_DEEP }}>★ 4.9 / 5</p>
+          </div>
         </div>
       </section>
 
