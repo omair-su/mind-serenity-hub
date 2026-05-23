@@ -15,7 +15,7 @@ import WillowLogo from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
-import signinBg from "@/assets/calm-hero-mountain.webp";
+import signinBg from "@/assets/sage-auth-bg.jpg";
 
 type Mode = "signin" | "signup";
 

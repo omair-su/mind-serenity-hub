@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
-import logoImg from "@/assets/logo/willow-vibes-icon.png";
+import logoImg from "@/assets/logo/willow-sage-icon.png";
 
 interface WillowLogoProps {
   variant?: "full" | "horizontal" | "vertical" | "icon" | "wordmark";
@@ -10,51 +10,38 @@ interface WillowLogoProps {
 }
 
 const sizeMap = {
-  xs: { icon: 24, text: "text-sm", gap: "gap-1.5", tracking: "tracking-[0.12em]" },
-  sm: { icon: 32, text: "text-lg", gap: "gap-2", tracking: "tracking-[0.14em]" },
-  md: { icon: 40, text: "text-xl", gap: "gap-2.5", tracking: "tracking-[0.15em]" },
-  lg: { icon: 56, text: "text-2xl", gap: "gap-3", tracking: "tracking-[0.16em]" },
-  xl: { icon: 72, text: "text-3xl", gap: "gap-4", tracking: "tracking-[0.18em]" },
+  xs: { icon: 24, text: "text-sm", gap: "gap-1.5", tracking: "tracking-[0.04em]" },
+  sm: { icon: 32, text: "text-lg", gap: "gap-2", tracking: "tracking-[0.04em]" },
+  md: { icon: 40, text: "text-xl", gap: "gap-2.5", tracking: "tracking-[0.04em]" },
+  lg: { icon: 56, text: "text-2xl", gap: "gap-3", tracking: "tracking-[0.04em]" },
+  xl: { icon: 72, text: "text-3xl", gap: "gap-4", tracking: "tracking-[0.04em]" },
 };
 
 const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: string; animated?: boolean }>(
   function LogoIcon({ size = 40, className, animated = false }, ref) {
-    const radius = Math.round(size * 0.22);
+    const radius = Math.round(size * 0.24);
+    const pad = Math.max(2, Math.round(size * 0.08));
+    // Warm cream/champagne tile so the sage logo stays visible against any bg
+    const tileBg = "linear-gradient(140deg, #F5ECD6 0%, #EFE3C2 100%)";
     if (animated) {
       return (
         <span
-          className={cn("relative inline-flex flex-shrink-0", className)}
-          style={{ width: size, height: size }}
+          className={cn("relative inline-flex flex-shrink-0 items-center justify-center", className)}
+          style={{ width: size, height: size, background: tileBg, borderRadius: radius, padding: pad, boxShadow: "0 8px 24px -8px rgba(105, 130, 90, 0.35)" }}
         >
           <span
             aria-hidden
-            className="absolute -inset-2 rounded-[28%] blur-2xl opacity-70 animate-pulse"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(255,226,122,0.45) 0%, rgba(130,103,214,0.35) 45%, transparent 75%)",
-            }}
+            className="absolute -inset-2 rounded-[28%] blur-2xl opacity-50 animate-pulse"
+            style={{ background: "radial-gradient(circle, rgba(212,180,120,0.45) 0%, rgba(135,168,120,0.35) 45%, transparent 75%)" }}
           />
           <img
             ref={ref}
             src={logoImg}
             alt="Willow Vibes Logo"
-            width={size}
-            height={size}
-            className="relative flex-shrink-0 object-cover drop-shadow-[0_8px_24px_rgba(130,103,214,0.55)] ring-1 ring-white/10"
-            style={{
-              borderRadius: radius,
-              animation: "willow-float 5s ease-in-out infinite",
-            }}
-          />
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              borderRadius: radius,
-              background:
-                "linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 40%)",
-              mixBlendMode: "overlay",
-            }}
+            width={size - pad * 2}
+            height={size - pad * 2}
+            className="relative flex-shrink-0 object-contain"
+            style={{ animation: "willow-float 5s ease-in-out infinite" }}
           />
           <style>{`
             @keyframes willow-float {
@@ -66,15 +53,19 @@ const LogoIcon = forwardRef<HTMLImageElement, { size?: number; className?: strin
       );
     }
     return (
-      <img
-        ref={ref}
-        src={logoImg}
-        alt="Willow Vibes Logo"
-        width={size}
-        height={size}
-        className={cn("flex-shrink-0 object-cover", className)}
-        style={{ borderRadius: radius }}
-      />
+      <span
+        className={cn("inline-flex flex-shrink-0 items-center justify-center", className)}
+        style={{ width: size, height: size, background: tileBg, borderRadius: radius, padding: pad, boxShadow: "0 4px 14px -6px rgba(105, 130, 90, 0.3)" }}
+      >
+        <img
+          ref={ref}
+          src={logoImg}
+          alt="Willow Vibes Logo"
+          width={size - pad * 2}
+          height={size - pad * 2}
+          className="flex-shrink-0 object-contain"
+        />
+      </span>
     );
   }
 );
