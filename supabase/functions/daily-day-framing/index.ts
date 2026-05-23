@@ -113,7 +113,7 @@ Deno.serve(async (req) => {
 
     const data = await resp.json();
     const framing = data.choices?.[0]?.message?.content?.trim()
-      ?? `Today's ${body.practice.toLowerCase()} is well-timed. Trust your breath — it knows the way home.`;
+      ?? `Today's ${safePractice.toLowerCase()} is well-timed. Trust your breath — it knows the way home.`;
 
     return new Response(JSON.stringify({ framing }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
