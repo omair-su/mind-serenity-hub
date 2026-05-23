@@ -30,6 +30,13 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "messages[] required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Server-side caps to prevent AI credit drain / prompt injection bloat
+    const safeMessages = messages.slice(-20).map((m: any) => ({
+      role: m?.role === "assistant" ? "assistant" : "user",
+      content: String(m?.content ?? "").slice(0, 4000),
+    }));
+    const safeTitle = String(protocolTitle ?? "").slice(0, 100);
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
@@ -41,9 +48,9 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a warm, calm post-crisis companion in the Willow Vibes app. The user just finished the "${protocolTitle}" SOS protocol. Respond in 1-3 short sentences. Validate first, then gently invite reflection. Never give medical advice. If user mentions self-harm or suicide, immediately encourage them to call a hotline (988 in US, 116 123 UK Samaritans, etc.) and continue listening compassionately.`,
+            content: `You are a warm, calm post-crisis companion in the Willow Vibes app. The user just finished the "${safeTitle}" SOS protocol. Respond in 1-3 short sentences. Validate first, then gently invite reflection. Never give medical advice. If user mentions self-harm or suicide, immediately encourage them to call a hotline (988 in US, 116 123 UK Samaritans, etc.) and continue listening compassionately.`,
           },
-          ...messages,
+          ...safeMessages,
         ],
       }),
     });
