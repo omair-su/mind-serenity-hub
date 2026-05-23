@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
 
     const systemPrompt = `You are a warm, wise meditation coach for the Willow Vibes app. Generate a single 1-2 sentence personalized framing for today's practice. Be specific, warm, and gently invitational. Never say "I" or "as an AI". Never give medical advice. Speak directly to the user (use "you"). End on a hopeful, grounded note. Maximum 220 characters.`;
 
-    const userPrompt = `Today is Day ${body.dayNumber} of a 30-day program. The practice is "${body.practice}". The focus is "${body.focus}". ${recentMoodLine} ${streakLine}\n\nWrite the personalized framing now.`;
+    const userPrompt = `Today is Day ${safeDayNumber} of a 30-day program. The practice is "${safePractice}". The focus is "${safeFocus}". ${recentMoodLine} ${streakLine}\n\nWrite the personalized framing now.`;
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
