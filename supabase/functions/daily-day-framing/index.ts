@@ -44,6 +44,10 @@ Deno.serve(async (req) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Server-side caps to prevent prompt-injection bloat and credit drain
+    const safeDayNumber = Math.max(1, Math.min(365, Number(body.dayNumber) | 0));
+    const safePractice = String(body.practice).slice(0, 120);
+    const safeFocus = String(body.focus ?? "").slice(0, 200);
 
     // Pull recent context
     let recentMoodLine = "";
