@@ -5,130 +5,124 @@
 @tailwind utilities;
 
 :root {
-  /* ── Calm-inspired Premium Palette (light) ── */
-  /* Surfaces: airy ivory/white, text: deep calm navy */
-  --background: 210 40% 98%;             /* #F7F9FC ivory-white */
-  --foreground: 213 67% 16%;             /* #0E2A47 calm navy */
-  --card: 0 0% 100%;
-  --card-foreground: 213 67% 16%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 213 67% 16%;
-  /* Primary: calm violet (#8267D6) */
-  --primary: 256 56% 62%;
-  --primary-foreground: 0 0% 100%;
-  /* Secondary: soft slate-violet */
-  --secondary: 220 30% 96%;
-  --secondary-foreground: 213 67% 16%;
-  --muted: 220 25% 95%;
-  --muted-foreground: 218 17% 43%;       /* #5B6B82 calm slate */
-  /* Accent: calm blue (#5B7FE0) */
-  --accent: 224 65% 95%;
-  --accent-foreground: 224 67% 35%;
-  --destructive: 0 72% 56%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 220 22% 91%;                 /* slate-200 */
-  --input: 220 22% 91%;
-  --ring: 256 56% 62%;
+  /* ── Willow Vibes Luxury Sage Palette (light) ── */
+  --background: 44 32% 96%;              /* warm cream #F5F1E8 */
+  --foreground: 105 22% 18%;             /* deep forest #243024 */
+  --card: 40 35% 98%;
+  --card-foreground: 105 22% 18%;
+  --popover: 40 35% 98%;
+  --popover-foreground: 105 22% 18%;
+  /* Primary: sage green (matches logo) */
+  --primary: 105 22% 45%;                /* #6F8C66 */
+  --primary-foreground: 44 40% 97%;
+  --secondary: 90 22% 88%;               /* soft sage */
+  --secondary-foreground: 105 22% 22%;
+  --muted: 60 18% 92%;
+  --muted-foreground: 105 12% 38%;
+  --accent: 42 50% 80%;                  /* champagne/cream gold */
+  --accent-foreground: 105 22% 22%;
+  --destructive: 8 60% 52%;
+  --destructive-foreground: 44 40% 97%;
+  --border: 90 18% 84%;
+  --input: 90 18% 84%;
+  --ring: 105 22% 45%;
   --radius: 1rem;
 
-  /* Brand tokens — remapped to Calm palette so all legacy
-     components (forest/sage/gold/cream/charcoal classes)
-     inherit the new look automatically. */
-  --forest: 213 67% 16%;                 /* navy */
-  --forest-deep: 215 55% 11%;
-  --forest-mid: 214 60% 22%;
-  --sage: 224 65% 65%;                   /* calm blue */
-  --sage-light: 224 65% 95%;
-  --sage-dark: 224 67% 45%;
-  --gold: 256 56% 62%;                   /* calm violet */
-  --gold-dark: 261 50% 50%;
-  --gold-light: 268 75% 92%;             /* violet soft */
-  --cream: 210 40% 98%;
-  --cream-dark: 220 25% 94%;
-  --charcoal: 213 67% 16%;
-  --charcoal-soft: 218 17% 43%;
+  /* Brand tokens — sage/forest/gold/cream luxury system */
+  --forest: 105 24% 22%;                 /* deep forest */
+  --forest-deep: 110 28% 13%;
+  --forest-mid: 105 24% 28%;
+  --sage: 102 22% 55%;                   /* sage from logo */
+  --sage-light: 95 28% 86%;
+  --sage-dark: 105 24% 35%;
+  --gold: 38 48% 60%;                    /* refined warm gold */
+  --gold-dark: 35 45% 45%;
+  --gold-light: 42 55% 88%;
+  --cream: 44 38% 96%;
+  --cream-dark: 42 28% 90%;
+  --charcoal: 105 22% 18%;
+  --charcoal-soft: 105 10% 38%;
 
   /* ── Editorial Luxe Tokens (landing page) ── */
-  --onyx: 220 18% 8%;          /* deep editorial black with warm undertone */
-  --onyx-soft: 220 14% 12%;    /* secondary surface */
-  --onyx-mid: 220 12% 16%;     /* tertiary surface */
-  --ivory: 36 38% 97%;         /* warmer than cream, paper-feel */
-  --ivory-warm: 36 30% 94%;
-  --champagne: 38 48% 72%;     /* refined gold, less orange */
-  --champagne-light: 40 55% 84%;
+  --onyx: 105 18% 12%;
+  --onyx-soft: 105 14% 16%;
+  --onyx-mid: 105 12% 22%;
+  --ivory: 44 38% 97%;
+  --ivory-warm: 42 32% 93%;
+  --champagne: 38 48% 72%;
+  --champagne-light: 42 55% 86%;
   --champagne-deep: 36 42% 52%;
 
-  /* Typography — match Calm-inspired marketing pages */
-  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-inter: 'Inter', system-ui, sans-serif;
+  /* Typography — Cormorant Garamond (display) + Karla (body) */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-inter: 'Karla', system-ui, sans-serif;
 
-  /* Shadows — soft cool-tinted */
-  --shadow-soft-val: 0 2px 20px -4px hsl(213 60% 20% / 0.06);
-  --shadow-card-val: 0 8px 30px -10px hsl(213 60% 20% / 0.10);
-  --shadow-elevated-val: 0 18px 60px -16px hsl(213 60% 20% / 0.18);
-  --shadow-gold-val: 0 14px 32px -12px hsl(224 65% 60% / 0.45);
+  /* Shadows — warm sage-tinted */
+  --shadow-soft-val: 0 2px 20px -4px hsl(105 30% 15% / 0.06);
+  --shadow-card-val: 0 8px 30px -10px hsl(105 30% 15% / 0.10);
+  --shadow-elevated-val: 0 18px 60px -16px hsl(105 30% 15% / 0.18);
+  --shadow-gold-val: 0 14px 32px -12px hsl(38 48% 55% / 0.40);
 
-  /* Sidebar — light ivory with navy text */
-  --sidebar-background: 210 40% 98%;
-  --sidebar-foreground: 213 67% 16%;
-  --sidebar-primary: 256 56% 62%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 220 30% 95%;
-  --sidebar-accent-foreground: 213 67% 16%;
-  --sidebar-border: 220 22% 91%;
-  --sidebar-ring: 256 56% 62%;
+  /* Sidebar — cream with sage accents */
+  --sidebar-background: 44 32% 96%;
+  --sidebar-foreground: 105 22% 18%;
+  --sidebar-primary: 105 22% 45%;
+  --sidebar-primary-foreground: 44 40% 97%;
+  --sidebar-accent: 90 22% 90%;
+  --sidebar-accent-foreground: 105 22% 22%;
+  --sidebar-border: 90 18% 84%;
+  --sidebar-ring: 105 22% 45%;
 }
 
 .dark {
-  /* Deep calm navy night theme with violet/blue accents */
-  --background: 220 40% 7%;              /* near-black navy */
-  --foreground: 210 30% 94%;
-  --card: 220 35% 11%;
-  --card-foreground: 210 30% 94%;
-  --popover: 220 35% 11%;
-  --popover-foreground: 210 30% 94%;
-  --primary: 256 70% 72%;                /* lighter violet for dark */
-  --primary-foreground: 220 40% 8%;
-  --secondary: 220 28% 16%;
-  --secondary-foreground: 210 30% 92%;
-  --muted: 220 25% 15%;
-  --muted-foreground: 218 15% 65%;
-  --accent: 224 50% 22%;
-  --accent-foreground: 224 70% 82%;
-  --destructive: 0 65% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 220 25% 18%;
-  --input: 220 25% 18%;
-  --ring: 256 70% 72%;
+  /* Deep forest night theme with sage + warm gold accents */
+  --background: 110 22% 7%;              /* near-black forest */
+  --foreground: 44 30% 92%;
+  --card: 110 20% 11%;
+  --card-foreground: 44 30% 92%;
+  --popover: 110 20% 11%;
+  --popover-foreground: 44 30% 92%;
+  --primary: 102 28% 62%;                /* lifted sage for dark */
+  --primary-foreground: 110 25% 10%;
+  --secondary: 110 16% 16%;
+  --secondary-foreground: 44 30% 92%;
+  --muted: 110 14% 14%;
+  --muted-foreground: 90 10% 65%;
+  --accent: 38 38% 28%;
+  --accent-foreground: 42 55% 86%;
+  --destructive: 8 55% 50%;
+  --destructive-foreground: 44 30% 95%;
+  --border: 110 14% 18%;
+  --input: 110 14% 18%;
+  --ring: 102 28% 62%;
 
-  /* Brand tokens remapped for dark calm theme */
-  --forest: 256 70% 72%;
-  --forest-deep: 220 40% 6%;
-  --forest-mid: 220 35% 11%;
-  --sage: 224 65% 70%;
-  --sage-light: 220 25% 16%;
-  --sage-dark: 224 70% 78%;
-  --gold: 256 70% 72%;
-  --gold-dark: 261 60% 60%;
-  --gold-light: 268 70% 85%;
-  --cream: 220 40% 7%;
-  --cream-dark: 220 35% 11%;
-  --charcoal: 210 30% 94%;
-  --charcoal-soft: 218 15% 65%;
+  --forest: 102 28% 62%;
+  --forest-deep: 110 22% 6%;
+  --forest-mid: 110 20% 11%;
+  --sage: 102 28% 65%;
+  --sage-light: 110 16% 18%;
+  --sage-dark: 102 30% 75%;
+  --gold: 38 48% 65%;
+  --gold-dark: 35 42% 50%;
+  --gold-light: 42 55% 80%;
+  --cream: 110 22% 7%;
+  --cream-dark: 110 20% 11%;
+  --charcoal: 44 30% 92%;
+  --charcoal-soft: 90 10% 65%;
 
-  --shadow-soft-val: 0 2px 20px -4px hsl(220 50% 2% / 0.5);
-  --shadow-card-val: 0 8px 40px -8px hsl(220 50% 2% / 0.6);
-  --shadow-elevated-val: 0 16px 60px -12px hsl(220 50% 2% / 0.7);
-  --shadow-gold-val: 0 14px 32px -12px hsl(256 70% 60% / 0.35);
+  --shadow-soft-val: 0 2px 20px -4px hsl(110 40% 2% / 0.5);
+  --shadow-card-val: 0 8px 40px -8px hsl(110 40% 2% / 0.6);
+  --shadow-elevated-val: 0 16px 60px -12px hsl(110 40% 2% / 0.7);
+  --shadow-gold-val: 0 14px 32px -12px hsl(38 48% 55% / 0.35);
 
-  --sidebar-background: 220 38% 9%;
-  --sidebar-foreground: 210 30% 92%;
-  --sidebar-primary: 256 70% 72%;
-  --sidebar-primary-foreground: 220 40% 8%;
-  --sidebar-accent: 220 28% 16%;
-  --sidebar-accent-foreground: 224 70% 82%;
-  --sidebar-border: 220 25% 18%;
-  --sidebar-ring: 256 70% 72%;
+  --sidebar-background: 110 22% 9%;
+  --sidebar-foreground: 44 30% 92%;
+  --sidebar-primary: 102 28% 62%;
+  --sidebar-primary-foreground: 110 25% 10%;
+  --sidebar-accent: 110 16% 16%;
+  --sidebar-accent-foreground: 42 55% 86%;
+  --sidebar-border: 110 14% 18%;
+  --sidebar-ring: 102 28% 62%;
 }
 
 @layer base {
@@ -296,32 +290,30 @@
 /* Fonts moved to async <link> in index.html to avoid render-blocking @import (FCP fix). */
 
 :root {
-  /* Calm palette */
-  --calm-navy: #0E2A47;
-  --calm-navy-soft: #234063;
-  --calm-slate: #5B6B82;
-  --calm-violet: #8267D6;
-  --calm-blue: #5B7FE0;
-  --calm-violet-soft: #E9D9FF;
-  --calm-cta: linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%);
+  /* Willow sage palette (used by .calm-* helpers — kept names for backward compat) */
+  --calm-navy: #243024;          /* deep forest */
+  --calm-navy-soft: #3d5239;
+  --calm-slate: #6b7a66;
+  --calm-violet: #6F8C66;         /* sage primary */
+  --calm-blue: #87a878;           /* lighter sage */
+  --calm-violet-soft: #DCE5D4;
+  --calm-cta: linear-gradient(90deg, #6F8C66 0%, #4f6b48 100%);
 
   /* Typography scale (fluid) */
-  --calm-display-1: clamp(2.5rem, 5vw + 1rem, 4.5rem);   /* h1 hero */
-  --calm-display-2: clamp(2rem, 3.5vw + 1rem, 3.5rem);   /* section title */
-  --calm-display-3: clamp(1.5rem, 2vw + 0.75rem, 2.25rem); /* subsection */
-  --calm-display-4: 1.25rem;                              /* card title */
-  --calm-body-lg: clamp(1rem, 0.4vw + 0.9rem, 1.125rem);
-  --calm-body: 0.9375rem;
+  --calm-display-1: clamp(2.75rem, 5vw + 1rem, 5rem);
+  --calm-display-2: clamp(2.25rem, 3.5vw + 1rem, 3.75rem);
+  --calm-display-3: clamp(1.75rem, 2vw + 0.75rem, 2.5rem);
+  --calm-display-4: 1.5rem;
+  --calm-body-lg: clamp(1.05rem, 0.4vw + 0.9rem, 1.175rem);
+  --calm-body: 1rem;
   --calm-eyebrow: 0.6875rem;
 
-  /* Vertical rhythm */
   --calm-section-y: clamp(4rem, 8vw, 8rem);
   --calm-section-y-sm: clamp(3rem, 5vw, 5rem);
   --calm-stack-lg: 3.5rem;
   --calm-stack-md: 2rem;
   --calm-stack-sm: 1.25rem;
 
-  /* Radius scale */
   --calm-radius-pill: 9999px;
   --calm-radius-card: 24px;
   --calm-radius-card-lg: 32px;
@@ -329,26 +321,24 @@
 }
 
 @layer components {
-  .font-calm-display { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; letter-spacing: -0.01em; }
-  .font-calm-serif   { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.015em; }
-  .font-calm-body    { font-family: 'Inter', system-ui, sans-serif; }
+  .font-calm-display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.01em; }
+  .font-calm-serif   { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.015em; }
+  .font-calm-body    { font-family: 'Karla', system-ui, sans-serif; }
 
-  /* Section + container rhythm */
   .calm-section { padding-top: var(--calm-section-y); padding-bottom: var(--calm-section-y); }
   .calm-section-sm { padding-top: var(--calm-section-y-sm); padding-bottom: var(--calm-section-y-sm); }
   .calm-container { width: 100%; max-width: 72rem; margin-left: auto; margin-right: auto; padding-left: 1.25rem; padding-right: 1.25rem; }
   @media (min-width: 768px) { .calm-container { padding-left: 1.75rem; padding-right: 1.75rem; } }
   .calm-container-tight { max-width: 48rem; }
 
-  /* Typography helpers */
-  .calm-h1 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 600; font-size: var(--calm-display-1); line-height: 1.05; letter-spacing: -0.02em; color: var(--calm-navy); }
-  .calm-h2 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 600; font-size: var(--calm-display-2); line-height: 1.1;  letter-spacing: -0.02em; color: var(--calm-navy); }
-  .calm-h3 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 600; font-size: var(--calm-display-3); line-height: 1.15; letter-spacing: -0.015em; color: var(--calm-navy); }
-  .calm-h4 { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 600; font-size: var(--calm-display-4); line-height: 1.3;  color: var(--calm-navy); }
-  .calm-lead { font-family: 'Inter', system-ui, sans-serif; font-size: var(--calm-body-lg); line-height: 1.6; color: var(--calm-slate); }
-  .calm-body { font-family: 'Inter', system-ui, sans-serif; font-size: var(--calm-body); line-height: 1.65; color: var(--calm-slate); }
+  .calm-h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: var(--calm-display-1); line-height: 1.05; letter-spacing: -0.015em; color: var(--calm-navy); }
+  .calm-h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: var(--calm-display-2); line-height: 1.1;  letter-spacing: -0.015em; color: var(--calm-navy); }
+  .calm-h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: var(--calm-display-3); line-height: 1.15; letter-spacing: -0.01em;  color: var(--calm-navy); }
+  .calm-h4 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: var(--calm-display-4); line-height: 1.3;  color: var(--calm-navy); }
+  .calm-lead { font-family: 'Karla', system-ui, sans-serif; font-size: var(--calm-body-lg); line-height: 1.65; color: var(--calm-slate); }
+  .calm-body { font-family: 'Karla', system-ui, sans-serif; font-size: var(--calm-body); line-height: 1.7; color: var(--calm-slate); }
   .calm-eyebrow {
-    font-family: 'Inter', system-ui, sans-serif; font-size: var(--calm-eyebrow);
+    font-family: 'Karla', system-ui, sans-serif; font-size: var(--calm-eyebrow);
     text-transform: uppercase; letter-spacing: 0.3em; font-weight: 700; color: var(--calm-violet);
   }
 
@@ -403,13 +393,13 @@
     color: hsl(var(--muted-foreground));
   }
   .calm-stat-num {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 600; letter-spacing: -0.02em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500; letter-spacing: -0.02em;
     color: hsl(var(--foreground));
   }
   .calm-widget-title {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 600; letter-spacing: -0.015em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500; letter-spacing: -0.01em;
     color: hsl(var(--foreground));
   }
   .calm-divider-soft {
