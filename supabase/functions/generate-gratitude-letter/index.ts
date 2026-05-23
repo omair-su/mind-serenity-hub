@@ -33,7 +33,11 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
-    const themesText = entries.slice(0, 14).map((e: any, i: number) => `${i + 1}. (${e.category ?? "general"}) "${e.text}"`).join("\n");
+    const themesText = entries.slice(0, 14).map((e: any, i: number) => {
+      const cat = String(e?.category ?? "general").slice(0, 40);
+      const txt = String(e?.text ?? "").slice(0, 500);
+      return `${i + 1}. (${cat}) "${txt}"`;
+    }).join("\n");
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

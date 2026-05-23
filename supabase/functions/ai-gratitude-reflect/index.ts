@@ -30,6 +30,11 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "text required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Server-side input caps
+    const safeText = text.slice(0, 2000);
+    const ALLOWED_CATEGORIES = new Set(["work", "relationships", "nature", "health", "growth", "general"]);
+    const safeCategory = category && ALLOWED_CATEGORIES.has(String(category)) ? String(category) : null;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
@@ -44,7 +49,7 @@ serve(async (req) => {
             content:
               "You are a warm, wise gratitude coach for the Willow Vibes meditation app. Given a single gratitude entry, respond with ONE short reflection (max 2 sentences, ~30 words) that gently expands on the gratitude, affirms the user, and invites a deeper noticing. No clichés. No emojis. Speak in second person.",
           },
-          { role: "user", content: `Gratitude entry${category ? ` (category: ${category})` : ""}: "${text}"` },
+          { role: "user", content: `Gratitude entry${safeCategory ? ` (category: ${safeCategory})` : ""}: "${safeText}"` },
         ],
       }),
     });

@@ -44,6 +44,10 @@ Deno.serve(async (req) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Server-side caps to prevent prompt-injection bloat and credit drain
+    const safeDayNumber = Math.max(1, Math.min(365, Number(body.dayNumber) | 0));
+    const safePractice = String(body.practice).slice(0, 120);
+    const safeFocus = String(body.focus ?? "").slice(0, 200);
 
     // Pull recent context
     let recentMoodLine = "";
@@ -75,7 +79,7 @@ Deno.serve(async (req) => {
 
     const systemPrompt = `You are a warm, wise meditation coach for the Willow Vibes app. Generate a single 1-2 sentence personalized framing for today's practice. Be specific, warm, and gently invitational. Never say "I" or "as an AI". Never give medical advice. Speak directly to the user (use "you"). End on a hopeful, grounded note. Maximum 220 characters.`;
 
-    const userPrompt = `Today is Day ${body.dayNumber} of a 30-day program. The practice is "${body.practice}". The focus is "${body.focus}". ${recentMoodLine} ${streakLine}\n\nWrite the personalized framing now.`;
+    const userPrompt = `Today is Day ${safeDayNumber} of a 30-day program. The practice is "${safePractice}". The focus is "${safeFocus}". ${recentMoodLine} ${streakLine}\n\nWrite the personalized framing now.`;
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -109,7 +113,7 @@ Deno.serve(async (req) => {
 
     const data = await resp.json();
     const framing = data.choices?.[0]?.message?.content?.trim()
-      ?? `Today's ${body.practice.toLowerCase()} is well-timed. Trust your breath — it knows the way home.`;
+      ?? `Today's ${safePractice.toLowerCase()} is well-timed. Trust your breath — it knows the way home.`;
 
     return new Response(JSON.stringify({ framing }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
