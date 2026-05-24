@@ -16,7 +16,7 @@ export default function PremiumLockModal({ open, onClose, feature, description }
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -34,16 +34,16 @@ export default function PremiumLockModal({ open, onClose, feature, description }
             <div className="relative h-40 bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--gold-dark))]/60 flex items-center justify-center">
               <div className="absolute inset-0 opacity-30">
                 <div className="absolute top-4 right-6 w-24 h-24 rounded-full bg-[hsl(var(--gold))]/40 blur-2xl" />
-                <div className="absolute bottom-4 left-6 w-20 h-20 rounded-full bg-white/30 blur-xl" />
+                <div className="absolute bottom-4 left-6 w-20 h-20 rounded-full bg-card/30 blur-xl" />
               </div>
               <button
                 onClick={onClose}
-                className="absolute top-3 right-3 p-1.5 rounded-full bg-black/30 text-white/80 hover:bg-black/50"
+                className="absolute top-3 right-3 p-1.5 rounded-full bg-charcoal/30 text-cream/80 hover:bg-charcoal/50"
               >
                 <X className="w-4 h-4" />
               </button>
-              <div className="relative z-10 w-20 h-20 rounded-2xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-2xl border border-white/20">
-                <Crown className="w-10 h-10 text-white" />
+              <div className="relative z-10 w-20 h-20 rounded-2xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-2xl border border-cream/20">
+                <Crown className="w-10 h-10 text-cream" />
               </div>
             </div>
 
@@ -75,7 +75,7 @@ export default function PremiumLockModal({ open, onClose, feature, description }
 
               <button
                 onClick={goToPricing}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 transition-all"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-cream font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.4)] hover:-translate-y-0.5 transition-all"
               >
                 See Plus Plans
               </button>

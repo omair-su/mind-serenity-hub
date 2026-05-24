@@ -70,7 +70,7 @@ export default function WeeklyRecapCard() {
           {stats.map(({ icon: Icon, label, value }) => (
             <div
               key={label}
-              className="rounded-2xl bg-white/60 backdrop-blur p-3 border border-[hsl(var(--sage))]/30"
+              className="rounded-2xl bg-card/60 backdrop-blur p-3 border border-[hsl(var(--sage))]/30"
             >
               <Icon className="w-4 h-4 text-[hsl(var(--gold-dark))] mb-1" />
               <p className="font-display text-lg font-bold text-[hsl(var(--forest-deep))] leading-none">

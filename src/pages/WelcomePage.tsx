@@ -122,7 +122,7 @@ export default function WelcomePage() {
         <div className="text-center py-8">
           <button
             onClick={() => navigate("/day/1")}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-gold to-gold-dark text-white font-body font-semibold text-sm tracking-wide hover:shadow-lg transition-all shadow-gold"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-gold to-gold-dark text-cream font-body font-semibold text-sm tracking-wide hover:shadow-lg transition-all shadow-gold"
           >
             Begin Day 1 <ArrowRight className="w-4 h-4" />
           </button>

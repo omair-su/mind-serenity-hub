@@ -96,7 +96,7 @@ export default function MoodTrackerPage() {
               <button
                 onClick={submitMood}
                 disabled={!primary}
-                className="flex-1 py-3 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold disabled:opacity-50"
+                className="flex-1 py-3 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-sm font-body font-semibold disabled:opacity-50"
               >
                 Save Check-In
               </button>
@@ -116,7 +116,7 @@ export default function MoodTrackerPage() {
         {/* Premium hook */}
         <button
           onClick={() => setPremiumOpen(true)}
-          className="w-full text-left rounded-2xl p-5 bg-gradient-to-br from-[hsl(var(--gold-light)/0.4)] via-white to-[hsl(var(--cream))] border border-[hsl(var(--gold)/0.4)] flex items-center gap-3 hover:shadow-[var(--shadow-gold-val)] hover:-translate-y-0.5 transition-all"
+          className="w-full text-left rounded-2xl p-5 bg-gradient-to-br from-[hsl(var(--gold-light)/0.4)] via-cream to-[hsl(var(--cream))] border border-[hsl(var(--gold)/0.4)] flex items-center gap-3 hover:shadow-[var(--shadow-gold-val)] hover:-translate-y-0.5 transition-all"
         >
           <div className="p-3 rounded-xl bg-[hsl(var(--gold)/0.2)]">
             <Lock className="w-4 h-4 text-[hsl(var(--gold-dark))]" />

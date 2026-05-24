@@ -58,7 +58,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
                 </p>
                 <button
                   onClick={() => setShowMixer(false)}
-                  className="text-white/40 hover:text-white"
+                  className="text-cream/40 hover:text-cream"
                   aria-label="Close mixer"
                 >
                   <X className="w-4 h-4" />
@@ -75,11 +75,11 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
                       className={`flex flex-col items-center gap-0.5 p-2 rounded-xl transition-all ${
                         active
                           ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40"
-                          : "hover:bg-white/5"
+                          : "hover:bg-card/5"
                       }`}
                     >
                       <span className="text-base">{b.emoji}</span>
-                      <span className="text-[9px] font-body text-white/70 leading-tight text-center">
+                      <span className="text-[9px] font-body text-cream/70 leading-tight text-center">
                         {b.label}
                       </span>
                     </button>
@@ -89,7 +89,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
 
               {bed !== "silence" && (
                 <div className="flex items-center gap-2 px-1">
-                  <VolumeX className="w-3.5 h-3.5 text-white/40 flex-shrink-0" />
+                  <VolumeX className="w-3.5 h-3.5 text-cream/40 flex-shrink-0" />
                   <Slider
                     value={[bedVolume]}
                     onValueChange={(v) => onBedVolumeChange(v[0])}
@@ -98,8 +98,8 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
                     step={1}
                     className="flex-1"
                   />
-                  <Volume2 className="w-3.5 h-3.5 text-white/40 flex-shrink-0" />
-                  <span className="text-[10px] font-body text-white/50 w-8 text-right tabular-nums">
+                  <Volume2 className="w-3.5 h-3.5 text-cream/40 flex-shrink-0" />
+                  <span className="text-[10px] font-body text-cream/50 w-8 text-right tabular-nums">
                     {bedVolume}%
                   </span>
                 </div>
@@ -111,7 +111,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
         {/* Main bar */}
         <div className="mx-3 mb-3 rounded-2xl bg-[hsl(var(--charcoal))]/95 backdrop-blur-2xl border border-[hsl(var(--gold))]/15 shadow-[0_-8px_40px_rgba(0,0,0,0.4)] overflow-hidden">
           {/* Progress strip on top */}
-          <div className="h-0.5 bg-white/5 relative overflow-hidden">
+          <div className="h-0.5 bg-card/5 relative overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]"
               animate={{ width: `${progress}%` }}
@@ -138,22 +138,22 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
 
             {/* Track info */}
             <div className="flex-1 min-w-0">
-              <p className="font-display text-sm font-semibold text-white truncate leading-tight">
+              <p className="font-display text-sm font-semibold text-cream truncate leading-tight">
                 {title}
               </p>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[10px] font-body text-white/40 tabular-nums">
+                <span className="text-[10px] font-body text-cream/40 tabular-nums">
                   {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : "—:—"}
                 </span>
                 {subtitle && (
                   <>
-                    <span className="text-white/20">·</span>
-                    <span className="text-[10px] font-body text-white/50 truncate">{subtitle}</span>
+                    <span className="text-cream/20">·</span>
+                    <span className="text-[10px] font-body text-cream/50 truncate">{subtitle}</span>
                   </>
                 )}
                 {bed !== "silence" && (
                   <>
-                    <span className="text-white/20">·</span>
+                    <span className="text-cream/20">·</span>
                     <span className="text-[10px] font-body text-[hsl(var(--gold))]/80 flex items-center gap-1">
                       {activeBed.emoji} {activeBed.label}
                     </span>
@@ -168,7 +168,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
               className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center transition-all ${
                 showMixer || bed !== "silence"
                   ? "bg-[hsl(var(--gold))]/15 text-[hsl(var(--gold))] ring-1 ring-[hsl(var(--gold))]/30"
-                  : "bg-white/5 text-white/60 hover:bg-white/10"
+                  : "bg-card/5 text-cream/60 hover:bg-card/10"
               }`}
               aria-label="Toggle ambient mixer"
             >
@@ -179,7 +179,7 @@ const NarrationBar = forwardRef<HTMLDivElement, NarrationBarProps>(({
             {onClose && (
               <button
                 onClick={onClose}
-                className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 transition-all"
+                className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center bg-card/5 text-cream/60 hover:bg-card/10 transition-all"
                 aria-label="Close player"
               >
                 <X className="w-4 h-4" />

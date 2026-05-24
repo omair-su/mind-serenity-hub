@@ -384,8 +384,8 @@ export default function FocusModePage() {
                   <Brain className="w-7 h-7 text-primary" />
                 </div>
                 <div>
-                  <h1 className="font-display text-3xl font-bold text-white">Focus Mode</h1>
-                  <p className="text-sm text-white/80 mt-1">Science-backed deep work sessions with mindful recovery</p>
+                  <h1 className="font-display text-3xl font-bold text-cream">Focus Mode</h1>
+                  <p className="text-sm text-cream/80 mt-1">Science-backed deep work sessions with mindful recovery</p>
                 </div>
               </div>
             </div>
@@ -471,7 +471,7 @@ export default function FocusModePage() {
                             onClick={() => setUseBinaural(!useBinaural)}
                             className={`w-10 h-5 rounded-full transition-colors relative ${useBinaural ? "bg-primary" : "bg-muted"}`}
                           >
-                            <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${useBinaural ? "left-6" : "left-1"}`} />
+                            <div className={`absolute top-1 w-3 h-3 rounded-full bg-card transition-all ${useBinaural ? "left-6" : "left-1"}`} />
                           </button>
                         </div>
                         {useBinaural && selectedFrequency && (

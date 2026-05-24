@@ -174,7 +174,7 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
           <button
             onClick={onClose}
             aria-label="Close timer"
-            className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/8 backdrop-blur-md border border-white/15 flex items-center justify-center text-cream hover:bg-white/15 transition-all z-20"
+            className="absolute top-5 right-5 w-11 h-11 rounded-full bg-card/8 backdrop-blur-md border border-cream/15 flex items-center justify-center text-cream hover:bg-card/15 transition-all z-20"
           >
             <X className="w-5 h-5" />
           </button>
@@ -285,7 +285,7 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
                 <motion.button
                   whileTap={{ scale: 0.92 }}
                   onClick={extend}
-                  className="px-4 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-cream font-body text-sm flex items-center gap-1.5 hover:bg-white/15 transition-all"
+                  className="px-4 py-3 rounded-full bg-card/10 backdrop-blur-md border border-cream/15 text-cream font-body text-sm flex items-center gap-1.5 hover:bg-card/15 transition-all"
                 >
                   <Plus className="w-4 h-4" /> 5 min
                 </motion.button>
@@ -319,7 +319,7 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
                   className={`px-4 py-1.5 rounded-full text-xs font-body font-semibold tracking-wider transition-all ${
                     minutes === m
                       ? "bg-[hsl(var(--gold))] text-charcoal"
-                      : "bg-white/8 text-cream/75 hover:bg-white/15 border border-white/10"
+                      : "bg-card/8 text-cream/75 hover:bg-card/15 border border-cream/10"
                   }`}
                 >
                   {m} min
@@ -336,12 +336,12 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
               transition={{ delay: 0.6 }}
               className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4"
             >
-              <div className="rounded-2xl bg-white/6 backdrop-blur-xl border border-white/10 px-3 py-2.5 flex items-center gap-2 overflow-x-auto">
+              <div className="rounded-2xl bg-card/6 backdrop-blur-xl border border-cream/10 px-3 py-2.5 flex items-center gap-2 overflow-x-auto">
                 <button
                   onClick={() => setBed("silence")}
                   aria-label="Silence"
                   className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                    bed === "silence" ? "bg-[hsl(var(--gold))] text-charcoal" : "text-cream/70 hover:bg-white/10"
+                    bed === "silence" ? "bg-[hsl(var(--gold))] text-charcoal" : "text-cream/70 hover:bg-card/10"
                   }`}
                 >
                   {bed === "silence" ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -354,7 +354,7 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
                       className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium flex items-center gap-1.5 transition-all ${
                         bed === o.id
                           ? "bg-[hsl(var(--gold))] text-charcoal"
-                          : "bg-white/5 text-cream/75 hover:bg-white/12 border border-white/10"
+                          : "bg-card/5 text-cream/75 hover:bg-card/12 border border-cream/10"
                       }`}
                     >
                       <span>{o.emoji}</span> <span className="hidden sm:inline">{o.label}</span>
@@ -406,13 +406,13 @@ export default function SignatureTimer({ open, onClose, initialMinutes = 15 }: S
                 <div className="mt-6 flex gap-2">
                   <button
                     onClick={skipMood}
-                    className="flex-1 py-3 rounded-xl bg-white text-charcoal-soft font-body text-sm border border-[hsl(var(--cream-dark))] hover:bg-[hsl(var(--cream-dark)/0.5)] transition-all"
+                    className="flex-1 py-3 rounded-xl bg-card text-charcoal-soft font-body text-sm border border-[hsl(var(--cream-dark))] hover:bg-[hsl(var(--cream-dark)/0.5)] transition-all"
                   >
                     Skip
                   </button>
                   <button
                     onClick={submitMood}
-                    className="flex-[1.4] py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold text-sm shadow-[var(--shadow-gold-val)] hover:-translate-y-0.5 transition-all"
+                    className="flex-[1.4] py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-semibold text-sm shadow-[var(--shadow-gold-val)] hover:-translate-y-0.5 transition-all"
                   >
                     Log & Finish
                   </button>

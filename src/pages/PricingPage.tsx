@@ -47,7 +47,7 @@ export default function PricingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white" style={{ color: NAVY }}>
+    <div className="min-h-screen bg-card" style={{ color: NAVY }}>
       <style dangerouslySetInnerHTML={{
         __html: `
           @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap');
@@ -56,7 +56,7 @@ export default function PricingPage() {
         `,
       }} />
 
-      <div className="text-white text-center py-3 px-4 font-calm-body" style={{ background: CTA_GRADIENT }}>
+      <div className="text-cream text-center py-3 px-4 font-calm-body" style={{ background: CTA_GRADIENT }}>
         <p className="text-xs sm:text-sm font-semibold tracking-wide">
           ✨ Founders Launch — Lifetime access just <span className="font-bold underline underline-offset-2">$149</span> for the first 1,000 members
         </p>
@@ -113,7 +113,7 @@ export default function PricingPage() {
             </div>
             <Link
               to="/sign-in"
-              className="mt-6 block text-center w-full py-3.5 rounded-full border border-slate-200 font-calm-body font-semibold text-sm hover:bg-slate-50"
+              className="mt-6 block text-center w-full py-3.5 rounded-full border border-border font-calm-body font-semibold text-sm hover:bg-background"
               style={{ color: NAVY }}
             >
               Start free
@@ -123,31 +123,31 @@ export default function PricingPage() {
           {/* PLUS YEARLY (most popular) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="calm-card calm-card-lg relative p-6 sm:p-8 flex flex-col md:scale-105 md:-translate-y-2 text-white border-0"
+            className="calm-card calm-card-lg relative p-6 sm:p-8 flex flex-col md:scale-105 md:-translate-y-2 text-cream border-0"
             style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px rgba(91,127,224,0.55)" }}
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: VIOLET }}>
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-card text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: VIOLET }}>
               ★ Most Popular
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <h3 className="font-calm-display text-xl font-semibold">Plus Yearly</h3>
-                <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full bg-white/95 text-[#5B7FE0]">
+                <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full bg-card/95 text-[#5B7FE0]">
                   Save {YEARLY_SAVINGS_PCT}%
                 </span>
               </div>
-              <p className="text-sm font-calm-body text-white/85 mt-1">Best value</p>
+              <p className="text-sm font-calm-body text-cream/85 mt-1">Best value</p>
               <div className="mt-5 mb-1 flex items-baseline gap-2">
                 <span className="font-calm-display text-5xl font-semibold">$79.99</span>
-                <span className="text-sm font-calm-body text-white/80">/year</span>
+                <span className="text-sm font-calm-body text-cream/80">/year</span>
               </div>
-              <p className="text-xs font-calm-body text-white/85 mb-5">
-                Just $6.67/month, billed yearly &middot; <span className="line-through text-white/60">$179.88</span>
+              <p className="text-xs font-calm-body text-cream/85 mb-5">
+                Just $6.67/month, billed yearly &middot; <span className="line-through text-cream/60">$179.88</span>
               </p>
               <ul className="space-y-2.5">
                 {PLUS_FEATURES.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm font-calm-body text-white">
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-white" />
+                  <li key={f} className="flex items-start gap-2 text-sm font-calm-body text-cream">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-cream" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -156,13 +156,13 @@ export default function PricingPage() {
             <button
               onClick={() => openCheckout({ priceId: "willow_plus_yearly" })}
               disabled={loading}
-              className="mt-6 w-full py-3.5 rounded-full bg-white font-calm-body font-bold text-sm hover:scale-[1.02] disabled:opacity-60 flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3.5 rounded-full bg-card font-calm-body font-bold text-sm hover:scale-[1.02] disabled:opacity-60 flex items-center justify-center gap-2"
               style={{ color: "#5B7FE0" }}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Start 7-day free trial
             </button>
-            <p className="text-[10px] font-calm-body text-center text-white/75 mt-2">
+            <p className="text-[10px] font-calm-body text-center text-cream/75 mt-2">
               Then $79.99/year. Cancel anytime.
             </p>
           </motion.div>
@@ -192,7 +192,7 @@ export default function PricingPage() {
             <button
               onClick={() => openCheckout({ priceId: "willow_plus_monthly" })}
               disabled={loading}
-              className="mt-6 w-full py-3.5 rounded-full text-white font-calm-body font-bold text-sm hover:scale-[1.02] disabled:opacity-60 flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3.5 rounded-full text-cream font-calm-body font-bold text-sm hover:scale-[1.02] disabled:opacity-60 flex items-center justify-center gap-2"
               style={{ background: NAVY }}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -230,7 +230,7 @@ export default function PricingPage() {
               <button
                 onClick={() => openCheckout({ priceId: "willow_lifetime_onetime" })}
                 disabled={loading}
-                className="w-full md:w-auto px-8 py-3.5 rounded-full text-white font-calm-body font-bold text-sm hover:scale-[1.03] disabled:opacity-60 inline-flex items-center justify-center gap-2"
+                className="w-full md:w-auto px-8 py-3.5 rounded-full text-cream font-calm-body font-bold text-sm hover:scale-[1.03] disabled:opacity-60 inline-flex items-center justify-center gap-2"
                 style={{ background: CTA_GRADIENT, boxShadow: "0 12px 32px -8px rgba(91,127,224,0.5)" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}

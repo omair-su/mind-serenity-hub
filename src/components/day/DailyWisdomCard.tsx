@@ -43,7 +43,7 @@ interface WisdomDialogProps {
 export function WisdomDialog({ open, cards, selected, onSelect, onClose }: WisdomDialogProps) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-charcoal/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-card rounded-2xl max-w-md w-full p-8 shadow-2xl border border-border/50">
         <div className="flex items-start justify-between mb-4">
           <span className="text-4xl">{selected.icon}</span>

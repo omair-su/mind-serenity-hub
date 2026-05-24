@@ -7,7 +7,7 @@
 //     feature="Sleep Stories"
 //     description="Drift away with cinematic narrated tales..."
 //     icon={Moon}
-//     gradient="from-indigo-500/20 to-violet-500/15"
+//     gradient="from-sage/20 to-sage/15"
 //     previewItems={["Lavender Fields of Provence", "The Enchanted Library", ...]}
 //   >
 //     <ActualPageContent />
@@ -84,14 +84,14 @@ export default function PremiumGate({
             </div>
 
             {/* Big icon */}
-            <div className={`mx-auto w-24 h-24 rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-6 border border-white/15 shadow-xl backdrop-blur-sm`}>
-              <Icon className="w-12 h-12 text-white" />
+            <div className={`mx-auto w-24 h-24 rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-6 border border-cream/15 shadow-xl backdrop-blur-sm`}>
+              <Icon className="w-12 h-12 text-cream" />
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+            <h1 className="font-display text-4xl sm:text-5xl font-bold text-cream mb-3">
               {feature}
             </h1>
-            <p className="text-base sm:text-lg font-body text-white/80 max-w-xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg font-body text-cream/80 max-w-xl mx-auto leading-relaxed">
               {description}
             </p>
 
@@ -99,19 +99,19 @@ export default function PremiumGate({
             <div className="mt-8 flex flex-col sm:flex-row gap-3 items-center justify-center">
               <Link
                 to="/pricing"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-white font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold via-gold-dark to-forest-deep text-cream font-body font-bold text-sm shadow-[0_15px_30px_-8px_rgba(212,175,55,0.5)] hover:-translate-y-0.5 transition-all"
               >
                 <Crown className="w-4 h-4" />
                 Unlock Willow Plus
               </Link>
               <Link
                 to="/app"
-                className="text-sm font-body text-white/70 hover:text-white px-4 py-3 transition-colors"
+                className="text-sm font-body text-cream/70 hover:text-cream px-4 py-3 transition-colors"
               >
                 Maybe later
               </Link>
             </div>
-            <p className="mt-4 text-[11px] font-body text-white/50">
+            <p className="mt-4 text-[11px] font-body text-cream/50">
               7-day free trial · Cancel anytime
             </p>
           </div>

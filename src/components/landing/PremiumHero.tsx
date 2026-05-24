@@ -58,13 +58,13 @@ export default function PremiumHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.7 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-white/15 bg-white/[0.06] backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6 border border-cream/15 bg-card/[0.06] backdrop-blur-md"
           >
             <span className="relative flex w-2 h-2">
               <span className="absolute inset-0 rounded-full bg-[#C9A87C] animate-ping opacity-60" />
               <span className="relative w-2 h-2 rounded-full bg-[#C9A87C]" />
             </span>
-            <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-white/85">
+            <span className="font-calm-body text-[11px] tracking-[0.18em] uppercase text-cream/85">
               Premium Mindfulness · 2026
             </span>
           </motion.div>
@@ -74,7 +74,7 @@ export default function PremiumHero() {
           </div>
 
           {/* Headline */}
-          <h1 className="font-calm-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.02] tracking-[-0.025em] text-white">
+          <h1 className="font-calm-display text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.02] tracking-[-0.025em] text-cream">
             Quiet the noise.
             <br />
             <span className="italic font-medium bg-gradient-to-r from-[#f5f0e0] via-[#f0d78c] to-[#c9a84c] bg-clip-text text-transparent">
@@ -107,7 +107,7 @@ export default function PremiumHero() {
             </Link>
             <Link to="/pricing" className="block">
               <button
-                className="w-full sm:w-auto px-8 py-4 rounded-full font-calm-body font-semibold text-base transition-colors hover:bg-white/[0.14]"
+                className="w-full sm:w-auto px-8 py-4 rounded-full font-calm-body font-semibold text-base transition-colors hover:bg-card/[0.14]"
                 style={{
                   background: "rgba(255,255,255,0.08)",
                   border: "1px solid rgba(255,255,255,0.2)",
@@ -122,7 +122,7 @@ export default function PremiumHero() {
           </div>
 
           {/* Trust microcopy */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 mt-6 text-xs font-calm-body text-white/70">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 mt-6 text-xs font-calm-body text-cream/70">
             <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-[#f0d78c]" /> 7-day free trial</span>
             <span className="flex items-center gap-1.5"><Heart className="w-3.5 h-3.5 text-[#f0d78c]" /> Cancel anytime</span>
             <span className="hidden sm:flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-[#f0d78c]" /> Built for busy minds</span>
@@ -143,7 +143,7 @@ export default function PremiumHero() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + i * 0.06, duration: 0.5 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-calm-body text-white/85 border border-white/10 bg-white/[0.05] backdrop-blur-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-calm-body text-cream/85 border border-cream/10 bg-card/[0.05] backdrop-blur-sm"
               >
                 <I className="w-3 h-3 text-[#f0d78c]" />
                 {label}
@@ -154,17 +154,17 @@ export default function PremiumHero() {
       </div>
 
       {/* Soft bottom fade into next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-cream pointer-events-none z-10" />
 
       {/* Scroll cue */}
       <motion.div
         aria-hidden
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 text-[10px] tracking-[0.3em] uppercase font-calm-body flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-cream/60 text-[10px] tracking-[0.3em] uppercase font-calm-body flex flex-col items-center gap-2"
         animate={{ opacity: [0.4, 0.9, 0.4] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
         Scroll
-        <span className="w-px h-8 bg-gradient-to-b from-white/60 to-transparent" />
+        <span className="w-px h-8 bg-gradient-to-b from-cream/60 to-transparent" />
       </motion.div>
     </section>
   );

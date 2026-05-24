@@ -50,7 +50,7 @@ export default function AssessmentPage() {
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                   <label key={num} className="text-center">
                     <input type="radio" name={area.label} className="sr-only peer" />
-                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-forest-deep peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
+                    <span className="block py-2 rounded-lg border border-border/50 text-sm font-body text-muted-foreground cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-primary peer-checked:to-forest-deep peer-checked:text-cream peer-checked:border-primary peer-checked:shadow-md transition-all hover:bg-secondary">
                       {num}
                     </span>
                   </label>

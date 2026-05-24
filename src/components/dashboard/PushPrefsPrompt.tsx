@@ -95,7 +95,7 @@ export default function PushPrefsPrompt() {
 
           <div className="relative p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center flex-shrink-0 shadow-[var(--shadow-gold-val)]">
-              <Bell className="w-5 h-5 text-white" />
+              <Bell className="w-5 h-5 text-cream" />
             </div>
             <div className="flex-1">
               <p className="text-[10px] font-body font-bold tracking-[0.22em] uppercase text-[hsl(var(--gold-dark))] mb-1">
@@ -119,7 +119,7 @@ export default function PushPrefsPrompt() {
               <Button
                 onClick={enable}
                 disabled={busy}
-                className="flex-1 sm:flex-initial rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold shadow-[var(--shadow-gold-val)]"
+                className="flex-1 sm:flex-initial rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-semibold shadow-[var(--shadow-gold-val)]"
               >
                 {busy ? "Enabling…" : "Yes, please"}
               </Button>

@@ -122,9 +122,9 @@ const WillowLogo = forwardRef<HTMLDivElement, WillowLogoProps>(function WillowLo
       tm: "text-primary/50",
     },
     "mono-white": {
-      willow: "text-white",
-      vibes: "text-white",
-      tm: "text-white/50",
+      willow: "text-cream",
+      vibes: "text-cream",
+      tm: "text-cream/50",
     },
   };
 

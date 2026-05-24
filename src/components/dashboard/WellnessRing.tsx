@@ -130,7 +130,7 @@ export default function WellnessRing({ wellness, level }: Props) {
                     </div>
                     <span className="font-display text-sm font-bold text-foreground">{a.value}</span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-card/60 overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${a.value}%` }}

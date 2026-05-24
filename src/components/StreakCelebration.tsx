@@ -112,7 +112,7 @@ export default function StreakCelebration({ streak, show, onClose }: StreakCeleb
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/60 backdrop-blur-sm"
           onClick={onClose}
         >
           <motion.div
@@ -153,15 +153,15 @@ export default function StreakCelebration({ streak, show, onClose }: StreakCeleb
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/15"
+              className="backdrop-blur-xl bg-card/10 rounded-2xl p-6 border border-cream/15"
             >
               <div className="flex items-center justify-center gap-1 text-[hsl(var(--gold))] mb-2">
                 <Sparkles className="w-4 h-4" />
                 <span className="text-xs font-body font-bold uppercase tracking-widest">Milestone</span>
                 <Sparkles className="w-4 h-4" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-white mb-1">{milestone.title}</h3>
-              <p className="text-white/60 text-sm font-body mb-3">
+              <h3 className="font-display text-2xl font-bold text-cream mb-1">{milestone.title}</h3>
+              <p className="text-cream/60 text-sm font-body mb-3">
                 {streak} days of consistent practice
               </p>
               <p className="text-[hsl(var(--gold))] text-sm font-body font-semibold">

@@ -295,7 +295,7 @@ function SoundscapeBuilderPageInner() {
                 </div>
                 <Button
                   onClick={() => handlePlaySoundscape(preset.id)}
-                  className="w-full bg-gradient-to-r from-gold-dark to-gold hover:opacity-90 text-white"
+                  className="w-full bg-gradient-to-r from-gold-dark to-gold hover:opacity-90 text-cream"
                   size="sm"
                 >
                   <Play className="w-3 h-3 mr-2" />
@@ -333,7 +333,7 @@ function SoundscapeBuilderPageInner() {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handlePlaySoundscape(soundscape.id)}
-                        className="flex-1 bg-gradient-to-r from-forest to-sage-dark hover:opacity-90 text-white"
+                        className="flex-1 bg-gradient-to-r from-forest to-sage-dark hover:opacity-90 text-cream"
                         size="sm"
                       >
                         <Play className="w-3 h-3 mr-1" />

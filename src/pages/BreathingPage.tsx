@@ -176,7 +176,7 @@ export default function BreathingPage() {
             <p className="text-4xl mb-3">✨</p>
             <p className="font-display text-xl font-semibold text-foreground">Exercise Complete!</p>
             <p className="text-sm font-body text-muted-foreground mt-1">{targetCycles} cycles of {selected.name}</p>
-            <button onClick={reset} className="mt-4 px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">Try Another</button>
+            <button onClick={reset} className="mt-4 px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">Try Another</button>
           </div>
         )}
 

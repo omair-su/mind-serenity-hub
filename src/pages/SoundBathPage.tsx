@@ -74,12 +74,12 @@ function SoundBathPageInner() {
           <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/90 via-forest-deep/50 to-transparent" />
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <Headphones className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-card/20 backdrop-blur-sm flex items-center justify-center">
+                <Headphones className="w-5 h-5 text-cream" />
               </div>
               <div>
-                <h1 className="font-display text-2xl font-bold text-white">Sound Bath & Healing Frequencies</h1>
-                <p className="text-sm text-white/80">Binaural beats & frequency therapy for deep healing</p>
+                <h1 className="font-display text-2xl font-bold text-cream">Sound Bath & Healing Frequencies</h1>
+                <p className="text-sm text-cream/80">Binaural beats & frequency therapy for deep healing</p>
               </div>
             </div>
           </div>

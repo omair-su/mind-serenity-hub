@@ -33,7 +33,7 @@ export default function StreakFreezeCard() {
       <div className="relative flex items-center gap-3">
         <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-[hsl(var(--sage-dark))] to-[hsl(var(--forest))] flex items-center justify-center flex-shrink-0">
           <Snowflake className="w-5 h-5 text-[hsl(var(--cream))]" />
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[hsl(var(--gold))] text-[10px] font-display font-bold text-white flex items-center justify-center shadow-sm">
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[hsl(var(--gold))] text-[10px] font-display font-bold text-cream flex items-center justify-center shadow-sm">
             {count}
           </span>
         </div>

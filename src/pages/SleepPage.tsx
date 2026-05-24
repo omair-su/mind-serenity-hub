@@ -134,9 +134,9 @@ export default function SleepPage() {
                   <button onClick={() => { tts.stop(); setStepIndex(s => s - 1); }} className="px-4 py-2.5 bg-card/80 backdrop-blur-sm rounded-xl text-sm font-body border border-border/50 shadow-soft">← Back</button>
                 )}
                 {stepIndex < activeSession.script.length - 1 ? (
-                  <button onClick={() => { tts.stop(); setStepIndex(s => s + 1); }} className="px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">Next →</button>
+                  <button onClick={() => { tts.stop(); setStepIndex(s => s + 1); }} className="px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">Next →</button>
                 ) : (
-                  <button onClick={() => { tts.stop(); setActive(null); setStepIndex(0); }} className="px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">
+                  <button onClick={() => { tts.stop(); setActive(null); setStepIndex(0); }} className="px-6 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-sm font-body font-semibold shadow-gold hover:shadow-lg transition-all">
                     Sweet Dreams ✓
                   </button>
                 )}

@@ -86,7 +86,7 @@ export default function DayHeroCinema({
 
       {/* Mood gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${moodGradient(hero.moodTint)}`} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-charcoal/20" />
 
       {/* Floating particles (gold dust) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -129,7 +129,7 @@ export default function DayHeroCinema({
           initial={{ y: 16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-display text-3xl md:text-5xl font-bold text-white leading-tight mb-3 max-w-[680px] drop-shadow-lg"
+          className="font-display text-3xl md:text-5xl font-bold text-cream leading-tight mb-3 max-w-[680px] drop-shadow-lg"
         >
           {title}
         </motion.h1>
@@ -138,7 +138,7 @@ export default function DayHeroCinema({
           initial={{ y: 14, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="font-display italic text-base md:text-lg text-white/85 mb-5 max-w-[520px]"
+          className="font-display italic text-base md:text-lg text-cream/85 mb-5 max-w-[520px]"
         >
           "{hero.affirmation}"
         </motion.p>
@@ -147,10 +147,10 @@ export default function DayHeroCinema({
           initial={{ y: 12, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex items-center gap-3 text-white/80 text-xs font-body mb-6"
+          className="flex items-center gap-3 text-cream/80 text-xs font-body mb-6"
         >
           <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {duration}</span>
-          <span className="w-1 h-1 rounded-full bg-white/40" />
+          <span className="w-1 h-1 rounded-full bg-card/40" />
           <span className="flex items-center gap-1.5"><Gauge className="w-3.5 h-3.5" /> {difficulty}</span>
         </motion.div>
 
@@ -186,7 +186,7 @@ export default function DayHeroCinema({
                 onListenOnly();
               }
             }}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/12 backdrop-blur-md text-white font-body font-medium text-sm ring-1 ring-white/25 hover:bg-white/20 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-card/12 backdrop-blur-md text-cream font-body font-medium text-sm ring-1 ring-cream/25 hover:bg-card/20 transition-colors cursor-pointer"
           >
             <Headphones className="w-4 h-4" /> Listen Only
           </div>
@@ -200,7 +200,7 @@ export default function DayHeroCinema({
                 onReadFirst();
               }
             }}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-transparent text-white/90 font-body font-medium text-sm ring-1 ring-white/20 hover:bg-white/10 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-transparent text-cream/90 font-body font-medium text-sm ring-1 ring-cream/20 hover:bg-card/10 transition-colors cursor-pointer"
           >
             <BookOpen className="w-4 h-4" /> Read First
           </div>

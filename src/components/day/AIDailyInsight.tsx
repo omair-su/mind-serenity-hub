@@ -69,7 +69,7 @@ export default function AIDailyInsight({ dayNumber, practice, focus }: AIDailyIn
           <button
             onClick={() => fetchInsight(true)}
             disabled={loading}
-            className="text-white/40 hover:text-white/80 transition-colors p-1"
+            className="text-cream/40 hover:text-cream/80 transition-colors p-1"
             aria-label="Refresh insight"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
@@ -77,7 +77,7 @@ export default function AIDailyInsight({ dayNumber, practice, focus }: AIDailyIn
         </div>
 
         {loading && !insight && (
-          <div className="flex items-center gap-2 text-white/60 py-3">
+          <div className="flex items-center gap-2 text-cream/60 py-3">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span className="font-body text-sm">Reading the rhythm of your week…</span>
           </div>
@@ -87,14 +87,14 @@ export default function AIDailyInsight({ dayNumber, practice, focus }: AIDailyIn
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="font-display text-base md:text-lg text-white/95 leading-relaxed italic"
+            className="font-display text-base md:text-lg text-cream/95 leading-relaxed italic"
           >
             "{insight}"
           </motion.p>
         )}
 
         {error && !insight && (
-          <p className="font-body text-sm text-white/60">
+          <p className="font-body text-sm text-cream/60">
             Today's reflection is quiet. Trust your intuition — it knows.
           </p>
         )}

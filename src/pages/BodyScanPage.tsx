@@ -148,15 +148,15 @@ function BodyScanPageInner() {
           <div className="absolute inset-0 bg-gradient-to-t from-[hsl(270,24%,12%)]/95 via-[hsl(280,20%,18%)]/55 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-5 h-5 text-white/75" />
-              <span className="text-xs font-body font-semibold text-white/70 uppercase tracking-wider">Guided Audio Experience</span>
+              <Sparkles className="w-5 h-5 text-cream/75" />
+              <span className="text-xs font-body font-semibold text-cream/70 uppercase tracking-wider">Guided Audio Experience</span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold text-white">Body Scan Meditation</h1>
-            <p className="text-sm font-body text-white/70 mt-1">A fully narrated journey through 9 body zones with detailed guidance and premium calming visuals.</p>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-cream">Body Scan Meditation</h1>
+            <p className="text-sm font-body text-cream/70 mt-1">A fully narrated journey through 9 body zones with detailed guidance and premium calming visuals.</p>
             <div className="flex flex-wrap gap-2 mt-2">
-              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80">🎙️ Voice Guided</span>
-              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80">🫁 Breathing Sync</span>
-              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80">⏱️ {Math.round(totalDuration / 60)} min total</span>
+              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-card/10 backdrop-blur-sm text-cream/80">🎙️ Voice Guided</span>
+              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-card/10 backdrop-blur-sm text-cream/80">🫁 Breathing Sync</span>
+              <span className="text-[10px] font-body px-2 py-1 rounded-full bg-card/10 backdrop-blur-sm text-cream/80">⏱️ {Math.round(totalDuration / 60)} min total</span>
             </div>
           </div>
         </div>

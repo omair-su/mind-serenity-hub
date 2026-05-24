@@ -32,9 +32,9 @@ export default function DayProgressIndicator({
                 onClick={() => locked ? onLockedDay(num) : onSelectDay(num)}
                 className={`relative w-7 h-7 rounded-full text-[10px] font-body font-semibold transition-all duration-200 flex items-center justify-center
                   ${isCurrent
-                    ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
+                    ? "bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream ring-2 ring-[hsl(var(--gold))]/40 scale-110 shadow-[var(--shadow-gold-val)]"
                     : isComplete
-                    ? "bg-[hsl(var(--forest))] text-white shadow-sm"
+                    ? "bg-[hsl(var(--forest))] text-cream shadow-sm"
                     : locked
                     ? "bg-[hsl(var(--cream-dark))]/60 text-[hsl(var(--charcoal-soft))]/60"
                     : "bg-[hsl(var(--cream-dark))]/70 text-[hsl(var(--charcoal-soft))] hover:bg-[hsl(var(--cream-dark))]"}`}

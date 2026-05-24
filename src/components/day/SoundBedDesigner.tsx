@@ -120,7 +120,7 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
     <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[hsl(var(--charcoal))] to-[hsl(var(--forest-deep))] border border-[hsl(var(--gold))]/20 shadow-soft">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between gap-3 p-5 hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between gap-3 p-5 hover:bg-card/5 transition-colors"
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[hsl(var(--gold))]/15 flex items-center justify-center">
@@ -128,7 +128,7 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
           </div>
           <div className="text-left">
             <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))]">Sound Bed Designer</p>
-            <p className="font-display text-base font-semibold text-white">
+            <p className="font-display text-base font-semibold text-cream">
               {anyActive ? "Layered soundscape active" : "Build your soundscape"}
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
               Stop All
             </span>
           )}
-          <ChevronDown className={`w-4 h-4 text-white/60 transition-transform ${open ? "rotate-180" : ""}`} />
+          <ChevronDown className={`w-4 h-4 text-cream/60 transition-transform ${open ? "rotate-180" : ""}`} />
         </div>
       </button>
 
@@ -175,21 +175,21 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
                         key={b.id}
                         onClick={() => setBed(b.id)}
                         className={`flex flex-col items-center gap-0.5 p-2 rounded-xl transition-all ${
-                          active ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40" : "hover:bg-white/5"
+                          active ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40" : "hover:bg-card/5"
                         }`}
                       >
                         <span className="text-base">{b.emoji}</span>
-                        <span className="text-[9px] font-body text-white/70 leading-tight text-center">{b.label}</span>
+                        <span className="text-[9px] font-body text-cream/70 leading-tight text-center">{b.label}</span>
                       </button>
                     );
                   })}
                 </div>
                 {bed !== "silence" && (
                   <div className="flex items-center gap-2 px-1">
-                    <VolumeX className="w-3 h-3 text-white/40" />
+                    <VolumeX className="w-3 h-3 text-cream/40" />
                     <Slider value={[bedVolume]} onValueChange={(v) => setBedVolume(v[0])} min={0} max={100} step={1} className="flex-1" />
-                    <Volume2 className="w-3 h-3 text-white/40" />
-                    <span className="text-[10px] text-white/50 w-7 text-right tabular-nums">{bedVolume}</span>
+                    <Volume2 className="w-3 h-3 text-cream/40" />
+                    <span className="text-[10px] text-cream/50 w-7 text-right tabular-nums">{bedVolume}</span>
                   </div>
                 )}
               </div>
@@ -201,7 +201,7 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
                     <Brain className="w-3 h-3" /> Binaural Beats
                   </p>
                   {binauralPreset && (
-                    <button onClick={() => setBinauralPreset(null)} className="text-[9px] font-body text-white/40 hover:text-white/70 uppercase tracking-wider">
+                    <button onClick={() => setBinauralPreset(null)} className="text-[9px] font-body text-cream/40 hover:text-cream/70 uppercase tracking-wider">
                       Off
                     </button>
                   )}
@@ -214,25 +214,25 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
                         key={p.id}
                         onClick={() => setBinauralPreset(p)}
                         className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl transition-all min-w-[78px] ${
-                          active ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40" : "bg-white/5 hover:bg-white/10"
+                          active ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40" : "bg-card/5 hover:bg-card/10"
                         }`}
                       >
                         <span className="text-sm">{p.icon}</span>
-                        <span className="text-[10px] font-body text-white/80 mt-0.5">{p.beatFreq}Hz</span>
-                        <span className="text-[8px] font-body text-white/50 uppercase tracking-wider">{p.category}</span>
+                        <span className="text-[10px] font-body text-cream/80 mt-0.5">{p.beatFreq}Hz</span>
+                        <span className="text-[8px] font-body text-cream/50 uppercase tracking-wider">{p.category}</span>
                       </button>
                     );
                   })}
                 </div>
                 {binauralPreset && (
                   <div className="flex items-center gap-2 px-1">
-                    <VolumeX className="w-3 h-3 text-white/40" />
+                    <VolumeX className="w-3 h-3 text-cream/40" />
                     <Slider value={[binauralVolume]} onValueChange={(v) => setBinauralVol(v[0])} min={0} max={60} step={1} className="flex-1" />
-                    <Volume2 className="w-3 h-3 text-white/40" />
-                    <span className="text-[10px] text-white/50 w-7 text-right tabular-nums">{binauralVolume}</span>
+                    <Volume2 className="w-3 h-3 text-cream/40" />
+                    <span className="text-[10px] text-cream/50 w-7 text-right tabular-nums">{binauralVolume}</span>
                   </div>
                 )}
-                <p className="text-[9px] font-body text-white/40 mt-1.5 italic">🎧 Headphones required for binaural effect</p>
+                <p className="text-[9px] font-body text-cream/40 mt-1.5 italic">🎧 Headphones required for binaural effect</p>
               </div>
 
               {/* ── Singing bowls interval ── */}
@@ -247,8 +247,8 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
                       onClick={() => setBowlInterval(opt.value)}
                       className={`p-2 rounded-lg text-[10px] font-body transition-all ${
                         bowlInterval === opt.value
-                          ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40 text-white"
-                          : "bg-white/5 text-white/60 hover:bg-white/10"
+                          ? "bg-[hsl(var(--gold))]/15 ring-1 ring-[hsl(var(--gold))]/40 text-cream"
+                          : "bg-card/5 text-cream/60 hover:bg-card/10"
                       }`}
                     >
                       {opt.label}
@@ -258,12 +258,12 @@ export default function SoundBedDesigner({ defaultBed = "silence" }: SoundBedDes
               </div>
 
               {/* Master mute */}
-              <div className="flex items-center justify-between pt-3 border-t border-white/10">
-                <span className="text-[10px] font-body uppercase tracking-wider text-white/60">Master</span>
+              <div className="flex items-center justify-between pt-3 border-t border-cream/10">
+                <span className="text-[10px] font-body uppercase tracking-wider text-cream/60">Master</span>
                 <button
                   onClick={() => setMuted((m) => !m)}
                   className={`flex items-center gap-1.5 text-xs font-body px-3 py-1.5 rounded-lg transition-colors ${
-                    muted ? "bg-destructive/20 text-destructive-foreground" : "bg-white/10 text-white/80"
+                    muted ? "bg-destructive/20 text-destructive-foreground" : "bg-card/10 text-cream/80"
                   }`}
                 >
                   {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}

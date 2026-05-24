@@ -282,7 +282,7 @@ function VideoPlayerOverlay({
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[100] bg-charcoal/95 backdrop-blur-sm flex items-center justify-center"
     >
-      <div className="relative w-full h-full md:w-[92vw] md:h-[88vh] md:rounded-3xl overflow-hidden bg-black flex items-center justify-center">
+      <div className="relative w-full h-full md:w-[92vw] md:h-[88vh] md:rounded-3xl overflow-hidden bg-charcoal flex items-center justify-center">
         <video
           ref={videoRef}
           src={videoUrl}

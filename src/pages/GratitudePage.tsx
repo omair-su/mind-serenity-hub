@@ -94,15 +94,15 @@ export default function GratitudePage() {
         {/* Hero with real image */}
         <div className="relative rounded-3xl overflow-hidden h-56 shadow-elevated">
           <img src={HERO_IMAGE} alt="Sunlit garden" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-transparent" />
           <div className="absolute top-4 right-6 w-24 h-24 rounded-full bg-gold/40 blur-2xl" />
-          <div className="absolute bottom-5 left-5 right-5 text-white">
+          <div className="absolute bottom-5 left-5 right-5 text-cream">
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-md"><Flower2 className="w-4 h-4" /></div>
-              <span className="text-[10px] font-body font-bold uppercase tracking-widest text-white/80">Daily Practice</span>
+              <div className="p-1.5 rounded-lg bg-card/20 backdrop-blur-md"><Flower2 className="w-4 h-4" /></div>
+              <span className="text-[10px] font-body font-bold uppercase tracking-widest text-cream/80">Daily Practice</span>
             </div>
             <h1 className="font-display text-3xl font-bold drop-shadow-lg">Gratitude Garden</h1>
-            <p className="text-xs font-body text-white/80 mt-1">Plant a seed each day. Watch your inner garden bloom.</p>
+            <p className="text-xs font-body text-cream/80 mt-1">Plant a seed each day. Watch your inner garden bloom.</p>
           </div>
         </div>
 

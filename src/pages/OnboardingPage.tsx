@@ -259,7 +259,7 @@ export default function OnboardingPage() {
                       }`}
                     >
                       <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${g.color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-5 h-5 text-white" />
+                        <Icon className="w-5 h-5 text-cream" />
                       </div>
                       <span className="font-body font-medium text-foreground text-left flex-1">{g.label}</span>
                       {isSelected && (
@@ -462,7 +462,7 @@ export default function OnboardingPage() {
             <div>
               <div className="text-center mb-6">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[hsl(var(--gold-light))] to-[hsl(var(--gold))] flex items-center justify-center shadow-md">
-                  <Sparkles className="w-8 h-8 text-white" />
+                  <Sparkles className="w-8 h-8 text-cream" />
                 </div>
                 <h2 className="font-display text-2xl font-bold text-foreground leading-tight">
                   Your personalized<br />practice plan
@@ -500,7 +500,7 @@ export default function OnboardingPage() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-lg animate-pulse-glow"
               >
-                <Sparkles className="w-10 h-10 text-white" />
+                <Sparkles className="w-10 h-10 text-cream" />
               </motion.div>
               <h2 className="font-display text-2xl font-bold text-foreground mb-3 leading-tight">
                 You're in the right place<br />to start feeling better

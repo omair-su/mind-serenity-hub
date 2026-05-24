@@ -44,10 +44,10 @@ export default function ChallengeJourneyTimeline({ challenge, completedDays, onS
                   <span
                     className={`flex w-10 h-10 rounded-full items-center justify-center font-display text-sm font-bold relative z-10 ${
                       done
-                        ? "bg-[hsl(var(--forest))] text-white"
+                        ? "bg-[hsl(var(--forest))] text-cream"
                         : isCurrent
                         ? "bg-[hsl(var(--gold))] text-[hsl(var(--charcoal))] shadow-[var(--shadow-gold-val)]"
-                        : "bg-white text-muted-foreground border border-[hsl(var(--cream-dark))]"
+                        : "bg-card text-muted-foreground border border-[hsl(var(--cream-dark))]"
                     }`}
                   >
                     {done ? <Check className="w-4 h-4" /> : day.day}

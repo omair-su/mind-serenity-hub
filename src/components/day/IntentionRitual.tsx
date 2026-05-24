@@ -76,7 +76,7 @@ export default function IntentionRitual({
         >
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/20 text-white/70 hover:bg-black/40"
+            className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-charcoal/20 text-cream/70 hover:bg-charcoal/40"
             aria-label="Skip ritual"
           >
             <X className="w-4 h-4" />

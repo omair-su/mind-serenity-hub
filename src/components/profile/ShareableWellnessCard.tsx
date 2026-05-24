@@ -97,7 +97,7 @@ export default function ShareableWellnessCard() {
         <button
           onClick={exportPng}
           disabled={busy}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-white font-body font-semibold text-sm hover:scale-105 active:scale-95 transition-transform disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-cream font-body font-semibold text-sm hover:scale-105 active:scale-95 transition-transform disabled:opacity-60"
         >
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Share2 className="w-4 h-4" />}
           {busy ? "Exporting…" : "Share"}

@@ -82,7 +82,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background font-body">
       {/* ── Navbar ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.06)]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl shadow-[0_1px_16px_rgba(0,0,0,0.06)]">
         <div className="max-w-[1200px] mx-auto flex items-center justify-between h-[72px] px-6">
           <Link to="/" className="flex items-center gap-2.5">
             <WillowLogo variant="horizontal" size="sm" />
@@ -141,10 +141,10 @@ export default function AboutPage() {
                     height={1000}
                   />
                   {/* Subtle bottom gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 via-transparent to-transparent" />
                   {/* Caption badge */}
                   <div className="absolute bottom-5 left-5 right-5">
-                    <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-soft">
+                    <div className="inline-flex items-center gap-2 bg-card/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-soft">
                       <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                       <span className="text-xs font-body font-semibold text-foreground tracking-wide">
                         Where it all began

@@ -27,7 +27,7 @@ export default function ChallengeFilters({ categories, active, onChange, sort, o
               onClick={() => onChange(c)}
               className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-body font-semibold transition-all ${
                 isActive
-                  ? "bg-[hsl(var(--forest))] text-white shadow-[var(--shadow-soft-val)]"
+                  ? "bg-[hsl(var(--forest))] text-cream shadow-[var(--shadow-soft-val)]"
                   : "bg-[hsl(var(--sage-light))] text-[hsl(var(--forest))] hover:bg-[hsl(var(--sage))]/40 border border-[hsl(var(--sage))]/40"
               }`}
             >
@@ -44,7 +44,7 @@ export default function ChallengeFilters({ categories, active, onChange, sort, o
               key={s.id}
               onClick={() => onSortChange(s.id)}
               className={`px-2.5 py-1 rounded-full text-[10px] font-body font-semibold transition-all ${
-                sort === s.id ? "bg-white text-[hsl(var(--forest))] shadow-sm" : "text-muted-foreground hover:text-foreground"
+                sort === s.id ? "bg-card text-[hsl(var(--forest))] shadow-sm" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {s.label}

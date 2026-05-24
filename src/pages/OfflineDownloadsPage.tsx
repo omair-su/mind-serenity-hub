@@ -173,7 +173,7 @@ function OfflineDownloadsPageInner() {
 
         {/* Storage card */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-10">
-          <Card className="bg-gradient-to-r from-primary to-sage text-white p-8 border-0 shadow-lg">
+          <Card className="bg-gradient-to-r from-primary to-sage text-cream p-8 border-0 shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
@@ -187,8 +187,8 @@ function OfflineDownloadsPageInner() {
                 <div className="opacity-80 font-body text-sm">MB used</div>
               </div>
             </div>
-            <div className="mt-6 bg-white/20 rounded-full h-3 overflow-hidden">
-              <motion.div className="bg-white/70 h-full rounded-full" initial={{ width: 0 }} animate={{ width: `${Math.min((totalMB / 500) * 100, 100)}%` }} transition={{ duration: 1, ease: "easeOut" }} />
+            <div className="mt-6 bg-card/20 rounded-full h-3 overflow-hidden">
+              <motion.div className="bg-card/70 h-full rounded-full" initial={{ width: 0 }} animate={{ width: `${Math.min((totalMB / 500) * 100, 100)}%` }} transition={{ duration: 1, ease: "easeOut" }} />
             </div>
             <p className="opacity-70 text-sm mt-2 font-body">500 MB available</p>
           </Card>
@@ -206,11 +206,11 @@ function OfflineDownloadsPageInner() {
                 <motion.div key={content.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + index * 0.04 }}>
                   <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group h-full flex flex-col">
                     <div className={`h-24 bg-gradient-to-br ${content.color} relative overflow-hidden flex items-center justify-center`}>
-                      <Icon className="w-10 h-10 text-white/80" />
+                      <Icon className="w-10 h-10 text-cream/80" />
                       {downloaded && (
-                        <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm rounded-full px-2.5 py-1 flex items-center gap-1.5">
-                          <WifiOff className="w-3 h-3 text-white" />
-                          <span className="text-[10px] font-body font-bold text-white">SAVED</span>
+                        <div className="absolute top-3 right-3 bg-card/20 backdrop-blur-sm rounded-full px-2.5 py-1 flex items-center gap-1.5">
+                          <WifiOff className="w-3 h-3 text-cream" />
+                          <span className="text-[10px] font-body font-bold text-cream">SAVED</span>
                         </div>
                       )}
                     </div>
@@ -238,7 +238,7 @@ function OfflineDownloadsPageInner() {
                             <Trash2 className="w-4 h-4 mr-2" />Remove
                           </Button>
                         ) : (
-                          <Button size="sm" className="flex-1 bg-gradient-to-r from-primary to-sage hover:opacity-90 text-white" onClick={() => handleDownload(content)} disabled={isDownloading}>
+                          <Button size="sm" className="flex-1 bg-gradient-to-r from-primary to-sage hover:opacity-90 text-cream" onClick={() => handleDownload(content)} disabled={isDownloading}>
                             {isDownloading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>) : (<><Download className="w-4 h-4 mr-2" />Save Offline</>)}
                           </Button>
                         )}

@@ -27,7 +27,7 @@ const pillars = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-24 md:py-32 bg-white" style={{ color: NAVY }}>
+    <section id="about" className="py-24 md:py-32 bg-card" style={{ color: NAVY }}>
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-14">
           <h3 className="font-calm-display text-4xl md:text-5xl font-semibold mb-5 tracking-[-0.02em]" style={{ color: NAVY }}>

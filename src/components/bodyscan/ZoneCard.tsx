@@ -33,7 +33,7 @@ export default function ZoneCard({ zone, isActive, isDone, onClick }: ZoneCardPr
               ? "bg-primary/10 text-primary"
               : isDone
               ? "bg-primary/8 text-primary"
-              : `bg-gradient-to-br ${zone.color} text-white`
+              : `bg-gradient-to-br ${zone.color} text-cream`
           }`}
         >
           <Icon className="w-4 h-4" />

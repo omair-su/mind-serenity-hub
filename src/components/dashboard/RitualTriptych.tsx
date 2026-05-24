@@ -33,7 +33,7 @@ const rituals = [
     copy: "A gentle wind-down ritual to invite restful sleep.",
     Icon: Moon,
     to: "/app/sleep",
-    bg: "bg-gradient-to-br from-[hsl(var(--forest-deep))] to-[hsl(var(--forest))]/80 text-white",
+    bg: "bg-gradient-to-br from-[hsl(var(--forest-deep))] to-[hsl(var(--forest))]/80 text-cream",
     accent: "text-[hsl(var(--gold-light))]",
     hours: [17, 28],
   },
@@ -83,22 +83,22 @@ export default function RitualTriptych() {
                   </span>
                 )}
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${
-                  isDark ? "bg-white/10" : "bg-white/70"
+                  isDark ? "bg-card/10" : "bg-card/70"
                 }`}>
                   <r.Icon className={`w-5 h-5 ${r.accent}`} />
                 </div>
                 <p className={`text-[10px] font-body font-bold uppercase tracking-[0.2em] mb-1 ${
-                  isDark ? "text-white/60" : "text-muted-foreground"
+                  isDark ? "text-cream/60" : "text-muted-foreground"
                 }`}>
                   {r.label}
                 </p>
                 <p className={`font-display text-base font-bold leading-snug ${
-                  isDark ? "text-white" : "text-foreground"
+                  isDark ? "text-cream" : "text-foreground"
                 }`}>
                   {r.title}
                 </p>
                 <p className={`text-xs font-body mt-1.5 leading-relaxed flex-1 ${
-                  isDark ? "text-white/65" : "text-muted-foreground"
+                  isDark ? "text-cream/65" : "text-muted-foreground"
                 }`}>
                   {r.copy}
                 </p>

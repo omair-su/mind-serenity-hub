@@ -147,7 +147,7 @@ export default function TimerPage() {
 
           <div className="flex items-center justify-center gap-3">
             {!running && !completed && seconds === minutes * 60 && (
-              <button onClick={start} className="px-8 py-3.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-base font-body font-semibold flex items-center gap-2 shadow-gold hover:shadow-lg transition-all">
+              <button onClick={start} className="px-8 py-3.5 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-base font-body font-semibold flex items-center gap-2 shadow-gold hover:shadow-lg transition-all">
                 <Play className="w-5 h-5" /> Begin
               </button>
             )}
@@ -170,7 +170,7 @@ export default function TimerPage() {
               </button>
             )}
             {completed && (
-              <button onClick={reset} className="px-8 py-3.5 bg-gradient-to-r from-gold to-gold-dark text-white rounded-xl text-base font-body font-semibold shadow-gold hover:shadow-lg transition-all">
+              <button onClick={reset} className="px-8 py-3.5 bg-gradient-to-r from-gold to-gold-dark text-cream rounded-xl text-base font-body font-semibold shadow-gold hover:shadow-lg transition-all">
                 New Session
               </button>
             )}

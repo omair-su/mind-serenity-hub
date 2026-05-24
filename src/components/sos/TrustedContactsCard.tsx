@@ -65,7 +65,7 @@ export default function TrustedContactsCard() {
           </div>
         </div>
         {!adding && (
-          <button onClick={() => setAdding(true)} className="p-2 rounded-full bg-[hsl(var(--forest))] text-white hover:bg-[hsl(var(--forest-deep))] transition" aria-label="Add contact">
+          <button onClick={() => setAdding(true)} className="p-2 rounded-full bg-[hsl(var(--forest))] text-cream hover:bg-[hsl(var(--forest-deep))] transition" aria-label="Add contact">
             <Plus className="w-4 h-4" />
           </button>
         )}
@@ -77,7 +77,7 @@ export default function TrustedContactsCard() {
           <input value={phone} maxLength={30} onChange={e => setPhone(e.target.value)} placeholder="Phone (e.g. +1 555 1234)" className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm font-body" />
           <input value={relation} maxLength={40} onChange={e => setRelation(e.target.value)} placeholder="Relation (Mum, friend, partner…)" className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm font-body" />
           <div className="flex gap-2">
-            <button onClick={add} className="flex-1 px-3 py-2 rounded-lg bg-[hsl(var(--forest))] text-white text-sm font-body font-bold hover:bg-[hsl(var(--forest-deep))]">Save</button>
+            <button onClick={add} className="flex-1 px-3 py-2 rounded-lg bg-[hsl(var(--forest))] text-cream text-sm font-body font-bold hover:bg-[hsl(var(--forest-deep))]">Save</button>
             <button onClick={() => setAdding(false)} className="px-3 py-2 rounded-lg bg-card border border-border text-sm font-body">Cancel</button>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function TrustedContactsCard() {
                 {c.relation ?? "Trusted"} {c.phone ? `· ${c.phone}` : ""}
               </p>
             </div>
-            <button onClick={() => sendSOS(c)} className="px-3 py-2 rounded-lg bg-[hsl(var(--gold))] text-white text-xs font-body font-bold hover:bg-[hsl(var(--gold-dark))] transition flex items-center gap-1.5">
+            <button onClick={() => sendSOS(c)} className="px-3 py-2 rounded-lg bg-[hsl(var(--gold))] text-cream text-xs font-body font-bold hover:bg-[hsl(var(--gold-dark))] transition flex items-center gap-1.5">
               <Send className="w-3.5 h-3.5" /> Send SOS
             </button>
             <button onClick={() => remove(c.id)} className="p-2 rounded-lg text-muted-foreground hover:text-destructive transition" aria-label="Remove">
