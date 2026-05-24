@@ -43,7 +43,7 @@ export default function HeroCinema({
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative overflow-hidden rounded-3xl shadow-[var(--shadow-elevated-val)] border border-white/5"
+      className="relative overflow-hidden rounded-3xl shadow-[var(--shadow-elevated-val)] border border-cream/5"
     >
       {/* Time-of-day adaptive hero */}
       <motion.img
@@ -79,8 +79,8 @@ export default function HeroCinema({
             transition={{ delay: 0.55 }}
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body font-medium ${
               todayPracticed
-                ? "bg-[hsl(var(--forest))]/90 text-white"
-                : "backdrop-blur-sm bg-white/15 text-white/85"
+                ? "bg-[hsl(var(--forest))]/90 text-cream"
+                : "backdrop-blur-sm bg-card/15 text-cream/85"
             }`}
           >
             {todayPracticed ? (
@@ -94,7 +94,7 @@ export default function HeroCinema({
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body backdrop-blur-sm bg-white/15 text-white/85"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body backdrop-blur-sm bg-card/15 text-cream/85"
             >
               {weatherLabel}
             </motion.span>
@@ -105,7 +105,7 @@ export default function HeroCinema({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
-          className="font-display text-2xl sm:text-4xl font-bold text-white leading-tight tracking-tight"
+          className="font-display text-2xl sm:text-4xl font-bold text-cream leading-tight tracking-tight"
         >
           {greeting}
         </motion.h1>
@@ -113,7 +113,7 @@ export default function HeroCinema({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="font-body text-xs sm:text-sm text-white/65 mt-1.5"
+          className="font-body text-xs sm:text-sm text-cream/65 mt-1.5"
         >
           Day {nextDay} of 30 · {30 - completedCount} sessions remaining
         </motion.p>
@@ -128,14 +128,14 @@ export default function HeroCinema({
             to={`/day/${nextDay}`}
             className="group relative inline-flex items-center gap-2.5 w-fit px-6 py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all duration-300 overflow-hidden"
           >
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-cream/40 to-transparent" />
             <Play className="w-4 h-4 relative" />
             <span className="relative">{todayPracticed ? "Review Practice" : `Begin Day ${nextDay}`}</span>
             <ArrowRight className="w-4 h-4 relative" />
           </Link>
           <button
             onClick={onQuickSession}
-            className="inline-flex items-center gap-2 px-4 py-3 rounded-xl backdrop-blur-md bg-white/12 border border-white/20 text-white font-body font-semibold text-sm hover:bg-white/20 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-3 rounded-xl backdrop-blur-md bg-card/12 border border-cream/20 text-cream font-body font-semibold text-sm hover:bg-card/20 transition-all"
           >
             <Play className="w-4 h-4" /> Quick Session
           </button>

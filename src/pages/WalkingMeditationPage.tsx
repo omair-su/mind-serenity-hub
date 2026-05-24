@@ -188,32 +188,32 @@ export default function WalkingMeditationPage() {
           <motion.div
             animate={{ y: [0, 15, 0], opacity: [0.2, 0.5, 0.2] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-20 left-8 w-16 h-16 rounded-full bg-white/20 blur-xl"
+            className="absolute bottom-20 left-8 w-16 h-16 rounded-full bg-card/20 blur-xl"
           />
 
           {/* Weather widget — always visible */}
           <button
             onClick={() => retryWeather()}
-            className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 flex items-center gap-2 z-10 transition-all hover:bg-black/55 active:scale-95"
+            className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-charcoal/40 backdrop-blur-md border border-cream/15 flex items-center gap-2 z-10 transition-all hover:bg-charcoal/55 active:scale-95"
             aria-label="Refresh weather"
           >
             {weatherLoading ? (
               <>
                 <span className="text-sm animate-pulse">🌍</span>
-                <span className="text-[10px] font-body font-semibold text-white/80">Loading…</span>
+                <span className="text-[10px] font-body font-semibold text-cream/80">Loading…</span>
               </>
             ) : weather ? (
               <>
                 <span className="text-sm">{weather.emoji}</span>
-                <span className="text-[11px] font-body font-bold text-white tabular-nums">{weather.tempC}°C</span>
-                <span className="text-[10px] font-body text-white/75 hidden sm:inline">
+                <span className="text-[11px] font-body font-bold text-cream tabular-nums">{weather.tempC}°C</span>
+                <span className="text-[10px] font-body text-cream/75 hidden sm:inline">
                   · {weather.city ? `${weather.city} · ` : ""}{weather.description}
                 </span>
               </>
             ) : (
               <>
                 <span className="text-sm">📍</span>
-                <span className="text-[10px] font-body font-semibold text-white/80">
+                <span className="text-[10px] font-body font-semibold text-cream/80">
                   {weatherError ? "Tap to retry" : "Tap for weather"}
                 </span>
               </>
@@ -222,13 +222,13 @@ export default function WalkingMeditationPage() {
 
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-xl bg-white/15 backdrop-blur-sm">
-                <Footprints className="w-5 h-5 text-white" />
+              <div className="p-2 rounded-xl bg-card/15 backdrop-blur-sm">
+                <Footprints className="w-5 h-5 text-cream" />
               </div>
-              <span className="text-xs font-body font-semibold uppercase tracking-wider text-white/70">Mindful Movement</span>
+              <span className="text-xs font-body font-semibold uppercase tracking-wider text-cream/70">Mindful Movement</span>
             </div>
-            <h1 className="font-display text-2xl font-bold text-white mb-1">Walking Meditation</h1>
-            <p className="text-sm font-body text-white/80">
+            <h1 className="font-display text-2xl font-bold text-cream mb-1">Walking Meditation</h1>
+            <p className="text-sm font-body text-cream/80">
               {weather?.isGoodForWalking
                 ? `Perfect for an outdoor walk · ${weather.tempC}°C · ${weather.description.toLowerCase()}`
                 : weather && !weather.isGoodForWalking

@@ -169,11 +169,11 @@ export default function RitualsPage() {
               {/* Hero */}
               <div className="relative rounded-2xl overflow-hidden h-40">
                 <img src={activeMeta.heroImage} alt={activeMeta.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <button onClick={() => setActiveId(null)} className="absolute top-3 left-3 p-2 rounded-full bg-black/40 backdrop-blur-md text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent" />
+                <button onClick={() => setActiveId(null)} className="absolute top-3 left-3 p-2 rounded-full bg-charcoal/40 backdrop-blur-md text-cream">
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <div className="absolute bottom-3 left-4 right-4 text-white">
+                <div className="absolute bottom-3 left-4 right-4 text-cream">
                   <p className="text-[10px] font-body uppercase tracking-widest opacity-80">Step {stepIndex + 1} of {steps.length}</p>
                   <h2 className="font-display text-xl font-bold">{activeMeta.name}</h2>
                 </div>
@@ -218,7 +218,7 @@ export default function RitualsPage() {
                           key={w}
                           onClick={() => setIntentionWord(w)}
                           className={`px-3 py-1.5 rounded-full text-xs font-body transition-colors ${
-                            intentionWord === w ? "bg-gold text-white" : "bg-secondary text-muted-foreground hover:text-foreground"
+                            intentionWord === w ? "bg-gold text-cream" : "bg-secondary text-muted-foreground hover:text-foreground"
                           }`}
                         >
                           {w}

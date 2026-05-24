@@ -101,7 +101,7 @@ export default function JournalPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search reflections..."
-              className="pl-9 font-body bg-white border-[hsl(var(--cream-dark))]"
+              className="pl-9 font-body bg-card border-[hsl(var(--cream-dark))]"
             />
           </div>
           <div className="flex gap-1.5">

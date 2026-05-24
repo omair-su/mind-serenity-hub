@@ -19,7 +19,7 @@ const included = [
 
 export default function CurriculumSection() {
   return (
-    <section id="curriculum" className="py-24 md:py-32 bg-white">
+    <section id="curriculum" className="py-24 md:py-32 bg-card">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-14">
           <p className="text-[10px] md:text-xs font-calm-body tracking-[0.35em] uppercase mb-4" style={{ color: "#8267D6" }}>The Curriculum</p>
@@ -37,11 +37,11 @@ export default function CurriculumSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-3xl overflow-hidden bg-card border border-border shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="aspect-[4/3] overflow-hidden relative">
                 <img src={w.img} loading="lazy" alt={w.title} className="w-full h-full object-cover" />
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-[10px] font-calm-body font-bold uppercase tracking-wider" style={{ color: w.color }}>
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-card/95 backdrop-blur-sm text-[10px] font-calm-body font-bold uppercase tracking-wider" style={{ color: w.color }}>
                   Week {w.week}
                 </div>
               </div>

@@ -145,18 +145,18 @@ export default function PracticeMode({
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className={`absolute inset-0 bg-gradient-to-br ${moodGradient(hero.moodTint)}`} />
-        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-charcoal/55" />
         {/* Vignette */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_black_100%)]" />
 
         {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 p-5 flex items-center justify-between z-10">
-          <div className="text-[10px] font-body font-bold uppercase tracking-[0.25em] text-white/70">
+          <div className="text-[10px] font-body font-bold uppercase tracking-[0.25em] text-cream/70">
             Day {dayNumber} · Step {index + 1}/{total}
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-card/10 backdrop-blur-md text-cream hover:bg-card/20 flex items-center justify-center"
             aria-label="Exit practice mode"
           >
             <X className="w-5 h-5" />
@@ -185,7 +185,7 @@ export default function PracticeMode({
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6 }}
                 className={`font-display text-xl md:text-2xl leading-[1.7] tracking-wide ${
-                  isPause ? "text-white/60 italic" : "text-white"
+                  isPause ? "text-cream/60 italic" : "text-cream"
                 }`}
               >
                 {isPause ? `pausing… ${pauseRemaining}s` : current}
@@ -194,7 +194,7 @@ export default function PracticeMode({
           </div>
 
           {tts.isLoading && !isPause && (
-            <div className="mt-6 flex items-center gap-2 text-white/60">
+            <div className="mt-6 flex items-center gap-2 text-cream/60">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="font-body text-xs">Preparing voice…</span>
             </div>
@@ -209,7 +209,7 @@ export default function PracticeMode({
               <span
                 key={i}
                 className={`h-0.5 rounded-full transition-all ${
-                  i === index ? "w-8 bg-[hsl(var(--gold))]" : i < index ? "w-3 bg-white/60" : "w-3 bg-white/20"
+                  i === index ? "w-8 bg-[hsl(var(--gold))]" : i < index ? "w-3 bg-card/60" : "w-3 bg-card/20"
                 }`}
               />
             ))}
@@ -219,7 +219,7 @@ export default function PracticeMode({
             <button
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={index === 0}
-              className="w-11 h-11 rounded-full bg-white/10 backdrop-blur text-white hover:bg-white/20 flex items-center justify-center disabled:opacity-40"
+              className="w-11 h-11 rounded-full bg-card/10 backdrop-blur text-cream hover:bg-card/20 flex items-center justify-center disabled:opacity-40"
               aria-label="Previous"
             >
               <SkipForward className="w-4 h-4 rotate-180" />
@@ -244,7 +244,7 @@ export default function PracticeMode({
             <button
               onClick={() => setIndex((i) => Math.min(total - 1, i + 1))}
               disabled={index === total - 1}
-              className="w-11 h-11 rounded-full bg-white/10 backdrop-blur text-white hover:bg-white/20 flex items-center justify-center disabled:opacity-40"
+              className="w-11 h-11 rounded-full bg-card/10 backdrop-blur text-cream hover:bg-card/20 flex items-center justify-center disabled:opacity-40"
               aria-label="Next"
             >
               <SkipForward className="w-4 h-4" />

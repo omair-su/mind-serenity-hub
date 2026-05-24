@@ -180,11 +180,11 @@ export default function AffirmationPage() {
           <div className="absolute top-[10%] right-[8%] text-3xl opacity-20 pointer-events-none animate-pulse">✦</div>
           <div className="absolute bottom-[15%] left-[6%] text-2xl opacity-15 pointer-events-none">🌿</div>
 
-          <p className="text-[12px] font-body font-bold uppercase tracking-[0.2em] text-white/40 mb-6">
+          <p className="text-[12px] font-body font-bold uppercase tracking-[0.2em] text-cream/40 mb-6">
             {categories.find(c => c.id === selectedCategory)?.icon} {categories.find(c => c.id === selectedCategory)?.label} Affirmation
           </p>
 
-          <blockquote className="font-display text-[22px] md:text-[28px] lg:text-[32px] text-white leading-[1.5] max-w-2xl relative z-10">
+          <blockquote className="font-display text-[22px] md:text-[28px] lg:text-[32px] text-cream leading-[1.5] max-w-2xl relative z-10">
             "{currentAffirmation}"
           </blockquote>
 
@@ -192,7 +192,7 @@ export default function AffirmationPage() {
             <button
               onClick={toggleFav}
               className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                isFav ? "bg-destructive/80 text-white" : "bg-white/10 text-white/60 hover:bg-white/20"
+                isFav ? "bg-destructive/80 text-cream" : "bg-card/10 text-cream/60 hover:bg-card/20"
               }`}
               title={isFav ? "Remove from favorites" : "Save to favorites"}
             >
@@ -211,7 +211,7 @@ export default function AffirmationPage() {
 
             <button
               onClick={nextAffirmation}
-              className="w-12 h-12 rounded-full bg-white/10 text-white/60 hover:bg-white/20 flex items-center justify-center transition-all"
+              className="w-12 h-12 rounded-full bg-card/10 text-cream/60 hover:bg-card/20 flex items-center justify-center transition-all"
               title="Next affirmation"
             >
               <RotateCcw className="w-5 h-5" />
@@ -221,7 +221,7 @@ export default function AffirmationPage() {
           <div className="flex gap-1.5 mt-6">
             {currentList.map((_, i) => (
               <button key={i} onClick={() => { tts.stop(); setCurrentIndex(i); }}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${i === currentIndex ? "bg-white w-4" : "bg-white/30"}`}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${i === currentIndex ? "bg-card w-4" : "bg-card/30"}`}
               />
             ))}
           </div>

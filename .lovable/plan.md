@@ -1,80 +1,72 @@
+## Audit Findings
 
-# Plan — Your branded videos, properly placed
+The new luxury sage theme (Cormorant Garamond + Karla, sage/forest/gold/cream tokens) is fully defined in `index.css` and `tailwind.config.ts`. However, an audit shows the theme is not yet applied consistently across the app:
 
-You'll upload your CapCut-edited Willow Vibes videos (audio baked in) into the existing `video` storage bucket in Cloud. I'll add a single **media manifest** that maps each filename to the exact slot in the app. No code rewrites later — you just upload a new file and refresh.
+**Old fonts still loaded/referenced**
+- `index.html` still preloads and links **Plus Jakarta Sans, Inter, Fraunces** alongside Cormorant + Karla.
+- Several components/pages still use the implicit Tailwind sans default (Plus Jakarta from old config) instead of `font-body` / `font-display`.
 
-## How it will work
+**Old raw Tailwind colors still in use — ~466 occurrences across 84 files**
 
-1. You upload `.mp4` files to the **`video` bucket** (Cloud → Files → `video`).
-2. The app reads a small manifest (`src/data/brandedVideos.ts`) that maps each "slot" to a filename.
-3. Each slot uses a signed URL from the `video` bucket, with graceful fallback to the current placeholder if a file is missing.
-4. Since audio is baked in, the video player will **play with sound by default** (no separate ambient layer mixed on top).
+Worst offenders:
+| File | Hits |
+|---|---|
+| `src/pages/SleepStoriesPage.tsx` | 49 |
+| `src/pages/SignInPage.tsx` | 32 |
+| `src/components/MeditationPlayer.tsx` | 32 |
+| `src/components/sos/PanicAttackProtocol.tsx` | 30 |
+| `src/components/day/SoundBedDesigner.tsx` | 21 |
+| `src/pages/SOSPage.tsx` | 20 |
+| `src/pages/PricingPage.tsx` | 16 |
+| `src/components/NarrationBar.tsx` | 14 |
+| `src/components/landing/WatchDemoModal.tsx` | 13 |
+| `src/pages/WalkingMeditationPage.tsx` | 11 |
+| …and 74 more files with smaller counts |
 
-## Filename convention (please use exactly this)
+These use raw classes like `bg-white`, `text-gray-500`, `bg-slate-900`, `from-blue-500`, `text-emerald-400`, etc. — violating the design system rule "never write custom color classes; always use semantic tokens".
 
-Since you said "Willow videos", I'll standardize so I can map them automatically:
+---
 
-**Video Library** (16 scenes):
-```
-library-01-forest-morning.mp4
-library-02-ocean-gentle.mp4
-library-03-rain-window.mp4
-library-04-fireplace.mp4
-library-05-aurora.mp4
-library-06-snowfall.mp4
-library-07-mountain-mist.mp4
-library-08-forest-stream.mp4
-library-09-candle.mp4
-library-10-cherry-blossom.mp4
-library-11-stars.mp4
-library-12-rain-leaves.mp4
-library-13-underwater.mp4
-library-14-clouds.mp4
-library-15-bamboo.mp4
-library-16-lavender.mp4
-```
+## Plan
 
-**Vagus Nerve Reset** (1 hero + 7 days):
-```
-vagus-hero.mp4
-vagus-day-01.mp4
-vagus-day-02.mp4
-vagus-day-03.mp4
-vagus-day-04.mp4
-vagus-day-05.mp4
-vagus-day-06.mp4
-vagus-day-07.mp4
-```
+### Phase 1 — Lock down fonts (1 file)
+- `index.html`: remove Plus Jakarta Sans, Inter, and Fraunces from the Google Fonts `<link>` and preloads. Keep only **Cormorant Garamond + Karla**.
+- Verify Tailwind `font-sans` default maps to Karla (set in `tailwind.config.ts` extend if missing) so any stray `font-sans` or unstyled text falls back to the new body font.
 
-You can upload them in any order, any time. You don't need all of them up-front — missing files just fall back to the current placeholder.
+### Phase 2 — Color token migration (84 files)
 
-## Posters (thumbnails)
+Apply a consistent mapping from raw Tailwind colors → semantic sage tokens:
 
-To fix the broken thumbnails, the manifest will **auto-generate poster frames from the video** on the client (first frame, cached). No need for you to export separate JPGs. If you'd rather upload your own posters, you can drop `library-01-forest-morning.jpg` next to the mp4 and it'll be used instead.
+| Old raw class | New semantic token |
+|---|---|
+| `bg-white`, `bg-gray-50/100` | `bg-card` / `bg-background` |
+| `bg-black`, `bg-gray-900/950`, `bg-slate-900` | `bg-forest-deep` / `bg-charcoal` |
+| `text-white` (on dark) | `text-cream` / `text-primary-foreground` |
+| `text-black`, `text-gray-900` | `text-foreground` / `text-charcoal` |
+| `text-gray-400/500/600` | `text-muted-foreground` / `text-charcoal-soft` |
+| `border-gray-*`, `border-slate-*` | `border-border` / `border-sage/20` |
+| `bg-blue-*`, `bg-indigo-*`, `bg-purple-*`, `bg-emerald-*`, `bg-teal-*` (primary accents) | `bg-sage` / `bg-forest` / `bg-primary` |
+| `text-blue-*`, `text-emerald-*`, `text-teal-*` (links/accents) | `text-sage` / `text-primary` |
+| `from-blue-* to-purple-*` gradients | `from-sage to-forest` / `from-forest to-forest-deep` |
+| `bg-amber-*`, `bg-yellow-*`, `text-amber-*` (premium/gold) | `bg-gold` / `text-gold` / `bg-gold-light` |
+| `bg-red-*`, `text-red-*` (errors/SOS) | `bg-destructive` / `text-destructive` |
+| `bg-rose-*`, `bg-pink-*` (warm) | `bg-gold` or `bg-accent` depending on context |
 
-## Premium gating (unchanged)
+Order of execution (highest-impact first):
+1. **High-traffic pages** — `SignInPage`, `PricingPage`, `SOSPage`, `SleepStoriesPage`, `WalkingMeditationPage`, `BodyScanPage`, `BreathingPage`, `TimerPage`, `SoundBathPage`, `FocusModePage`, `ProfilePage`, `AboutPage`, `OfflineDownloadsPage`, `PaddleChecklistPage`, `AffirmationPage`, `AssessmentPage`, `MoodTrackerPage`, `OnboardingPage`, `WelcomePage`, `JournalPage`, `GratitudePage`, `FriendsPage`, `RitualsPage`, `DayPage`, `DashboardPage`, `ChallengesPage`, `VideoLibraryPage`, `SleepPage`, `AIRecommendationsPage`, `SoundscapeBuilderPage`.
+2. **Player / overlay components** — `MeditationPlayer`, `NarrationBar`, `GlobalMiniPlayer`, `AmbientMusicPlayer`, `SignatureTimer`, `RescuePlayer`, `PanicAttackProtocol`, `AICompanionChat`, `WatchDemoModal`, `PremiumLockModal`, `PremiumGate`, `WinBackModal`, `StreakCelebration`, `WelcomeModal`, `StreakRecoveryModal`, `ChallengeCompleteModal`.
+3. **Landing/marketing sections** — `PremiumHero`, `ScienceSection`, `AboutSection`, `CurriculumSection`, `TestimonialsSection`.
+4. **Dashboard / day / rituals / challenges widgets** — all remaining `dashboard/`, `day/`, `rituals/`, `challenges/`, `bodyscan/`, `gratitude/`, `mood/`, `sos/`, `walking/`, `timer/`, `ui-premium/`, `profile/`, `WillowLogo`, `AvatarUploader`, `ThemeToggle`.
 
-- Video Library: first 4 free, rest premium.
-- Vagus program: Day 1 free, Days 2–7 premium.
+For each file: also ensure headings use `font-display` and body copy inherits `font-body` (no explicit `font-sans` left over).
 
-## What I'll build
+### Phase 3 — Verify
+- Visual spot-check: SignIn, Pricing, Dashboard, MeditationPlayer, SOS, Sleep Stories in **both light and dark mode** to confirm contrast.
+- Re-run the audit ripgrep — target is 0 raw color-class hits outside `src/components/ui/**` (shadcn primitives stay untouched).
+- Confirm `font-sans` default = Karla so any missed component still looks correct.
 
-1. **`src/data/brandedVideos.ts`** — central manifest mapping slot IDs → bucket filenames. One place to edit.
-2. **`src/lib/brandedVideoUrl.ts`** — small helper that resolves a slot to a signed URL from the `video` bucket, with placeholder fallback and a 1-hour cache.
-3. **`useBrandedVideo(slot)` hook** — returns `{ videoUrl, posterUrl, loading }`. Auto-derives poster from the first video frame if no poster is uploaded.
-4. **Update `videoLibrary.ts`** — replace the hardcoded `VIDEO_LIBRARY_HERO` / `WILLOW_DEMO_VIDEO` repetition with per-card slot IDs (`library-01` … `library-16`).
-5. **Update `vagusNerveReset.ts` + day pages** — each day uses its slot (`vagus-day-01` … `vagus-day-07`); hero uses `vagus-hero`.
-6. **Player tweaks** — since audio is baked in, the Video Library fullscreen player will start at a sensible volume (60%) instead of muted, with a mute/unmute toggle.
-7. **Storage RLS** — make sure authenticated users can read from the `video` bucket (premium-gated files stay behind the existing `is_premium` check at the UI layer; signed URLs expire in 1h so they can't be permanently shared).
-
-## What stays out of scope (for this step)
-
-- Day pages (1–30) and Sleep Stories — not touched per your choice. Easy to extend later by adding more slots to the manifest.
-- No changes to TTS/narration audio pipeline.
-
-## After approval
-
-1. I implement the manifest + helpers + player tweaks.
-2. I confirm storage RLS is set so signed URLs work.
-3. You upload your videos to **Cloud → Files → `video`** using the filenames above.
-4. Refresh — your branded videos appear in the correct slots automatically.
+### Scope guardrails
+- No business-logic changes. UI/CSS only.
+- Do not touch `src/components/ui/**` (shadcn primitives use semantic tokens already).
+- Do not touch `supabase/functions/**` (server code only).
+- Edge function and `types.ts` matches in the audit are noise (string literals/types), not styling — ignored.

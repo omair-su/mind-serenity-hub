@@ -103,7 +103,7 @@ export default function ChallengesPage() {
             </p>
 
             {/* Featured this month */}
-            <div className="relative mt-5 flex items-center gap-3 p-3 rounded-2xl bg-white/70 border border-[hsl(var(--gold))]/40 shadow-[var(--shadow-soft-val)] backdrop-blur-sm">
+            <div className="relative mt-5 flex items-center gap-3 p-3 rounded-2xl bg-card/70 border border-[hsl(var(--gold))]/40 shadow-[var(--shadow-soft-val)] backdrop-blur-sm">
               <span className="text-2xl">{featured.icon}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold-dark))]">
@@ -222,7 +222,7 @@ export default function ChallengesPage() {
                   return (
                     <span
                       key={b}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-body font-medium px-2.5 py-1 rounded-full bg-white/70 backdrop-blur-sm text-foreground/80 border border-white/60"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-body font-medium px-2.5 py-1 rounded-full bg-card/70 backdrop-blur-sm text-foreground/80 border border-cream/60"
                     >
                       <Icon className="w-3 h-3 text-[hsl(var(--forest))]" />
                       {b}
@@ -305,7 +305,7 @@ export default function ChallengesPage() {
 
               <button
                 onClick={() => completeDay(challenge.id, day.day)}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all"
               >
                 <Check className="w-4 h-4" /> Complete Day {day.day}
               </button>

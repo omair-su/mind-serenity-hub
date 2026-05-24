@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        sans: ['Karla', 'system-ui', 'sans-serif'],
         display: ['Cormorant Garamond', 'Georgia', 'serif'],
         body: ['Karla', 'system-ui', 'sans-serif'],
         serif: ['Cormorant Garamond', 'Georgia', 'serif'],

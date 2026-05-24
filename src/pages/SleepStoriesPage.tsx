@@ -40,7 +40,7 @@ function StarField() {
       {stars.map((s) => (
         <span
           key={s.id}
-          className="absolute rounded-full bg-white/80"
+          className="absolute rounded-full bg-card/80"
           style={{
             top: `${s.top}%`,
             left: `${s.left}%`,
@@ -106,13 +106,13 @@ function FlagshipCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-[#0b1530] via-[#1a2150] to-[#2a1f4d]" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
-      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/30 to-charcoal/10" />
+      <div className="absolute inset-0 ring-1 ring-inset ring-cream/10 rounded-3xl" />
 
-      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[10px] font-body text-white/90">
+      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-card/10 backdrop-blur-md border border-cream/15 text-[10px] font-body text-cream/90">
         <Sparkles className="w-3 h-3 text-gold" /> Flagship
       </div>
-      <div className="absolute top-4 right-4 inline-flex items-center gap-1 text-[10px] font-body text-white/85 bg-black/40 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
+      <div className="absolute top-4 right-4 inline-flex items-center gap-1 text-[10px] font-body text-cream/85 bg-charcoal/40 backdrop-blur-md px-2 py-1 rounded-full border border-cream/10">
         <Clock className="w-3 h-3" /> {s.duration} min
       </div>
 
@@ -122,19 +122,19 @@ function FlagshipCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
             {s.mood}
           </span>
         )}
-        <h3 className="font-display text-xl sm:text-2xl font-semibold text-white drop-shadow-md">
+        <h3 className="font-display text-xl sm:text-2xl font-semibold text-cream drop-shadow-md">
           {s.title}
         </h3>
         {s.teaser && (
-          <p className="text-sm text-white/75 mt-1 font-body leading-relaxed line-clamp-2">
+          <p className="text-sm text-cream/75 mt-1 font-body leading-relaxed line-clamp-2">
             {s.teaser}
           </p>
         )}
-        <div className="mt-4 flex items-center gap-2 text-white/90">
-          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/15 backdrop-blur-md border border-white/20 group-hover:bg-gold group-hover:text-charcoal transition-all duration-500">
+        <div className="mt-4 flex items-center gap-2 text-cream/90">
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-card/15 backdrop-blur-md border border-cream/20 group-hover:bg-gold group-hover:text-charcoal transition-all duration-500">
             <Play className="w-4 h-4 ml-0.5" />
           </span>
-          <span className="text-xs font-body text-white/75">
+          <span className="text-xs font-body text-cream/75">
             Narrated by {s.narrator}
           </span>
         </div>
@@ -147,7 +147,7 @@ function StoryCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
   return (
     <button
       onClick={onOpen}
-      className="group relative overflow-hidden rounded-2xl text-left bg-gradient-to-br from-[#0d1734]/90 via-[#141a3a]/85 to-[#1d1843]/90 border border-white/10 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-500 p-5"
+      className="group relative overflow-hidden rounded-2xl text-left bg-gradient-to-br from-[#0d1734]/90 via-[#141a3a]/85 to-[#1d1843]/90 border border-cream/10 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-500 p-5"
     >
       <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-gold/10 blur-2xl" />
       <div className="relative z-10">
@@ -155,12 +155,12 @@ function StoryCard({ s, onOpen }: { s: SleepStory; onOpen: () => void }) {
           <span className="text-3xl group-hover:scale-110 transition-transform duration-500">
             {s.icon}
           </span>
-          <span className="inline-flex items-center gap-1 text-[10px] font-body text-white/70 bg-white/5 px-2 py-1 rounded-full border border-white/10">
+          <span className="inline-flex items-center gap-1 text-[10px] font-body text-cream/70 bg-card/5 px-2 py-1 rounded-full border border-cream/10">
             <Clock className="w-3 h-3" /> {s.duration} min
           </span>
         </div>
-        <h3 className="font-display text-base font-semibold text-white mt-3">{s.title}</h3>
-        <p className="text-xs font-body text-white/65 mt-1 leading-relaxed line-clamp-2">
+        <h3 className="font-display text-base font-semibold text-cream mt-3">{s.title}</h3>
+        <p className="text-xs font-body text-cream/65 mt-1 leading-relaxed line-clamp-2">
           {s.teaser || s.description}
         </p>
         <div className="flex items-center gap-1.5 mt-3 text-gold text-xs font-body font-medium">
@@ -235,7 +235,7 @@ function StoryDetail({
           <div className="absolute inset-0 bg-charcoal/70" />
           {/* Sleep-timer fade — animates to full black over 30s when timer expires */}
           <div
-            className="absolute inset-0 bg-black transition-opacity duration-[30000ms] ease-linear"
+            className="absolute inset-0 bg-charcoal transition-opacity duration-[30000ms] ease-linear"
             style={{ opacity: timerExpired ? 1 : 0 }}
           />
         </div>
@@ -246,7 +246,7 @@ function StoryDetail({
           onBack();
           tts.stop();
         }}
-        className="flex items-center gap-2 text-sm font-body text-white/70 hover:text-white transition-colors"
+        className="flex items-center gap-2 text-sm font-body text-cream/70 hover:text-cream transition-colors"
       >
         <ArrowLeft className="w-4 h-4" /> Back to Sleep Stories
       </button>
@@ -258,7 +258,7 @@ function StoryDetail({
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#0b1530] via-[#1a2150] to-[#2a1f4d]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent" />
         <Mist />
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 max-w-3xl">
           {story.mood && (
@@ -266,13 +266,13 @@ function StoryDetail({
               {story.mood}
             </span>
           )}
-          <h1 className="font-display text-3xl sm:text-5xl font-semibold text-white drop-shadow">
+          <h1 className="font-display text-3xl sm:text-5xl font-semibold text-cream drop-shadow">
             {story.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs font-body text-white/80">
+          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs font-body text-cream/80">
             <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {story.duration} min</span>
             <span className="inline-flex items-center gap-1"><Headphones className="w-3 h-3" /> Narrated by {story.narrator}</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 border border-white/15">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-card/10 border border-cream/15">
               <Download className="w-3 h-3" /> Offline ready
             </span>
           </div>
@@ -280,8 +280,8 @@ function StoryDetail({
       </div>
 
       {/* Player panel */}
-      <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 sm:p-8 shadow-elevated">
-        <p className="font-body text-base text-white/85 leading-[2] max-w-3xl mx-auto text-center">
+      <div className="relative rounded-3xl border border-cream/10 bg-card/[0.04] backdrop-blur-xl p-6 sm:p-8 shadow-elevated">
+        <p className="font-body text-base text-cream/85 leading-[2] max-w-3xl mx-auto text-center">
           {story.paragraphs[paragraphIndex]}
         </p>
 
@@ -292,7 +292,7 @@ function StoryDetail({
               onClick={() => setParagraphIndex(i)}
               aria-label={`Paragraph ${i + 1}`}
               className={`h-1.5 rounded-full transition-all ${
-                i === paragraphIndex ? "w-8 bg-gold" : i < paragraphIndex ? "w-4 bg-gold/40" : "w-4 bg-white/15"
+                i === paragraphIndex ? "w-8 bg-gold" : i < paragraphIndex ? "w-4 bg-gold/40" : "w-4 bg-card/15"
               }`}
             />
           ))}
@@ -302,7 +302,7 @@ function StoryDetail({
           {paragraphIndex > 0 && (
             <button
               onClick={() => { tts.stop(); setParagraphIndex((p) => p - 1); }}
-              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-cream/80 bg-card/5 border border-cream/10 hover:bg-card/10 transition"
             >
               ← Previous
             </button>
@@ -328,14 +328,14 @@ function StoryDetail({
           {paragraphIndex < story.paragraphs.length - 1 ? (
             <button
               onClick={() => { tts.stop(); setParagraphIndex((p) => p + 1); }}
-              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-cream/80 bg-card/5 border border-cream/10 hover:bg-card/10 transition"
             >
               Next →
             </button>
           ) : (
             <button
               onClick={() => { tts.stop(); onBack(); }}
-              className="px-4 py-2.5 rounded-xl text-sm font-body text-white/80 bg-white/5 border border-white/10 hover:bg-white/10 transition"
+              className="px-4 py-2.5 rounded-xl text-sm font-body text-cream/80 bg-card/5 border border-cream/10 hover:bg-card/10 transition"
             >
               Sweet Dreams ✓
             </button>
@@ -344,7 +344,7 @@ function StoryDetail({
           <button
             onClick={playFullStory}
             disabled={tts.isLoading}
-            className="px-4 py-2.5 rounded-xl text-sm font-body text-white/85 bg-white/5 border border-white/10 hover:bg-white/10 transition disabled:opacity-50"
+            className="px-4 py-2.5 rounded-xl text-sm font-body text-cream/85 bg-card/5 border border-cream/10 hover:bg-card/10 transition disabled:opacity-50"
           >
             ▶ Play Full Story
           </button>
@@ -353,7 +353,7 @@ function StoryDetail({
             <button
               onClick={tts.stop}
               aria-label="Stop"
-              className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:bg-white/10"
+              className="p-2.5 rounded-xl bg-card/5 border border-cream/10 text-cream/80 hover:bg-card/10"
             >
               <Square className="w-4 h-4" />
             </button>
@@ -362,20 +362,20 @@ function StoryDetail({
 
         {tts.duration > 0 && (
           <div className="mt-6 max-w-md mx-auto">
-            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+            <div className="w-full bg-card/10 rounded-full h-1.5 overflow-hidden">
               <div className="bg-gold h-full transition-all" style={{ width: `${tts.progress}%` }} />
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-[10px] font-body text-white/55">{tts.formatTime(tts.currentTime)}</span>
-              <span className="text-[10px] font-body text-white/55">{tts.formatTime(tts.duration)}</span>
+              <span className="text-[10px] font-body text-cream/55">{tts.formatTime(tts.currentTime)}</span>
+              <span className="text-[10px] font-body text-cream/55">{tts.formatTime(tts.duration)}</span>
             </div>
           </div>
         )}
 
         {/* Sleep timer + volume */}
         <div className="mt-8 grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <div className="flex items-center gap-2 text-white/85 font-body text-sm mb-3">
+          <div className="rounded-2xl border border-cream/10 bg-card/[0.03] p-4">
+            <div className="flex items-center gap-2 text-cream/85 font-body text-sm mb-3">
               <TimerIcon className="w-4 h-4 text-gold" /> Sleep Timer
             </div>
             <div className="flex flex-wrap gap-2">
@@ -386,7 +386,7 @@ function StoryDetail({
                   className={`px-3 py-1.5 rounded-full text-xs font-body border transition ${
                     sleepTimer === m
                       ? "bg-gold text-charcoal border-gold"
-                      : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                      : "bg-card/5 border-cream/10 text-cream/75 hover:bg-card/10"
                   }`}
                 >
                   {m === null ? "Off" : `${m} min`}
@@ -394,8 +394,8 @@ function StoryDetail({
               ))}
             </div>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-            <div className="flex items-center gap-2 text-white/85 font-body text-sm mb-3">
+          <div className="rounded-2xl border border-cream/10 bg-card/[0.03] p-4">
+            <div className="flex items-center gap-2 text-cream/85 font-body text-sm mb-3">
               <Volume2 className="w-4 h-4 text-gold" /> Volume
             </div>
             <input
@@ -415,7 +415,7 @@ function StoryDetail({
       {/* Related */}
       {related.length > 0 && (
         <div>
-          <h3 className="font-display text-xl text-white mb-4">More stories like this</h3>
+          <h3 className="font-display text-xl text-cream mb-4">More stories like this</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {related.map((r) => (
               <StoryCard key={r.id} s={r} onOpen={() => { onBack(); setTimeout(() => {}, 0); }} />
@@ -459,17 +459,17 @@ function SleepStoriesPageInner() {
           {!story && (
             <>
               {/* HERO */}
-              <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 sm:p-12">
+              <section className="relative overflow-hidden rounded-3xl border border-cream/10 bg-card/[0.03] backdrop-blur-md p-6 sm:p-12">
                 <MoonGlow />
                 <Mist />
                 <div className="relative">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/15 border border-gold/30 text-[10px] uppercase tracking-[0.2em] text-gold font-body">
                     <Sparkles className="w-3 h-3" /> Included in Pro
                   </div>
-                  <h1 className="font-display text-4xl sm:text-6xl font-semibold text-white mt-5 leading-[1.05] max-w-3xl">
+                  <h1 className="font-display text-4xl sm:text-6xl font-semibold text-cream mt-5 leading-[1.05] max-w-3xl">
                     Sleep stories that quiet the mind and welcome the night.
                   </h1>
-                  <p className="font-body text-base sm:text-lg text-white/70 mt-4 max-w-2xl leading-relaxed">
+                  <p className="font-body text-base sm:text-lg text-cream/70 mt-4 max-w-2xl leading-relaxed">
                     Immersive bedtime journeys designed to soften tension, slow the breath,
                     and guide you gently into deep sleep.
                   </p>
@@ -485,7 +485,7 @@ function SleepStoriesPageInner() {
                         const el = document.getElementById("sleep-story-grid");
                         el?.scrollIntoView({ behavior: "smooth" });
                       }}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/15 text-white/85 font-body text-sm hover:bg-white/10 transition"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-card/5 border border-cream/15 text-cream/85 font-body text-sm hover:bg-card/10 transition"
                     >
                       Preview Stories
                     </button>
@@ -496,7 +496,7 @@ function SleepStoriesPageInner() {
               {/* Flagship cards */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-display text-2xl text-white">Tonight's flagship journeys</h2>
+                  <h2 className="font-display text-2xl text-cream">Tonight's flagship journeys</h2>
                   <span className="text-[10px] uppercase tracking-[0.2em] text-gold/80 font-body">Pro originals</span>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -508,14 +508,14 @@ function SleepStoriesPageInner() {
 
               {/* Categories */}
               <section id="sleep-story-grid" className="space-y-4">
-                <h2 className="font-display text-2xl text-white">Explore the library</h2>
+                <h2 className="font-display text-2xl text-cream">Explore the library</h2>
                 <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
                   <button
                     onClick={() => setActiveCategory("all")}
                     className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition border ${
                       activeCategory === "all"
                         ? "bg-gold text-charcoal border-gold shadow-gold"
-                        : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                        : "bg-card/5 border-cream/10 text-cream/75 hover:bg-card/10"
                     }`}
                   >
                     All Stories
@@ -527,7 +527,7 @@ function SleepStoriesPageInner() {
                       className={`px-4 py-2 rounded-full text-sm font-body whitespace-nowrap transition border flex items-center gap-1.5 ${
                         activeCategory === cat.id
                           ? "bg-gold text-charcoal border-gold shadow-gold"
-                          : "bg-white/5 border-white/10 text-white/75 hover:bg-white/10"
+                          : "bg-card/5 border-cream/10 text-cream/75 hover:bg-card/10"
                       }`}
                     >
                       <span>{cat.icon}</span> {cat.name}
@@ -536,7 +536,7 @@ function SleepStoriesPageInner() {
                 </div>
 
                 {filtered.length === 0 ? (
-                  <p className="text-white/60 font-body text-sm py-10 text-center">
+                  <p className="text-cream/60 font-body text-sm py-10 text-center">
                     More stories arriving soon in this collection.
                   </p>
                 ) : (
@@ -549,12 +549,12 @@ function SleepStoriesPageInner() {
               </section>
 
               {/* How it works */}
-              <section className="rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 sm:p-8">
+              <section className="rounded-3xl border border-cream/10 bg-card/[0.03] backdrop-blur-md p-6 sm:p-8">
                 <div className="flex items-center gap-2 mb-2">
                   <Moon className="w-4 h-4 text-gold" />
-                  <h3 className="font-display text-lg text-white">How Sleep Stories Work</h3>
+                  <h3 className="font-display text-lg text-cream">How Sleep Stories Work</h3>
                 </div>
-                <p className="text-sm font-body text-white/70 leading-relaxed">
+                <p className="text-sm font-body text-cream/70 leading-relaxed">
                   Listen in bed with the lights low. Don't try to follow the story — let the
                   words wash over you like waves. Most listeners drift off before the story
                   ends, and that is exactly the point.

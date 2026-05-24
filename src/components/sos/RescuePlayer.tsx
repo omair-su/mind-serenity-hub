@@ -106,7 +106,7 @@ export default function RescuePlayer({ technique, onClose }: Props) {
             </button>
             <button
               onClick={() => isLast ? null : setStepIdx(s => s + 1)}
-              className={`flex-1 px-6 py-4 rounded-2xl font-body font-bold text-white flex items-center justify-center gap-2 transition shadow-lg ${
+              className={`flex-1 px-6 py-4 rounded-2xl font-body font-bold text-cream flex items-center justify-center gap-2 transition shadow-lg ${
                 isLast ? "bg-muted text-muted-foreground cursor-default" : "bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest-deep))]"
               }`}
               disabled={isLast}
@@ -120,7 +120,7 @@ export default function RescuePlayer({ technique, onClose }: Props) {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-5 rounded-2xl bg-card border border-border">
               <p className="text-sm font-body text-foreground text-center mb-3">Did this help?</p>
               <div className="flex gap-3 justify-center">
-                <button onClick={() => finish(true)} className="px-5 py-2.5 rounded-full bg-[hsl(var(--forest))] text-white font-body font-bold text-sm hover:bg-[hsl(var(--forest-deep))] transition flex items-center gap-2">
+                <button onClick={() => finish(true)} className="px-5 py-2.5 rounded-full bg-[hsl(var(--forest))] text-cream font-body font-bold text-sm hover:bg-[hsl(var(--forest-deep))] transition flex items-center gap-2">
                   <Heart className="w-4 h-4" /> Yes, helped
                 </button>
                 <button onClick={() => finish(false)} className="px-5 py-2.5 rounded-full bg-card border border-border text-foreground font-body text-sm hover:bg-secondary/40 transition">

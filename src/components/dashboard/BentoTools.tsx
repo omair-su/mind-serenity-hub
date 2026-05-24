@@ -51,18 +51,18 @@ export default function BentoTools() {
         >
           <Link
             to={featured.path}
-            className="group relative flex flex-col h-full p-5 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] text-white border border-[hsl(var(--forest-deep))] shadow-[var(--shadow-card-val)] hover:shadow-[var(--shadow-elevated-val)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+            className="group relative flex flex-col h-full p-5 rounded-2xl bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] text-cream border border-[hsl(var(--forest-deep))] shadow-[var(--shadow-card-val)] hover:shadow-[var(--shadow-elevated-val)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-[hsl(var(--gold))]/15 blur-3xl" />
             <div className="absolute bottom-0 right-0 w-32 h-32 rounded-tl-full bg-[hsl(var(--gold))]/8" />
             <span className="relative text-[9px] font-body font-bold uppercase tracking-[0.22em] text-[hsl(var(--gold-light))]">
               Featured today
             </span>
-            <div className="relative w-12 h-12 rounded-2xl bg-white/12 backdrop-blur-sm flex items-center justify-center mt-3">
+            <div className="relative w-12 h-12 rounded-2xl bg-card/12 backdrop-blur-sm flex items-center justify-center mt-3">
               <featured.icon className="w-6 h-6 text-[hsl(var(--gold-light))]" />
             </div>
             <p className="relative font-display text-xl font-bold mt-3">{featured.label}</p>
-            <p className="relative text-xs font-body text-white/70 mt-1.5 leading-relaxed flex-1">
+            <p className="relative text-xs font-body text-cream/70 mt-1.5 leading-relaxed flex-1">
               {featured.desc}
             </p>
             <div className="relative inline-flex items-center gap-1.5 mt-4 text-xs font-body font-semibold text-[hsl(var(--gold-light))] group-hover:gap-2.5 transition-all">

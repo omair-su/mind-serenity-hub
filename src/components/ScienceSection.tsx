@@ -37,7 +37,7 @@ export default function ScienceSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="bg-white rounded-3xl p-6 md:p-8 text-center shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
+                className="bg-card rounded-3xl p-6 md:p-8 text-center shadow-sm border border-border hover:shadow-md transition-shadow"
               >
                 <div className="w-12 h-12 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: `${item.color}1A` }}>
                   <Icon className="w-6 h-6" style={{ color: item.color }} />

@@ -29,8 +29,8 @@ export default function RitualHeroCard({ meta, onClick, locked, index = 0 }: Rit
         <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
         {locked && (
           <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-gold/90 backdrop-blur-sm flex items-center gap-1 shadow-lg">
-            <Crown className="w-3 h-3 text-white" />
-            <span className="text-[9px] font-body font-bold uppercase tracking-wider text-white">Plus</span>
+            <Crown className="w-3 h-3 text-cream" />
+            <span className="text-[9px] font-body font-bold uppercase tracking-wider text-cream">Plus</span>
           </div>
         )}
         <div className="absolute bottom-3 left-3 text-3xl drop-shadow-lg">{meta.iconEmoji}</div>

@@ -31,10 +31,10 @@ export default function WalkEnvironmentCard({ env, active, onSelect }: Props) {
       )}
       <div className="absolute inset-x-0 bottom-0 p-3 z-10">
         <div className="flex items-center gap-1.5 mb-0.5">
-          <Icon className="w-3.5 h-3.5 text-white/90" />
-          <p className="text-xs font-display font-bold text-white">{env.label}</p>
+          <Icon className="w-3.5 h-3.5 text-cream/90" />
+          <p className="text-xs font-display font-bold text-cream">{env.label}</p>
         </div>
-        <p className="text-[10px] font-body text-white/70 leading-tight line-clamp-2">{env.desc}</p>
+        <p className="text-[10px] font-body text-cream/70 leading-tight line-clamp-2">{env.desc}</p>
       </div>
     </button>
   );

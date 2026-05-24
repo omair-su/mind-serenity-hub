@@ -71,13 +71,13 @@ export default function ChallengeCard({ challenge, completedDays, pct, onOpen, s
 
         {/* Meta row */}
         <div className="flex flex-wrap items-center gap-1.5 mt-3">
-          <span className="inline-flex items-center gap-1 text-[10px] font-body text-foreground/70 px-2 py-0.5 rounded-full bg-white/60 backdrop-blur-sm border border-white/50">
+          <span className="inline-flex items-center gap-1 text-[10px] font-body text-foreground/70 px-2 py-0.5 rounded-full bg-card/60 backdrop-blur-sm border border-cream/50">
             <Clock className="w-3 h-3" /> {challenge.duration} days
           </span>
           <span className={`text-[10px] font-body font-semibold px-2 py-0.5 rounded-full border ${difficultyTone(difficulty)}`}>
             {difficulty}
           </span>
-          <span className="text-[10px] font-body text-muted-foreground px-2 py-0.5 rounded-full bg-white/40 border border-white/40">
+          <span className="text-[10px] font-body text-muted-foreground px-2 py-0.5 rounded-full bg-card/40 border border-cream/40">
             {challenge.category}
           </span>
         </div>
@@ -90,7 +90,7 @@ export default function ChallengeCard({ challenge, completedDays, pct, onOpen, s
               <span
                 key={i}
                 className={`h-1.5 flex-1 max-w-[14px] rounded-full transition-all ${
-                  done ? "bg-[hsl(var(--forest))]" : "bg-white/60 border border-white/70"
+                  done ? "bg-[hsl(var(--forest))]" : "bg-card/60 border border-cream/70"
                 }`}
               />
             );

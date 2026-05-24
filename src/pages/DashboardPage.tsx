@@ -184,7 +184,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 to={`/day/${nextDay}`}
-                className="flex items-center justify-center gap-2 mt-6 w-full py-3.5 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-white font-body font-semibold text-sm hover:shadow-[var(--shadow-gold-val)] transition-shadow"
+                className="flex items-center justify-center gap-2 mt-6 w-full py-3.5 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-cream font-body font-semibold text-sm hover:shadow-[var(--shadow-gold-val)] transition-shadow"
               >
                 <Play className="w-4 h-4" /> Begin Session <ArrowRight className="w-4 h-4" />
               </Link>

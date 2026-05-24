@@ -40,7 +40,7 @@ export default function ThemeToggle() {
       aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       title={`Calm palette · ${isDark ? "Dark" : "Light"} mode`}
       className="fixed z-[60] right-4 bottom-24 lg:bottom-6 lg:right-6
-                 h-12 w-[88px] rounded-full
+ h-12 w-[88px] rounded-full
                  bg-card/95 backdrop-blur-md
                  border border-border
                  shadow-[var(--shadow-card-val)]
@@ -61,7 +61,7 @@ export default function ThemeToggle() {
         className={`relative z-10 h-9 w-9 rounded-full
                     flex items-center justify-center
                     bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--sage-dark))]
-                    text-white shadow-[var(--shadow-gold-val)]
+                    text-cream shadow-[var(--shadow-gold-val)]
                     ${isDark ? "ml-auto" : ""}`}
       >
         {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}

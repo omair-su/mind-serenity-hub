@@ -196,7 +196,7 @@ export default function PaddleChecklistPage() {
         </p>
 
         {/* Public URL checks */}
-        <Card className="p-6 mb-6 bg-white border-sage/30">
+        <Card className="p-6 mb-6 bg-card border-sage/30">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-display text-xl text-forest">
@@ -271,7 +271,7 @@ export default function PaddleChecklistPage() {
         </Card>
 
         {/* Manual content checks */}
-        <Card className="p-6 mb-6 bg-white border-sage/30">
+        <Card className="p-6 mb-6 bg-card border-sage/30">
           <div className="mb-4">
             <h2 className="font-display text-xl text-forest">
               2. Content checks (do manually)
@@ -313,7 +313,7 @@ export default function PaddleChecklistPage() {
         </Card>
 
         {/* Accessibility quick check */}
-        <Card className="p-6 mb-6 bg-white border-sage/30">
+        <Card className="p-6 mb-6 bg-card border-sage/30">
           <h2 className="font-display text-xl text-forest mb-2">
             3. Accessibility quick check
           </h2>

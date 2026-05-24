@@ -467,7 +467,7 @@ export default function DayPage() {
                 <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))] mb-1.5">
                   Today, for you · Plus
                 </p>
-                <p className="font-display text-base text-white/90 leading-relaxed italic">
+                <p className="font-display text-base text-cream/90 leading-relaxed italic">
                   "Unlock a personalized AI reflection written for your week and your patterns…"
                 </p>
                 <span className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-body font-semibold text-[hsl(var(--gold))]">
@@ -638,10 +638,10 @@ export default function DayPage() {
               <p className="text-[10px] font-body font-bold uppercase tracking-[0.2em] text-[hsl(var(--gold))] mb-1">
                 {tts.isLoading ? "Composing voice…" : tts.isPlaying ? "Now playing" : "Listen to today's practice"}
               </p>
-              <p className="font-display text-base text-white/95 truncate">
+              <p className="font-display text-base text-cream/95 truncate">
                 {day.title} · {PREMIUM_VOICES.find(v => v.key === selectedVoice)?.label}
               </p>
-              <p className="text-[11px] font-body text-white/60 mt-1">
+              <p className="text-[11px] font-body text-cream/60 mt-1">
                 Sentences highlight above as they are spoken · Ambient bed pairs automatically
               </p>
             </div>
@@ -674,7 +674,7 @@ export default function DayPage() {
                 className={`px-8 py-3 rounded-xl text-sm font-body font-semibold transition-all shadow-md ${
                   timer.running
                     ? "bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground hover:from-destructive/90"
-                    : "bg-gradient-to-r from-gold to-gold-dark text-white hover:shadow-gold shadow-gold"
+                    : "bg-gradient-to-r from-gold to-gold-dark text-cream hover:shadow-gold shadow-gold"
                 }`}
               >
                 {timer.running ? "Pause" : timer.seconds === durationMins * 60 ? "Begin Timer" : "Resume"}
@@ -772,7 +772,7 @@ export default function DayPage() {
 
             <button
               onClick={saveAndSync}
-              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold text-base shadow-[var(--shadow-gold-val)] hover:shadow-lg hover:-translate-y-0.5 transition-all"
+              className="mt-6 w-full py-3.5 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-semibold text-base shadow-[var(--shadow-gold-val)] hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               Save & Sync to Journal + Mood
             </button>

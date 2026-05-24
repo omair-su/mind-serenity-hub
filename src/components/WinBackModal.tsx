@@ -41,7 +41,7 @@ export default function WinBackModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[70] bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-md rounded-2xl bg-card border border-border shadow-2xl p-6 sm:p-8"

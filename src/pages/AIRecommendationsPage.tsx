@@ -187,7 +187,7 @@ function AIRecommendationsPageInner() {
               </div>
               <Link
                 to={`/day/${situationMeditation.dayId}`}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-cream text-xs font-body font-semibold hover:opacity-90 transition-all"
               >
                 Start Now
                 <ChevronRight className="w-3 h-3" />
@@ -261,7 +261,7 @@ function AIRecommendationsPageInner() {
                 <div className="text-xs text-muted-foreground mb-3">{rec.duration}</div>
                 <Link
                   to={`/day/${rec.dayId}`}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-white text-xs font-body font-semibold hover:opacity-90 transition-all"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-cream text-xs font-body font-semibold hover:opacity-90 transition-all"
                 >
                   Start
                   <ChevronRight className="w-3 h-3" />

@@ -266,10 +266,10 @@ export default function MeditationPlayer({
           >
             <button
               onClick={handleClose}
-              className="w-10 h-10 rounded-full backdrop-blur-md bg-white/10 flex items-center justify-center"
+              className="w-10 h-10 rounded-full backdrop-blur-md bg-card/10 flex items-center justify-center"
               aria-label="Close session"
             >
-              <ChevronDown className="w-5 h-5 text-white" />
+              <ChevronDown className="w-5 h-5 text-cream" />
             </button>
             <div className="flex items-center gap-2">
               <button
@@ -277,20 +277,20 @@ export default function MeditationPlayer({
                   setShowMusicPicker((s) => !s);
                   setShowAmbient(false);
                 }}
-                className="w-10 h-10 rounded-full backdrop-blur-md bg-white/10 flex items-center justify-center"
+                className="w-10 h-10 rounded-full backdrop-blur-md bg-card/10 flex items-center justify-center"
                 aria-label="Choose music"
               >
-                <Music className="w-5 h-5 text-white" />
+                <Music className="w-5 h-5 text-cream" />
               </button>
               <button
                 onClick={() => {
                   setShowAmbient((s) => !s);
                   setShowMusicPicker(false);
                 }}
-                className="w-10 h-10 rounded-full backdrop-blur-md bg-white/10 flex items-center justify-center"
+                className="w-10 h-10 rounded-full backdrop-blur-md bg-card/10 flex items-center justify-center"
                 aria-label="Background sounds"
               >
-                <Volume2 className="w-5 h-5 text-white" />
+                <Volume2 className="w-5 h-5 text-cream" />
               </button>
             </div>
           </motion.div>
@@ -304,10 +304,10 @@ export default function MeditationPlayer({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-20 right-4 w-72 max-h-[60vh] overflow-y-auto backdrop-blur-xl bg-white/10 rounded-2xl p-4 border border-white/10 z-20"
+            className="absolute top-20 right-4 w-72 max-h-[60vh] overflow-y-auto backdrop-blur-xl bg-card/10 rounded-2xl p-4 border border-cream/10 z-20"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-white/70 text-xs font-body font-semibold uppercase tracking-wider mb-3">
+            <p className="text-cream/70 text-xs font-body font-semibold uppercase tracking-wider mb-3">
               Ambient Music
             </p>
             <div className="grid grid-cols-2 gap-2 mb-4">
@@ -317,19 +317,19 @@ export default function MeditationPlayer({
                   onClick={() => setMusicTrack(t)}
                   className={`flex flex-col items-start gap-1 p-2 rounded-xl text-left transition-all ${
                     musicTrack.id === t.id
-                      ? "bg-white/20 ring-1 ring-white/30"
-                      : "hover:bg-white/10"
+                      ? "bg-card/20 ring-1 ring-cream/30"
+                      : "hover:bg-card/10"
                   }`}
                 >
                   <span className="text-base">{t.emoji}</span>
-                  <span className="text-[11px] text-white/90 font-body font-semibold leading-tight truncate w-full">
+                  <span className="text-[11px] text-cream/90 font-body font-semibold leading-tight truncate w-full">
                     {t.name}
                   </span>
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <VolumeX className="w-3.5 h-3.5 text-white/50" />
+              <VolumeX className="w-3.5 h-3.5 text-cream/50" />
               <Slider
                 value={[musicVolume]}
                 onValueChange={(v) => setMusicVolume(v[0])}
@@ -338,7 +338,7 @@ export default function MeditationPlayer({
                 step={1}
                 className="flex-1"
               />
-              <Volume2 className="w-3.5 h-3.5 text-white/50" />
+              <Volume2 className="w-3.5 h-3.5 text-cream/50" />
             </div>
           </motion.div>
         )}
@@ -351,10 +351,10 @@ export default function MeditationPlayer({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-20 right-4 w-72 backdrop-blur-xl bg-white/10 rounded-2xl p-4 border border-white/10 z-20"
+            className="absolute top-20 right-4 w-72 backdrop-blur-xl bg-card/10 rounded-2xl p-4 border border-cream/10 z-20"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-white/70 text-xs font-body font-semibold uppercase tracking-wider mb-3">
+            <p className="text-cream/70 text-xs font-body font-semibold uppercase tracking-wider mb-3">
               Background Sound
             </p>
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -364,18 +364,18 @@ export default function MeditationPlayer({
                   onClick={() => setAmbientSound(s.id as NatureSoundId | "silence")}
                   className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
                     ambientSound === s.id
-                      ? "bg-white/20 ring-1 ring-white/30"
-                      : "hover:bg-white/10"
+                      ? "bg-card/20 ring-1 ring-cream/30"
+                      : "hover:bg-card/10"
                   }`}
                 >
                   <span className="text-lg">{s.emoji}</span>
-                  <span className="text-[10px] text-white/70 font-body">{s.label}</span>
+                  <span className="text-[10px] text-cream/70 font-body">{s.label}</span>
                 </button>
               ))}
             </div>
             {ambientSound !== "silence" && (
               <div className="flex items-center gap-2">
-                <VolumeX className="w-3.5 h-3.5 text-white/50" />
+                <VolumeX className="w-3.5 h-3.5 text-cream/50" />
                 <Slider
                   value={[ambientVolume]}
                   onValueChange={(v) => setAmbientVolume(v[0])}
@@ -384,7 +384,7 @@ export default function MeditationPlayer({
                   step={1}
                   className="flex-1"
                 />
-                <Volume2 className="w-3.5 h-3.5 text-white/50" />
+                <Volume2 className="w-3.5 h-3.5 text-cream/50" />
               </div>
             )}
           </motion.div>
@@ -401,9 +401,9 @@ export default function MeditationPlayer({
               exit={{ opacity: 0, y: 10 }}
               className="text-center mb-8"
             >
-              <h2 className="font-display text-2xl font-bold text-white mb-1">{title}</h2>
-              {subtitle && <p className="text-white/50 text-sm font-body">{subtitle}</p>}
-              <p className="text-white/40 text-[11px] font-body mt-2">
+              <h2 className="font-display text-2xl font-bold text-cream mb-1">{title}</h2>
+              {subtitle && <p className="text-cream/50 text-sm font-body">{subtitle}</p>}
+              <p className="text-cream/40 text-[11px] font-body mt-2">
                 🎵 {musicTrack.name} · {musicTrack.credit}
               </p>
             </motion.div>
@@ -424,13 +424,13 @@ export default function MeditationPlayer({
                 transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
                 className="w-24 h-24 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_hsl(var(--gold)/0.4)]"
               >
-                <Check className="w-12 h-12 text-white" />
+                <Check className="w-12 h-12 text-cream" />
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="font-display text-3xl font-bold text-white mb-2"
+                className="font-display text-3xl font-bold text-cream mb-2"
               >
                 Session Complete
               </motion.h2>
@@ -438,7 +438,7 @@ export default function MeditationPlayer({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="text-white/50 font-body mb-2"
+                className="text-cream/50 font-body mb-2"
               >
                 {fmt(duration)} of mindful practice
               </motion.p>
@@ -460,7 +460,7 @@ export default function MeditationPlayer({
               >
                 <button
                   onClick={restart}
-                  className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-body font-semibold text-sm flex items-center gap-2 hover:bg-white/20 transition-all"
+                  className="px-6 py-3 rounded-xl bg-card/10 backdrop-blur-sm text-cream font-body font-semibold text-sm flex items-center gap-2 hover:bg-card/20 transition-all"
                 >
                   <RotateCcw className="w-4 h-4" /> Repeat
                 </button>
@@ -495,7 +495,7 @@ export default function MeditationPlayer({
                 step={1}
                 className="mb-2"
               />
-              <div className="flex justify-between text-xs text-white/40 font-body">
+              <div className="flex justify-between text-xs text-cream/40 font-body">
                 <span>{fmt(elapsed)}</span>
                 <span>-{fmt(duration - elapsed)}</span>
               </div>
@@ -504,10 +504,10 @@ export default function MeditationPlayer({
             <div className="flex items-center justify-center gap-8">
               <button
                 onClick={() => skip(-15)}
-                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all"
+                className="w-12 h-12 rounded-full bg-card/10 backdrop-blur-sm flex items-center justify-center hover:bg-card/20 transition-all"
                 aria-label="Back 15 seconds"
               >
-                <SkipBack className="w-5 h-5 text-white" />
+                <SkipBack className="w-5 h-5 text-cream" />
               </button>
               <button
                 onClick={toggle}
@@ -528,10 +528,10 @@ export default function MeditationPlayer({
               </button>
               <button
                 onClick={() => skip(15)}
-                className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all"
+                className="w-12 h-12 rounded-full bg-card/10 backdrop-blur-sm flex items-center justify-center hover:bg-card/20 transition-all"
                 aria-label="Forward 15 seconds"
               >
-                <SkipForward className="w-5 h-5 text-white" />
+                <SkipForward className="w-5 h-5 text-cream" />
               </button>
             </div>
           </motion.div>

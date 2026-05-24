@@ -14,7 +14,7 @@ interface StatTileProps {
 
 const toneMap = {
   neutral: {
-    bg: "bg-white border-[hsl(var(--cream-dark))]",
+    bg: "bg-card border-[hsl(var(--cream-dark))]",
     icon: "bg-[hsl(var(--sage-light))] text-[hsl(var(--forest))]",
     value: "text-charcoal",
   },
@@ -24,13 +24,13 @@ const toneMap = {
     value: "text-cream",
   },
   gold: {
-    bg: "bg-gradient-to-br from-[hsl(var(--gold-light)/0.5)] to-white border-[hsl(var(--gold)/0.4)]",
+    bg: "bg-gradient-to-br from-[hsl(var(--gold-light)/0.5)] to-card border-[hsl(var(--gold)/0.4)]",
     icon: "bg-[hsl(var(--gold)/0.25)] text-[hsl(var(--gold-dark))]",
     value: "text-[hsl(var(--forest-deep))]",
   },
   sage: {
     bg: "bg-[hsl(var(--sage-light))] border-[hsl(var(--sage)/0.4)]",
-    icon: "bg-white text-[hsl(var(--forest))]",
+    icon: "bg-card text-[hsl(var(--forest))]",
     value: "text-[hsl(var(--forest-deep))]",
   },
 };

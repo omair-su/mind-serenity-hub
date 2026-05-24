@@ -143,11 +143,11 @@ export default function AmbientMusicPlayer({
           title={playing ? "Stop" : "Play"}
         >
           {loading ? (
-            <Loader2 className="w-5 h-5 text-white animate-spin" />
+            <Loader2 className="w-5 h-5 text-cream animate-spin" />
           ) : playing ? (
-            <Pause className="w-5 h-5 text-white" />
+            <Pause className="w-5 h-5 text-cream" />
           ) : (
-            <Play className="w-5 h-5 text-white ml-0.5" />
+            <Play className="w-5 h-5 text-cream ml-0.5" />
           )}
         </button>
 

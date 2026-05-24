@@ -27,7 +27,7 @@ export default function GlobalMiniPlayer() {
           className="fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[90] w-[calc(100%-1.5rem)] max-w-md"
         >
           <div className="rounded-2xl bg-[hsl(var(--charcoal))]/95 backdrop-blur-2xl border border-[hsl(var(--gold))]/20 shadow-[0_-8px_40px_rgba(0,0,0,0.4)] overflow-hidden">
-            <div className="h-0.5 bg-white/5">
+            <div className="h-0.5 bg-card/5">
               <motion.div
                 className="h-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]"
                 animate={{ width: `${progress}%` }}
@@ -43,11 +43,11 @@ export default function GlobalMiniPlayer() {
                 />
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-display text-sm font-semibold text-white truncate leading-tight">
+                <p className="font-display text-sm font-semibold text-cream truncate leading-tight">
                   {p.track?.title}
                 </p>
                 {p.track?.subtitle && (
-                  <p className="text-[10px] font-body text-white/50 truncate">
+                  <p className="text-[10px] font-body text-cream/50 truncate">
                     {p.track.subtitle}
                   </p>
                 )}
@@ -68,7 +68,7 @@ export default function GlobalMiniPlayer() {
               </button>
               <button
                 onClick={p.close}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-white/60 hover:bg-white/10 transition-all"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-card/5 text-cream/60 hover:bg-card/10 transition-all"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />

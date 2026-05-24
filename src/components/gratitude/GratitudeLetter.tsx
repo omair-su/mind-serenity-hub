@@ -48,7 +48,7 @@ export default function GratitudeLetter({ entries }: GratitudeLetterProps) {
         <button
           onClick={generate}
           disabled={loading}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-white text-sm font-body font-semibold flex items-center justify-center gap-2 disabled:opacity-60"
+          className="w-full py-3 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-cream text-sm font-body font-semibold flex items-center justify-center gap-2 disabled:opacity-60"
         >
           {loading ? (<><Loader2 className="w-4 h-4 animate-spin" /> Composing your letter...</>) : (<><Sparkles className="w-4 h-4" /> Compose This Week's Letter</>)}
         </button>

@@ -21,7 +21,7 @@ export default function EmptyState({
     <div
       className={cn(
         "flex flex-col items-center text-center py-14 px-6 rounded-3xl",
-        "bg-gradient-to-b from-[hsl(var(--sage-light)/0.4)] to-white",
+        "bg-gradient-to-b from-[hsl(var(--sage-light)/0.4)] to-card",
         "border border-dashed border-[hsl(var(--sage)/0.5)]",
         className,
       )}

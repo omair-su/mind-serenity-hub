@@ -83,7 +83,7 @@ export default function AICompanionChat({ protocolTitle }: AICompanionChatProps)
         <button
           onClick={send}
           disabled={sending || !input.trim()}
-          className="px-4 py-2.5 rounded-xl bg-gold text-white disabled:opacity-50 hover:bg-gold-dark transition-colors"
+          className="px-4 py-2.5 rounded-xl bg-gold text-cream disabled:opacity-50 hover:bg-gold-dark transition-colors"
         >
           <Send className="w-4 h-4" />
         </button>

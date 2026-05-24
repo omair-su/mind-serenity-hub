@@ -85,19 +85,19 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
       >
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-3 rounded-full bg-white/10 backdrop-blur-xl text-white/90 hover:bg-white/20 transition"
+          className="absolute top-5 right-5 p-3 rounded-full bg-card/10 backdrop-blur-xl text-cream/90 hover:bg-card/20 transition"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="w-full max-w-xl text-white">
+        <div className="w-full max-w-xl text-cream">
           {/* Step pill */}
           <div className="flex justify-center gap-1.5 mb-8">
             {STEPS.map((s, i) => (
               <span
                 key={s}
-                className={`h-1 rounded-full transition-all ${i === step ? "w-10 bg-white" : i < step ? "w-6 bg-white/60" : "w-6 bg-white/20"}`}
+                className={`h-1 rounded-full transition-all ${i === step ? "w-10 bg-card" : i < step ? "w-6 bg-card/60" : "w-6 bg-card/20"}`}
               />
             ))}
           </div>
@@ -105,19 +105,19 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
           <AnimatePresence mode="wait">
             {current === "reassure" && (
               <motion.div key="reassure" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center space-y-8">
-                <Heart className="w-14 h-14 mx-auto text-white/90" />
+                <Heart className="w-14 h-14 mx-auto text-cream/90" />
                 <h2 className="font-display text-4xl md:text-5xl font-bold leading-tight">You're safe.<br />This will pass.</h2>
-                <p className="font-body text-lg text-white/80 max-w-md mx-auto leading-relaxed">
+                <p className="font-body text-lg text-cream/80 max-w-md mx-auto leading-relaxed">
                   What you're feeling is real, but it is not dangerous. Your body is having a stress response. We'll move through this together, one step at a time.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm font-body text-white/70 mb-3">Right now, how intense is the panic? (1–10)</p>
+                  <p className="text-sm font-body text-cream/70 mb-3">Right now, how intense is the panic? (1–10)</p>
                   <div className="flex justify-center gap-2 flex-wrap">
                     {[1,2,3,4,5,6,7,8,9,10].map(n => (
                       <button
                         key={n}
                         onClick={() => setPanicBefore(n)}
-                        className={`w-10 h-10 rounded-full font-body font-bold transition ${panicBefore === n ? "bg-white text-[hsl(210_60%_22%)] scale-110" : "bg-white/15 hover:bg-white/25"}`}
+                        className={`w-10 h-10 rounded-full font-body font-bold transition ${panicBefore === n ? "bg-card text-[hsl(210_60%_22%)] scale-110" : "bg-card/15 hover:bg-card/25"}`}
                       >{n}</button>
                     ))}
                   </div>
@@ -125,7 +125,7 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
                 <button
                   onClick={next}
                   disabled={panicBefore === null}
-                  className="mx-auto flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[hsl(210_60%_22%)] font-body font-bold disabled:opacity-40 hover:scale-105 transition"
+                  className="mx-auto flex items-center gap-2 px-8 py-4 rounded-full bg-card text-[hsl(210_60%_22%)] font-body font-bold disabled:opacity-40 hover:scale-105 transition"
                 >
                   I'm ready to begin <ChevronRight className="w-5 h-5" />
                 </button>
@@ -135,9 +135,9 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
             {current === "ground" && (
               <motion.div key="ground" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
                 <div className="text-center space-y-3">
-                  <Eye className="w-12 h-12 mx-auto text-white/90" />
+                  <Eye className="w-12 h-12 mx-auto text-cream/90" />
                   <h2 className="font-display text-3xl md:text-4xl font-bold">Name 5 things you can see</h2>
-                  <p className="text-white/75 font-body">Look around. Type whatever you notice — a wall, a cup, your hand. This brings you back to the present.</p>
+                  <p className="text-cream/75 font-body">Look around. Type whatever you notice — a wall, a cup, your hand. This brings you back to the present.</p>
                 </div>
                 <div className="space-y-3">
                   {grounding.map((v, i) => (
@@ -148,13 +148,13 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
                         const arr = [...grounding]; arr[i] = e.target.value; setGrounding(arr);
                       }}
                       placeholder={`${i + 1}. I see…`}
-                      className="w-full px-5 py-4 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 text-white placeholder-white/50 font-body focus:outline-none focus:bg-white/20 focus:border-white/40"
+                      className="w-full px-5 py-4 rounded-2xl bg-card/15 backdrop-blur-md border border-cream/20 text-cream placeholder-white/50 font-body focus:outline-none focus:bg-card/20 focus:border-cream/40"
                     />
                   ))}
                 </div>
                 <button
                   onClick={next}
-                  className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-[hsl(210_60%_22%)] font-body font-bold hover:scale-[1.02] transition"
+                  className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-card text-[hsl(210_60%_22%)] font-body font-bold hover:scale-[1.02] transition"
                 >
                   Continue <ChevronRight className="w-5 h-5" />
                 </button>
@@ -163,9 +163,9 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
 
             {current === "breathe" && (
               <motion.div key="breathe" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center space-y-8">
-                <Wind className="w-12 h-12 mx-auto text-white/90" />
+                <Wind className="w-12 h-12 mx-auto text-cream/90" />
                 <h2 className="font-display text-3xl md:text-4xl font-bold">Box Breathing</h2>
-                <p className="text-white/75 font-body max-w-sm mx-auto">Follow the circle. Breathe in 4 · hold 4 · out 4 · hold 4.</p>
+                <p className="text-cream/75 font-body max-w-sm mx-auto">Follow the circle. Breathe in 4 · hold 4 · out 4 · hold 4.</p>
 
                 <div className="relative w-64 h-64 mx-auto">
                   <motion.div
@@ -173,7 +173,7 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
                       scale: boxPhase === "in" ? 1.15 : boxPhase === "out" ? 0.85 : boxPhase === "hold1" ? 1.15 : 0.85,
                     }}
                     transition={{ duration: 1, ease: "easeInOut" }}
-                    className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-md border border-white/30"
+                    className="absolute inset-0 rounded-full bg-gradient-to-br from-cream/30 to-cream/10 backdrop-blur-md border border-cream/30"
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <p className="font-display text-2xl font-bold capitalize">
@@ -185,7 +185,7 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
 
                 <button
                   onClick={next}
-                  className="mx-auto flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[hsl(210_60%_22%)] font-body font-bold hover:scale-105 transition"
+                  className="mx-auto flex items-center gap-2 px-8 py-4 rounded-full bg-card text-[hsl(210_60%_22%)] font-body font-bold hover:scale-105 transition"
                 >
                   I feel calmer <ChevronRight className="w-5 h-5" />
                 </button>
@@ -194,21 +194,21 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
 
             {current === "checkin" && (
               <motion.div key="checkin" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center space-y-8">
-                <Heart className="w-12 h-12 mx-auto text-white/90" />
+                <Heart className="w-12 h-12 mx-auto text-cream/90" />
                 <h2 className="font-display text-3xl md:text-4xl font-bold">How do you feel now? (1–10)</h2>
-                <p className="text-white/75 font-body">No right answer. Just notice.</p>
+                <p className="text-cream/75 font-body">No right answer. Just notice.</p>
                 <div className="flex justify-center gap-2 flex-wrap">
                   {[1,2,3,4,5,6,7,8,9,10].map(n => (
                     <button
                       key={n}
                       onClick={() => setPanicAfter(n)}
-                      className={`w-12 h-12 rounded-full font-body font-bold transition ${panicAfter === n ? "bg-white text-[hsl(210_60%_22%)] scale-110" : "bg-white/15 hover:bg-white/25"}`}
+                      className={`w-12 h-12 rounded-full font-body font-bold transition ${panicAfter === n ? "bg-card text-[hsl(210_60%_22%)] scale-110" : "bg-card/15 hover:bg-card/25"}`}
                     >{n}</button>
                   ))}
                 </div>
                 {panicAfter !== null && panicBefore !== null && (
-                  <div className="px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 max-w-sm mx-auto">
-                    <p className="font-body text-sm text-white/90">
+                  <div className="px-5 py-4 rounded-2xl bg-card/10 backdrop-blur-md border border-cream/20 max-w-sm mx-auto">
+                    <p className="font-body text-sm text-cream/90">
                       {panicAfter < panicBefore
                         ? `You moved from ${panicBefore} → ${panicAfter}. That's real progress. Be proud.`
                         : panicAfter === panicBefore
@@ -220,14 +220,14 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button
                     onClick={() => setStep(2)}
-                    className="px-6 py-3 rounded-full bg-white/15 hover:bg-white/25 text-white font-body font-bold border border-white/20"
+                    className="px-6 py-3 rounded-full bg-card/15 hover:bg-card/25 text-cream font-body font-bold border border-cream/20"
                   >
                     Repeat breathing
                   </button>
                   <button
                     onClick={next}
                     disabled={panicAfter === null}
-                    className="px-8 py-3 rounded-full bg-white text-[hsl(210_60%_22%)] font-body font-bold disabled:opacity-40 hover:scale-105 transition"
+                    className="px-8 py-3 rounded-full bg-card text-[hsl(210_60%_22%)] font-body font-bold disabled:opacity-40 hover:scale-105 transition"
                   >
                     Continue
                   </button>
@@ -237,32 +237,32 @@ export default function PanicAttackProtocol({ open, onClose, onSuggestChat }: Pr
 
             {current === "followup" && (
               <motion.div key="followup" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center space-y-6">
-                <Sparkles className="w-12 h-12 mx-auto text-white/90" />
+                <Sparkles className="w-12 h-12 mx-auto text-cream/90" />
                 <h2 className="font-display text-3xl md:text-4xl font-bold">You did it.</h2>
-                <p className="text-white/85 font-body max-w-md mx-auto leading-relaxed">
+                <p className="text-cream/85 font-body max-w-md mx-auto leading-relaxed">
                   You moved through it. That took courage. Here are gentle next steps — pick what feels right, or just rest.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto pt-2">
                   <button
                     onClick={() => { onSuggestChat?.(); finish(); }}
-                    className="px-5 py-4 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-left"
+                    className="px-5 py-4 rounded-2xl bg-card/15 hover:bg-card/25 backdrop-blur-md border border-cream/20 text-left"
                   >
                     <MessageCircle className="w-5 h-5 mb-2" />
                     <p className="font-body font-bold">Talk to companion</p>
-                    <p className="text-xs text-white/70 mt-0.5">Process what just happened</p>
+                    <p className="text-xs text-cream/70 mt-0.5">Process what just happened</p>
                   </button>
                   <button
                     onClick={finish}
-                    className="px-5 py-4 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-left"
+                    className="px-5 py-4 rounded-2xl bg-card/15 hover:bg-card/25 backdrop-blur-md border border-cream/20 text-left"
                   >
                     <Heart className="w-5 h-5 mb-2" />
                     <p className="font-body font-bold">Rest now</p>
-                    <p className="text-xs text-white/70 mt-0.5">Close gently and breathe</p>
+                    <p className="text-xs text-cream/70 mt-0.5">Close gently and breathe</p>
                   </button>
                 </div>
                 <button
                   onClick={finish}
-                  className="text-white/70 hover:text-white font-body text-sm underline-offset-4 hover:underline mt-4"
+                  className="text-cream/70 hover:text-cream font-body text-sm underline-offset-4 hover:underline mt-4"
                 >
                   Exit
                 </button>

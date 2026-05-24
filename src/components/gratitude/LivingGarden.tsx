@@ -55,15 +55,15 @@ export default function LivingGarden({ count }: LivingGardenProps) {
 
       {count === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-sm font-body text-white/90 bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full">
+          <p className="text-sm font-body text-cream/90 bg-charcoal/20 backdrop-blur-sm px-4 py-2 rounded-full">
             🌱 Plant your first seed
           </p>
         </div>
       )}
 
       {/* Tier badge */}
-      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/30 backdrop-blur-md border border-white/40">
-        <span className="text-[10px] font-body font-bold uppercase tracking-widest text-white drop-shadow">
+      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-card/30 backdrop-blur-md border border-cream/40">
+        <span className="text-[10px] font-body font-bold uppercase tracking-widest text-cream drop-shadow">
           {tier} · {count}
         </span>
       </div>

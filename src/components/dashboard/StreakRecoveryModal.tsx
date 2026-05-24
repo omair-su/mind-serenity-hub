@@ -112,7 +112,7 @@ export default function StreakRecoveryModal() {
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[hsl(var(--cream))] via-white to-[hsl(var(--gold))]/5 shadow-[var(--shadow-card-val)]"
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[hsl(var(--cream))] via-cream to-[hsl(var(--gold))]/5 shadow-[var(--shadow-card-val)]"
           >
             <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-[hsl(var(--gold))]/15 blur-[80px]" />
             <button
@@ -125,7 +125,7 @@ export default function StreakRecoveryModal() {
 
             <div className="relative p-7 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] shadow-[var(--shadow-gold-val)] mb-4">
-                <Snowflake className="w-7 h-7 text-white" />
+                <Snowflake className="w-7 h-7 text-cream" />
               </div>
               <p className="text-[10px] font-body font-bold tracking-[0.22em] uppercase text-[hsl(var(--gold-dark))] mb-2">
                 — Streak Rescue —
@@ -155,7 +155,7 @@ export default function StreakRecoveryModal() {
                 <Button
                   onClick={rescue}
                   disabled={busy}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold shadow-[var(--shadow-gold-val)]"
+                  className="flex-1 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-semibold shadow-[var(--shadow-gold-val)]"
                 >
                   Protect streak
                 </Button>

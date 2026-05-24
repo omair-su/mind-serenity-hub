@@ -27,8 +27,8 @@ export default function PaceOrb({ cadence, active }: PaceOrbProps) {
           transition={{ duration: period, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="text-center">
-            <div className="text-2xl font-display font-bold text-white tabular-nums">{cadence || "—"}</div>
-            <div className="text-[8px] font-body uppercase tracking-widest text-white/80">spm</div>
+            <div className="text-2xl font-display font-bold text-cream tabular-nums">{cadence || "—"}</div>
+            <div className="text-[8px] font-body uppercase tracking-widest text-cream/80">spm</div>
           </div>
         </motion.div>
       </div>

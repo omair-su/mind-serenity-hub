@@ -44,7 +44,7 @@ export default function MoodWheel({ primary, secondary, onPrimary, onSecondary }
                 }}
               >
                 <span className="text-2xl">{slice.emoji}</span>
-                <span className={`text-[10px] font-body font-semibold ${active ? "text-white" : "text-foreground"}`}>
+                <span className={`text-[10px] font-body font-semibold ${active ? "text-cream" : "text-foreground"}`}>
                   {slice.primary}
                 </span>
               </motion.button>

@@ -90,8 +90,8 @@ export default function AvatarUploader({ userId, currentUrl, fallbackEmoji = "ðŸ
           <span>{fallbackEmoji}</span>
         )}
         {uploading && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <Loader2 className="w-5 h-5 text-white animate-spin" />
+          <div className="absolute inset-0 bg-charcoal/40 flex items-center justify-center">
+            <Loader2 className="w-5 h-5 text-cream animate-spin" />
           </div>
         )}
       </div>

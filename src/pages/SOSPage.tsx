@@ -247,13 +247,13 @@ export default function SOSPage() {
       <motion.div className="max-w-4xl mx-auto space-y-10 pb-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         
         {/* ─── REFINED PREMIUM HEADER ─── */}
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest-mid))] to-[hsl(var(--forest))] p-8 md:p-10 text-white shadow-2xl border border-white/5">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest-mid))] to-[hsl(var(--forest))] p-8 md:p-10 text-cream shadow-2xl border border-cream/5">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/5 rounded-full blur-[80px] -ml-10 -mb-10" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-2xl shadow-[hsl(var(--gold))]/30 border border-white/10">
-              <Zap className="w-8 h-8 md:w-10 md:h-10 text-white" />
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold-light))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-2xl shadow-[hsl(var(--gold))]/30 border border-cream/10">
+              <Zap className="w-8 h-8 md:w-10 md:h-10 text-cream" />
             </div>
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
@@ -261,7 +261,7 @@ export default function SOSPage() {
                 <span className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-gold/80">Elite SOS Protocol</span>
               </div>
               <h1 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tight">Instant Serenity</h1>
-              <p className="text-base md:text-lg font-body text-white/70 mt-2 max-w-lg leading-relaxed">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
+              <p className="text-base md:text-lg font-body text-cream/70 mt-2 max-w-lg leading-relaxed">Emergency protocols designed for high-performance individuals to regain composure in seconds.</p>
             </div>
           </div>
         </div>
@@ -269,19 +269,19 @@ export default function SOSPage() {
         {/* ─── BIG RED PANIC BUTTON — instant access, no nav ─── */}
         <button
           onClick={() => setPanicOpen(true)}
-          className="group w-full relative overflow-hidden rounded-3xl p-6 md:p-7 text-left bg-gradient-to-br from-destructive via-destructive to-[hsl(var(--destructive))]/80 hover:brightness-110 active:scale-[0.99] transition-all shadow-2xl shadow-destructive/30 border border-white/10"
+          className="group w-full relative overflow-hidden rounded-3xl p-6 md:p-7 text-left bg-gradient-to-br from-destructive via-destructive to-[hsl(var(--destructive))]/80 hover:brightness-110 active:scale-[0.99] transition-all shadow-2xl shadow-destructive/30 border border-cream/10"
         >
-          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-3xl group-hover:bg-white/20 transition" />
+          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-card/10 blur-3xl group-hover:bg-card/20 transition" />
           <div className="relative flex items-center gap-5">
-            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center border border-white/30">
-              <Siren className="w-7 h-7 md:w-8 md:h-8 text-white" />
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-card/15 backdrop-blur flex items-center justify-center border border-cream/30">
+              <Siren className="w-7 h-7 md:w-8 md:h-8 text-cream" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-white/70 mb-1">Emergency Calm</p>
-              <h2 className="font-display text-xl md:text-3xl font-bold text-white leading-tight">I'M HAVING A PANIC ATTACK</h2>
-              <p className="text-xs md:text-sm font-body text-white/80 mt-1">Tap for instant guided intervention. You're safe.</p>
+              <p className="text-[10px] font-body font-bold tracking-[0.3em] uppercase text-cream/70 mb-1">Emergency Calm</p>
+              <h2 className="font-display text-xl md:text-3xl font-bold text-cream leading-tight">I'M HAVING A PANIC ATTACK</h2>
+              <p className="text-xs md:text-sm font-body text-cream/80 mt-1">Tap for instant guided intervention. You're safe.</p>
             </div>
-            <ChevronRight className="w-6 h-6 text-white/80 hidden md:block" />
+            <ChevronRight className="w-6 h-6 text-cream/80 hidden md:block" />
           </div>
         </button>
 
@@ -305,7 +305,7 @@ export default function SOSPage() {
                     onClick={() => setRescueCategory(cat)}
                     className={`flex-shrink-0 px-4 py-2.5 rounded-2xl border font-body text-sm font-bold transition flex items-center gap-2 ${
                       isActive
-                        ? "bg-[hsl(var(--forest))] border-[hsl(var(--forest))] text-white shadow-md"
+                        ? "bg-[hsl(var(--forest))] border-[hsl(var(--forest))] text-cream shadow-md"
                         : "bg-card border-border text-foreground hover:border-[hsl(var(--forest))]/40"
                     }`}
                   >
@@ -381,18 +381,18 @@ export default function SOSPage() {
               <div className="h-72 md:h-80 relative overflow-hidden">
                 <img src={activeSession.image} alt="" className="w-full h-full object-cover scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
-                <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[2.5rem]" />
+                <div className="absolute inset-0 ring-1 ring-inset ring-cream/10 rounded-[2.5rem]" />
                 
                 <button 
                   onClick={closeSession}
-                  className="absolute top-6 right-6 p-2.5 rounded-full bg-black/30 backdrop-blur-xl text-white border border-white/10 hover:bg-black/50 transition-all z-20"
+                  className="absolute top-6 right-6 p-2.5 rounded-full bg-charcoal/30 backdrop-blur-xl text-cream border border-cream/10 hover:bg-charcoal/50 transition-all z-20"
                 >
                   <X className="w-5 h-5" />
                 </button>
                 
                 <div className="absolute bottom-8 left-10 z-10">
                   <div className="flex items-center gap-4">
-                    <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl">
+                    <div className="p-3.5 rounded-2xl bg-card/10 backdrop-blur-2xl border border-cream/20 shadow-2xl">
                       {activeSession.icon}
                     </div>
                     <div>
@@ -434,13 +434,13 @@ export default function SOSPage() {
                     <div className="flex items-center gap-5">
                       <button 
                         onClick={() => setRunning(!running)} 
-                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[hsl(var(--forest-deep))] text-white flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/10"
+                        className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[hsl(var(--forest-deep))] text-cream flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all border border-cream/10"
                       >
                         {running ? <Pause className="w-7 h-7 md:w-8 md:h-8" /> : <Play className="w-7 h-7 md:w-8 md:h-8 ml-1.5" />}
                       </button>
                       <button 
                         onClick={nextStep} 
-                        className="px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-dark))] to-[hsl(var(--gold-dark))] text-white rounded-[1.25rem] text-base md:text-lg font-body font-bold shadow-[0_20px_40px_-12px_hsl(var(--gold)/0.4)] hover:shadow-[0_25px_50px_-12px_hsl(var(--gold)/0.5)] hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border border-white/10"
+                        className="px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-[hsl(var(--gold))] via-[hsl(var(--gold-dark))] to-[hsl(var(--gold-dark))] text-cream rounded-[1.25rem] text-base md:text-lg font-body font-bold shadow-[0_20px_40px_-12px_hsl(var(--gold)/0.4)] hover:shadow-[0_25px_50px_-12px_hsl(var(--gold)/0.5)] hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3 border border-cream/10"
                       >
                         {stepIndex < activeSession.steps.length - 1 ? "Continue Protocol" : "I Am Restored"}
                         <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -461,7 +461,7 @@ export default function SOSPage() {
                         onClick={() => setBinauralActive(!binauralActive)}
                         className={`px-4 py-2 rounded-full text-xs font-body font-bold uppercase tracking-wider transition-all border ${
                           binauralActive
-                            ? 'bg-[hsl(var(--gold-dark))] text-white border-[hsl(var(--gold-dark))] shadow-md hover:bg-[hsl(var(--forest-mid))]'
+                            ? 'bg-[hsl(var(--gold-dark))] text-cream border-[hsl(var(--gold-dark))] shadow-md hover:bg-[hsl(var(--forest-mid))]'
                             : 'bg-card text-foreground border-border hover:border-[hsl(var(--gold))]/40'
                         }`}
                       >
@@ -545,7 +545,7 @@ export default function SOSPage() {
                   <div className="h-52 overflow-hidden relative">
                     <img src={s.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                     <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-40 group-hover:opacity-20 transition-opacity`} />
-                    <div className="absolute inset-0 ring-1 ring-inset ring-white/5 rounded-t-[2rem]" />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-cream/5 rounded-t-[2rem]" />
                   </div>
                   <div className="p-7 relative">
                     <div className="absolute -top-10 right-8 w-16 h-16 rounded-2xl bg-card shadow-2xl flex items-center justify-center group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 border border-border/50">

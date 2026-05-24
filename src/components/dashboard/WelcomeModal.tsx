@@ -154,14 +154,14 @@ export default function WelcomeModal() {
               {step < steps.length - 1 ? (
                 <Button
                   onClick={() => setStep(step + 1)}
-                  className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] text-white font-body font-semibold py-6 hover:scale-[1.02] transition-transform"
+                  className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--forest))] to-[hsl(var(--forest-deep))] text-cream font-body font-semibold py-6 hover:scale-[1.02] transition-transform"
                 >
                   {current.cta}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
                 <Link to="/day/1" onClick={close} className="block">
-                  <Button className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-semibold py-6 shadow-[var(--shadow-gold-val)] hover:scale-[1.02] transition-transform">
+                  <Button className="w-full rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-semibold py-6 shadow-[var(--shadow-gold-val)] hover:scale-[1.02] transition-transform">
                     <Sparkles className="w-4 h-4 mr-2" />
                     {current.cta}
                   </Button>

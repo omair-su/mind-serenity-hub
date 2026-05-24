@@ -30,7 +30,7 @@ export default function TodaysFocusCard({
         <p className="text-base font-body text-[hsl(var(--charcoal))]/80 leading-relaxed">{benefits}</p>
         <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
           {items.map(item => (
-            <div key={item.label} className="p-3 rounded-xl bg-white/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
+            <div key={item.label} className="p-3 rounded-xl bg-card/60 dark:bg-[hsl(var(--cream-dark))]/40 border border-[hsl(var(--border))] shadow-sm">
               <item.icon className="w-3.5 h-3.5 text-[hsl(var(--gold-dark))] mb-1" />
               <p className="text-[10px] font-body font-semibold text-[hsl(var(--charcoal-soft))] uppercase tracking-wider">{item.label}</p>
               <p className="text-xs font-body text-[hsl(var(--charcoal))] mt-0.5 line-clamp-2">{item.value}</p>

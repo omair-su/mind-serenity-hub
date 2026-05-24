@@ -50,18 +50,18 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative p-8 rounded-3xl text-white overflow-hidden"
+              className="relative p-8 rounded-3xl text-cream overflow-hidden"
               style={{ background: t.gradient, boxShadow: "0 18px 40px -16px rgba(91,127,224,0.45)" }}
             >
               {/* Big translucent quote mark */}
-              <div className="absolute top-4 left-6 font-calm-display text-[80px] leading-none text-white/25 select-none">"</div>
+              <div className="absolute top-4 left-6 font-calm-display text-[80px] leading-none text-cream/25 select-none">"</div>
 
-              <p className="font-calm-body text-base mb-7 mt-8 leading-relaxed text-white">
+              <p className="font-calm-body text-base mb-7 mt-8 leading-relaxed text-cream">
                 {t.content}
               </p>
 
-              <div className="font-calm-body text-sm text-white/85 mb-2">
-                {t.name} — <span className="text-white/70">{t.role}</span>
+              <div className="font-calm-body text-sm text-cream/85 mb-2">
+                {t.name} — <span className="text-cream/70">{t.role}</span>
               </div>
 
               <div className="flex gap-0.5">
@@ -70,7 +70,7 @@ export default function TestimonialsSection() {
                 ))}
               </div>
 
-              <div className="absolute -bottom-3 -right-3 w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-xs font-bold">
+              <div className="absolute -bottom-3 -right-3 w-10 h-10 rounded-full bg-card/15 backdrop-blur-sm flex items-center justify-center text-xs font-bold">
                 {t.avatar}
               </div>
             </motion.div>

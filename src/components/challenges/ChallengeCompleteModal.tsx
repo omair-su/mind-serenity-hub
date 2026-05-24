@@ -37,7 +37,7 @@ export default function ChallengeCompleteModal({ show, challenge, progress, onCl
           >
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/70 hover:bg-white flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-card/70 hover:bg-card flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function ChallengeCompleteModal({ show, challenge, progress, onCl
                 transition={{ type: "spring", stiffness: 180, delay: 0.15 }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-[var(--shadow-gold-val)]"
               >
-                <Trophy className="w-12 h-12 text-white drop-shadow" />
+                <Trophy className="w-12 h-12 text-cream drop-shadow" />
               </motion.div>
               <motion.span
                 animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
@@ -100,7 +100,7 @@ export default function ChallengeCompleteModal({ show, challenge, progress, onCl
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + i * 0.05 }}
-                    className="rounded-xl bg-white/70 border border-[hsl(var(--cream-dark))] p-3"
+                    className="rounded-xl bg-card/70 border border-[hsl(var(--cream-dark))] p-3"
                   >
                     <p className="text-[10px] font-body font-bold text-[hsl(var(--forest))] uppercase tracking-wider">
                       Day {r.day} · {r.title}
@@ -115,7 +115,7 @@ export default function ChallengeCompleteModal({ show, challenge, progress, onCl
 
             <button
               onClick={onClose}
-              className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white font-body font-bold text-sm hover:brightness-110 transition-all shadow-[var(--shadow-gold-val)]"
+              className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-cream font-body font-bold text-sm hover:brightness-110 transition-all shadow-[var(--shadow-gold-val)]"
             >
               Continue your practice
             </button>

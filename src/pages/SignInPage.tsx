@@ -182,21 +182,21 @@ export default function SignInPage() {
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-white/55 backdrop-blur-md" />
+        <div className="absolute inset-0 bg-card/55 backdrop-blur-md" />
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative w-full max-w-md bg-white/90 backdrop-blur-xl calm-card calm-card-lg p-10 text-center shadow-2xl border-white/60"
+          className="relative w-full max-w-md bg-card/90 backdrop-blur-xl calm-card calm-card-lg p-10 text-center shadow-2xl border-cream/60"
         >
           <div className="w-16 h-16 rounded-full bg-[hsl(20_70%_60%/0.12)] mx-auto flex items-center justify-center mb-6">
             <Mail className="w-8 h-8 text-[hsl(20_70%_50%)]" />
           </div>
-          <h1 className="font-serif-display text-3xl font-medium text-slate-900 mb-3">
+          <h1 className="font-serif-display text-3xl font-medium text-foreground mb-3">
             Check your inbox
           </h1>
-          <p className="font-sans-body text-slate-600 leading-relaxed mb-8">
+          <p className="-body text-muted-foreground leading-relaxed mb-8">
             We've sent a confirmation link to{" "}
-            <span className="font-semibold text-slate-900">{email}</span>.
+            <span className="font-semibold text-foreground">{email}</span>.
             Click it to activate your Willow Vibes account.
           </p>
           <button
@@ -204,7 +204,7 @@ export default function SignInPage() {
               setConfirmationSent(false);
               setMode("signin");
             }}
-            className="w-full h-[52px] rounded-full text-white font-sans-body font-semibold transition hover:scale-[1.02]"
+            className="w-full h-[52px] rounded-full text-cream font-body font-semibold transition hover:scale-[1.02]"
             style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
           >
             Back to sign in
@@ -212,9 +212,8 @@ export default function SignInPage() {
         </motion.div>
         <style dangerouslySetInnerHTML={{
           __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
-            .font-serif-display { font-family: 'Fraunces', serif; }
-            .font-sans-body { font-family: 'Inter', sans-serif; }
+            .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+            .font-body { font-family: 'Karla', system-ui, sans-serif; }
           `,
         }} />
       </div>
@@ -225,9 +224,8 @@ export default function SignInPage() {
     <div className="min-h-screen flex flex-col md:flex-row overflow-hidden relative">
       <style dangerouslySetInnerHTML={{
         __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap');
-          .font-serif-display { font-family: 'Fraunces', serif; letter-spacing: -0.015em; }
-          .font-sans-body { font-family: 'Inter', sans-serif; }
+          .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.015em; }
+          .font-body { font-family: 'Karla', system-ui, sans-serif; }
         `,
       }} />
 
@@ -240,7 +238,7 @@ export default function SignInPage() {
         />
         {/* Cool navy/violet wash to match landing page palette */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0E2A47]/35 via-[#5B7FE0]/15 to-[#8267D6]/25" />
-        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-white/10 md:to-white/55" />
+        <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-cream/10 md:to-cream/55" />
       </div>
 
       {/* ─── LEFT: BRAND COPY (over photo) ─── */}
@@ -259,10 +257,10 @@ export default function SignInPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3 py-1 mb-5 rounded-full bg-white/25 backdrop-blur-md border border-white/40"
+            className="inline-flex items-center gap-2 px-3 py-1 mb-5 rounded-full bg-card/25 backdrop-blur-md border border-cream/40"
           >
-            <Sparkles className="w-3 h-3 text-white" />
-            <span className="font-sans-body text-[11px] uppercase tracking-[0.2em] text-white font-medium">
+            <Sparkles className="w-3 h-3 text-cream" />
+            <span className="-body text-[11px] uppercase tracking-[0.2em] text-cream font-medium">
               Mindful Practice
             </span>
           </motion.div>
@@ -271,7 +269,7 @@ export default function SignInPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, duration: 0.8 }}
-            className="font-serif-display text-4xl lg:text-5xl font-light text-white leading-[1.1] mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.25)]"
+            className="font-serif-display text-4xl lg:text-5xl font-light text-cream leading-[1.1] mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.25)]"
           >
             {mode === "signup" ? (
               <>Begin your <em className="font-medium italic">quiet practice</em>.</>
@@ -284,7 +282,7 @@ export default function SignInPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="font-sans-body text-base text-white/90 leading-relaxed max-w-md drop-shadow-[0_1px_8px_rgba(0,0,0,0.25)]"
+            className="-body text-base text-cream/90 leading-relaxed max-w-md drop-shadow-[0_1px_8px_rgba(0,0,0,0.25)]"
           >
             {mode === "signup"
               ? "Join thousands cultivating calm and focus through daily practice."
@@ -305,12 +303,12 @@ export default function SignInPage() {
             <WillowLogo variant="vertical" size="md" colorScheme="mono-white" className="mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]" />
           </div>
 
-          <div className="bg-white/92 backdrop-blur-xl calm-card calm-card-lg p-7 md:p-9 shadow-[0_20px_60px_-15px_rgba(30,41,59,0.25)] border-white/70">
+          <div className="bg-card/92 backdrop-blur-xl calm-card calm-card-lg p-7 md:p-9 shadow-[0_20px_60px_-15px_rgba(30,41,59,0.25)] border-cream/70">
             <motion.div variants={itemVariants} className="mb-7">
-              <h2 className="font-serif-display text-3xl font-medium text-slate-900 mb-2">
+              <h2 className="font-serif-display text-3xl font-medium text-foreground mb-2">
                 {mode === "signup" ? "Create account" : "Sign in"}
               </h2>
-              <p className="font-sans-body text-slate-500 text-sm leading-relaxed">
+              <p className="-body text-muted-foreground text-sm leading-relaxed">
                 {mode === "signup"
                   ? "Start your practice in under a minute."
                   : "Enter your details to access your meditation program."}
@@ -327,7 +325,7 @@ export default function SignInPage() {
                   className="mb-5 flex items-start gap-2 rounded-xl bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive"
                 >
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-                  <span className="font-sans-body">{errorMsg}</span>
+                  <span className="-body">{errorMsg}</span>
                 </motion.div>
               )}
               {infoMsg && (
@@ -338,7 +336,7 @@ export default function SignInPage() {
                   className="mb-5 flex items-start gap-2 rounded-xl bg-sage-light/30 border border-sage/40 px-4 py-3 text-sm text-forest-deep"
                 >
                   <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
-                  <span className="font-sans-body">{infoMsg}</span>
+                  <span className="-body">{infoMsg}</span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -346,7 +344,7 @@ export default function SignInPage() {
             <form onSubmit={handleEmailSubmit} className="space-y-4">
               {mode === "signup" && (
                 <motion.div variants={itemVariants} className="space-y-1.5">
-                  <label className="block font-sans-body text-xs font-medium text-slate-700 ml-1">
+                  <label className="block font-body text-xs font-medium text-foreground ml-1">
                     Full name
                   </label>
                   <input
@@ -355,13 +353,13 @@ export default function SignInPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
                     autoComplete="name"
-                    className="w-full h-[50px] px-4 rounded-xl bg-slate-50 border border-slate-200 font-sans-body text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:bg-white focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                    className="w-full h-[50px] px-4 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                   />
                 </motion.div>
               )}
 
               <motion.div variants={itemVariants} className="space-y-1.5">
-                <label className="block font-sans-body text-xs font-medium text-slate-700 ml-1">
+                <label className="block font-body text-xs font-medium text-foreground ml-1">
                   Email
                 </label>
                 <input
@@ -370,20 +368,20 @@ export default function SignInPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   autoComplete="email"
-                  className="w-full h-[50px] px-4 rounded-xl bg-slate-50 border border-slate-200 font-sans-body text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:bg-white focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                  className="w-full h-[50px] px-4 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                 />
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-1.5">
                 <div className="flex justify-between items-center ml-1">
-                  <label className="block font-sans-body text-xs font-medium text-slate-700">
+                  <label className="block font-body text-xs font-medium text-foreground">
                     Password
                   </label>
                   {mode === "signin" && (
                     <button
                       type="button"
                       onClick={handleForgotPassword}
-                      className="text-xs font-sans-body font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                      className="text-xs font-body font-medium text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Forgot password?
                     </button>
@@ -396,12 +394,12 @@ export default function SignInPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === "signup" ? "At least 6 characters" : "••••••••"}
                     autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                    className="w-full h-[50px] px-4 pr-12 rounded-xl bg-slate-50 border border-slate-200 font-sans-body text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:bg-white focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                    className="w-full h-[50px] px-4 pr-12 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -413,11 +411,11 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-[52px] rounded-full text-white font-sans-body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full h-[52px] rounded-full text-cream font-body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-cream/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
                       <span>{mode === "signup" ? "Create account" : "Sign in"}</span>
@@ -430,10 +428,10 @@ export default function SignInPage() {
 
             <motion.div variants={itemVariants} className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200"></div>
+                <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-3 bg-white text-slate-400 font-sans-body uppercase tracking-wider">or</span>
+                <span className="px-3 bg-card text-muted-foreground font-body uppercase tracking-wider">or</span>
               </div>
             </motion.div>
 
@@ -441,10 +439,10 @@ export default function SignInPage() {
               <button
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full h-[50px] rounded-xl bg-white border border-slate-200 text-slate-700 font-sans-body font-medium text-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-70"
+                className="w-full h-[50px] rounded-xl bg-card border border-border text-foreground font-body font-medium text-sm hover:bg-background hover:border-border transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-70"
               >
                 {googleLoading ? (
-                  <div className="w-5 h-5 border-2 border-slate-300 border-t-slate-700 rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-border border-t-slate-700 rounded-full animate-spin" />
                 ) : (
                   <>
                     <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24">
@@ -459,7 +457,7 @@ export default function SignInPage() {
               </button>
             </motion.div>
 
-            <motion.p variants={itemVariants} className="mt-7 text-center font-sans-body text-sm text-slate-500">
+            <motion.p variants={itemVariants} className="mt-7 text-center font-body text-sm text-muted-foreground">
               {mode === "signup" ? "Already have an account? " : "Don't have an account? "}
               <button
                 type="button"
@@ -467,7 +465,7 @@ export default function SignInPage() {
                   resetMessages();
                   setMode(mode === "signup" ? "signin" : "signup");
                 }}
-                className="text-slate-900 font-semibold hover:underline decoration-2 underline-offset-4"
+                className="text-foreground font-semibold hover:underline decoration-2 underline-offset-4"
               >
                 {mode === "signup" ? "Sign in" : "Sign up"}
               </button>
@@ -476,10 +474,10 @@ export default function SignInPage() {
 
           <motion.div
             variants={itemVariants}
-            className="mt-6 flex justify-center gap-2 text-white/85"
+            className="mt-6 flex justify-center gap-2 text-cream/85"
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span className="text-[11px] font-sans-body tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
+            <span className="text-[11px] font-body tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               Secure & private — your practice is yours alone
             </span>
           </motion.div>
