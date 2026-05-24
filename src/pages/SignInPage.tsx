@@ -212,9 +212,8 @@ export default function SignInPage() {
         </motion.div>
         <style dangerouslySetInnerHTML={{
           __html: `
-            @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
-            .font-serif-display { font-family: 'Fraunces', serif; }
-            .-body { font-family: 'Inter', sans-serif; }
+            .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+            .font-body { font-family: 'Karla', system-ui, sans-serif; }
           `,
         }} />
       </div>
