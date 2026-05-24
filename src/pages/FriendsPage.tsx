@@ -52,7 +52,7 @@ export default function FriendsPage() {
       return;
     }
     const { data, error } = await supabase
-      .from("friendships")
+      .from("friendships_safe")
       .select("*")
       .or(`user_id.eq.${uid},friend_user_id.eq.${uid}`)
       .order("created_at", { ascending: false });
