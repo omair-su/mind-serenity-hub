@@ -11,13 +11,13 @@ interface LuxeCardProps extends HTMLAttributes<HTMLDivElement> {
 
 const variantMap: Record<Variant, string> = {
   default:
-    "bg-white border border-[hsl(var(--cream-dark))] shadow-[0_4px_24px_hsl(139_37%_15%/0.06)]",
+    "bg-card border border-[hsl(var(--cream-dark))] shadow-[0_4px_24px_hsl(139_37%_15%/0.06)]",
   forest:
     "bg-gradient-to-br from-[hsl(var(--forest-deep))] via-[hsl(var(--forest))] to-[hsl(var(--forest-mid))] text-cream border border-[hsl(var(--gold)/0.2)] shadow-[var(--shadow-elevated-val)]",
   gold:
-    "bg-gradient-to-br from-[hsl(var(--gold-light)/0.4)] via-white to-[hsl(var(--cream))] border border-[hsl(var(--gold)/0.35)] shadow-[var(--shadow-gold-val)]",
+    "bg-gradient-to-br from-[hsl(var(--gold-light)/0.4)] via-card to-[hsl(var(--cream))] border border-[hsl(var(--gold)/0.35)] shadow-[var(--shadow-gold-val)]",
   ghost:
-    "bg-white/60 backdrop-blur-md border border-[hsl(var(--sage)/0.3)]",
+    "bg-card/60 backdrop-blur-md border border-[hsl(var(--sage)/0.3)]",
 };
 
 /**
