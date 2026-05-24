@@ -204,7 +204,7 @@ export default function SignInPage() {
               setConfirmationSent(false);
               setMode("signin");
             }}
-            className="w-full h-[52px] rounded-full text-cream -body font-semibold transition hover:scale-[1.02]"
+            className="w-full h-[52px] rounded-full text-cream font-body font-semibold transition hover:scale-[1.02]"
             style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
           >
             Back to sign in
@@ -346,7 +346,7 @@ export default function SignInPage() {
             <form onSubmit={handleEmailSubmit} className="space-y-4">
               {mode === "signup" && (
                 <motion.div variants={itemVariants} className="space-y-1.5">
-                  <label className="block -body text-xs font-medium text-foreground ml-1">
+                  <label className="block font-body text-xs font-medium text-foreground ml-1">
                     Full name
                   </label>
                   <input
@@ -355,13 +355,13 @@ export default function SignInPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
                     autoComplete="name"
-                    className="w-full h-[50px] px-4 rounded-xl bg-background border border-border -body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                    className="w-full h-[50px] px-4 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                   />
                 </motion.div>
               )}
 
               <motion.div variants={itemVariants} className="space-y-1.5">
-                <label className="block -body text-xs font-medium text-foreground ml-1">
+                <label className="block font-body text-xs font-medium text-foreground ml-1">
                   Email
                 </label>
                 <input
@@ -370,20 +370,20 @@ export default function SignInPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   autoComplete="email"
-                  className="w-full h-[50px] px-4 rounded-xl bg-background border border-border -body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                  className="w-full h-[50px] px-4 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                 />
               </motion.div>
 
               <motion.div variants={itemVariants} className="space-y-1.5">
                 <div className="flex justify-between items-center ml-1">
-                  <label className="block -body text-xs font-medium text-foreground">
+                  <label className="block font-body text-xs font-medium text-foreground">
                     Password
                   </label>
                   {mode === "signin" && (
                     <button
                       type="button"
                       onClick={handleForgotPassword}
-                      className="text-xs -body font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-xs font-body font-medium text-muted-foreground hover:text-foreground transition-colors"
                     >
                       Forgot password?
                     </button>
@@ -396,7 +396,7 @@ export default function SignInPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === "signup" ? "At least 6 characters" : "••••••••"}
                     autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                    className="w-full h-[50px] px-4 pr-12 rounded-xl bg-background border border-border -body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-slate-900/5 transition-all duration-200"
+                    className="w-full h-[50px] px-4 pr-12 rounded-xl bg-background border border-border font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-forest-deep focus:bg-card focus:ring-4 focus:ring-border/5 transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -413,7 +413,7 @@ export default function SignInPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-[52px] rounded-full text-cream -body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full h-[52px] rounded-full text-cream font-body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
                 >
                   {isLoading ? (
@@ -433,7 +433,7 @@ export default function SignInPage() {
                 <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-3 bg-card text-muted-foreground -body uppercase tracking-wider">or</span>
+                <span className="px-3 bg-card text-muted-foreground font-body uppercase tracking-wider">or</span>
               </div>
             </motion.div>
 
@@ -441,7 +441,7 @@ export default function SignInPage() {
               <button
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full h-[50px] rounded-xl bg-card border border-border text-foreground -body font-medium text-sm hover:bg-background hover:border-border transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-70"
+                className="w-full h-[50px] rounded-xl bg-card border border-border text-foreground font-body font-medium text-sm hover:bg-background hover:border-border transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-70"
               >
                 {googleLoading ? (
                   <div className="w-5 h-5 border-2 border-border border-t-slate-700 rounded-full animate-spin" />
@@ -459,7 +459,7 @@ export default function SignInPage() {
               </button>
             </motion.div>
 
-            <motion.p variants={itemVariants} className="mt-7 text-center -body text-sm text-muted-foreground">
+            <motion.p variants={itemVariants} className="mt-7 text-center font-body text-sm text-muted-foreground">
               {mode === "signup" ? "Already have an account? " : "Don't have an account? "}
               <button
                 type="button"
@@ -479,7 +479,7 @@ export default function SignInPage() {
             className="mt-6 flex justify-center gap-2 text-cream/85"
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span className="text-[11px] -body tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
+            <span className="text-[11px] font-body tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
               Secure & private — your practice is yours alone
             </span>
           </motion.div>
