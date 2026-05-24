@@ -1,3 +1,4 @@
+import { createClient } from 'npm:@supabase/supabase-js@2';
 import { gatewayFetch, type PaddleEnv } from '../_shared/paddle.ts';
 
 const responseHeaders = {
@@ -8,12 +9,27 @@ const responseHeaders = {
   },
 };
 
+const anonClient = createClient(
+  Deno.env.get('SUPABASE_URL')!,
+  Deno.env.get('SUPABASE_ANON_KEY')!,
+);
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, responseHeaders);
   }
 
   try {
+    // Require an authenticated caller to prevent unauthenticated quota drain.
+    const token = (req.headers.get('Authorization') ?? '').replace('Bearer ', '');
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, ...responseHeaders });
+    }
+    const { data: userData, error: userErr } = await anonClient.auth.getUser(token);
+    if (userErr || !userData?.user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, ...responseHeaders });
+    }
+
     const { priceId, environment } = await req.json();
     if (!priceId) {
       return new Response(JSON.stringify({ error: 'priceId required' }), {
