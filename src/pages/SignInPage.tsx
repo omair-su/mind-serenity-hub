@@ -224,9 +224,8 @@ export default function SignInPage() {
     <div className="min-h-screen flex flex-col md:flex-row overflow-hidden relative">
       <style dangerouslySetInnerHTML={{
         __html: `
-          @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap');
-          .font-serif-display { font-family: 'Fraunces', serif; letter-spacing: -0.015em; }
-          .-body { font-family: 'Inter', sans-serif; }
+          .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.015em; }
+          .font-body { font-family: 'Karla', system-ui, sans-serif; }
         `,
       }} />
 
