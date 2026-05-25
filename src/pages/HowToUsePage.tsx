@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { Clock, MapPin, Headphones, Brain, Target, Flame, Heart, CheckCircle2, Lightbulb, Shield, Zap } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const principles = [
   {

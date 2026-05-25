@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { foundationSections } from "@/data/courseData";
 import { HelpCircle } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const weekGradients = [
   "from-forest/12 to-sage/5",

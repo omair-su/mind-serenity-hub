@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { ClipboardCheck, PenLine, Sparkles } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 export default function AssessmentPage() {
   const ratingAreas = [
