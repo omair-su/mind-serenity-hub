@@ -24,9 +24,10 @@ function loadProgress(): Set<number> {
 
 export default function VagusNerveResetPage() {
   usePageSEO({
-    title: "Vagus Nerve Reset — 7-Day Nervous System Program | Willow Vibes",
+    title: "Vagus Nerve Reset — 7-Day Nervous System Program",
     description:
       "Calm your nervous system in 7 days with science-backed somatic techniques: physiological sigh, humming, cold-face protocol, 4-7-8 breath, and more.",
+    canonical: "https://willowvibes.com/app/programs/vagus-nerve",
   });
 
   const navigate = useNavigate();

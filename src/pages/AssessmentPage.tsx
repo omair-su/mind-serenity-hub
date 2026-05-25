@@ -1,7 +1,14 @@
 import Layout from "@/components/Layout";
 import { ClipboardCheck, PenLine, Sparkles } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 export default function AssessmentPage() {
+  usePageSEO({
+    title: "Wellness Self-Assessment — Willow Vibes",
+    description:
+      "Rate stress, sleep, focus, and emotional regulation to set a baseline before starting the Willow Vibes 30-day meditation course. Track real change.",
+    canonical: "https://willowvibes.com/course/assessment",
+  });
   const ratingAreas = [
     { label: "Stress Level", desc: "1 = overwhelming, 10 = minimal" },
     { label: "Sleep Quality", desc: "1 = terrible, 10 = deep and restorative" },

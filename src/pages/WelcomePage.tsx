@@ -3,8 +3,15 @@ import Layout from "@/components/Layout";
 import { foundationSections, weeks } from "@/data/courseData";
 import heroImg from "@/assets/hero-meditation.webp";
 import { ArrowRight, Leaf, BookOpen, FlaskConical, Clock, Sparkles, Brain, Heart, Shield, Target, Zap, Sun } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 export default function WelcomePage() {
+  usePageSEO({
+    title: "30-Day Meditation Foundation Course — Willow Vibes",
+    description:
+      "Begin the Willow Vibes 30-day mindfulness and meditation challenge — transform your mind, calm your nervous system, and build a lasting daily practice.",
+    canonical: "https://willowvibes.com/course",
+  });
   const navigate = useNavigate();
 
   return (

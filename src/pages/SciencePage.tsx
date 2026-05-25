@@ -16,10 +16,10 @@ const factGradients = [
 
 export default function SciencePage() {
   usePageSEO({
-    title: "The Science of Meditation — Research-Backed Benefits | Willow Vibes",
+    title: "The Science of Meditation — Willow Vibes",
     description:
       "Decades of neuroscience research on meditation: stress reduction, focus, sleep, emotional regulation, and brain changes. Evidence behind every Willow Vibes practice.",
-    canonical: "https://www.willowvibes.com/science",
+    canonical: "https://willowvibes.com/course/science",
   });
   return (
     <Layout>

@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { Clock, MapPin, Headphones, Brain, Target, Flame, Heart, CheckCircle2, Lightbulb, Shield, Zap } from "lucide-react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const principles = [
   {
@@ -73,6 +74,12 @@ const keys = [
 ];
 
 export default function HowToUsePage() {
+  usePageSEO({
+    title: "How to Use the Willow Vibes Meditation Course",
+    description:
+      "Principles for building a daily meditation habit: consistent time and place, embracing the wandering mind, and trusting the 30-day sequence.",
+    canonical: "https://willowvibes.com/course/how-to-use",
+  });
   return (
     <Layout>
       <div className="animate-fade-in space-y-10">
