@@ -21,6 +21,12 @@ const challengeGradients = [
 ];
 
 export default function ExpectationsPage() {
+  usePageSEO({
+    title: "What to Expect — 30-Day Meditation Journey | Willow Vibes",
+    description:
+      "An honest guide to the 30-day Willow Vibes meditation course — the challenges, breakthroughs, and realistic milestones across each week of practice.",
+    canonical: "https://willowvibes.com/course/expectations",
+  });
   return (
     <Layout>
       <div className="animate-fade-in space-y-10">
