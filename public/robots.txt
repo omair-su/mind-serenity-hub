@@ -19,5 +19,5 @@ Disallow: /sign-in
 Disallow: /reset-password
 Disallow: /onboarding
 
-Sitemap: https://www.willowvibes.com/sitemap.xml
-Host: https://www.willowvibes.com
+Sitemap: https://willowvibes.com/sitemap.xml
+Host: https://willowvibes.com

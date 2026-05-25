@@ -40,10 +40,10 @@ const YEARLY_SAVINGS_PCT = 58;
 export default function PricingPage() {
   const { openCheckout, loading } = usePaddleCheckout();
   usePageSEO({
-    title: "Willow Vibes Pricing — Plus Monthly, Yearly & Lifetime Wellness Access",
+    title: "Willow Vibes Pricing — Plus Monthly, Yearly & Lifetime",
     description:
       "Try Willow Plus free for 7 days. $14.99/mo, $79.99/yr (save 58%), or $149 lifetime. AI coach, sleep stories, sound therapy, SOS care. 14-day money-back guarantee.",
-    canonical: "https://www.willowvibes.com/pricing",
+    canonical: "https://willowvibes.com/pricing",
   });
 
   return (

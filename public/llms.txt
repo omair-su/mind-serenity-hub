@@ -1,0 +1,25 @@
+# Willow Vibes
+
+> All-in-one wellness app: guided meditation, sleep stories, breathwork, AI coaching, mood tracking, and SOS relief — designed to calm the nervous system and build lasting daily practice.
+
+Willow Vibes is a premium meditation and mental wellness platform with a 30-day foundation course, science-backed somatic programs (e.g. Vagus Nerve Reset), and adaptive AI tools. Billing runs through Paddle (Merchant of Record); plans include monthly, yearly, and a one-time Founders Lifetime.
+
+## Pages
+
+- [Home](/): Overview of the Willow Vibes wellness system.
+- [Pricing](/pricing): Plus monthly, yearly, and Founders Lifetime plans with 7-day free trial.
+- [About](/about): Mission, team, and philosophy behind Willow Vibes.
+
+## Course
+
+- [30-Day Foundation](/course): Premium 30-day mindfulness and meditation course overview.
+- [How to Use](/course/how-to-use): Principles for building a daily meditation habit.
+- [The Science](/course/science): Research and neuroscience behind every Willow practice.
+- [What to Expect](/course/expectations): Honest guide to the 30-day journey.
+- [Self Assessment](/course/assessment): Baseline wellness questions to track progress.
+
+## Legal
+
+- [Terms of Service](/legal/terms): Account, subscription, and billing terms.
+- [Privacy Policy](/legal/privacy): Data collection, GDPR / CCPA, payments via Paddle.
+- [Refund Policy](/legal/refund): 14-day money-back guarantee.

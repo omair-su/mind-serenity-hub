@@ -23,12 +23,7 @@ export default function LegalLayout({ title, updated, children }: Props) {
     description:
       SEO_DESCRIPTIONS[title] ??
       `${title} for Willow Vibes — guided meditation, breathwork, and mindfulness.`,
-    canonical: `https://www.willowvibes.com/legal/${title
-      .toLowerCase()
-      .replace(/\s.*/, "")
-      .replace("terms", "terms")
-      .replace("privacy", "privacy")
-      .replace("refund", "refund")}`,
+    canonical: `https://willowvibes.com/legal/${title.toLowerCase().split(" ")[0]}`,
   });
   return (
     <div className="min-h-screen bg-background">

@@ -73,10 +73,10 @@ const values = [
 export default function AboutPage() {
   useScrollReveal();
   usePageSEO({
-    title: "About Willow Vibes — Meditation for Real People with Real Stress",
+    title: "About Willow Vibes — Meditation for Stressed Humans",
     description:
-      "Meet the team and mission behind Willow Vibes. Science-backed meditation, breathwork, and mindfulness — built for stressed, busy humans who need tools that actually work.",
-    canonical: "https://www.willowvibes.com/about",
+      "Meet the team and mission behind Willow Vibes. Science-backed meditation, breathwork, and mindfulness — built for busy humans who need tools that work.",
+    canonical: "https://willowvibes.com/about",
   });
 
   return (
