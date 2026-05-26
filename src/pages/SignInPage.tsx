@@ -205,7 +205,7 @@ export default function SignInPage() {
               setMode("signin");
             }}
             className="w-full h-[52px] rounded-full text-cream font-body font-semibold transition hover:scale-[1.02]"
-            style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
+            style={{ background: "linear-gradient(90deg, hsl(var(--forest)) 0%, hsl(var(--sage-dark)) 100%)", boxShadow: "0 12px 28px -10px hsl(var(--forest) / 0.45)" }}
           >
             Back to sign in
           </button>
@@ -237,7 +237,7 @@ export default function SignInPage() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         {/* Cool navy/violet wash to match landing page palette */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0E2A47]/35 via-[#5B7FE0]/15 to-[#8267D6]/25" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--forest-deep))]/30 via-[hsl(var(--sage))]/10 to-[hsl(var(--forest))]/25" />
         <div className="absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-cream/10 md:to-cream/55" />
       </div>
 
@@ -412,7 +412,7 @@ export default function SignInPage() {
                   type="submit"
                   disabled={isLoading}
                   className="w-full h-[52px] rounded-full text-cream font-body font-semibold text-sm hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                  style={{ background: "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)", boxShadow: "0 12px 28px -10px rgba(91,127,224,0.55)" }}
+                  style={{ background: "linear-gradient(90deg, hsl(var(--forest)) 0%, hsl(var(--sage-dark)) 100%)", boxShadow: "0 12px 28px -10px hsl(var(--forest) / 0.45)" }}
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-cream/30 border-t-white rounded-full animate-spin" />

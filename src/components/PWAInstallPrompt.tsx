@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 
 const FIRST_LAUNCH_KEY = "wv-first-launch-at";
 const DISMISSED_KEY = "wv-install-prompt-dismissed-at";
-const DAYS_BEFORE_PROMPT = 3;
-const DISMISS_COOLDOWN_DAYS = 7;
+const DAYS_BEFORE_PROMPT = 0;
+const DISMISS_COOLDOWN_DAYS = 3;
 
 type BIPEvent = Event & {
   prompt: () => Promise<void>;

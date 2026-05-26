@@ -4,7 +4,8 @@ import PremiumLockModal from "@/components/PremiumLockModal";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Send, Sparkles, Crown, Biohazard, Volume2, Square, Mic, Loader2 } from "lucide-react";
+import { Send, Sparkles, Crown, Volume2, Square, Mic, Loader2 } from "lucide-react";
+import willowSageIcon from "@/assets/logo/willow-sage-icon.png";
 import DOMPurify from "dompurify";
 import { useCoachVoice } from "@/hooks/useCoachVoice";
 import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
@@ -298,8 +299,8 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
           <header className="flex-shrink-0 mb-4 pb-4 border-b border-[hsl(var(--gold))]/25">
             <div className="flex items-center gap-3">
               {/* Monogram — forest with gold ring */}
-              <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--forest))] shadow-[0_8px_24px_-8px_hsl(var(--forest)/0.5)]">
-                <Biohazard className="w-5 h-5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
+              <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--cream))] shadow-[0_8px_24px_-8px_hsl(var(--forest)/0.35)] overflow-hidden">
+                <img src={willowSageIcon} alt="Willow Coach" className="w-10 h-10 object-contain" />
                 <span className="absolute -inset-[3px] rounded-full border border-[hsl(var(--gold))]/50 pointer-events-none" />
               </div>
 
@@ -357,8 +358,8 @@ What's on your mind today? Tap a prompt below, or simply ask.`,
             {messages.map(msg => (
               <div key={msg.id} className="flex gap-3 animate-fade-in">
                 {msg.role === "coach" ? (
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--forest))] mt-0.5">
-                    <Biohazard className="w-3.5 h-3.5 text-[hsl(var(--champagne-light))]" strokeWidth={1.5} />
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--cream))] mt-0.5 overflow-hidden border border-[hsl(var(--gold))]/30">
+                    <img src={willowSageIcon} alt="Willow" className="w-7 h-7 object-contain" />
                   </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[hsl(var(--cream-dark))] border border-[hsl(var(--border))] mt-0.5">

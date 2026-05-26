@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#1a1230" />
+    <meta name="theme-color" content="#2C3E2D" />
     <meta name="color-scheme" content="light dark" />
 
     <!-- Primary Meta Tags -->
@@ -178,7 +178,28 @@
     </script>
   </head>
   <body>
+    <style>
+      #wv-splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#F5F1E8;z-index:9999;transition:opacity .5s ease}
+      #wv-splash.hide{opacity:0;pointer-events:none}
+      #wv-splash img{width:96px;height:96px;border-radius:24px;animation:wv-breathe 2.4s ease-in-out infinite;box-shadow:0 14px 32px -12px rgba(44,62,45,.35)}
+      #wv-splash span{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;letter-spacing:.04em;color:#2C3E2D;opacity:.85}
+      @keyframes wv-breathe{0%,100%{transform:scale(.94);filter:drop-shadow(0 0 0 rgba(111,140,102,0))}50%{transform:scale(1.06);filter:drop-shadow(0 0 22px rgba(111,140,102,.45))}}
+    </style>
+    <div id="wv-splash" aria-hidden="true">
+      <img src="/favicon.png" alt="Willow Vibes" />
+      <span>Willow Vibes</span>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function(){
+        var hidden=false;
+        function hide(){if(hidden)return;hidden=true;var s=document.getElementById('wv-splash');if(!s)return;s.classList.add('hide');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s);},600);}
+        var root=document.getElementById('root');
+        var obs=new MutationObserver(function(){if(root&&root.childElementCount>0){obs.disconnect();hide();}});
+        if(root)obs.observe(root,{childList:true});
+        setTimeout(hide,4000);
+      })();
+    </script>
   </body>
 </html>
