@@ -7,11 +7,13 @@ import ComparisonTable from "@/components/pricing/ComparisonTable";
 import TestimonialCarousel from "@/components/pricing/TestimonialCarousel";
 import GuaranteeSeal from "@/components/pricing/GuaranteeSeal";
 
-const NAVY = "#0E2A47";
-const NAVY_SOFT = "#234063";
-const SLATE = "#5B6B82";
-const VIOLET = "#8267D6";
-const CTA_GRADIENT = "linear-gradient(90deg, #5B7FE0 0%, #8267D6 100%)";
+// Sage luxury palette mapped to design tokens
+const NAVY = "hsl(var(--forest-deep))";
+const NAVY_SOFT = "hsl(var(--forest))";
+const SLATE = "hsl(var(--charcoal-soft))";
+const VIOLET = "hsl(var(--gold-dark))";
+const CTA_GRADIENT = "linear-gradient(135deg, hsl(var(--forest)) 0%, hsl(var(--sage-dark)) 100%)";
+const ACCENT = "hsl(var(--gold-dark))";
 
 const FREE_FEATURES = [
   "7-day taste of the flagship program",
