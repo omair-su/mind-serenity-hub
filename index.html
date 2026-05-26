@@ -192,7 +192,14 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      window.addEventListener('load',function(){setTimeout(function(){var s=document.getElementById('wv-splash');if(s){s.classList.add('hide');setTimeout(function(){s.remove();},600);}},400);});
+      (function(){
+        var hidden=false;
+        function hide(){if(hidden)return;hidden=true;var s=document.getElementById('wv-splash');if(!s)return;s.classList.add('hide');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s);},600);}
+        var root=document.getElementById('root');
+        var obs=new MutationObserver(function(){if(root&&root.childElementCount>0){obs.disconnect();hide();}});
+        if(root)obs.observe(root,{childList:true});
+        setTimeout(hide,4000);
+      })();
     </script>
   </body>
 </html>
