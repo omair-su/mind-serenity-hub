@@ -72,7 +72,7 @@ export default function PricingPage() {
 
       <section className="calm-container calm-container-tight text-center calm-section-sm">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-6" style={{ background: "rgba(130,103,214,0.12)", color: VIOLET }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-6" style={{ background: "hsla(38, 48%, 60%,0.12)", color: VIOLET }}>
             <Sparkles className="w-3 h-3" />
             <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.25em]">Willow Plus</span>
           </div>
@@ -107,7 +107,7 @@ export default function PricingPage() {
               <ul className="space-y-2.5">
                 {FREE_FEATURES.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm font-calm-body" style={{ color: NAVY_SOFT }}>
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#5B7FE0" }} />
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "hsl(var(--forest))" }} />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -126,7 +126,7 @@ export default function PricingPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="calm-card calm-card-lg relative p-6 sm:p-8 flex flex-col md:scale-105 md:-translate-y-2 text-cream border-0"
-            style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px rgba(91,127,224,0.55)" }}
+            style={{ background: CTA_GRADIENT, boxShadow: "0 30px 70px -20px hsla(105, 22%, 45%,0.55)" }}
           >
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-card text-[10px] font-calm-body font-bold uppercase tracking-[0.25em] shadow-md" style={{ color: VIOLET }}>
               ★ Most Popular
@@ -134,7 +134,7 @@ export default function PricingPage() {
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <h3 className="font-calm-display text-xl font-semibold">Plus Yearly</h3>
-                <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full bg-card/95 text-[#5B7FE0]">
+                <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full bg-card/95 text-[hsl(var(--forest))]">
                   Save {YEARLY_SAVINGS_PCT}%
                 </span>
               </div>
@@ -159,7 +159,7 @@ export default function PricingPage() {
               onClick={() => openCheckout({ priceId: "willow_plus_yearly" })}
               disabled={loading}
               className="mt-6 w-full py-3.5 rounded-full bg-card font-calm-body font-bold text-sm hover:scale-[1.02] disabled:opacity-60 flex items-center justify-center gap-2"
-              style={{ color: "#5B7FE0" }}
+              style={{ color: "hsl(var(--forest))" }}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               Start 7-day free trial
@@ -184,7 +184,7 @@ export default function PricingPage() {
               <ul className="space-y-2.5">
                 {PLUS_FEATURES.slice(0, 6).map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm font-calm-body" style={{ color: NAVY_SOFT }}>
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#5B7FE0" }} />
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "hsl(var(--forest))" }} />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -213,7 +213,7 @@ export default function PricingPage() {
         >
           <div className="relative grid md:grid-cols-[1fr_auto] gap-6 items-center">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ background: "rgba(130,103,214,0.12)", color: VIOLET }}>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ background: "hsla(38, 48%, 60%,0.12)", color: VIOLET }}>
                 <InfinityIcon className="w-3 h-3" />
                 <span className="text-[10px] font-calm-body font-bold uppercase tracking-[0.25em]">Founders Lifetime — Limited</span>
               </div>
@@ -233,7 +233,7 @@ export default function PricingPage() {
                 onClick={() => openCheckout({ priceId: "willow_lifetime_onetime" })}
                 disabled={loading}
                 className="w-full md:w-auto px-8 py-3.5 rounded-full text-cream font-calm-body font-bold text-sm hover:scale-[1.03] disabled:opacity-60 inline-flex items-center justify-center gap-2"
-                style={{ background: CTA_GRADIENT, boxShadow: "0 12px 32px -8px rgba(91,127,224,0.5)" }}
+                style={{ background: CTA_GRADIENT, boxShadow: "0 12px 32px -8px hsla(105, 22%, 45%,0.5)" }}
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Claim Lifetime Access
