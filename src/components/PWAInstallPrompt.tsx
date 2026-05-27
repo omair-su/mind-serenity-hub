@@ -34,6 +34,7 @@ export default function PWAInstallPrompt() {
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
   const [open, setOpen] = useState(false);
   const [iosMode, setIosMode] = useState(false);
+  const [manualMode, setManualMode] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -42,12 +43,18 @@ export default function PWAInstallPrompt() {
     const ua = window.navigator.userAgent.toLowerCase();
     const isIOS = /iphone|ipad|ipod/.test(ua);
     const isSafari = /safari/.test(ua) && !/crios|fxios|edgios|opr\//.test(ua);
+    const isMobile = /android|iphone|ipad|ipod|mobile/.test(ua);
+    let manualTimer: number | null = null;
+
+    const canOpenPrompt = () => {
+      const dismissed = Number(localStorage.getItem(DISMISSED_KEY) || "0");
+      const daysSinceDismiss = (Date.now() - dismissed) / (24 * 60 * 60 * 1000);
+      return dismissed === 0 || daysSinceDismiss >= DISMISS_COOLDOWN_DAYS;
+    };
 
     if (isIOS && isSafari) {
       setIosMode(true);
-      const dismissed = Number(localStorage.getItem(DISMISSED_KEY) || "0");
-      const daysSinceDismiss = (Date.now() - dismissed) / (24 * 60 * 60 * 1000);
-      if (dismissed === 0 || daysSinceDismiss >= DISMISS_COOLDOWN_DAYS) {
+      if (canOpenPrompt()) {
         setOpen(true);
       }
     }
@@ -57,6 +64,7 @@ export default function PWAInstallPrompt() {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BIPEvent);
+      setManualMode(false);
       maybeOpen();
     };
 
@@ -71,6 +79,16 @@ export default function PWAInstallPrompt() {
     };
 
     window.addEventListener("beforeinstallprompt", handler);
+
+    if (!isIOS && isMobile) {
+      manualTimer = window.setTimeout(() => {
+        if (!deferred && canOpenPrompt()) {
+          setManualMode(true);
+          setOpen(true);
+        }
+      }, 1800);
+    }
+
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
@@ -87,7 +105,7 @@ export default function PWAInstallPrompt() {
     setOpen(false);
   };
 
-  if (!open || (!deferred && !iosMode)) return null;
+  if (!open || (!deferred && !iosMode && !manualMode)) return null;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-[60] p-4 pointer-events-none">
@@ -101,6 +119,15 @@ export default function PWAInstallPrompt() {
             <>
               <p className="text-xs text-muted-foreground mt-0.5">
                 On iPhone, tap <span className="inline-flex items-center gap-1 font-medium text-foreground"><Share2 className="w-3 h-3" /> Share</span> then choose <span className="font-medium text-foreground">Add to Home Screen</span>.
+              </p>
+              <div className="flex gap-2 mt-3">
+                <Button size="sm" variant="ghost" onClick={onDismiss} className="text-xs h-8">Got it</Button>
+              </div>
+            </>
+          ) : manualMode && !deferred ? (
+            <>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                If your browser does not show the popup, open the browser menu and choose <span className="font-medium text-foreground">Install app</span> or <span className="font-medium text-foreground">Add to Home screen</span>.
               </p>
               <div className="flex gap-2 mt-3">
                 <Button size="sm" variant="ghost" onClick={onDismiss} className="text-xs h-8">Got it</Button>
