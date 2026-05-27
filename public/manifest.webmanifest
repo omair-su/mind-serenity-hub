@@ -2,7 +2,7 @@
   "name": "Willow Vibes",
   "short_name": "Willow Vibes",
   "description": "Willow Vibes — the complete wellness system for mind, body, and sleep. Meditation, breathwork, sleep stories, AI coaching, and sound therapy.",
-  "start_url": "/app",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
