@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star, Heart, BookOpen, MessageCircle, Activity, Music2, Timer, Sun, LineChart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
+import { supabase } from "@/integrations/supabase/client";
 const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
@@ -23,10 +24,11 @@ const SAGE_DEEP = "#7d9b76";
 const FOREST = "#3a4d36";
 const INK = "#1f231d";
 const MUTED = "#6b7268";
+const GOLD = "#c9a84c";
 
 const fontStyles = `
-  .ff-display { font-family: 'Cormorant Garamond', 'Fraunces', Georgia, serif; letter-spacing: -0.015em; }
-  .ff-body { font-family: 'Karla', 'Inter', system-ui, sans-serif; }
+  .ff-display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.015em; }
+  .ff-body { font-family: 'Karla', system-ui, sans-serif; }
   .ff-eyebrow { font-family: 'Karla', system-ui, sans-serif; letter-spacing: 0.32em; text-transform: uppercase; }
 `;
 
@@ -38,6 +40,7 @@ const FOREST_IMG =
   "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -46,6 +49,20 @@ export default function LandingPage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia?.("(display-mode: standalone)").matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+    if (!isStandalone) return;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        navigate("/app", { replace: true });
+      }
+    });
+  }, [navigate]);
 
   const nav = [
     { label: "Philosophy", id: "philosophy" },
@@ -165,6 +182,14 @@ export default function LandingPage() {
 
       {/* ─── Hero ───────────────────────────────────────────────────── */}
       <section id="top" className="relative w-full overflow-hidden" style={{ background: CREAM }}>
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-[38rem]"
+          style={{
+            background:
+              "radial-gradient(circle at 18% 18%, rgba(168,192,160,0.22) 0%, rgba(168,192,160,0) 42%), radial-gradient(circle at 82% 22%, rgba(201,168,76,0.16) 0%, rgba(201,168,76,0) 36%), linear-gradient(180deg, rgba(237,229,215,0.92) 0%, rgba(245,240,232,0) 100%)",
+          }}
+        />
         <div className="max-w-7xl mx-auto px-5 md:px-10 pt-28 md:pt-44 pb-16 md:pb-32">
           <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
             {/* Orb — appears ABOVE text on mobile, right column on desktop */}
@@ -174,6 +199,14 @@ export default function LandingPage() {
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               className="relative order-1 lg:order-2 mx-auto w-[68%] sm:w-[55%] lg:w-full"
             >
+              <div
+                aria-hidden
+                className="absolute -inset-[10%] rounded-full blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(168,192,160,0.36) 0%, rgba(201,168,76,0.18) 38%, rgba(245,240,232,0) 72%)",
+                }}
+              />
               <div
                 className="relative aspect-square w-full rounded-full overflow-hidden"
                 style={{
@@ -229,6 +262,27 @@ export default function LandingPage() {
               <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
                 Premium Mindfulness · Est. 2026
               </p>
+              <div className="flex justify-center lg:justify-start mb-6">
+                <div
+                  className="inline-flex items-center gap-3 rounded-full px-4 py-2"
+                  style={{
+                    background: "rgba(245,240,232,0.72)",
+                    border: "1px solid rgba(125,155,118,0.22)",
+                    boxShadow: "0 12px 36px -24px rgba(58,77,54,0.28)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <LogoIcon size={34} animated />
+                  <div className="text-left leading-none">
+                    <p className="ff-display text-[1.25rem]" style={{ color: INK }}>
+                      Willow <span className="italic" style={{ color: SAGE_DEEP }}>Vibes</span>
+                    </p>
+                    <p className="ff-eyebrow text-[8px] mt-1" style={{ color: MUTED }}>
+                      Luxury calm for modern lives
+                    </p>
+                  </div>
+                </div>
+              </div>
               <h1
                 className="ff-display font-light leading-[0.98] tracking-tight"
                 style={{ color: INK, fontSize: "clamp(2.5rem, 7.5vw, 6.5rem)" }}
@@ -277,6 +331,26 @@ export default function LandingPage() {
                   <Star className="w-3.5 h-3.5" style={{ color: SAGE_DEEP }} /> 4.9 / 5 · 10k+ practicing
                 </span>
               </div>
+              <div className="mt-7 flex flex-wrap justify-center lg:justify-start gap-2.5">
+                {[
+                  "Breathwork Studio",
+                  "Sleep Stories",
+                  "SOS Rescue",
+                  "Private AI Coach",
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="ff-body text-[12px] px-3 py-1.5 rounded-full"
+                    style={{
+                      color: FOREST,
+                      background: "rgba(220,229,212,0.65)",
+                      border: "1px solid rgba(125,155,118,0.22)",
+                    }}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           </div>
         </div>
@@ -295,7 +369,7 @@ export default function LandingPage() {
               <span className="ff-eyebrow text-[12px]" style={{ letterSpacing: "0.3em" }}>WIRED</span>
               <span className="ff-display italic text-[20px]">Architectural Digest</span>
             </div>
-            <p className="ff-eyebrow text-[9px]" style={{ color: SAGE_DEEP }}>★ 4.9 / 5</p>
+            <p className="ff-eyebrow text-[9px]" style={{ color: GOLD }}>★ 4.9 / 5</p>
           </div>
         </div>
       </section>
