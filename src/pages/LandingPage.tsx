@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, ArrowRight, Check, Star, Heart, BookOpen, MessageCircle, Activity, Music2, Timer, Sun, LineChart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
+import { supabase } from "@/integrations/supabase/client";
 const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
@@ -39,6 +40,7 @@ const FOREST_IMG =
   "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -47,6 +49,20 @@ export default function LandingPage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia?.("(display-mode: standalone)").matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+    if (!isStandalone) return;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        navigate("/app", { replace: true });
+      }
+    });
+  }, [navigate]);
 
   const nav = [
     { label: "Philosophy", id: "philosophy" },
