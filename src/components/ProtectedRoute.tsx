@@ -22,11 +22,27 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
 
   useEffect(() => {
     let cancelled = false;
+    const initFallback = window.setTimeout(() => {
+      if (!cancelled && checkedUserId.current === null) {
+        setStatus("unauthed");
+      }
+    }, 2500);
 
     // Resolve onboarding status for a known session. Safe to call outside of
     // onAuthStateChange (no auth-lock deadlock).
     const resolveOnboarding = async (userId: string) => {
-      let complete = !!getProfile().onboardingComplete;
+      const local = getProfile();
+      const complete = !!local.onboardingComplete;
+
+      // Never block entry to the app on a network/database round-trip.
+      // Returning users should land immediately; if we later confirm onboarding
+      // is incomplete we can still route them to the onboarding flow.
+      setStatus("authed");
+
+      if (allowIncompleteOnboarding || complete) {
+        return;
+      }
+
       try {
         const { data } = await supabase
           .from("profiles")
@@ -35,17 +51,16 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
           .maybeSingle();
         const cloudComplete = !!(data?.onboarding_answers && Object.keys(data.onboarding_answers as object).length > 0);
         if (cloudComplete) {
-          complete = true;
-          const local = getProfile();
           if (!local.onboardingComplete) {
             saveProfile({ ...local, onboardingComplete: true });
           }
+          return;
         }
       } catch {
         /* network — keep local value */
       }
       if (cancelled) return;
-      setStatus(complete || allowIncompleteOnboarding ? "authed" : "needs-onboarding");
+      setStatus("needs-onboarding");
     };
 
     // 1) Subscribe FIRST so we don't miss INITIAL_SESSION.
@@ -54,6 +69,7 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
     //    any DB work to a microtask via setTimeout(0).
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (cancelled) return;
+      window.clearTimeout(initFallback);
       if (!session) {
         checkedUserId.current = null;
         setStatus("unauthed");
@@ -71,6 +87,7 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
     // 2) Then read the current session for the initial render.
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (cancelled) return;
+      window.clearTimeout(initFallback);
       if (!session) {
         setStatus("unauthed");
         return;
@@ -82,9 +99,10 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
 
     return () => {
       cancelled = true;
+      window.clearTimeout(initFallback);
       sub.subscription.unsubscribe();
     };
-  }, [allowIncompleteOnboarding, location.pathname]);
+  }, [allowIncompleteOnboarding]);
 
   if (status === "loading") {
     return (
