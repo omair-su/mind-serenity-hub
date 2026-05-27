@@ -41,7 +41,7 @@ export default function PWAInstallPrompt() {
 
     const ua = window.navigator.userAgent.toLowerCase();
     const isIOS = /iphone|ipad|ipod/.test(ua);
-    const isSafari = /safari/.test(ua) && !/crios|fxios|edgios|opr"/.test(ua);
+    const isSafari = /safari/.test(ua) && !/crios|fxios|edgios|opr\//.test(ua);
 
     if (isIOS && isSafari) {
       setIosMode(true);
