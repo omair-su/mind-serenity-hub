@@ -89,7 +89,10 @@ export default function PWAInstallPrompt() {
       }, 1800);
     }
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      if (manualTimer) window.clearTimeout(manualTimer);
+    };
   }, []);
 
   const onInstall = async () => {
