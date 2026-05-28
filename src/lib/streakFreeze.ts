@@ -33,6 +33,35 @@ function readStore(): FreezeStore {
 
 function writeStore(s: FreezeStore) {
   try { localStorage.setItem(FREEZES_KEY, JSON.stringify(s)); } catch {}
+  // Mirror to cloud — fire and forget
+  try {
+    const used = JSON.parse(localStorage.getItem(FREEZE_USED_KEY) || "[]");
+    upsertUserStreak({
+      freezes_available: s.available,
+      last_grant_week: s.lastGrantWeek,
+      used_freeze_dates: Array.isArray(used) ? used : [],
+    }).catch(() => {});
+  } catch {}
+}
+
+/**
+ * Pull server-side streak state into localStorage cache. Call once after sign-in.
+ */
+export async function hydrateStreakFromCloud(): Promise<void> {
+  try {
+    const remote = await fetchUserStreak();
+    if (!remote) return;
+    if (remote.last_grant_week) {
+      writeStoreLocalOnly({ available: remote.freezes_available, lastGrantWeek: remote.last_grant_week });
+    }
+    if (Array.isArray(remote.used_freeze_dates)) {
+      localStorage.setItem(FREEZE_USED_KEY, JSON.stringify(remote.used_freeze_dates));
+    }
+  } catch {}
+}
+
+function writeStoreLocalOnly(s: FreezeStore) {
+  try { localStorage.setItem(FREEZES_KEY, JSON.stringify(s)); } catch {}
 }
 
 /**
