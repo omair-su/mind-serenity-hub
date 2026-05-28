@@ -1,6 +1,8 @@
 // Streak Freeze tokens — protect a missed day from breaking your streak.
 // One free token granted per ISO week; up to 3 stored at a time.
-// Pure client-side (localStorage). No DB schema needed for v1.
+// LocalStorage is the fast cache; Supabase is the cross-device source of truth.
+
+import { fetchUserStreak, upsertUserStreak } from "./cloudSync";
 
 const FREEZES_KEY = "wv-streak-freezes";
 const FREEZE_GRANTS_KEY = "wv-streak-freeze-grants";
@@ -30,6 +32,35 @@ function readStore(): FreezeStore {
 }
 
 function writeStore(s: FreezeStore) {
+  try { localStorage.setItem(FREEZES_KEY, JSON.stringify(s)); } catch {}
+  // Mirror to cloud — fire and forget
+  try {
+    const used = JSON.parse(localStorage.getItem(FREEZE_USED_KEY) || "[]");
+    upsertUserStreak({
+      freezes_available: s.available,
+      last_grant_week: s.lastGrantWeek,
+      used_freeze_dates: Array.isArray(used) ? used : [],
+    }).catch(() => {});
+  } catch {}
+}
+
+/**
+ * Pull server-side streak state into localStorage cache. Call once after sign-in.
+ */
+export async function hydrateStreakFromCloud(): Promise<void> {
+  try {
+    const remote = await fetchUserStreak();
+    if (!remote) return;
+    if (remote.last_grant_week) {
+      writeStoreLocalOnly({ available: remote.freezes_available, lastGrantWeek: remote.last_grant_week });
+    }
+    if (Array.isArray(remote.used_freeze_dates)) {
+      localStorage.setItem(FREEZE_USED_KEY, JSON.stringify(remote.used_freeze_dates));
+    }
+  } catch {}
+}
+
+function writeStoreLocalOnly(s: FreezeStore) {
   try { localStorage.setItem(FREEZES_KEY, JSON.stringify(s)); } catch {}
 }
 

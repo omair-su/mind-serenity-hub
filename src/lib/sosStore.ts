@@ -60,6 +60,8 @@ export function isFavorite(toolId: string): boolean {
 }
 
 // ─── Trusted contacts ──────────────────────────────────────────────────────
+import { fetchSOSContacts, upsertSOSContact, deleteSOSContactCloud } from "./cloudSync";
+
 export function getContacts(): TrustedContact[] {
   return safeRead<TrustedContact[]>(KEY_CONTACTS, []);
 }
@@ -68,9 +70,21 @@ export function saveContact(c: TrustedContact) {
   const idx = list.findIndex(x => x.id === c.id);
   if (idx >= 0) list[idx] = c; else list.unshift(c);
   safeWrite(KEY_CONTACTS, list);
+  upsertSOSContact({ id: c.id, name: c.name, phone: c.phone, relation: c.relation }).catch(() => {});
 }
 export function deleteContact(id: string) {
   safeWrite(KEY_CONTACTS, getContacts().filter(c => c.id !== id));
+  deleteSOSContactCloud(id).catch(() => {});
+}
+
+/** Pull server-side contacts into local cache. Call once after sign-in. */
+export async function hydrateContactsFromCloud(): Promise<void> {
+  const remote = await fetchSOSContacts();
+  if (!remote) return;
+  const mapped: TrustedContact[] = remote.map(c => ({
+    id: c.id, name: c.name, phone: c.phone ?? undefined, relation: c.relation ?? undefined,
+  }));
+  safeWrite(KEY_CONTACTS, mapped);
 }
 
 // ─── Insights ──────────────────────────────────────────────────────────────

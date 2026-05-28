@@ -323,3 +323,67 @@ export async function syncDayToMood(
     moodSyncedAt: new Date().toISOString(),
   };
 }
+
+// ============ Streak Freezes ============
+export interface CloudStreak {
+  freezes_available: number;
+  last_grant_week: string;
+  used_freeze_dates: string[];
+}
+
+export async function fetchUserStreak(): Promise<CloudStreak | null> {
+  const uid = await getUserId();
+  if (!uid) return null;
+  const { data, error } = await supabase
+    .from("user_streaks")
+    .select("freezes_available, last_grant_week, used_freeze_dates")
+    .eq("user_id", uid)
+    .maybeSingle();
+  if (error) { console.warn("[fetchUserStreak]", error.message); return null; }
+  return (data as CloudStreak) ?? null;
+}
+
+export async function upsertUserStreak(s: CloudStreak): Promise<void> {
+  const uid = await getUserId();
+  if (!uid) return;
+  const { error } = await supabase
+    .from("user_streaks")
+    .upsert({ user_id: uid, ...s }, { onConflict: "user_id" });
+  if (error) console.warn("[upsertUserStreak]", error.message);
+}
+
+// ============ SOS Contacts ============
+export interface CloudSOSContact {
+  id: string;
+  name: string;
+  phone?: string | null;
+  relation?: string | null;
+}
+
+export async function fetchSOSContacts(): Promise<CloudSOSContact[] | null> {
+  const uid = await getUserId();
+  if (!uid) return null;
+  const { data, error } = await supabase
+    .from("sos_contacts")
+    .select("id, name, phone, relation")
+    .eq("user_id", uid)
+    .order("created_at", { ascending: false });
+  if (error) { console.warn("[fetchSOSContacts]", error.message); return null; }
+  return (data as CloudSOSContact[]) ?? [];
+}
+
+export async function upsertSOSContact(c: CloudSOSContact): Promise<void> {
+  const uid = await getUserId();
+  if (!uid) return;
+  const { error } = await supabase
+    .from("sos_contacts")
+    .upsert({ id: c.id, user_id: uid, name: c.name, phone: c.phone ?? null, relation: c.relation ?? null }, { onConflict: "id" });
+  if (error) console.warn("[upsertSOSContact]", error.message);
+}
+
+export async function deleteSOSContactCloud(id: string): Promise<void> {
+  const uid = await getUserId();
+  if (!uid) return;
+  const { error } = await supabase.from("sos_contacts").delete().eq("id", id).eq("user_id", uid);
+  if (error) console.warn("[deleteSOSContactCloud]", error.message);
+}

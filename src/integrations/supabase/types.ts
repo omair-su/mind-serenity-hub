@@ -392,6 +392,36 @@ export type Database = {
         }
         Relationships: []
       }
+      sos_contacts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          phone: string | null
+          relation: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          phone?: string | null
+          relation?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          relation?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -487,6 +517,33 @@ export type Database = {
           streak_days?: number
           total_minutes?: number
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_streaks: {
+        Row: {
+          created_at: string
+          freezes_available: number
+          last_grant_week: string
+          updated_at: string
+          used_freeze_dates: string[]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          freezes_available?: number
+          last_grant_week?: string
+          updated_at?: string
+          used_freeze_dates?: string[]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          freezes_available?: number
+          last_grant_week?: string
+          updated_at?: string
+          used_freeze_dates?: string[]
           user_id?: string
         }
         Relationships: []
