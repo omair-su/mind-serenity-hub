@@ -119,8 +119,9 @@ export default function SignInPage() {
           description: `We sent a confirmation link to ${email}.`,
         });
       } else {
-        // Brand-new account → run onboarding before landing on the dashboard.
-        navigate("/onboarding", { replace: true });
+        // Session created immediately (auto-confirm on) → straight to the app.
+        // ProtectedRoute will route to /onboarding if it's still incomplete.
+        navigate(safeRedirect, { replace: true });
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
