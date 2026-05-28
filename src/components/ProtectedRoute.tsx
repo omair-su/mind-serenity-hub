@@ -80,7 +80,12 @@ export default function ProtectedRoute({ children, allowIncompleteOnboarding = f
       if (checkedUserId.current === session.user.id) return;
       checkedUserId.current = session.user.id;
       setTimeout(() => {
-        if (!cancelled) resolveOnboarding(session.user.id);
+        if (!cancelled) {
+          resolveOnboarding(session.user.id);
+          // Hydrate cross-device state from cloud (non-blocking)
+          import("@/lib/streakFreeze").then(m => m.hydrateStreakFromCloud?.()).catch(() => {});
+          import("@/lib/sosStore").then(m => m.hydrateContactsFromCloud?.()).catch(() => {});
+        }
       }, 0);
     });
 
