@@ -1,6 +1,8 @@
 // Streak Freeze tokens — protect a missed day from breaking your streak.
 // One free token granted per ISO week; up to 3 stored at a time.
-// Pure client-side (localStorage). No DB schema needed for v1.
+// LocalStorage is the fast cache; Supabase is the cross-device source of truth.
+
+import { fetchUserStreak, upsertUserStreak } from "./cloudSync";
 
 const FREEZES_KEY = "wv-streak-freezes";
 const FREEZE_GRANTS_KEY = "wv-streak-freeze-grants";
