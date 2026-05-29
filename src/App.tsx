@@ -93,6 +93,8 @@ function AppInner() {
         <Routes>
           {/* Public */}
           <Route path="/" element={<LandingPage />} />
+          {/* Spec alias for the Vagus Nerve Reset program */}
+          <Route path="/program/vagus-nerve-reset" element={Guarded(<VagusNerveResetPage />)} />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/about" element={<AboutPage />} />
