@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Play, Lock, Crown, Check, Sparkles, ChevronDown } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { getProgramById } from "@/data/programs";
@@ -56,7 +57,35 @@ export default function ProgramHomePage() {
     description:
       program?.description ??
       "Multi-day science-backed wellness mini-programs from Willow Vibes.",
+    canonical: program
+      ? `https://willowvibes.com/app/programs/${program.id}`
+      : undefined,
   });
+
+  useJsonLd(
+    program
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: program.title,
+          description: program.description,
+          provider: {
+            "@type": "Organization",
+            name: "Willow Vibes",
+            sameAs: "https://willowvibes.com",
+          },
+          educationalLevel: "Beginner",
+          inLanguage: "en",
+          url: `https://willowvibes.com/app/programs/${program.id}`,
+          hasCourseInstance: {
+            "@type": "CourseInstance",
+            courseMode: "Online",
+            courseWorkload: `PT${program.days.length * 5}M`,
+          },
+        }
+      : null,
+    `course-${program?.id ?? "none"}`,
+  );
 
   if (!program) {
     return (

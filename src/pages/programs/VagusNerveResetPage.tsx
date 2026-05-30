@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { VAGUS_NERVE_RESET } from "@/data/programs/vagusNerveReset";
@@ -56,6 +57,30 @@ export default function VagusNerveResetPage() {
       "Reset your nervous system in 7 days with science-backed somatic techniques: extended-exhale breathing, humming, cold-face protocol, gentle movement, body scan, laughter, and integration.",
     canonical: "https://willowvibes.com/app/programs/vagus-nerve",
   });
+
+  useJsonLd(
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      name: "7-Day Vagus Nerve Reset",
+      description:
+        "Science-backed somatic program that resets the nervous system in 7 days through breathwork, humming, cold-face protocol, movement, body scan, laughter, and integration.",
+      provider: {
+        "@type": "Organization",
+        name: "Willow Vibes",
+        sameAs: "https://willowvibes.com",
+      },
+      educationalLevel: "Beginner",
+      inLanguage: "en",
+      url: "https://willowvibes.com/app/programs/vagus-nerve",
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "Online",
+        courseWorkload: "PT35M",
+      },
+    },
+    "course-vagus-nerve",
+  );
 
   const navigate = useNavigate();
   const { isPremium } = useIsPremium();

@@ -15,6 +15,7 @@ import WillowLogo from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
+import { captureReferralFromUrl, applyPendingReferral } from "@/lib/referrals";
 import signinBg from "@/assets/sage-auth-bg.jpg";
 
 type Mode = "signin" | "signup";
@@ -40,14 +41,25 @@ export default function SignInPage() {
     ? redirectParam
     : "/app";
 
+  // Capture ?ref= from invite links before any redirect strips it
+  useEffect(() => {
+    captureReferralFromUrl();
+  }, []);
+
   // If already signed in, bounce to redirect target (default /app)
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate(safeRedirect, { replace: true });
+      if (data.session) {
+        applyPendingReferral(data.session.user.id);
+        navigate(safeRedirect, { replace: true });
+      }
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) navigate(safeRedirect, { replace: true });
+      if (session) {
+        applyPendingReferral(session.user.id);
+        navigate(safeRedirect, { replace: true });
+      }
     });
 
     return () => sub.subscription.unsubscribe();

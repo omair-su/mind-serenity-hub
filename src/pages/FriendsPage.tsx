@@ -2,11 +2,12 @@
 // and view streaks of accepted friends who opted in to share.
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { UserPlus, Flame, Clock, Loader2, X, Check, Crown } from "lucide-react";
+import { UserPlus, Flame, Clock, Loader2, X, Check, Crown, Link2, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
 import { supabase } from "@/integrations/supabase/client";
+import { buildReferralUrl } from "@/lib/referrals";
 
 interface FriendRow {
   id: string;
@@ -176,10 +177,52 @@ export default function FriendsPage() {
           </p>
         </header>
 
+        {/* Shareable invite link */}
+        {me && (
+          <div className="rounded-3xl border border-[hsl(var(--gold)/0.3)] bg-gradient-to-br from-[hsl(var(--cream))] to-[hsl(var(--cream)/0.4)] p-5 sm:p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Share2 className="w-4 h-4 text-[hsl(var(--gold-dark))]" />
+              <p className="text-[10px] font-body font-bold tracking-[0.25em] uppercase text-[hsl(var(--gold-dark))]">
+                Your invite link
+              </p>
+            </div>
+            <p className="font-body text-sm text-muted-foreground mb-3">
+              Share this link — anyone who signs up through it joins your circle automatically.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex-1 px-4 py-2.5 rounded-full border border-border bg-background text-xs font-body text-foreground truncate flex items-center gap-2">
+                <Link2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                {buildReferralUrl(me)}
+              </div>
+              <button
+                onClick={async () => {
+                  const url = buildReferralUrl(me);
+                  try {
+                    if (navigator.share) {
+                      await navigator.share({
+                        title: "Join me on Willow Vibes",
+                        text: "I've been practicing on Willow Vibes — join me and we'll keep each other accountable.",
+                        url,
+                      });
+                    } else {
+                      await navigator.clipboard.writeText(url);
+                      toast.success("Invite link copied!");
+                    }
+                  } catch {/* user cancelled share */}
+                }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[hsl(var(--gold-dark))] to-[hsl(var(--gold))] text-cream font-body font-semibold text-sm hover:scale-105 active:scale-95 transition-transform"
+              >
+                <Share2 className="w-4 h-4" />
+                Share
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Invite */}
         <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
           <label className="text-xs font-body font-semibold text-foreground">
-            Invite a friend
+            Or invite by email
           </label>
           <div className="mt-3 flex flex-col sm:flex-row gap-2">
             <input

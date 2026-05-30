@@ -585,6 +585,7 @@ export type Database = {
       }
     }
     Functions: {
+      accept_referral: { Args: { _inviter: string }; Returns: string }
       get_friend_stats: {
         Args: { _friend_user_id: string }
         Returns: {
