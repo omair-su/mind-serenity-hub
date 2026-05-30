@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Play, Lock, Crown, Check, Sparkles, ChevronDown } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { getProgramById } from "@/data/programs";
