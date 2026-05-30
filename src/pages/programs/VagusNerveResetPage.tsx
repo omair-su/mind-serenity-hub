@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { useBrandedVideo } from "@/hooks/useBrandedVideo";
 import { VAGUS_NERVE_RESET } from "@/data/programs/vagusNerveReset";
