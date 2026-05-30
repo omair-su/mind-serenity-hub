@@ -58,6 +58,30 @@ export default function VagusNerveResetPage() {
     canonical: "https://willowvibes.com/app/programs/vagus-nerve",
   });
 
+  useJsonLd(
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      name: "7-Day Vagus Nerve Reset",
+      description:
+        "Science-backed somatic program that resets the nervous system in 7 days through breathwork, humming, cold-face protocol, movement, body scan, laughter, and integration.",
+      provider: {
+        "@type": "Organization",
+        name: "Willow Vibes",
+        sameAs: "https://willowvibes.com",
+      },
+      educationalLevel: "Beginner",
+      inLanguage: "en",
+      url: "https://willowvibes.com/app/programs/vagus-nerve",
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "Online",
+        courseWorkload: "PT35M",
+      },
+    },
+    "course-vagus-nerve",
+  );
+
   const navigate = useNavigate();
   const { isPremium } = useIsPremium();
   const program = VAGUS_NERVE_RESET;
