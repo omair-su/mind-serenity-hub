@@ -124,6 +124,12 @@ export default function SignInPage() {
         return;
       }
 
+      // Fire signup north-star event (deduped by analytics module)
+      try {
+        const { trackNorthStar } = await import("@/lib/analytics");
+        trackNorthStar("signup", { method: "email" });
+      } catch {}
+
       if (!data.session) {
         setConfirmationSent(true);
         toast({
