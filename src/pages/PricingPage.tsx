@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Check, Sparkles, ArrowLeft, Infinity as InfinityIcon, Loader2 } from "lucide-react";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { usePageSEO } from "@/hooks/usePageSEO";
+import { trackNorthStar } from "@/lib/analytics";
 import ComparisonTable from "@/components/pricing/ComparisonTable";
 import TestimonialCarousel from "@/components/pricing/TestimonialCarousel";
 import GuaranteeSeal from "@/components/pricing/GuaranteeSeal";
@@ -47,6 +49,7 @@ export default function PricingPage() {
       "Try Willow Plus free for 7 days. $14.99/mo, $79.99/yr (save 58%), or $149 lifetime. AI coach, sleep stories, sound therapy, SOS care. 14-day money-back guarantee.",
     canonical: "https://willowvibes.com/pricing",
   });
+  useEffect(() => { trackNorthStar("premium_view", { source: "pricing_page" }, { oncePerDevice: false }); }, []);
 
   return (
     <div className="min-h-screen bg-card" style={{ color: NAVY }}>

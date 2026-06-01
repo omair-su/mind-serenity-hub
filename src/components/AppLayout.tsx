@@ -4,7 +4,9 @@ import SoundMixer from "@/components/SoundMixer";
 import CommandPalette from "@/components/CommandPalette";
 import ThemeToggle from "@/components/ThemeToggle";
 import StreakRecoveryModal from "@/components/dashboard/StreakRecoveryModal";
+import OnboardingReminderSheet from "@/components/dashboard/OnboardingReminderSheet";
 import GlobalMiniPlayer from "@/components/GlobalMiniPlayer";
+import AnalyticsBootstrap from "@/components/AnalyticsBootstrap";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +22,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <CommandPalette />
       <ThemeToggle />
       <StreakRecoveryModal />
+      <OnboardingReminderSheet />
       <GlobalMiniPlayer />
+      <AnalyticsBootstrap />
     </div>
   );
 }

@@ -107,6 +107,11 @@ export async function finalizeOnboarding(profile: UserProfile, startedAt: number
   // Force an immediate, awaited sync so the next route guard sees cloud truth.
   await pushOnce(finished, 3);
   track({ type: "onboarding_completed", durationMs: Date.now() - startedAt });
+  // North-star instrumentation (deduped, one-shot)
+  try {
+    const { trackNorthStar } = await import("@/lib/analytics");
+    trackNorthStar("onboarding_complete", { durationMs: Date.now() - startedAt });
+  } catch {}
   return { synced: !lastError, error: lastError };
 }
 
