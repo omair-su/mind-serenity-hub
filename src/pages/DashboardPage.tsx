@@ -26,6 +26,9 @@ import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
 import WeeklyRecapCard from "@/components/dashboard/WeeklyRecapCard";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
 import DailyDropCard from "@/components/dashboard/DailyDropCard";
+import QuickStartPanel from "@/components/dashboard/QuickStartPanel";
+import ProgramProgressRing from "@/components/dashboard/ProgramProgressRing";
+import StreakCalendar from "@/components/dashboard/StreakCalendar";
 import { SectionHeader, StatTile, LuxeCard } from "@/components/ui-premium";
 
 
@@ -108,6 +111,10 @@ export default function DashboardPage() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
+            <QuickStartPanel onQuickSession={() => setShowPlayer(true)} />
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
             <DailyDropCard />
           </motion.div>
 
@@ -181,6 +188,11 @@ export default function DashboardPage() {
             <StatTile label="Minutes" value={totalMins} icon={Clock} tone="neutral" />
             <StatTile label="Streak" value={streak} unit="d" icon={Flame} tone="gold" />
             <StatTile label="Badges" value={earnedCount} icon={Trophy} tone="forest" />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ProgramProgressRing />
+            <StreakCalendar />
           </motion.div>
 
           <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-5 gap-4">
