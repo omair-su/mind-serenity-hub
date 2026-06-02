@@ -25,19 +25,29 @@ import WelcomeModal from "@/components/dashboard/WelcomeModal";
 import PushPrefsPrompt from "@/components/dashboard/PushPrefsPrompt";
 import WeeklyRecapCard from "@/components/dashboard/WeeklyRecapCard";
 import StreakFreezeCard from "@/components/dashboard/StreakFreezeCard";
-import LiveNowPulse from "@/components/dashboard/LiveNowPulse";
 import DailyDropCard from "@/components/dashboard/DailyDropCard";
+import { SectionHeader, StatTile, LuxeCard } from "@/components/ui-premium";
 
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 };
 const itemVariants = {
   hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: easing } },
 };
+
+function GoldDivider() {
+  return (
+    <div className="flex items-center gap-3 my-2 opacity-70" aria-hidden>
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[hsl(var(--gold)/0.4)] to-transparent" />
+      <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]" />
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[hsl(var(--gold)/0.4)] to-transparent" />
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const location = useLocation();
@@ -66,28 +76,16 @@ export default function DashboardPage() {
   });
   const [showPlayer, setShowPlayer] = useState(false);
 
-  const stats = [
-    { label: "Days Done", value: `${completed.length}/30`, icon: Target },
-    { label: "Minutes", value: `${totalMins}`, icon: Clock },
-    { label: "Streak", value: `${streak}d`, icon: Flame },
-    { label: "Badges", value: `${earnedCount}`, icon: Trophy },
-  ];
-
   return (
     <AppLayout>
       <motion.div
         key={location.key}
-        className="space-y-8"
+        className="space-y-12"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Live presence pulse */}
-        <motion.div variants={itemVariants} className="flex justify-center sm:justify-start">
-          <LiveNowPulse />
-        </motion.div>
-
-        {/* Hero */}
+        {/* ───────────── HERO ───────────── */}
         <motion.div variants={itemVariants}>
           <HeroCinema
             greeting={greeting}
@@ -99,190 +97,242 @@ export default function DashboardPage() {
           />
         </motion.div>
 
-        {/* Daily Drop */}
-        <motion.div variants={itemVariants}>
-          <DailyDropCard />
-        </motion.div>
+        {/* ───────────── TODAY ───────────── */}
+        <section className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <SectionHeader
+              eyebrow="Today"
+              title="Your sanctuary, this morning"
+              description="A daily drop, your focus session and the rituals that anchor you."
+            />
+          </motion.div>
 
-        {/* Wellness ring + compact stat strip */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-          <div className="lg:col-span-3">
-            <WellnessRing wellness={wellness} level={wellnessLevel} />
-          </div>
-          <div className="lg:col-span-2 grid grid-cols-2 gap-3">
-            {stats.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.06, duration: 0.4 }}
-                className="calm-widget p-4"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-9 h-9 rounded-xl bg-[hsl(var(--accent))] flex items-center justify-center">
-                    <s.icon className="w-4 h-4 text-[hsl(var(--primary))]" />
-                  </span>
-                  <span className="calm-eyebrow-sm">{s.label}</span>
+          <motion.div variants={itemVariants}>
+            <DailyDropCard />
+          </motion.div>
+
+          {nextDayData && (
+            <motion.div variants={itemVariants}>
+              <LuxeCard variant="forest" className="relative overflow-hidden p-0">
+                {/* gold corner ornaments */}
+                <span className="pointer-events-none absolute top-4 left-4 w-10 h-10 border-l border-t border-[hsl(var(--gold)/0.55)] rounded-tl-2xl" />
+                <span className="pointer-events-none absolute top-4 right-4 w-10 h-10 border-r border-t border-[hsl(var(--gold)/0.55)] rounded-tr-2xl" />
+                <span className="pointer-events-none absolute bottom-4 left-4 w-10 h-10 border-l border-b border-[hsl(var(--gold)/0.55)] rounded-bl-2xl" />
+                <span className="pointer-events-none absolute bottom-4 right-4 w-10 h-10 border-r border-b border-[hsl(var(--gold)/0.55)] rounded-br-2xl" />
+                <span className="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.18)] blur-3xl" />
+                <span className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-[hsl(var(--sage)/0.15)] blur-3xl" />
+
+                <div className="relative p-8 md:p-10">
+                  <div className="flex items-start justify-between gap-6">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-bold tracking-[0.32em] uppercase text-[hsl(var(--gold-light))]">
+                        Today's Focus · Day {nextDay}
+                      </p>
+                      <h3 className="font-display text-3xl md:text-[34px] text-cream mt-3 leading-tight">
+                        {nextDayData.title}
+                      </h3>
+                      <p className="font-body text-cream/70 mt-3 max-w-xl text-sm md:text-base leading-relaxed">
+                        A guided session crafted for {nextDayData.difficulty.toLowerCase()} practitioners. Settle in and let the breath lead the way.
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2 mt-5">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream/10 backdrop-blur-sm text-[11px] font-body text-cream/90 border border-cream/15">
+                          <Clock className="w-3 h-3" /> {nextDayData.duration}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[hsl(var(--gold)/0.18)] text-[11px] font-body text-[hsl(var(--gold-light))] border border-[hsl(var(--gold)/0.35)]">
+                          <Target className="w-3 h-3" /> {nextDayData.difficulty}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="hidden sm:flex w-16 h-16 rounded-2xl bg-gradient-to-br from-[hsl(var(--gold)/0.3)] to-[hsl(var(--gold)/0.05)] border border-[hsl(var(--gold)/0.4)] items-center justify-center flex-shrink-0">
+                      <Leaf className="w-7 h-7 text-[hsl(var(--gold-light))]" />
+                    </div>
+                  </div>
+                  <Link
+                    to={`/day/${nextDay}`}
+                    className="group mt-7 inline-flex w-full items-center justify-center gap-2 px-6 py-4 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] text-[hsl(var(--charcoal))] font-body font-bold text-sm shadow-[var(--shadow-gold-val)] hover:brightness-110 transition-all"
+                  >
+                    <Play className="w-4 h-4" /> Begin Session
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
-                <p className="calm-stat-num text-[28px] leading-none mt-3">{s.value}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+              </LuxeCard>
+            </motion.div>
+          )}
 
-        {/* Streak garden + freeze tokens */}
-        {streak > 0 && (
-          <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <StreakGarden streak={streak} />
+          <motion.div variants={itemVariants}>
+            <RitualTriptych />
+          </motion.div>
+        </section>
+
+        <GoldDivider />
+
+        {/* ───────────── PROGRESS ───────────── */}
+        <section className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <SectionHeader
+              eyebrow="Your Practice"
+              title="A quiet record of your devotion"
+              description="Wellness, streaks and milestones — measured gently."
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <StatTile label="Days Done" value={completed.length} unit={`/30`} icon={Target} tone="sage" />
+            <StatTile label="Minutes" value={totalMins} icon={Clock} tone="neutral" />
+            <StatTile label="Streak" value={streak} unit="d" icon={Flame} tone="gold" />
+            <StatTile label="Badges" value={earnedCount} icon={Trophy} tone="forest" />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            <div className="lg:col-span-3">
+              <WellnessRing wellness={wellness} level={wellnessLevel} />
             </div>
-            <div>
-              <StreakFreezeCard />
+            <div className="lg:col-span-2">
+              <WeeklyRecapCard />
             </div>
           </motion.div>
-        )}
 
-        {/* Soft push reminders prompt (day 2+) */}
-        <motion.div variants={itemVariants}>
-          <PushPrefsPrompt />
-        </motion.div>
+          {streak > 0 && (
+            <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2">
+                <StreakGarden streak={streak} />
+              </div>
+              <div>
+                <StreakFreezeCard />
+              </div>
+            </motion.div>
+          )}
 
-        {/* Weekly recap */}
-        <motion.div variants={itemVariants}>
-          <WeeklyRecapCard />
-        </motion.div>
+          <motion.div variants={itemVariants}>
+            <PushPrefsPrompt />
+          </motion.div>
+        </section>
 
-        {/* Today's triptych */}
-        <motion.div variants={itemVariants}>
-          <RitualTriptych />
-        </motion.div>
+        <GoldDivider />
 
-        {/* Today's focus card */}
-        {nextDayData && (
-          <motion.div variants={itemVariants} className="calm-widget calm-widget-lg relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--accent))]/60 via-transparent to-[hsl(var(--primary))]/8 pointer-events-none" />
-            <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-[hsl(var(--primary))]/15 to-transparent rounded-bl-full pointer-events-none" />
-            <div className="relative p-6 sm:p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Today's Focus</p>
-                  <h3 className="calm-widget-title text-2xl sm:text-[28px] mt-2 leading-snug">
-                    Day {nextDay}: {nextDayData.title}
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-2 mt-4">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--accent))] text-xs font-body text-[hsl(var(--accent-foreground))]">
-                      <Clock className="w-3 h-3" /> {nextDayData.duration}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(var(--primary))]/12 text-xs font-body text-[hsl(var(--primary))]">
-                      <Target className="w-3 h-3" /> {nextDayData.difficulty}
+        {/* ───────────── FEATURED PROGRAMS ───────────── */}
+        <section className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <SectionHeader
+              eyebrow="Featured Programs"
+              title="Hand-picked journeys for you"
+              description="Cinematic, science-backed and crafted with care."
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link to="/app/programs/vagus-nerve" className="block group">
+              <LuxeCard variant="gold" className="h-full relative overflow-hidden">
+                <span className="pointer-events-none absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[hsl(var(--gold)/0.25)] blur-3xl" />
+                <div className="relative flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-[hsl(var(--forest))] text-[hsl(var(--gold-light))] flex items-center justify-center shrink-0 shadow-[var(--shadow-gold-val)] group-hover:scale-105 transition-transform">
+                    <Sparkles className="w-7 h-7" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-[hsl(var(--gold-dark))]">Signature · 7 Days</p>
+                    <h3 className="font-display text-2xl text-[hsl(var(--forest-deep))] leading-snug mt-1.5">
+                      Vagus Nerve Reset
+                    </h3>
+                    <p className="font-body text-sm text-charcoal-soft mt-2 leading-relaxed">
+                      A guided 7-day program built around fast nervous-system regulation.
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-[hsl(var(--forest))] group-hover:gap-2.5 transition-all">
+                      Begin program <ArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--sage))]/30 flex items-center justify-center flex-shrink-0">
-                  <Leaf className="w-7 h-7 text-[hsl(var(--primary))]" />
+              </LuxeCard>
+            </Link>
+
+            <Link to="/app/video-library" className="block group">
+              <LuxeCard variant="ghost" className="h-full relative overflow-hidden">
+                <span className="pointer-events-none absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-[hsl(var(--sage)/0.25)] blur-3xl" />
+                <div className="relative flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-card border border-[hsl(var(--sage)/0.4)] text-[hsl(var(--forest))] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <ScanEye className="w-7 h-7" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-[hsl(var(--gold-dark))]">Visual Ritual</p>
+                    <h3 className="font-display text-2xl text-charcoal leading-snug mt-1.5">
+                      Cinematic Video Library
+                    </h3>
+                    <p className="font-body text-sm text-charcoal-soft mt-2 leading-relaxed">
+                      Play cinematic backdrops for breathwork, sleep or deep focus.
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-[hsl(var(--forest))] group-hover:gap-2.5 transition-all">
+                      Open library <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <Link
-                to={`/day/${nextDay}`}
-                className="flex items-center justify-center gap-2 mt-6 w-full py-3.5 rounded-full bg-gradient-to-r from-[hsl(var(--sage-dark))] to-[hsl(var(--primary))] text-cream font-body font-semibold text-sm hover:shadow-[var(--shadow-gold-val)] transition-shadow"
-              >
-                <Play className="w-4 h-4" /> Begin Session <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+              </LuxeCard>
+            </Link>
           </motion.div>
-        )}
 
-        {/* Personalised feed */}
-        <motion.div variants={itemVariants}>
-          <HomeFeed />
-        </motion.div>
+          <motion.div variants={itemVariants}>
+            <Link to="/app/audio-library" className="block group">
+              <LuxeCard variant="forest" className="relative overflow-hidden">
+                <span className="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.18)] blur-3xl" />
+                <div className="relative flex items-center gap-5">
+                  <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--gold))] text-[hsl(var(--charcoal))] flex items-center justify-center shrink-0 shadow-[var(--shadow-gold-val)] group-hover:scale-105 transition-transform">
+                    <Headphones className="w-8 h-8" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold tracking-[0.28em] uppercase text-[hsl(var(--gold-light))]">Premium Audio</p>
+                    <h3 className="font-display text-2xl md:text-[26px] text-cream leading-snug mt-1.5">
+                      Build a playlist for your practice
+                    </h3>
+                    <p className="font-body text-sm text-cream/70 mt-2 leading-relaxed">
+                      Stream sleep stories, masterclasses and focus sessions back-to-back.
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-[hsl(var(--gold-light))] group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
+                </div>
+              </LuxeCard>
+            </Link>
+          </motion.div>
+        </section>
 
-        {/* Audio Library highlight */}
-        <motion.div variants={itemVariants}>
-          <Link
-            to="/app/audio-library"
-            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--primary))]/12 via-[hsl(var(--accent))]/40 to-[hsl(var(--sage))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-foreground text-background flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Headphones className="w-7 h-7" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Premium Audio</p>
-                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
-                  Build a playlist for your practice
-                </h3>
-                <p className="font-body text-sm text-muted-foreground mt-1">
-                  Stream sleep stories, masterclasses & focus sessions back-to-back.
-                </p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
-            </div>
-          </Link>
-        </motion.div>
+        <GoldDivider />
 
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link
-            to="/app/video-library"
-            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--accent))]/30 via-[hsl(var(--primary))]/8 to-[hsl(var(--sage))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-card text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <ScanEye className="w-7 h-7" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">New visual ritual</p>
-                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
-                  Open the calming video library
-                </h3>
-                <p className="font-body text-sm text-muted-foreground mt-1">
-                  Play cinematic backdrops for breathwork, sleep, or focus — with premium scenes locked correctly.
-                </p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
-            </div>
-          </Link>
+        {/* ───────────── FEED ───────────── */}
+        <section className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <SectionHeader
+              eyebrow="For You"
+              title="Recommended next"
+              description="Personalised to where you are in your practice today."
+            />
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <HomeFeed />
+          </motion.div>
+        </section>
 
-          <Link
-            to="/app/programs/vagus-nerve"
-            className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[hsl(var(--gold))]/15 via-[hsl(var(--gold-light))]/20 to-[hsl(var(--accent))]/15 p-6 sm:p-7 hover:shadow-[var(--shadow-card-val)] transition-shadow"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-card text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Sparkles className="w-7 h-7" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="calm-eyebrow-sm text-[hsl(var(--primary))]">Trending program</p>
-                <h3 className="font-display text-xl sm:text-2xl text-foreground leading-snug mt-1">
-                  Start Vagus Nerve Reset
-                </h3>
-                <p className="font-body text-sm text-muted-foreground mt-1">
-                  A guided 7-day program built around fast nervous-system regulation techniques.
-                </p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform shrink-0 hidden sm:block" />
-            </div>
-          </Link>
-        </motion.div>
+        <GoldDivider />
 
-        {/* Bento toolkit */}
-        <motion.div variants={itemVariants}>
-          <BentoTools />
-        </motion.div>
+        {/* ───────────── TOOLKIT ───────────── */}
+        <section className="space-y-6">
+          <motion.div variants={itemVariants}>
+            <SectionHeader
+              eyebrow="The Toolkit"
+              title="Everything within reach"
+              description="A complete library of practices, sounds and reflective tools."
+            />
+          </motion.div>
+          <motion.div variants={itemVariants}>
+            <BentoTools />
+          </motion.div>
+        </section>
 
-        {/* Footer pull-quote */}
+        {/* ───────────── QUOTE ───────────── */}
         <motion.div variants={itemVariants}>
           <QuoteRibbon />
         </motion.div>
       </motion.div>
 
-      {/* First-run welcome */}
       <WelcomeModal />
-
-      {/* Streak Celebration Modal */}
       <StreakCelebration streak={streak} show={showStreakCelebration} onClose={() => setShowStreakCelebration(false)} />
 
-      {/* Full-screen Meditation Player */}
       <AnimatePresence>
         {showPlayer && (
           <MeditationPlayer
