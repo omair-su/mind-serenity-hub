@@ -101,6 +101,9 @@ export function useFreeze(forDate: string): boolean {
     used.push(forDate);
     localStorage.setItem(FREEZE_USED_KEY, JSON.stringify(used));
   } catch {}
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("wv-streak-freeze-changed", { detail: { forDate } }));
+  }
   return true;
 }
 
