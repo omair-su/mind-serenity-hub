@@ -1,5 +1,7 @@
 // 14-day streak calendar — a quiet, elegant row of dots showing the last
-// two weeks of practice. Today is highlighted in gold.
+// two weeks of practice. Today is highlighted in gold. Reactive to day
+// completion events and cross-tab storage updates.
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getAllDayStates } from "@/lib/userStore";
 
@@ -8,20 +10,49 @@ const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 function getPracticedDateSet(): Set<string> {
   const states = getAllDayStates();
   const set = new Set<string>();
+  const todayIso = new Date().toISOString().slice(0, 10);
   Object.values(states).forEach((s) => {
-    if (s?.completedAt && s.checklist?.every(Boolean)) {
+    const allChecked = s?.checklist?.length ? s.checklist.every(Boolean) : false;
+    if (s?.completedAt && allChecked) {
       set.add(s.completedAt.slice(0, 10));
+    } else if (allChecked) {
+      // Fallback for legacy entries without a timestamp — assume today.
+      set.add(todayIso);
     }
   });
   return set;
 }
 
-export default function StreakCalendar() {
-  const practiced = getPracticedDateSet();
-  let frozen = new Set<string>();
+function getFrozenSet(): Set<string> {
   try {
-    frozen = new Set<string>(JSON.parse(localStorage.getItem("wv-streak-freeze-used") || "[]"));
-  } catch {}
+    return new Set<string>(JSON.parse(localStorage.getItem("wv-streak-freeze-used") || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+export default function StreakCalendar() {
+  const [practiced, setPracticed] = useState<Set<string>>(() => getPracticedDateSet());
+  const [frozen, setFrozen] = useState<Set<string>>(() => getFrozenSet());
+
+  useEffect(() => {
+    const refresh = () => {
+      setPracticed(getPracticedDateSet());
+      setFrozen(getFrozenSet());
+    };
+    const onStorage = (e: StorageEvent) => {
+      if (!e.key) return;
+      if (e.key.startsWith("wv-day-") || e.key === "wv-streak-freeze-used") refresh();
+    };
+    window.addEventListener("wv-day-completed", refresh);
+    window.addEventListener("wv-streak-freeze-changed", refresh);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("wv-day-completed", refresh);
+      window.removeEventListener("wv-streak-freeze-changed", refresh);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
 
   const days: { date: Date; iso: string; done: boolean; isFrozen: boolean; isToday: boolean }[] = [];
   const today = new Date();
@@ -60,16 +91,23 @@ export default function StreakCalendar() {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-2" role="list" aria-label="Last fourteen days of practice">
         {days.map((d, i) => {
           const dayOfWeek = d.date.getDay();
+          const statusLabel = d.done
+            ? "practised"
+            : d.isFrozen
+              ? "streak freeze used"
+              : "no practice";
           return (
             <motion.div
               key={d.iso}
+              role="listitem"
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.02 * i, duration: 0.3 }}
               className="flex flex-col items-center gap-1.5"
+              aria-label={`${d.iso}${d.isToday ? " (today)" : ""} — ${statusLabel}`}
               title={`${d.iso}${d.done ? " — practised" : d.isFrozen ? " — freeze used" : ""}`}
             >
               <span className="text-[9px] font-body tracking-wider uppercase text-charcoal-soft/60">
@@ -96,15 +134,15 @@ export default function StreakCalendar() {
 
       <div className="flex items-center justify-center gap-4 mt-5 pt-4 border-t border-[hsl(var(--cream-dark))]">
         <span className="inline-flex items-center gap-1.5 text-[10px] font-body text-charcoal-soft">
-          <span className="w-2.5 h-2.5 rounded-md bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--sage-dark))]" />
+          <span aria-hidden className="w-2.5 h-2.5 rounded-md bg-gradient-to-br from-[hsl(var(--forest))] to-[hsl(var(--sage-dark))]" />
           Practised
         </span>
         <span className="inline-flex items-center gap-1.5 text-[10px] font-body text-charcoal-soft">
-          <span className="w-2.5 h-2.5 rounded-md bg-[hsl(var(--gold)/0.15)] border border-[hsl(var(--gold)/0.4)]" />
+          <span aria-hidden className="w-2.5 h-2.5 rounded-md bg-[hsl(var(--gold)/0.15)] border border-[hsl(var(--gold)/0.4)]" />
           Freeze
         </span>
         <span className="inline-flex items-center gap-1.5 text-[10px] font-body text-charcoal-soft">
-          <span className="w-2.5 h-2.5 rounded-md ring-2 ring-[hsl(var(--gold))] bg-card" />
+          <span aria-hidden className="w-2.5 h-2.5 rounded-md ring-2 ring-[hsl(var(--gold))] bg-card" />
           Today
         </span>
       </div>
