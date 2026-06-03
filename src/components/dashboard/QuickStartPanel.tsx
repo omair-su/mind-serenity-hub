@@ -38,7 +38,7 @@ export default function QuickStartPanel({ onQuickSession }: QuickStartPanelProps
     title = day.title;
     subtitle = `Day ${nextProgramDay} · Vagus Nerve Reset`;
     duration = day.duration;
-    href = `/app/program/${VAGUS_NERVE_RESET.id}/day/${nextProgramDay}`;
+    href = `/app/programs/${VAGUS_NERVE_RESET.id}/day/${nextProgramDay}`;
     badge = "Continue Program";
   } else {
     const nextDay = getNextDay();
