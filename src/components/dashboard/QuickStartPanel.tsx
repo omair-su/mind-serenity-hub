@@ -116,15 +116,17 @@ export default function QuickStartPanel({ onQuickSession }: QuickStartPanelProps
 
         {/* Alternate one-tap options */}
         <div className="mt-6 pt-5 border-t border-[hsl(var(--gold)/0.2)] grid grid-cols-3 gap-2">
-          <button
-            onClick={onQuickSession}
+          <Link
+            to="/app/breathing"
+            aria-label="Start a 5-minute breathing practice"
             className="group flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card/60 backdrop-blur-sm border border-[hsl(var(--cream-dark))] hover:border-[hsl(var(--gold)/0.4)] transition-all"
           >
             <Wind className="w-4 h-4 text-[hsl(var(--forest))] group-hover:scale-110 transition-transform" />
             <span className="text-[10px] font-body font-semibold text-charcoal">5-min Breath</span>
-          </button>
+          </Link>
           <Link
             to="/app/sound-bath"
+            aria-label="Open the sound bath"
             className="group flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card/60 backdrop-blur-sm border border-[hsl(var(--cream-dark))] hover:border-[hsl(var(--gold)/0.4)] transition-all"
           >
             <Headphones className="w-4 h-4 text-[hsl(var(--forest))] group-hover:scale-110 transition-transform" />
@@ -132,6 +134,7 @@ export default function QuickStartPanel({ onQuickSession }: QuickStartPanelProps
           </Link>
           <Link
             to="/app/sos"
+            aria-label="Open SOS calm rescue"
             className="group flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card/60 backdrop-blur-sm border border-[hsl(var(--cream-dark))] hover:border-[hsl(var(--gold)/0.4)] transition-all"
           >
             <Sparkles className="w-4 h-4 text-[hsl(var(--forest))] group-hover:scale-110 transition-transform" />
