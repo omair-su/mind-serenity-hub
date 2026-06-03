@@ -330,6 +330,23 @@ export default function DayPage() {
     const next = [...checklist];
     next[idx] = !next[idx];
     setChecklist(next);
+    // When the user completes all 4 ritual checks for the day, stamp completedAt
+    // and broadcast so the dashboard (streak calendar, progress, confetti) updates.
+    const wasComplete = checklist.every(Boolean);
+    const nowComplete = next.every(Boolean);
+    if (nowComplete && !wasComplete) {
+      try {
+        const raw = localStorage.getItem(`wv-day-${dayNumber}`);
+        const prev = raw ? JSON.parse(raw) : {};
+        const stamped = { ...prev, checklist: next, completedAt: new Date().toISOString() };
+        localStorage.setItem(`wv-day-${dayNumber}`, JSON.stringify(stamped));
+      } catch { /* ignore */ }
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("wv-day-completed", { detail: { day: dayNumber } }),
+        );
+      }
+    }
   };
 
   const startSession = () => {
