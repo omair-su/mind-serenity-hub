@@ -25,8 +25,16 @@ function markComplete(programId: string, day: number) {
   try {
     const raw = localStorage.getItem(STORAGE_KEY(programId));
     const set = new Set<number>(raw ? JSON.parse(raw) : []);
+    const wasNew = !set.has(day);
     set.add(day);
     localStorage.setItem(STORAGE_KEY(programId), JSON.stringify([...set]));
+    if (wasNew && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("wv-program-day-complete", {
+          detail: { programId, day, total: [...set].length },
+        }),
+      );
+    }
   } catch { /* ignore */ }
 }
 
