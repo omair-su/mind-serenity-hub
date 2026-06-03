@@ -9,7 +9,7 @@ import { getNextDay, getCompletedDays } from "@/lib/userStore";
 import { weeks } from "@/data/courseData";
 
 interface QuickStartPanelProps {
-  onQuickSession: () => void;
+  onQuickSession?: () => void;
 }
 
 function getProgramCompleted(): number[] {
