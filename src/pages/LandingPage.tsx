@@ -51,17 +51,24 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const isStandalone =
-      window.matchMedia?.("(display-mode: standalone)").matches ||
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-
-    if (!isStandalone) return;
-
+    // Always redirect already-authenticated visitors straight to the app.
+    // This covers PWA standalone, Capacitor/Android wrappers, and regular browser
+    // re-visits — so returning users don't have to sign in again on every launch.
+    let cancelled = false;
     supabase.auth.getSession().then(({ data }) => {
+      if (cancelled) return;
       if (data.session) {
         navigate("/app", { replace: true });
       }
     });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (cancelled) return;
+      if (session) navigate("/app", { replace: true });
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const nav = [
