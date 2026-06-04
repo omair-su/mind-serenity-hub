@@ -468,6 +468,13 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Outcomes / numbers (new) ───────────────────────────────── */}
+      <OutcomesBand />
+
+      {/* ─── A Day With Willow (new) ────────────────────────────────── */}
+      <DayWithWillow />
+
+
       {/* ─── Inside the App — feature cards ─────────────────────────── */}
       <section id="features" className="w-full" style={{ background: CREAM }}>
         <div className="max-w-7xl mx-auto px-5 md:px-10 py-24 md:py-32">
