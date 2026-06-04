@@ -8,6 +8,13 @@ const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
+import {
+  OutcomesBand,
+  DayWithWillow,
+  WhyWillow,
+  CraftedBy,
+  MemberVoicesTrio,
+} from "@/components/landing/LandingExtras";
 
 /**
  * Willow Vibes — premium, minimal, editorial landing.
