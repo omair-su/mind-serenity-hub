@@ -8,6 +8,13 @@ const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
+import {
+  OutcomesBand,
+  DayWithWillow,
+  WhyWillow,
+  CraftedBy,
+  MemberVoicesTrio,
+} from "@/components/landing/LandingExtras";
 
 /**
  * Willow Vibes — premium, minimal, editorial landing.
@@ -461,6 +468,13 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Outcomes / numbers (new) ───────────────────────────────── */}
+      <OutcomesBand />
+
+      {/* ─── A Day With Willow (new) ────────────────────────────────── */}
+      <DayWithWillow />
+
+
       {/* ─── Inside the App — feature cards ─────────────────────────── */}
       <section id="features" className="w-full" style={{ background: CREAM }}>
         <div className="max-w-7xl mx-auto px-5 md:px-10 py-24 md:py-32">
@@ -550,6 +564,12 @@ export default function LandingPage() {
 
 
 
+      {/* ─── Why Willow (new) ───────────────────────────────────────── */}
+      <WhyWillow />
+
+      {/* ─── Crafted By (new) ───────────────────────────────────────── */}
+      <CraftedBy />
+
       {/* ─── Cinematic image band ───────────────────────────────────── */}
       <section className="relative w-full overflow-hidden">
         <div className="relative h-[420px] md:h-[560px]">
@@ -618,6 +638,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Member Voices trio (new) ───────────────────────────────── */}
+      <MemberVoicesTrio />
 
       {/* ─── Plans / Pricing ────────────────────────────────────────── */}
       <section id="plans" className="w-full" style={{ background: CREAM_DEEP }}>
