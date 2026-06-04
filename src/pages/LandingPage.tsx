@@ -564,6 +564,12 @@ export default function LandingPage() {
 
 
 
+      {/* ─── Why Willow (new) ───────────────────────────────────────── */}
+      <WhyWillow />
+
+      {/* ─── Crafted By (new) ───────────────────────────────────────── */}
+      <CraftedBy />
+
       {/* ─── Cinematic image band ───────────────────────────────────── */}
       <section className="relative w-full overflow-hidden">
         <div className="relative h-[420px] md:h-[560px]">
