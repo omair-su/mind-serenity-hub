@@ -1,8 +1,23 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { restoreSessionFromBackup, startSessionBackupMirror } from "./lib/authPersistence";
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Restore any auth session backup BEFORE mounting React so route guards see
+// the authenticated user on the very first render. This keeps installed
+// Android/PWA users signed in across relaunches even if the WebView's
+// localStorage was cleared.
+const boot = async () => {
+  try {
+    await restoreSessionFromBackup();
+  } catch {
+    /* never block boot */
+  }
+  startSessionBackupMirror();
+  createRoot(document.getElementById("root")!).render(<App />);
+};
+
+boot();
 
 // Defer non-critical bootstrap (reminder scheduler + service-worker registration)
 // until the browser is idle so they don't extend the main-thread long task that
@@ -20,4 +35,3 @@ if (typeof w.requestIdleCallback === "function") {
 } else {
   setTimeout(bootDeferred, 2500);
 }
-
