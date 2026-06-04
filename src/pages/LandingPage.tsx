@@ -639,6 +639,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Member Voices trio (new) ───────────────────────────────── */}
+      <MemberVoicesTrio />
+
       {/* ─── Plans / Pricing ────────────────────────────────────────── */}
       <section id="plans" className="w-full" style={{ background: CREAM_DEEP }}>
         <div className="max-w-6xl mx-auto px-5 md:px-10 py-24 md:py-32">
