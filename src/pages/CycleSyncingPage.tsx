@@ -1702,6 +1702,14 @@ export default function CycleSyncingPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const prev = document.title;
+    document.title = "Cycle Syncing — Live in Sync With Your Hormones | WillowVibes";
+    return () => {
+      document.title = prev;
+    };
+  }, []);
+
   return (
     <div style={{ background: PALETTE.cream, color: PALETTE.charcoal, minHeight: "100vh" }}>
 
