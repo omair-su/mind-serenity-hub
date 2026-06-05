@@ -72,6 +72,7 @@ const ProgramHomePage = lazy(() => import("./pages/programs/ProgramHomePage"));
 const ProgramDayPage = lazy(() => import("./pages/programs/ProgramDayPage"));
 const FriendsPage = lazy(() => import("./pages/FriendsPage"));
 const PaddleChecklistPage = lazy(() => import("./pages/PaddleChecklistPage"));
+const CycleSyncingPage = lazy(() => import("./pages/CycleSyncingPage"));
 
 // Wrap a page in the auth guard so unauthenticated users are redirected to sign-in.
 const Guarded = (el: React.ReactNode) => <ProtectedRoute>{el}</ProtectedRoute>;
@@ -102,6 +103,8 @@ function AppInner() {
           <Route path="/legal/terms" element={<TermsPage />} />
           <Route path="/legal/privacy" element={<PrivacyPage />} />
           <Route path="/legal/refund" element={<RefundPage />} />
+          <Route path="/cycle-syncing" element={<CycleSyncingPage />} />
+          <Route path="/app/cycle-syncing" element={Guarded(<CycleSyncingPage />)} />
           <Route
             path="/onboarding"
             element={
