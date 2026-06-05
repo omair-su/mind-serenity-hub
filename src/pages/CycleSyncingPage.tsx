@@ -1704,14 +1704,6 @@ export default function CycleSyncingPage() {
 
   return (
     <div style={{ background: PALETTE.cream, color: PALETTE.charcoal, minHeight: "100vh" }}>
-      <Helmet>
-        <title>Cycle Syncing — Live in Sync With Your Hormones | WillowVibes</title>
-        <meta
-          name="description"
-          content="Personalized rituals, nutrition, breathwork, and vagus nerve practices tailored to each of your four hormonal phases."
-        />
-        <link rel="canonical" href="https://willowvibes.com/cycle-syncing" />
-      </Helmet>
 
       <style>{`
         @keyframes csFadeInUp {
