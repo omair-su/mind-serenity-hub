@@ -103,6 +103,8 @@ function AppInner() {
           <Route path="/legal/terms" element={<TermsPage />} />
           <Route path="/legal/privacy" element={<PrivacyPage />} />
           <Route path="/legal/refund" element={<RefundPage />} />
+          <Route path="/cycle-syncing" element={<CycleSyncingPage />} />
+          <Route path="/app/cycle-syncing" element={Guarded(<CycleSyncingPage />)} />
           <Route
             path="/onboarding"
             element={
