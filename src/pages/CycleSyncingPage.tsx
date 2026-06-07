@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "@/components/Sidebar";
+import BottomNav from "@/components/BottomNav";
+
 
 
 /**
@@ -273,38 +277,11 @@ function HeroSection() {
         >
           Begin Your Cycle Journey →
         </CTAButton>
-        <div style={{ height: 14 }} />
-        <Body size={13} color="rgba(255,255,255,0.85)">
-          Included with Willow Plus · 7-day free trial
-        </Body>
-      </div>
-
-      {/* Floating trust badge */}
-      <div
-        className="cs-floating-badge"
-        style={{
-          position: "absolute",
-          right: 32,
-          bottom: 32,
-          maxWidth: 280,
-          background: "white",
-          borderRadius: 20,
-          padding: 18,
-          boxShadow: "0 12px 40px rgba(0,0,0,0.18)",
-          textAlign: "left",
-        }}
-      >
-        <div style={{ fontSize: 22 }}>🌙</div>
-        <div style={{ height: 6 }} />
-        <Body size={13} color={PALETTE.forest} weight={700}>
-          Loved by 50,000+ women who finally understand their bodies
-        </Body>
-        <div style={{ height: 6 }} />
-        <div style={{ color: PALETTE.goldenPollen, fontSize: 14, letterSpacing: 2 }}>★★★★★</div>
       </div>
     </section>
   );
 }
+
 
 // ---------------- Section 2: Phase Navigator ----------------
 
@@ -580,8 +557,10 @@ function FoodPill({ emoji, name, why }: { emoji: string; name: string; why?: str
 
 function MenstrualContent({ unlocked }: { unlocked: boolean }) {
   const accent = PALETTE.blushRose;
+  const navigate = useNavigate();
   return (
     <div className="cs-grid">
+
       {/* A */}
       <Card delay={0}>
         <Eyebrow color={accent}>Today's Ritual</Eyebrow>
@@ -690,7 +669,7 @@ function MenstrualContent({ unlocked }: { unlocked: boolean }) {
           "I honor my body's sacred rhythm. Rest is productive. Release is renewal."
         </Display>
         <div style={{ height: 24 }} />
-        <CTAButton bg={PALETTE.sageDeep}>✍️ Open Today's Journal Prompt</CTAButton>
+        <CTAButton bg={PALETTE.sageDeep} onClick={() => navigate("/app/journal")}>✍️ Open Today's Journal Prompt</CTAButton>
       </Card>
     </div>
   );
@@ -1712,6 +1691,8 @@ export default function CycleSyncingPage() {
 
   return (
     <div style={{ background: PALETTE.cream, color: PALETTE.charcoal, minHeight: "100vh" }}>
+      <Sidebar />
+      <main className="lg:ml-72 pb-24 lg:pb-0">
 
       <style>{`
         @keyframes csFadeInUp {
@@ -1741,7 +1722,6 @@ export default function CycleSyncingPage() {
           .cs-grid { grid-template-columns: 1fr !important; }
           .cs-wheel-grid { grid-template-columns: 1fr !important; }
           .cs-hero-title { font-size: 42px !important; }
-          .cs-floating-badge { right: 16px !important; bottom: 16px !important; max-width: 220px !important; padding: 14px !important; }
         }
         @media (max-width: 600px) {
           .cs-hero { min-height: 70vh !important; padding: 90px 20px 60px !important; }
@@ -1794,8 +1774,9 @@ export default function CycleSyncingPage() {
       <VagusDeepDive />
       <CycleWheelTracker onPhaseDetected={setActive} />
       <RitualChecklist />
-      <UpgradeCTA />
-      <Testimonials />
+      </main>
+      <BottomNav />
     </div>
   );
+
 }

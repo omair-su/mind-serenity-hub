@@ -41,7 +41,7 @@ const premiumItems = [
   { label: "Box Breathing (Athletes)", path: "/app/programs/box-breathing-athletes", icon: Wind },
   { label: "Grief Companion", path: "/app/programs/grief-companion", icon: Heart },
   { label: "ADHD Focus Stack", path: "/app/programs/adhd-focus-stack", icon: Brain },
-  { label: "Cycle Sync", path: "/app/programs/cycle-sync", icon: Flower2 },
+  { label: "Cycle Sync", path: "/app/cycle-syncing", icon: Flower2 },
   { label: "Sound Frequency Therapy", path: "/app/programs/sound-frequency", icon: Headphones },
   { label: "Ritual Pack", path: "/app/programs/ritual-pack", icon: Sun },
   { label: "Sleep Stories", path: "/app/sleep-stories", icon: BookOpen },

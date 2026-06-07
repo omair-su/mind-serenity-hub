@@ -52,7 +52,7 @@ const categories = [
       { label: "Box Breathing", desc: "7-day performance breathwork", icon: Wind, path: "/app/programs/box-breathing-athletes" },
       { label: "Grief Companion", desc: "7 days of letters & meditation", icon: Heart, path: "/app/programs/grief-companion" },
       { label: "ADHD Focus Stack", desc: "Pomodoro + binaural + scan", icon: Brain, path: "/app/programs/adhd-focus-stack" },
-      { label: "Cycle Sync", desc: "Tuned to your menstrual phase", icon: Heart, path: "/app/programs/cycle-sync" },
+      { label: "Cycle Sync", desc: "Tuned to your menstrual phase", icon: Heart, path: "/app/cycle-syncing" },
       { label: "Sound Frequency", desc: "528 · 432 · 963 Hz therapy", icon: Music, path: "/app/programs/sound-frequency" },
       { label: "Ritual Pack", desc: "Morning & evening templates", icon: Sunrise, path: "/app/programs/ritual-pack" },
       { label: "Rituals", desc: "Daily routines", icon: Compass, path: "/app/rituals" },
