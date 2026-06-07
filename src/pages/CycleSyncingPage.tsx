@@ -1763,10 +1763,21 @@ export default function CycleSyncingPage() {
 
           <div style={{ height: 32 }} />
 
-          {active === "menstrual" && <MenstrualContent unlocked={unlocked} />}
-          {active === "follicular" && <FollicularContent />}
-          {active === "ovulatory" && <OvulatoryContent />}
-          {active === "luteal" && <LutealContent unlocked={unlocked} />}
+          {active === "menstrual" && <MenstrualContent unlocked={true} />}
+          {active !== "menstrual" && (
+            <div style={{ position: "relative" }}>
+              <div style={{ filter: isPremium ? "none" : "blur(6px)", pointerEvents: isPremium ? "auto" : "none" }}>
+                {active === "follicular" && <FollicularContent />}
+                {active === "ovulatory" && <OvulatoryContent />}
+                {active === "luteal" && <LutealContent unlocked={true} />}
+              </div>
+              <PremiumLockOverlay
+                unlocked={isPremium}
+                onUnlock={() => navigate("/pricing")}
+                label={`${PHASES[active].name} Phase — Willow Plus`}
+              />
+            </div>
+          )}
         </div>
       </section>
 
