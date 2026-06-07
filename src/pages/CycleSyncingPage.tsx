@@ -1691,6 +1691,8 @@ export default function CycleSyncingPage() {
 
   return (
     <div style={{ background: PALETTE.cream, color: PALETTE.charcoal, minHeight: "100vh" }}>
+      <Sidebar />
+      <main className="lg:ml-72 pb-24 lg:pb-0">
 
       <style>{`
         @keyframes csFadeInUp {
@@ -1720,7 +1722,6 @@ export default function CycleSyncingPage() {
           .cs-grid { grid-template-columns: 1fr !important; }
           .cs-wheel-grid { grid-template-columns: 1fr !important; }
           .cs-hero-title { font-size: 42px !important; }
-          .cs-floating-badge { right: 16px !important; bottom: 16px !important; max-width: 220px !important; padding: 14px !important; }
         }
         @media (max-width: 600px) {
           .cs-hero { min-height: 70vh !important; padding: 90px 20px 60px !important; }
@@ -1773,8 +1774,9 @@ export default function CycleSyncingPage() {
       <VagusDeepDive />
       <CycleWheelTracker onPhaseDetected={setActive} />
       <RitualChecklist />
-      <UpgradeCTA />
-      <Testimonials />
+      </main>
+      <BottomNav />
     </div>
   );
+
 }
