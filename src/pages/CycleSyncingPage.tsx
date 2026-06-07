@@ -1661,9 +1661,11 @@ function Testimonials() {
 
 export default function CycleSyncingPage() {
   const [active, setActive] = useState<PhaseKey>("menstrual");
-  // Treat all users as unlocked here; the gate is purely visual aspiration.
-  // To re-introduce a real gate, swap in useIsPremium().
-  const unlocked = true;
+  const navigate = useNavigate();
+  const { isPremium } = useIsPremium();
+  // Menstrual (Week 1) is always free. Other three phases require Willow Plus.
+  const unlocked = isPremium;
+
 
   useEffect(() => {
     // Inject Google Fonts once for Cormorant Garamond + Karla.
