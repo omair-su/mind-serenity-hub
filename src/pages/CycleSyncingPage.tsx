@@ -1173,19 +1173,6 @@ function VagusDeepDive() {
           </Body>
         </div>
 
-        <div style={{ height: 56 }} />
-
-        <Card bg={PALETTE.forest} border={PALETTE.sageMid} style={{ maxWidth: 480, margin: "0 auto" }} pad={28}>
-          <div style={{ textAlign: "center" }}>
-            <Eyebrow color={PALETTE.sageLight}>Anatomy</Eyebrow>
-            <div style={{ height: 8 }} />
-            <Display size={24} color="white">
-              Your Vagus Nerve Pathway
-            </Display>
-          </div>
-          <div style={{ height: 14 }} />
-          <VagusPathwaySVG />
-        </Card>
       </div>
     </section>
   );
