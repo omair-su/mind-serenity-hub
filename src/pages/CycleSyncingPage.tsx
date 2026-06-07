@@ -1774,7 +1774,7 @@ export default function CycleSyncingPage() {
               <PremiumLockOverlay
                 unlocked={isPremium}
                 onUnlock={() => navigate("/pricing")}
-                label={`${PHASES[active].name} Phase — Willow Plus`}
+                label={`${PHASES[active].label} Phase — Willow Plus`}
               />
             </div>
           )}
