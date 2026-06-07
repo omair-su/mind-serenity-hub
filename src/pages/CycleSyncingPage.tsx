@@ -558,8 +558,9 @@ function FoodPill({ emoji, name, why }: { emoji: string; name: string; why?: str
 function MenstrualContent({ unlocked }: { unlocked: boolean }) {
   const accent = PALETTE.blushRose;
   const navigate = useNavigate();
-
+  return (
     <div className="cs-grid">
+
       {/* A */}
       <Card delay={0}>
         <Eyebrow color={accent}>Today's Ritual</Eyebrow>
