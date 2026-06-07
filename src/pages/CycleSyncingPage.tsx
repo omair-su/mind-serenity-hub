@@ -520,9 +520,11 @@ function PremiumLockOverlay({ unlocked, onUnlock, label }: { unlocked: boolean; 
       <Display size={22} color="white">
         {label || "Willow Plus Members"}
       </Display>
-      <Body size={14} color="white" style={{ maxWidth: 360, opacity: 0.9 }}>
-        Week 1 (Menstrual phase) is free. Unlock Follicular, Ovulatory & Luteal phases with Willow Plus.
-      </Body>
+      <div style={{ maxWidth: 360, opacity: 0.9 }}>
+        <Body size={14} color="white">
+          Week 1 (Menstrual phase) is free. Unlock Follicular, Ovulatory & Luteal phases with Willow Plus.
+        </Body>
+      </div>
       <CTAButton bg={PALETTE.goldenPollen} color={PALETTE.forest} onClick={onUnlock}>
         Unlock with Willow Plus →
       </CTAButton>
