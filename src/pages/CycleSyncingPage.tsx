@@ -277,38 +277,11 @@ function HeroSection() {
         >
           Begin Your Cycle Journey →
         </CTAButton>
-        <div style={{ height: 14 }} />
-        <Body size={13} color="rgba(255,255,255,0.85)">
-          Included with Willow Plus · 7-day free trial
-        </Body>
-      </div>
-
-      {/* Floating trust badge */}
-      <div
-        className="cs-floating-badge"
-        style={{
-          position: "absolute",
-          right: 32,
-          bottom: 32,
-          maxWidth: 280,
-          background: "white",
-          borderRadius: 20,
-          padding: 18,
-          boxShadow: "0 12px 40px rgba(0,0,0,0.18)",
-          textAlign: "left",
-        }}
-      >
-        <div style={{ fontSize: 22 }}>🌙</div>
-        <div style={{ height: 6 }} />
-        <Body size={13} color={PALETTE.forest} weight={700}>
-          Loved by 50,000+ women who finally understand their bodies
-        </Body>
-        <div style={{ height: 6 }} />
-        <div style={{ color: PALETTE.goldenPollen, fontSize: 14, letterSpacing: 2 }}>★★★★★</div>
       </div>
     </section>
   );
 }
+
 
 // ---------------- Section 2: Phase Navigator ----------------
 
