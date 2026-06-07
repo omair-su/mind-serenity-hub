@@ -669,7 +669,7 @@ function MenstrualContent({ unlocked }: { unlocked: boolean }) {
           "I honor my body's sacred rhythm. Rest is productive. Release is renewal."
         </Display>
         <div style={{ height: 24 }} />
-        <CTAButton bg={PALETTE.sageDeep}>✍️ Open Today's Journal Prompt</CTAButton>
+        <CTAButton bg={PALETTE.sageDeep} onClick={() => navigate("/app/journal")}>✍️ Open Today's Journal Prompt</CTAButton>
       </Card>
     </div>
   );
