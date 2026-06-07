@@ -496,14 +496,14 @@ function ScienceBox({ children }: { children: React.ReactNode }) {
   );
 }
 
-function PremiumLockOverlay({ unlocked }: { unlocked: boolean }) {
+function PremiumLockOverlay({ unlocked, onUnlock, label }: { unlocked: boolean; onUnlock?: () => void; label?: string }) {
   if (unlocked) return null;
   return (
     <div
       style={{
         position: "absolute",
         inset: 0,
-        background: "rgba(44,62,45,0.45)",
+        background: "rgba(44,62,45,0.55)",
         backdropFilter: "blur(4px)",
         borderRadius: 20,
         display: "flex",
@@ -512,18 +512,24 @@ function PremiumLockOverlay({ unlocked }: { unlocked: boolean }) {
         flexDirection: "column",
         gap: 12,
         zIndex: 2,
+        padding: 24,
+        textAlign: "center",
       }}
     >
       <div style={{ fontSize: 28 }}>🔒</div>
       <Display size={22} color="white">
-        Willow Plus Members
+        {label || "Willow Plus Members"}
       </Display>
-      <CTAButton bg={PALETTE.goldenPollen} color={PALETTE.forest}>
+      <Body size={14} color="white" style={{ maxWidth: 360, opacity: 0.9 }}>
+        Week 1 (Menstrual phase) is free. Unlock Follicular, Ovulatory & Luteal phases with Willow Plus.
+      </Body>
+      <CTAButton bg={PALETTE.goldenPollen} color={PALETTE.forest} onClick={onUnlock}>
         Unlock with Willow Plus →
       </CTAButton>
     </div>
   );
 }
+
 
 function FoodPill({ emoji, name, why }: { emoji: string; name: string; why?: string }) {
   return (
