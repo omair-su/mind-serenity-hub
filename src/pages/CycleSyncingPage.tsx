@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import BottomNav from "@/components/BottomNav";
+import { useIsPremium } from "@/hooks/useIsPremium";
+
 
 
 
@@ -496,14 +498,14 @@ function ScienceBox({ children }: { children: React.ReactNode }) {
   );
 }
 
-function PremiumLockOverlay({ unlocked }: { unlocked: boolean }) {
+function PremiumLockOverlay({ unlocked, onUnlock, label }: { unlocked: boolean; onUnlock?: () => void; label?: string }) {
   if (unlocked) return null;
   return (
     <div
       style={{
         position: "absolute",
         inset: 0,
-        background: "rgba(44,62,45,0.45)",
+        background: "rgba(44,62,45,0.55)",
         backdropFilter: "blur(4px)",
         borderRadius: 20,
         display: "flex",
@@ -512,18 +514,26 @@ function PremiumLockOverlay({ unlocked }: { unlocked: boolean }) {
         flexDirection: "column",
         gap: 12,
         zIndex: 2,
+        padding: 24,
+        textAlign: "center",
       }}
     >
       <div style={{ fontSize: 28 }}>🔒</div>
       <Display size={22} color="white">
-        Willow Plus Members
+        {label || "Willow Plus Members"}
       </Display>
-      <CTAButton bg={PALETTE.goldenPollen} color={PALETTE.forest}>
+      <div style={{ maxWidth: 360, opacity: 0.9 }}>
+        <Body size={14} color="white">
+          Week 1 (Menstrual phase) is free. Unlock Follicular, Ovulatory & Luteal phases with Willow Plus.
+        </Body>
+      </div>
+      <CTAButton bg={PALETTE.goldenPollen} color={PALETTE.forest} onClick={onUnlock}>
         Unlock with Willow Plus →
       </CTAButton>
     </div>
   );
 }
+
 
 function FoodPill({ emoji, name, why }: { emoji: string; name: string; why?: string }) {
   return (
@@ -1651,9 +1661,11 @@ function Testimonials() {
 
 export default function CycleSyncingPage() {
   const [active, setActive] = useState<PhaseKey>("menstrual");
-  // Treat all users as unlocked here; the gate is purely visual aspiration.
-  // To re-introduce a real gate, swap in useIsPremium().
-  const unlocked = true;
+  const navigate = useNavigate();
+  const { isPremium } = useIsPremium();
+  // Menstrual (Week 1) is always free. Other three phases require Willow Plus.
+  const unlocked = isPremium;
+
 
   useEffect(() => {
     // Inject Google Fonts once for Cormorant Garamond + Karla.
@@ -1751,10 +1763,21 @@ export default function CycleSyncingPage() {
 
           <div style={{ height: 32 }} />
 
-          {active === "menstrual" && <MenstrualContent unlocked={unlocked} />}
-          {active === "follicular" && <FollicularContent />}
-          {active === "ovulatory" && <OvulatoryContent />}
-          {active === "luteal" && <LutealContent unlocked={unlocked} />}
+          {active === "menstrual" && <MenstrualContent unlocked={true} />}
+          {active !== "menstrual" && (
+            <div style={{ position: "relative" }}>
+              <div style={{ filter: isPremium ? "none" : "blur(6px)", pointerEvents: isPremium ? "auto" : "none" }}>
+                {active === "follicular" && <FollicularContent />}
+                {active === "ovulatory" && <OvulatoryContent />}
+                {active === "luteal" && <LutealContent unlocked={true} />}
+              </div>
+              <PremiumLockOverlay
+                unlocked={isPremium}
+                onUnlock={() => navigate("/pricing")}
+                label={`${PHASES[active].label} Phase — Willow Plus`}
+              />
+            </div>
+          )}
         </div>
       </section>
 
