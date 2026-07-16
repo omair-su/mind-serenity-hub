@@ -17,10 +17,16 @@ import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
 import { captureReferralFromUrl, applyPendingReferral } from "@/lib/referrals";
 import signinBg from "@/assets/sage-auth-bg.jpg";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 type Mode = "signin" | "signup";
 
 export default function SignInPage() {
+  usePageSEO({
+    title: "Sign In — Willow Vibes",
+    description: "Sign in or create your Willow Vibes account to access guided meditation, sleep stories, breathwork, and your 7-day free trial of Willow Plus.",
+    canonical: "https://willowvibes.com/sign-in",
+  });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 

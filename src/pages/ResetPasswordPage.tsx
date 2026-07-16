@@ -6,6 +6,11 @@ import { supabase } from "@/integrations/supabase/client";
 import WillowLogo from "@/components/WillowLogo";
 
 export default function ResetPasswordPage() {
+  usePageSEO({
+    title: "Reset Your Password — Willow Vibes",
+    description: "Reset the password for your Willow Vibes account and get back to your daily meditation, breathwork, and sleep practice.",
+    canonical: "https://willowvibes.com/reset-password",
+  });
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
