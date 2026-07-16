@@ -43,11 +43,21 @@ serve(async (req) => {
       "user_progress",
       "subscriptions",
       "lifetime_purchases",
+      "sos_contacts",
+      "push_subscriptions",
+      "coach_usage",
+      "user_streaks",
       "profiles",
     ];
     for (const t of tables) {
       await admin.from(t).delete().eq("user_id", userId);
     }
+
+    // Friendships reference the user on either side
+    await admin
+      .from("friendships")
+      .delete()
+      .or(`user_id.eq.${userId},friend_user_id.eq.${userId}`);
 
     // Best-effort: remove avatar files
     try {
