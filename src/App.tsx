@@ -24,6 +24,7 @@ const TermsPage = lazy(() => import("./pages/legal/TermsPage"));
 const PrivacyPage = lazy(() => import("./pages/legal/PrivacyPage"));
 const RefundPage = lazy(() => import("./pages/legal/RefundPage"));
 const OnboardingPage = lazy(() => import("./pages/OnboardingPage"));
+const HowToMeditatePage = lazy(() => import("./pages/HowToMeditatePage"));
 
 // Lazy-loaded course content
 const WelcomePage = lazy(() => import("./pages/WelcomePage"));
@@ -103,6 +104,7 @@ function AppInner() {
           <Route path="/legal/terms" element={<TermsPage />} />
           <Route path="/legal/privacy" element={<PrivacyPage />} />
           <Route path="/legal/refund" element={<RefundPage />} />
+          <Route path="/guides/how-to-meditate" element={<HowToMeditatePage />} />
           <Route path="/app/cycle-syncing" element={Guarded(<CycleSyncingPage />)} />
 
           <Route
