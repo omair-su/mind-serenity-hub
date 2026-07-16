@@ -41,6 +41,31 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://willowvibes.com/sign-in</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://willowvibes.com/reset-password</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://willowvibes.com/onboarding</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://willowvibes.com/program/vagus-nerve-reset</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://willowvibes.com/app/cycle-syncing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://willowvibes.com/legal/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
