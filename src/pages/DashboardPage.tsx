@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import AppLayout from "@/components/AppLayout";

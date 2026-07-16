@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Lock, CheckCircle2, AlertCircle, ArrowRight } from "lucide-react";

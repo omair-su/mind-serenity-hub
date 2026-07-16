@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfile, saveProfile } from "@/lib/userStore";
