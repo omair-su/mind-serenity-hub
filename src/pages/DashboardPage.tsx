@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
@@ -53,6 +54,11 @@ function GoldDivider() {
 }
 
 export default function DashboardPage() {
+  usePageSEO({
+    title: "Your Dashboard — Willow Vibes",
+    description: "Your personal wellness dashboard: today's ritual, streak, mood check-in, and quick access to meditations, breathwork, and sleep stories.",
+    canonical: "https://willowvibes.com/app",
+  });
   const location = useLocation();
   const greeting = getGreeting();
   const nextDay = getNextDay();

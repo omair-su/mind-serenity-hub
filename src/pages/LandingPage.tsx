@@ -422,7 +422,7 @@ export default function LandingPage() {
               <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
                 The Practice
               </p>
-              <h3
+              <h2
                 className="ff-display font-light leading-[1.05]"
                 style={{ color: INK, fontSize: "clamp(2rem, 4.2vw, 3.5rem)" }}
               >
@@ -430,7 +430,7 @@ export default function LandingPage() {
                 <span className="italic" style={{ color: SAGE_DEEP }}>
                   one quiet ritual.
                 </span>
-              </h3>
+              </h2>
             </div>
             <p className="ff-body text-[16px] leading-[1.75] md:pt-10" style={{ color: MUTED }}>
               Everything in Willow Vibes is composed around four enduring pillars —
@@ -456,9 +456,9 @@ export default function LandingPage() {
                 style={{ background: CREAM_DEEP }}
               >
                 <I className="w-5 h-5 mb-6" style={{ color: SAGE_DEEP }} />
-                <h4 className="ff-display text-[26px] leading-tight mb-3" style={{ color: INK }}>
+                <h3 className="ff-display text-[26px] leading-tight mb-3" style={{ color: INK }}>
                   {title}
-                </h4>
+                </h3>
                 <p className="ff-body text-[14px] leading-[1.7]" style={{ color: MUTED }}>
                   {body}
                 </p>
@@ -482,7 +482,7 @@ export default function LandingPage() {
             <p className="ff-eyebrow text-[10px] mb-5" style={{ color: SAGE_DEEP }}>
               Inside Willow
             </p>
-            <h3
+            <h2
               className="ff-display font-light leading-[1.05]"
               style={{ color: INK, fontSize: "clamp(2rem, 4.5vw, 3.6rem)" }}
             >
@@ -490,7 +490,7 @@ export default function LandingPage() {
               <span className="italic" style={{ color: SAGE_DEEP }}>
                 in your pocket.
               </span>
-            </h3>
+            </h2>
             <p className="ff-body mt-5 text-[16px] leading-[1.75]" style={{ color: MUTED }}>
               Twelve crafted tools, working as one. Each one designed by therapists,
               sound engineers, and contemplative teachers.
@@ -539,9 +539,9 @@ export default function LandingPage() {
                     {tag}
                   </span>
                 </div>
-                <h4 className="ff-display text-[22px] leading-tight mb-2" style={{ color: INK }}>
+                <h3 className="ff-display text-[22px] leading-tight mb-2" style={{ color: INK }}>
                   {title}
-                </h4>
+                </h3>
                 <p className="ff-body text-[13.5px] leading-[1.65]" style={{ color: MUTED }}>
                   {body}
                 </p>

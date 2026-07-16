@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfile, saveProfile } from "@/lib/userStore";
@@ -78,6 +79,11 @@ const feelingOptions = [
 ];
 
 export default function OnboardingPage() {
+  usePageSEO({
+    title: "Welcome to Willow Vibes — Personalize Your Practice",
+    description: "Tell us about your goals so Willow Vibes can tailor your meditation, sleep, and breathwork journey from day one.",
+    canonical: "https://willowvibes.com/onboarding",
+  });
   const navigate = useNavigate();
   const [step, setStep] = useState(() => getResumeStep(steps.length));
   const [profile, setProfile] = useState(getProfile());

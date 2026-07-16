@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import BottomNav from "@/components/BottomNav";
 import { useIsPremium } from "@/hooks/useIsPremium";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 
 
@@ -1660,6 +1661,11 @@ function Testimonials() {
 // ---------------- Page composition ----------------
 
 export default function CycleSyncingPage() {
+  usePageSEO({
+    title: "Cycle Syncing — Wellness for Every Phase | Willow Vibes",
+    description: "Align meditation, movement, and nutrition with your menstrual, follicular, ovulatory, and luteal phases. Science-backed cycle syncing inside Willow Vibes.",
+    canonical: "https://willowvibes.com/app/cycle-syncing",
+  });
   const [active, setActive] = useState<PhaseKey>("menstrual");
   const navigate = useNavigate();
   const { isPremium } = useIsPremium();

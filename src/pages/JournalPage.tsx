@@ -9,8 +9,14 @@ import { BookOpen, Search, Star, Calendar, Loader2, CloudOff } from "lucide-reac
 import { Input } from "@/components/ui/input";
 import { PageHero, LuxeCard, EmptyState } from "@/components/ui-premium";
 import journalHero from "@/assets/journal-hero.webp";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 export default function JournalPage() {
+  usePageSEO({
+    title: "Living Journal — Willow Vibes",
+    description: "Your private reflection space. Revisit intentions, mood shifts, and gratitude across your 30-day Willow Vibes journey.",
+    canonical: "https://willowvibes.com/app/journal",
+  });
   const [filter, setFilter] = useState<number | "all">("all");
   const [search, setSearch] = useState("");
   // Hydrate immediately from local cache, then refresh from cloud (Phase 3 coherence)
