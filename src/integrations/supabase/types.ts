@@ -470,6 +470,30 @@ export type Database = {
         }
         Relationships: []
       }
+      timer_sessions: {
+        Row: {
+          created_at: string
+          duration_minutes: number
+          id: string
+          session_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes: number
+          id?: string
+          session_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          session_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_progress: {
         Row: {
           achievements: Json
@@ -526,6 +550,7 @@ export type Database = {
           created_at: string
           freezes_available: number
           last_grant_week: string
+          longest_streak: number
           updated_at: string
           used_freeze_dates: string[]
           user_id: string
@@ -534,6 +559,7 @@ export type Database = {
           created_at?: string
           freezes_available?: number
           last_grant_week?: string
+          longest_streak?: number
           updated_at?: string
           used_freeze_dates?: string[]
           user_id: string
@@ -542,6 +568,7 @@ export type Database = {
           created_at?: string
           freezes_available?: number
           last_grant_week?: string
+          longest_streak?: number
           updated_at?: string
           used_freeze_dates?: string[]
           user_id?: string
