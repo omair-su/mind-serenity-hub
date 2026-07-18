@@ -329,6 +329,7 @@ export interface CloudStreak {
   freezes_available: number;
   last_grant_week: string;
   used_freeze_dates: string[];
+  longest_streak?: number;
 }
 
 export async function fetchUserStreak(): Promise<CloudStreak | null> {
@@ -336,7 +337,7 @@ export async function fetchUserStreak(): Promise<CloudStreak | null> {
   if (!uid) return null;
   const { data, error } = await supabase
     .from("user_streaks")
-    .select("freezes_available, last_grant_week, used_freeze_dates")
+    .select("freezes_available, last_grant_week, used_freeze_dates, longest_streak")
     .eq("user_id", uid)
     .maybeSingle();
   if (error) { console.warn("[fetchUserStreak]", error.message); return null; }
@@ -350,6 +351,56 @@ export async function upsertUserStreak(s: CloudStreak): Promise<void> {
     .from("user_streaks")
     .upsert({ user_id: uid, ...s }, { onConflict: "user_id" });
   if (error) console.warn("[upsertUserStreak]", error.message);
+}
+
+/** Mirror the longest-ever streak up to the cloud. Only overwrites if higher. */
+export async function upsertLongestStreak(longest: number): Promise<void> {
+  const uid = await getUserId();
+  if (!uid) return;
+  // Read-modify-write to avoid regressing a higher server value.
+  const { data } = await supabase
+    .from("user_streaks")
+    .select("longest_streak")
+    .eq("user_id", uid)
+    .maybeSingle();
+  const currentServer = (data?.longest_streak as number | undefined) ?? 0;
+  if (longest <= currentServer) return;
+  const { error } = await supabase
+    .from("user_streaks")
+    .upsert({ user_id: uid, longest_streak: longest }, { onConflict: "user_id" });
+  if (error) console.warn("[upsertLongestStreak]", error.message);
+}
+
+// ============ Timer Sessions ============
+export interface CloudTimerSession {
+  id: string;
+  duration_minutes: number;
+  session_type: string;
+  created_at: string;
+}
+
+export async function insertTimerSession(session: { date: string; duration: number; type: string }): Promise<void> {
+  const uid = await getUserId();
+  if (!uid) return;
+  const { error } = await supabase.from("timer_sessions").insert({
+    user_id: uid,
+    duration_minutes: Math.max(0, Math.round(session.duration)),
+    session_type: session.type || "custom",
+    created_at: session.date || new Date().toISOString(),
+  });
+  if (error) console.warn("[insertTimerSession]", error.message);
+}
+
+export async function fetchTimerSessions(limit = 200): Promise<CloudTimerSession[]> {
+  const uid = await getUserId();
+  if (!uid) return [];
+  const { data, error } = await supabase
+    .from("timer_sessions")
+    .select("id, duration_minutes, session_type, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) { console.warn("[fetchTimerSessions]", error.message); return []; }
+  return (data as CloudTimerSession[]) ?? [];
 }
 
 // ============ SOS Contacts ============
