@@ -13,6 +13,7 @@ import ChallengeCard from "@/components/challenges/ChallengeCard";
 import ChallengeJourneyTimeline from "@/components/challenges/ChallengeJourneyTimeline";
 import LeafFallAnimation from "@/components/challenges/LeafFallAnimation";
 import ChallengeCompleteModal from "@/components/challenges/ChallengeCompleteModal";
+import PremiumGate from "@/components/PremiumGate";
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 
@@ -31,7 +32,7 @@ const getProgressPercent = (challengeId: string, progress: ReturnType<typeof get
   return Math.round((p.completedDays.length / c.duration) * 100);
 };
 
-export default function ChallengesPage() {
+function ChallengesPageInner() {
   const [activeChallengeId, setActiveChallengeId] = useState<string | null>(null);
   const [activeDay, setActiveDay] = useState<number | null>(null);
   const [note, setNote] = useState("");

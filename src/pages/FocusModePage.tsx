@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import focusmodeHero from "@/assets/focusmode-hero.webp";
 import { startBinaural, stopBinaural, setBinauralVolume, FREQUENCY_PRESETS, FrequencyPreset, isBinauralPlaying } from "@/lib/binauralBeats";
 import { saveTimerSession, getTimerSessions, getEarnedAchievements } from "@/lib/userStore";
+import PremiumGate from "@/components/PremiumGate";
+import { Trophy } from "lucide-react";
 
 type Phase = "idle" | "focus" | "break" | "longBreak" | "done";
 

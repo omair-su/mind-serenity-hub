@@ -31,7 +31,9 @@ const guidedPrompts = [
   { prompt: "What challenge or struggle has taught you something valuable recently?", category: "growth" },
 ];
 
-export default function GratitudePage() {
+import PremiumGate from "@/components/PremiumGate";
+
+function GratitudePageInner() {
   const [entries, setEntries] = useState<CloudGratitudeEntry[]>([]);
   const [text, setText] = useState("");
   const [promptIdx] = useState(Math.floor(Math.random() * guidedPrompts.length));
