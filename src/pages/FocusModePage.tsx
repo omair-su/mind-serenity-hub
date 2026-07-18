@@ -118,7 +118,7 @@ const FOCUS_SCIENCE = [
   },
 ];
 
-export default function FocusModePage() {
+function FocusModePageInner() {
   const [preset, setPreset] = useState(PREMIUM_PROFILES[0]);
   const [phase, setPhase] = useState<Phase>("idle");
   const [secondsLeft, setSecondsLeft] = useState(0);
