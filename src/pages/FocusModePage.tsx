@@ -741,3 +741,23 @@ function FocusModePageInner() {
     </AppLayout>
   );
 }
+
+export default function FocusModePage() {
+  return (
+    <PremiumGate
+      feature="Focus Mode"
+      description="Deep-work sessions with binaural beats, Pomodoro variants, focus analytics, and expert-guided flow-state protocols."
+      icon={Brain}
+      gradient="from-forest/25 to-charcoal/15"
+      previewItems={[
+        "Classic Pomodoro, Deep Work, Sprint & Flow profiles",
+        "Binaural beat frequencies for focus & flow",
+        "Session tracking + productivity analytics",
+        "Focus achievements & milestones",
+        "Expert-guided deep-work protocols",
+      ]}
+    >
+      <FocusModePageInner />
+    </PremiumGate>
+  );
+}
