@@ -31,7 +31,9 @@ const guidedPrompts = [
   { prompt: "What challenge or struggle has taught you something valuable recently?", category: "growth" },
 ];
 
-export default function GratitudePage() {
+import PremiumGate from "@/components/PremiumGate";
+
+function GratitudePageInner() {
   const [entries, setEntries] = useState<CloudGratitudeEntry[]>([]);
   const [text, setText] = useState("");
   const [promptIdx] = useState(Math.floor(Math.random() * guidedPrompts.length));
@@ -232,5 +234,26 @@ export default function GratitudePage() {
         </div>
       </motion.div>
     </AppLayout>
+  );
+}
+
+export default function GratitudePage() {
+  return (
+    <PremiumGate
+      feature="Gratitude Garden"
+      description="Grow a living garden of daily gratitudes with AI coach reflections, guided prompts, and ambient soundscapes tuned to your mood."
+      icon={Flower2}
+      gradient="from-sage/25 to-gold/15"
+      previewItems={[
+        "AI coach reflections on every entry",
+        "Living garden — flowers bloom as you practice",
+        "6 guided categories: people, health, nature, moments, growth, comfort",
+        "Ambient music matched to your mood",
+        "21-day gratitude rewiring program",
+        "Voice-recorded gratitude letters",
+      ]}
+    >
+      <GratitudePageInner />
+    </PremiumGate>
   );
 }

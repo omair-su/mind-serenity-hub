@@ -181,6 +181,11 @@ export function getLongestStreak(): number {
 
 export function saveLongestStreak(streak: number) {
   try { localStorage.setItem(STREAK_KEY, JSON.stringify({ longest: streak })); } catch {}
+  // Fire-and-forget cloud mirror so the personal-best record survives device switches.
+  // Imported lazily to avoid a circular dep with cloudSync (which imports supabase client).
+  import("./cloudSync").then(({ upsertLongestStreak }) => {
+    upsertLongestStreak(streak).catch(() => {});
+  }).catch(() => {});
 }
 
 export function getMoods(): MoodEntry[] {
@@ -207,6 +212,10 @@ export function saveTimerSession(session: { date: string; duration: number; type
   const sessions = getTimerSessions();
   sessions.push(session);
   try { localStorage.setItem(TIMER_SESSIONS_KEY, JSON.stringify(sessions)); } catch {}
+  // Fire-and-forget cloud mirror. See saveLongestStreak note re: dynamic import.
+  import("./cloudSync").then(({ insertTimerSession }) => {
+    insertTimerSession(session).catch(() => {});
+  }).catch(() => {});
 }
 
 // Achievement definitions

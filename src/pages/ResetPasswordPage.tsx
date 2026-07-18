@@ -23,19 +23,25 @@ export default function ResetPasswordPage() {
 
   // Detect recovery flow — Supabase places type=recovery in the URL hash
   useEffect(() => {
+    // Only trust the PASSWORD_RECOVERY auth event fired by Supabase when the
+    // magic recovery link is processed. A pre-existing signed-in session must
+    // NOT unlock this form, otherwise anyone on a shared device could change
+    // the password without email verification.
     const hash = window.location.hash;
-    const isRecovery = hash.includes("type=recovery") || hash.includes("access_token");
+    const isRecoveryLink = hash.includes("type=recovery") || hash.includes("access_token");
 
-    // Listen for the PASSWORD_RECOVERY event triggered by the magic link
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") setHasRecoverySession(true);
     });
 
-    // Also check if a session already exists (link already processed)
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session && isRecovery) setHasRecoverySession(true);
-      else if (data.session) setHasRecoverySession(true);
-    });
+    // If the link was already consumed on this page load, Supabase may have
+    // fired PASSWORD_RECOVERY before our listener attached. Enable the form
+    // only in that case — never for a plain existing session.
+    if (isRecoveryLink) {
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setHasRecoverySession(true);
+      });
+    }
 
     return () => sub.subscription.unsubscribe();
   }, []);

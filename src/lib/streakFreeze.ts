@@ -57,6 +57,16 @@ export async function hydrateStreakFromCloud(): Promise<void> {
     if (Array.isArray(remote.used_freeze_dates)) {
       localStorage.setItem(FREEZE_USED_KEY, JSON.stringify(remote.used_freeze_dates));
     }
+    // Mirror personal-best from cloud only if it beats the local cache.
+    if (typeof remote.longest_streak === "number" && remote.longest_streak > 0) {
+      try {
+        const localRaw = localStorage.getItem("wv-streak");
+        const localLongest = localRaw ? (JSON.parse(localRaw).longest || 0) : 0;
+        if (remote.longest_streak > localLongest) {
+          localStorage.setItem("wv-streak", JSON.stringify({ longest: remote.longest_streak }));
+        }
+      } catch {}
+    }
   } catch {}
 }
 

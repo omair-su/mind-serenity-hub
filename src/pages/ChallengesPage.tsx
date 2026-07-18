@@ -13,6 +13,7 @@ import ChallengeCard from "@/components/challenges/ChallengeCard";
 import ChallengeJourneyTimeline from "@/components/challenges/ChallengeJourneyTimeline";
 import LeafFallAnimation from "@/components/challenges/LeafFallAnimation";
 import ChallengeCompleteModal from "@/components/challenges/ChallengeCompleteModal";
+import PremiumGate from "@/components/PremiumGate";
 
 const easing = [0.25, 0.1, 0.25, 1] as const;
 
@@ -31,7 +32,7 @@ const getProgressPercent = (challengeId: string, progress: ReturnType<typeof get
   return Math.round((p.completedDays.length / c.duration) * 100);
 };
 
-export default function ChallengesPage() {
+function ChallengesPageInner() {
   const [activeChallengeId, setActiveChallengeId] = useState<string | null>(null);
   const [activeDay, setActiveDay] = useState<number | null>(null);
   const [note, setNote] = useState("");
@@ -350,5 +351,25 @@ function ProgressRingMini({ pct }: { pct: number }) {
         <span className="font-display text-sm font-bold text-foreground">{pct}%</span>
       </div>
     </div>
+  );
+}
+
+export default function ChallengesPage() {
+  return (
+    <PremiumGate
+      feature="Guided Challenges"
+      description="Multi-day transformational journeys — breath, sleep, focus and heart practices with daily check-ins and cinematic completion moments."
+      icon={Sparkles}
+      gradient="from-gold-dark/25 to-forest/15"
+      previewItems={[
+        "7, 14, and 21-day guided challenges",
+        "Daily practice + reflection prompts",
+        "Progress rings and streak tracking",
+        "Themed journeys: breath, sleep, focus, heart",
+        "Completion certificate + falling-leaf celebration",
+      ]}
+    >
+      <ChallengesPageInner />
+    </PremiumGate>
   );
 }

@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import focusmodeHero from "@/assets/focusmode-hero.webp";
 import { startBinaural, stopBinaural, setBinauralVolume, FREQUENCY_PRESETS, FrequencyPreset, isBinauralPlaying } from "@/lib/binauralBeats";
 import { saveTimerSession, getTimerSessions, getEarnedAchievements } from "@/lib/userStore";
+import PremiumGate from "@/components/PremiumGate";
+import { Trophy } from "lucide-react";
 
 type Phase = "idle" | "focus" | "break" | "longBreak" | "done";
 
@@ -116,7 +118,7 @@ const FOCUS_SCIENCE = [
   },
 ];
 
-export default function FocusModePage() {
+function FocusModePageInner() {
   const [preset, setPreset] = useState(PREMIUM_PROFILES[0]);
   const [phase, setPhase] = useState<Phase>("idle");
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -737,5 +739,25 @@ export default function FocusModePage() {
         </Dialog>
       </div>
     </AppLayout>
+  );
+}
+
+export default function FocusModePage() {
+  return (
+    <PremiumGate
+      feature="Focus Mode"
+      description="Deep-work sessions with binaural beats, Pomodoro variants, focus analytics, and expert-guided flow-state protocols."
+      icon={Brain}
+      gradient="from-forest/25 to-charcoal/15"
+      previewItems={[
+        "Classic Pomodoro, Deep Work, Sprint & Flow profiles",
+        "Binaural beat frequencies for focus & flow",
+        "Session tracking + productivity analytics",
+        "Focus achievements & milestones",
+        "Expert-guided deep-work protocols",
+      ]}
+    >
+      <FocusModePageInner />
+    </PremiumGate>
   );
 }
