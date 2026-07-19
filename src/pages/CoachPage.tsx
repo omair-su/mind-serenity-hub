@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import AppLayout from "@/components/AppLayout";
 import PremiumLockModal from "@/components/PremiumLockModal";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { useIsPremium } from "@/hooks/useIsPremium";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -68,6 +69,11 @@ function formatText(text: string) {
 }
 
 export default function CoachPage() {
+  usePageSEO({
+    title: "Willow Coach — Your AI Wellness Companion",
+    description: "Chat with Willow Coach: a private, on-brand AI trained on evidence-based mindfulness, sleep, and nervous-system regulation. Voice replies included with Willow Plus.",
+    canonical: "https://willowvibes.com/app/coach",
+  });
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const [showLock, setShowLock] = useState(false);
   const [usageToday, setUsageToday] = useState<number | null>(null);

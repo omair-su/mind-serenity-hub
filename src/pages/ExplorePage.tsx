@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AppLayout from "@/components/AppLayout";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import {
   BookOpen, Wind, Moon, Brain, Heart, Flame, Trophy, Target,
   Music, Headphones, Zap, Clock, MessageCircle, Leaf, Sparkles,
@@ -85,6 +86,11 @@ const sectionVariants = {
 };
 
 export default function ExplorePage() {
+  usePageSEO({
+    title: "Explore — Willow Vibes",
+    description: "Discover every Willow Vibes practice: guided meditations, breathwork, sleep stories, sound baths, walking meditations, and your AI wellness coach.",
+    canonical: "https://willowvibes.com/app/explore",
+  });
   return (
     <AppLayout>
       <motion.div
