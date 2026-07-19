@@ -81,7 +81,7 @@ export default function HeroCinema({
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/10 border border-cream/20 backdrop-blur-xl"
           aria-live="polite"
         >
           <span className="relative flex h-2 w-2">
@@ -133,7 +133,7 @@ export default function HeroCinema({
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body font-medium ${
               todayPracticed
                 ? "bg-[hsl(var(--forest))]/90 text-cream"
-                : "backdrop-blur-md bg-white/12 text-cream/85 border border-white/15"
+                : "backdrop-blur-md bg-cream/12 text-cream/85 border border-cream/15"
             }`}
           >
             {todayPracticed ? (
@@ -147,7 +147,7 @@ export default function HeroCinema({
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body backdrop-blur-md bg-white/12 text-cream/85 border border-white/15"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-body backdrop-blur-md bg-cream/12 text-cream/85 border border-cream/15"
             >
               {weatherLabel}
             </motion.span>
@@ -191,7 +191,7 @@ export default function HeroCinema({
           </Link>
           <button
             onClick={onQuickSession}
-            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full backdrop-blur-md bg-white/10 border border-white/25 text-cream font-body font-semibold text-sm hover:bg-white/15 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full backdrop-blur-md bg-cream/10 border border-cream/25 text-cream font-body font-semibold text-sm hover:bg-cream/15 transition-all"
           >
             <Play className="w-4 h-4" /> Quick Session
           </button>
