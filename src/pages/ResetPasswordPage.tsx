@@ -76,7 +76,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[hsl(var(--forest-deep))]">
+    <div className="min-h-dvh flex items-center justify-center p-6 relative overflow-hidden bg-[hsl(var(--forest-deep))]">
       {/* Luxury background */}
       <div
         className="absolute inset-0 opacity-30"

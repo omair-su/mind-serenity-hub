@@ -7,6 +7,7 @@ import { useAmbientBed } from "@/hooks/useAmbientBed";
 import NarrationBar from "@/components/NarrationBar";
 import AmbientMusicPlayer from "@/components/AmbientMusicPlayer";
 import { pickTrackByMood } from "@/lib/realAmbientTracks";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const sleepGradients = [
   "from-[hsl(var(--forest-deep))]/15 via-[hsl(var(--forest))]/8 to-[hsl(var(--sage-light))]/5",
@@ -39,6 +40,11 @@ const sleepMeditations = [
 ];
 
 export default function SleepPage() {
+  usePageSEO({
+    title: "Sleep Meditations & Bedtime Stories | Willow Vibes",
+    description: "Fall asleep faster with guided sleep meditations, bedtime stories, and layered ambient soundscapes — engineered for deep, restorative rest.",
+    canonical: "https://willowvibes.com/app/sleep",
+  });
   const [active, setActive] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const tts = useTextToSpeech();

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import AppLayout from "@/components/AppLayout";
 import { Wind, Play, Pause, RotateCcw } from "lucide-react";
 import breathingHero from "@/assets/breathing-hero.webp";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 interface BreathExercise {
   id: string;
@@ -35,6 +36,11 @@ const phaseLabels: Record<Phase, string> = {
 };
 
 export default function BreathingPage() {
+  usePageSEO({
+    title: "Breathwork — Box, 4-7-8 & Coherence Breathing | Willow Vibes",
+    description: "Guided breathwork sessions with a visual pacer: box breathing, 4-7-8, coherent breathing, and Wim Hof. Reduce anxiety and sharpen focus in minutes.",
+    canonical: "https://willowvibes.com/app/breathing",
+  });
   const [selected, setSelected] = useState<BreathExercise | null>(null);
   const [phase, setPhase] = useState<Phase>('idle');
   const [counter, setCounter] = useState(0);

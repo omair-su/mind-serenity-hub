@@ -1,7 +1,15 @@
 // Willow Vibes service worker — handles background web push notifications
 // AND caches downloaded meditation audio for offline playback.
+//
+// Cache-busting: bump AUDIO_CACHE when the audio catalog materially
+// changes. Old caches are auto-purged on activate. Clients can also
+// postMessage({type:"SKIP_WAITING"}) to force an immediate swap.
 
-const AUDIO_CACHE = "wv-audio-v1";
+const AUDIO_CACHE = "wv-audio-v2";
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
+});
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();

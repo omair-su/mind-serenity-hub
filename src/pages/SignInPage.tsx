@@ -201,7 +201,7 @@ export default function SignInPage() {
   // ────────────────────────────────────────────────────────────────────
   if (confirmationSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <div className="min-h-dvh flex items-center justify-center p-6 relative overflow-hidden">
         <img
           src={signinBg}
           alt=""
@@ -235,24 +235,14 @@ export default function SignInPage() {
             Back to sign in
           </button>
         </motion.div>
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
-            .font-body { font-family: 'Karla', system-ui, sans-serif; }
-          `,
-        }} />
+        {/* Fonts (Cormorant Garamond + Karla) are set globally via Tailwind
+            font-display / font-body tokens; no local <style> block needed. */}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row overflow-hidden relative">
-      <style dangerouslySetInnerHTML={{
-        __html: `
-          .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -0.015em; }
-          .font-body { font-family: 'Karla', system-ui, sans-serif; }
-        `,
-      }} />
+    <div className="min-h-dvh flex flex-col md:flex-row overflow-hidden relative">
 
       {/* ─── PHOTO BACKGROUND — Calm-style misty mountain dawn ─── */}
       <div className="absolute inset-0">
@@ -267,7 +257,7 @@ export default function SignInPage() {
       </div>
 
       {/* ─── LEFT: BRAND COPY (over photo) ─── */}
-      <div className="relative hidden md:flex md:w-1/2 h-screen items-end p-12 lg:p-16 z-10">
+      <div className="relative hidden md:flex md:w-1/2 h-dvh items-end p-12 lg:p-16 z-10">
         <div className="max-w-lg">
           <motion.div
             initial={{ opacity: 0, y: 12 }}

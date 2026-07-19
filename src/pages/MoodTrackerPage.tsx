@@ -10,10 +10,16 @@ import MoodInsightsCard from "@/components/mood/MoodInsightsCard";
 import PremiumLockModal from "@/components/PremiumLockModal";
 import { PageHero, LuxeCard, EmptyState } from "@/components/ui-premium";
 import { fetchMoodEntries, saveMoodEntry, type CloudMoodEntry } from "@/lib/cloudSync";
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const HERO = "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&q=80&w=1600";
 
 export default function MoodTrackerPage() {
+  usePageSEO({
+    title: "Mood Tracker — Emotional Intelligence | Willow Vibes",
+    description: "Track your emotional weather with a beautifully designed mood wheel. Spot patterns, get AI insights, and receive a monthly emotional health report.",
+    canonical: "https://willowvibes.com/app/mood",
+  });
   const [entries, setEntries] = useState<CloudMoodEntry[]>([]);
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [primary, setPrimary] = useState<string | null>(null);

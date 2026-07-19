@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import AppLayout from "@/components/AppLayout";
 import { 
   Zap, Play, Pause, Clock, AlertTriangle, Shield, Wind, Heart, 
@@ -159,6 +160,11 @@ const allSessions = [
 ];
 
 export default function SOSPage() {
+  usePageSEO({
+    title: "SOS — Rapid Calm for Panic & Overwhelm | Willow Vibes",
+    description: "Instant relief techniques for panic, anxiety, and overwhelm: 4-7-8 breathing, grounding, binaural rescue, and an AI companion — designed for the hardest moments.",
+    canonical: "https://willowvibes.com/app/sos",
+  });
   const [active, setActive] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [timerSecs, setTimerSecs] = useState(0);

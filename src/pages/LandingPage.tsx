@@ -4,6 +4,7 @@ import { Menu, X, Shield, Sparkles, Brain, Moon, Wind, Headphones, Flower2, Arro
 import { Link, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageSEO } from "@/hooks/usePageSEO";
 const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
 
 // Lazy below-the-fold sections
@@ -47,6 +48,11 @@ const FOREST_IMG =
   "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1600&q=80";
 
 export default function LandingPage() {
+  usePageSEO({
+    title: "Willow Vibes — Meditation, Sleep & Breathwork for Modern Minds",
+    description: "A calmer nervous system in 10 minutes a day. Guided meditation, sleep stories, breathwork, and an AI wellness coach. Start your 7-day free trial.",
+    canonical: "https://willowvibes.com/",
+  });
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
