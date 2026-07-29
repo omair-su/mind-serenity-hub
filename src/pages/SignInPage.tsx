@@ -320,9 +320,9 @@ export default function SignInPage() {
 
           <div className="bg-card/92 backdrop-blur-xl calm-card calm-card-lg p-7 md:p-9 shadow-[0_20px_60px_-15px_rgba(30,41,59,0.25)] border-cream/70">
             <motion.div variants={itemVariants} className="mb-7">
-              <h2 className="font-serif-display text-3xl font-medium text-foreground mb-2">
+              <h1 className="font-serif-display text-3xl font-medium text-foreground mb-2">
                 {mode === "signup" ? "Create account" : "Sign in"}
-              </h2>
+              </h1>
               <p className="-body text-muted-foreground text-sm leading-relaxed">
                 {mode === "signup"
                   ? "Start your practice in under a minute."
