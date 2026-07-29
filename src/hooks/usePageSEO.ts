@@ -4,6 +4,8 @@ interface SEOOptions {
   title: string;
   description: string;
   canonical?: string;
+  /** og:type override, defaults to "website". Use "article" for guides/blog. */
+  ogType?: "website" | "article";
 }
 
 /**
@@ -15,7 +17,7 @@ interface SEOOptions {
  * because the homepage and /about shared the same description from index.html.
  * Each public route now declares its own.
  */
-export function usePageSEO({ title, description, canonical }: SEOOptions) {
+export function usePageSEO({ title, description, canonical, ogType }: SEOOptions) {
   useEffect(() => {
     const prevTitle = document.title;
 
@@ -43,6 +45,9 @@ export function usePageSEO({ title, description, canonical }: SEOOptions) {
     const ogUrl = document.querySelector<HTMLMetaElement>(
       'meta[property="og:url"]'
     );
+    const ogTypeTag = document.querySelector<HTMLMetaElement>(
+      'meta[property="og:type"]'
+    );
     const twTitle = document.querySelector<HTMLMetaElement>(
       'meta[name="twitter:title"]'
     );
@@ -53,12 +58,14 @@ export function usePageSEO({ title, description, canonical }: SEOOptions) {
     const prevOgTitle = ogTitle?.getAttribute("content") ?? "";
     const prevOgDesc = ogDesc?.getAttribute("content") ?? "";
     const prevOgUrl = ogUrl?.getAttribute("content") ?? "";
+    const prevOgType = ogTypeTag?.getAttribute("content") ?? "";
     const prevTwTitle = twTitle?.getAttribute("content") ?? "";
     const prevTwDesc = twDesc?.getAttribute("content") ?? "";
 
     ogTitle?.setAttribute("content", title);
     ogDesc?.setAttribute("content", description);
     if (canonical) ogUrl?.setAttribute("content", canonical);
+    if (ogType) ogTypeTag?.setAttribute("content", ogType);
     twTitle?.setAttribute("content", title);
     twDesc?.setAttribute("content", description);
 
@@ -70,8 +77,9 @@ export function usePageSEO({ title, description, canonical }: SEOOptions) {
       ogTitle?.setAttribute("content", prevOgTitle);
       ogDesc?.setAttribute("content", prevOgDesc);
       if (prevOgUrl) ogUrl?.setAttribute("content", prevOgUrl);
+      if (prevOgType) ogTypeTag?.setAttribute("content", prevOgType);
       twTitle?.setAttribute("content", prevTwTitle);
       twDesc?.setAttribute("content", prevTwDesc);
     };
-  }, [title, description, canonical]);
+  }, [title, description, canonical, ogType]);
 }

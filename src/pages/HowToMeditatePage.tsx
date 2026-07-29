@@ -84,9 +84,10 @@ const FAQS = [
 
 export default function HowToMeditatePage() {
   usePageSEO({
-    title: "How to Meditate — A Science-Backed Guide for Beginners | Willow Vibes",
-    description: "Learn how to meditate in 5 minutes a day. A science-backed, no-nonsense guide for busy beginners — five simple steps, the research behind it, and answers to the most common questions.",
+    title: "How to Meditate: 5-Minute Guide for Beginners",
+    description: "Learn how to meditate in 5 minutes a day. A science-backed guide for busy beginners — five simple steps, the research, and answers to common questions.",
     canonical: "https://willowvibes.com/guides/how-to-meditate",
+    ogType: "article",
   });
 
   return (
