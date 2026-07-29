@@ -4,6 +4,8 @@ interface SEOOptions {
   title: string;
   description: string;
   canonical?: string;
+  /** og:type override, defaults to "website". Use "article" for guides/blog. */
+  ogType?: "website" | "article";
 }
 
 /**
@@ -15,7 +17,7 @@ interface SEOOptions {
  * because the homepage and /about shared the same description from index.html.
  * Each public route now declares its own.
  */
-export function usePageSEO({ title, description, canonical }: SEOOptions) {
+export function usePageSEO({ title, description, canonical, ogType }: SEOOptions) {
   useEffect(() => {
     const prevTitle = document.title;
 
