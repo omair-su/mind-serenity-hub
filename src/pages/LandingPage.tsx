@@ -429,6 +429,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Problem / empathy band ─────────────────────────────────── */}
+      <ProblemBand />
+
       {/* ─── Practice — editorial four pillars ──────────────────────── */}
       <section id="practice" className="w-full" style={{ background: CREAM_DEEP }}>
         <div className="max-w-7xl mx-auto px-5 md:px-10 py-24 md:py-32">
