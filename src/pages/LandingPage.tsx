@@ -483,6 +483,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Product proof — how it works ───────────────────────────── */}
+      <ProductProof />
+
       {/* ─── Outcomes / numbers (new) ───────────────────────────────── */}
       <OutcomesBand />
 
