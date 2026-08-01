@@ -403,6 +403,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Trust strip — counters + press marquee ─────────────────── */}
+      <TrustStrip />
+
       {/* ─── Philosophy / About ─────────────────────────────────────── */}
       <section id="philosophy" className="w-full" style={{ background: CREAM }}>
         <div className="max-w-5xl mx-auto px-5 md:px-10 py-24 md:py-36 text-center">
