@@ -16,6 +16,15 @@ import {
   CraftedBy,
   MemberVoicesTrio,
 } from "@/components/landing/LandingExtras";
+import {
+  TrustStrip,
+  ProblemBand,
+  ProductProof,
+  ScienceBand,
+  MemberPortraits,
+  RiskReversal,
+} from "@/components/landing/FunnelBands";
+import StickyMobileCTA from "@/components/landing/StickyMobileCTA";
 
 /**
  * Willow Vibes — premium, minimal, editorial landing.
