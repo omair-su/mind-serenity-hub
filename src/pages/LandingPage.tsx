@@ -833,6 +833,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ─── Sticky mobile conversion bar ───────────────────────────── */}
+      <StickyMobileCTA />
     </div>
   );
 }
