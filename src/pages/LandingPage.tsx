@@ -16,6 +16,15 @@ import {
   CraftedBy,
   MemberVoicesTrio,
 } from "@/components/landing/LandingExtras";
+import {
+  TrustStrip,
+  ProblemBand,
+  ProductProof,
+  ScienceBand,
+  MemberPortraits,
+  RiskReversal,
+} from "@/components/landing/FunnelBands";
+import StickyMobileCTA from "@/components/landing/StickyMobileCTA";
 
 /**
  * Willow Vibes — premium, minimal, editorial landing.
@@ -394,6 +403,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Trust strip — counters + press marquee ─────────────────── */}
+      <TrustStrip />
+
       {/* ─── Philosophy / About ─────────────────────────────────────── */}
       <section id="philosophy" className="w-full" style={{ background: CREAM }}>
         <div className="max-w-5xl mx-auto px-5 md:px-10 py-24 md:py-36 text-center">
@@ -419,6 +431,9 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
+      {/* ─── Problem / empathy band ─────────────────────────────────── */}
+      <ProblemBand />
 
       {/* ─── Practice — editorial four pillars ──────────────────────── */}
       <section id="practice" className="w-full" style={{ background: CREAM_DEEP }}>
@@ -473,6 +488,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Product proof — how it works ───────────────────────────── */}
+      <ProductProof />
 
       {/* ─── Outcomes / numbers (new) ───────────────────────────────── */}
       <OutcomesBand />
@@ -645,8 +663,14 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Science & evidence ─────────────────────────────────────── */}
+      <ScienceBand />
+
       {/* ─── Member Voices trio (new) ───────────────────────────────── */}
       <MemberVoicesTrio />
+
+      {/* ─── Member portraits ───────────────────────────────────────── */}
+      <MemberPortraits />
 
       {/* ─── Plans / Pricing ────────────────────────────────────────── */}
       <section id="plans" className="w-full" style={{ background: CREAM_DEEP }}>
@@ -731,6 +755,9 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
+      {/* ─── Risk reversal ──────────────────────────────────────────── */}
+      <RiskReversal />
 
       {/* ─── FAQ ────────────────────────────────────────────────────── */}
       <section id="faq" className="w-full" style={{ background: CREAM }}>
@@ -824,6 +851,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* ─── Sticky mobile conversion bar ───────────────────────────── */}
+      <StickyMobileCTA />
     </div>
   );
 }
