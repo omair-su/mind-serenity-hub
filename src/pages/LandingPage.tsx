@@ -654,8 +654,14 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Science & evidence ─────────────────────────────────────── */}
+      <ScienceBand />
+
       {/* ─── Member Voices trio (new) ───────────────────────────────── */}
       <MemberVoicesTrio />
+
+      {/* ─── Member portraits ───────────────────────────────────────── */}
+      <MemberPortraits />
 
       {/* ─── Plans / Pricing ────────────────────────────────────────── */}
       <section id="plans" className="w-full" style={{ background: CREAM_DEEP }}>
