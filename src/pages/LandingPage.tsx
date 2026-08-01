@@ -741,6 +741,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── Risk reversal ──────────────────────────────────────────── */}
+      <RiskReversal />
+
       {/* ─── FAQ ────────────────────────────────────────────────────── */}
       <section id="faq" className="w-full" style={{ background: CREAM }}>
         <Suspense fallback={null}>
