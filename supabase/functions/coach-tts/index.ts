@@ -65,28 +65,26 @@ Deno.serve(async (req) => {
     }
     const clean = stripMarkdown(text).slice(0, MAX_CHARS);
 
-    const r = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${COACH_VOICE_ID}/stream?output_format=mp3_44100_128`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: clean,
-          model_id: "eleven_turbo_v2_5",
-          voice_settings: {
-            stability: 0.6, similarity_boost: 0.8, style: 0.25,
-            use_speaker_boost: true, speed: 1.0,
-          },
-        }),
+    const r = await fetch(TTS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        model: TTS_MODEL,
+        input: clean,
+        voice: COACH_VOICE,
+        response_format: "mp3",
+        speed: 1.0,
+        instructions:
+          "Speak like a warm, grounded wellness coach: calm, encouraging and natural, with an unhurried pace.",
+      }),
+    });
 
     if (!r.ok || !r.body) {
       const err = await r.text().catch(() => "");
-      console.error("[coach-tts] EL error", r.status, err);
+      console.error("[coach-tts] gateway error", r.status, err);
       return new Response(JSON.stringify({ error: "TTS_ERROR" }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -95,6 +93,7 @@ Deno.serve(async (req) => {
     return new Response(r.body, {
       headers: { ...corsHeaders, "Content-Type": "audio/mpeg", "Cache-Control": "no-store" },
     });
+
   } catch (e) {
     console.error("[coach-tts] fatal", e);
     return new Response(JSON.stringify({ error: "Internal error" }), {
