@@ -1,4 +1,4 @@
-// Generates studio-quality meditation narration via ElevenLabs.
+// Generates studio-quality meditation narration via Lovable AI text-to-speech.
 // Caches results so the same script is never billed twice.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 
@@ -7,17 +7,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const TTS_MODEL = 'openai/gpt-4o-mini-tts';
+const TTS_ENDPOINT = 'https://ai.gateway.lovable.dev/v1/audio/speech';
+
 // Curated voice palette — each matches a category for brand consistency.
 const VOICE_LIBRARY = {
   // Calming, warm — perfect for body scans and daily meditation
-  sarah: { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Sarah', tone: 'calm-feminine' },
+  sarah: { id: 'sage', name: 'Sarah', tone: 'calm-feminine' },
   // Deep, grounding — perfect for sleep stories
-  george: { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'George', tone: 'deep-masculine' },
+  george: { id: 'onyx', name: 'George', tone: 'deep-masculine' },
   // Gentle, ethereal — perfect for affirmations
-  matilda: { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matilda', tone: 'gentle-feminine' },
+  matilda: { id: 'shimmer', name: 'Matilda', tone: 'gentle-feminine' },
   // Soft-spoken — perfect for sound bath intros
-  charlie: { id: 'IKne3meq5aSn9XLyUdCD', name: 'Charlie', tone: 'soft-masculine' },
+  charlie: { id: 'ash', name: 'Charlie', tone: 'soft-masculine' },
 } as const;
+
 
 type VoiceKey = keyof typeof VOICE_LIBRARY;
 
