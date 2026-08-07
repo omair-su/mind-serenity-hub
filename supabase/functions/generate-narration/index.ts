@@ -1,4 +1,4 @@
-// Generates studio-quality meditation narration via ElevenLabs.
+// Generates studio-quality meditation narration via Lovable AI text-to-speech.
 // Caches results so the same script is never billed twice.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 
@@ -7,17 +7,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const TTS_MODEL = 'openai/gpt-4o-mini-tts';
+const TTS_ENDPOINT = 'https://ai.gateway.lovable.dev/v1/audio/speech';
+
 // Curated voice palette — each matches a category for brand consistency.
 const VOICE_LIBRARY = {
   // Calming, warm — perfect for body scans and daily meditation
-  sarah: { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Sarah', tone: 'calm-feminine' },
+  sarah: { id: 'sage', name: 'Sarah', tone: 'calm-feminine' },
   // Deep, grounding — perfect for sleep stories
-  george: { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'George', tone: 'deep-masculine' },
+  george: { id: 'onyx', name: 'George', tone: 'deep-masculine' },
   // Gentle, ethereal — perfect for affirmations
-  matilda: { id: 'XrExE9yKIg1WjnnlVkGX', name: 'Matilda', tone: 'gentle-feminine' },
+  matilda: { id: 'shimmer', name: 'Matilda', tone: 'gentle-feminine' },
   // Soft-spoken — perfect for sound bath intros
-  charlie: { id: 'IKne3meq5aSn9XLyUdCD', name: 'Charlie', tone: 'soft-masculine' },
+  charlie: { id: 'ash', name: 'Charlie', tone: 'soft-masculine' },
 } as const;
+
 
 type VoiceKey = keyof typeof VOICE_LIBRARY;
 
@@ -48,12 +52,40 @@ function defaultVoiceFor(category: string): VoiceKey {
   }
 }
 
+// Meditation scripts routinely exceed the model's single-request input limit.
+// Split at sentence boundaries into conservative chunks so nothing is truncated.
+function chunkForTTS(text: string, maxWords = 350): string[] {
+  const wordCount = (s: string) => (s.match(/\S+/g) ?? []).length;
+  const sentences = text.match(/[^.!?]+[.!?]*\s*/g) ?? [text];
+  const chunks: string[] = [];
+  let current = '';
+  const flush = () => {
+    if (current.trim()) chunks.push(current.trim());
+    current = '';
+  };
+  for (const sentence of sentences) {
+    if (wordCount(sentence) > maxWords) {
+      flush();
+      const words = sentence.match(/\S+/g) ?? [];
+      for (let i = 0; i < words.length; i += maxWords) {
+        chunks.push(words.slice(i, i + maxWords).join(' '));
+      }
+      continue;
+    }
+    if (current && wordCount(current) + wordCount(sentence) > maxWords) flush();
+    current += sentence;
+  }
+  flush();
+  return chunks.length ? chunks : [text];
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
-    if (!ELEVENLABS_API_KEY) throw new Error('ELEVENLABS_API_KEY missing');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY missing');
+
 
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
     const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
@@ -138,7 +170,9 @@ Deno.serve(async (req) => {
 
     const voiceKey: VoiceKey = voice ?? defaultVoiceFor(category);
     const voiceMeta = VOICE_LIBRARY[voiceKey];
-    const scriptHash = await sha256(script + voiceKey);
+    // Model + voice are part of the hash so provider changes invalidate stale audio.
+    const scriptHash = await sha256(`${TTS_MODEL}|${voiceMeta.id}|${script}`);
+
 
     // Helper: build a fresh signed URL (1 hour) for a given storage path
     const signUrl = async (storagePath: string): Promise<string> => {
@@ -166,47 +200,55 @@ Deno.serve(async (req) => {
       });
     }
 
-    // 2. Generate via ElevenLabs
+    // 2. Generate via Lovable AI text-to-speech (chunked, then concatenated)
     console.log(`[narration] generating ${trackKey} with voice ${voiceMeta.name}`);
-    const ttsResponse = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceMeta.id}?output_format=mp3_44100_128`,
-      {
+    const chunks = chunkForTTS(script);
+    const parts: Uint8Array[] = [];
+
+    for (const chunk of chunks) {
+      const ttsResponse = await fetch(TTS_ENDPOINT, {
         method: 'POST',
         headers: {
-          'xi-api-key': ELEVENLABS_API_KEY,
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          text: script,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.65,
-            similarity_boost: 0.8,
-            style: 0.3,
-            use_speaker_boost: true,
-            speed: 0.92,
-          },
+          model: TTS_MODEL,
+          input: chunk,
+          voice: voiceMeta.id,
+          response_format: 'mp3',
+          speed: 0.9,
+          instructions:
+            'Speak as a professional meditation guide: slow, warm, soothing and unhurried. Leave natural pauses at sentence breaks. Keep the tone gentle and grounded throughout.',
         }),
-      }
-    );
-
-    if (!ttsResponse.ok) {
-      const err = await ttsResponse.text();
-      console.error('[narration] ElevenLabs error:', err);
-      // Detect free-tier abuse block / quota — signal client to use browser TTS fallback (return 200 so UI doesn't crash)
-      const isAbuseBlock = err.includes('detected_unusual_activity') || err.includes('Free Tier usage disabled');
-      const isQuota = ttsResponse.status === 401 || ttsResponse.status === 429 || err.includes('quota');
-      return new Response(JSON.stringify({
-        fallback: true,
-        reason: isAbuseBlock ? 'TTS_UNUSABLE' : isQuota ? 'TTS_QUOTA' : 'TTS_ERROR',
-        message: 'Premium narration temporarily unavailable. Using browser voice instead.',
-      }), {
-        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
+
+      if (!ttsResponse.ok) {
+        const err = await ttsResponse.text().catch(() => '');
+        console.error('[narration] Lovable AI TTS error:', ttsResponse.status, err);
+        const isQuota = ttsResponse.status === 402;
+        const isRate = ttsResponse.status === 429;
+        return new Response(JSON.stringify({
+          fallback: true,
+          reason: isQuota ? 'TTS_QUOTA' : isRate ? 'TTS_RATE_LIMIT' : 'TTS_ERROR',
+          message: 'Premium narration temporarily unavailable. Using browser voice instead.',
+        }), {
+          status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      parts.push(new Uint8Array(await ttsResponse.arrayBuffer()));
     }
 
-    const audioBuffer = await ttsResponse.arrayBuffer();
+    const totalBytes = parts.reduce((n, p) => n + p.length, 0);
+    const audioBuffer = new Uint8Array(totalBytes);
+    let offset = 0;
+    for (const p of parts) {
+      audioBuffer.set(p, offset);
+      offset += p.length;
+    }
     const storagePath = `${category}/${trackKey}.mp3`;
+
 
     // 3. Upload to private storage (overwrite if existed)
     const { error: uploadError } = await admin.storage

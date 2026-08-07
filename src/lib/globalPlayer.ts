@@ -1,6 +1,6 @@
 // Module-level singleton audio player.
 // One HTMLAudioElement that survives route changes. React subscribes via
-// `useSyncExternalStore`. Backed by ElevenLabs narration (through the
+// `useSyncExternalStore`. Backed by Lovable AI narration (through the
 // generate-narration edge function) for script tracks, or a direct audio
 // URL for legacy / ambient tracks.
 //
@@ -29,7 +29,7 @@ export interface PlayerTrack {
   subtitle?: string;
   author?: string;
   thumbnail?: string;
-  /** Full meditation/story script (triggers ElevenLabs generation). */
+  /** Full meditation/story script (triggers studio narration generation). */
   script?: string;
   voice?: PlayerVoice;
   category?: PlayerCategory;

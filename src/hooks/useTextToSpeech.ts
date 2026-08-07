@@ -1,5 +1,5 @@
 // Premium narration hook — calls the generate-narration edge function,
-// which uses ElevenLabs studio voices and caches every track in storage.
+// which uses Lovable AI studio voices and caches every track in storage.
 // Same script = instant cached playback (no re-billing).
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -101,7 +101,7 @@ export function useTextToSpeech() {
 
           if (invokeError) throw new Error(invokeError.message);
 
-          // Edge function signaled a fallback (ElevenLabs blocked / quota) — use browser TTS
+          // Edge function signaled a fallback (AI voice blocked / quota) — use browser TTS
           if (data?.fallback) {
             setIsLoading(false);
             return playWithBrowserTTS(text, () => setIsPlaying(true), () => setIsPlaying(false));
@@ -205,7 +205,7 @@ async function sha1(text: string): Promise<string> {
     .join("");
 }
 
-// Browser SpeechSynthesis fallback when ElevenLabs is unavailable
+// Browser SpeechSynthesis fallback when studio narration is unavailable
 function playWithBrowserTTS(text: string, onStart: () => void, onEnd: () => void) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   try {

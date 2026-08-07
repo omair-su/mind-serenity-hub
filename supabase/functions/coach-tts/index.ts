@@ -1,5 +1,5 @@
-// Willow Coach voice replies — streams ElevenLabs TTS audio.
-// Premium-only to control ElevenLabs spend. Free users fall back to browser TTS.
+// Willow Coach voice replies — streams Lovable AI text-to-speech audio.
+// Premium-only to control spend. Free users fall back to browser TTS.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -8,9 +8,12 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// Sarah — warm, calming, on-brand for coaching.
-const COACH_VOICE_ID = "EXAVITQu4vr4xnSDxMaL";
+// Matches the "Sarah" brand voice — warm, calming, on-brand for coaching.
+const COACH_VOICE = "sage";
+const TTS_MODEL = "openai/gpt-4o-mini-tts";
+const TTS_ENDPOINT = "https://ai.gateway.lovable.dev/v1/audio/speech";
 const MAX_CHARS = 1500;
+
 
 function stripMarkdown(text: string): string {
   return text
@@ -24,8 +27,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!ELEVENLABS_API_KEY) {
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+
       return new Response(JSON.stringify({ error: "TTS_NOT_CONFIGURED" }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -61,28 +65,26 @@ Deno.serve(async (req) => {
     }
     const clean = stripMarkdown(text).slice(0, MAX_CHARS);
 
-    const r = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${COACH_VOICE_ID}/stream?output_format=mp3_44100_128`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: clean,
-          model_id: "eleven_turbo_v2_5",
-          voice_settings: {
-            stability: 0.6, similarity_boost: 0.8, style: 0.25,
-            use_speaker_boost: true, speed: 1.0,
-          },
-        }),
+    const r = await fetch(TTS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        model: TTS_MODEL,
+        input: clean,
+        voice: COACH_VOICE,
+        response_format: "mp3",
+        speed: 1.0,
+        instructions:
+          "Speak like a warm, grounded wellness coach: calm, encouraging and natural, with an unhurried pace.",
+      }),
+    });
 
     if (!r.ok || !r.body) {
       const err = await r.text().catch(() => "");
-      console.error("[coach-tts] EL error", r.status, err);
+      console.error("[coach-tts] gateway error", r.status, err);
       return new Response(JSON.stringify({ error: "TTS_ERROR" }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -91,6 +93,7 @@ Deno.serve(async (req) => {
     return new Response(r.body, {
       headers: { ...corsHeaders, "Content-Type": "audio/mpeg", "Cache-Control": "no-store" },
     });
+
   } catch (e) {
     console.error("[coach-tts] fatal", e);
     return new Response(JSON.stringify({ error: "Internal error" }), {

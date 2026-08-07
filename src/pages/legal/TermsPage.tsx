@@ -51,7 +51,7 @@ export default function TermsPage() {
       <p>You retain ownership of journal entries, gratitude logs, mood data, and other content you create ("User Content"). You grant us a limited license to store and process User Content solely to provide the Service to you.</p>
 
       <h2>9. AI-Generated Content</h2>
-      <p>The Service uses AI models (including Anthropic Claude, Google Gemini, OpenAI GPT, and ElevenLabs voices) to generate insights, reflections, and narration. AI output may contain inaccuracies and should not be relied on as professional advice.</p>
+      <p>The Service uses AI models (including Anthropic Claude, Google Gemini and OpenAI GPT) to generate insights, reflections, and narration. AI output may contain inaccuracies and should not be relied on as professional advice.</p>
 
       <h2>10. Termination</h2>
       <p>We may suspend or terminate your account if you violate these Terms. You may delete your account at any time from settings; upon deletion, your data will be removed in accordance with our Privacy Policy.</p>

@@ -8,7 +8,7 @@ export interface RitualMeta {
   steps: number;
   heroImage: string;
   ambientId: string;
-  voiceId: string; // ElevenLabs voice
+  voiceId: string; // Studio AI voice
   accent: string; // tailwind gradient
   iconEmoji: string;
 }

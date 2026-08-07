@@ -40,7 +40,7 @@ export default function PrivacyPage() {
       <ul>
         <li><strong>Paddle</strong> — Merchant of Record for payments, taxes, and invoicing.</li>
         <li><strong>Supabase</strong> — secure cloud database and authentication.</li>
-        <li><strong>AI providers</strong> — Anthropic, Google, OpenAI, and ElevenLabs process AI requests on our behalf under data processing agreements. Inputs are not used to train their models.</li>
+        <li><strong>AI providers</strong> — Anthropic, Google and OpenAI process AI requests on our behalf under data processing agreements. Inputs are not used to train their models.</li>
         <li><strong>Email providers</strong> — for transactional and marketing email delivery.</li>
         <li><strong>Legal authorities</strong> — when required by law.</li>
       </ul>
