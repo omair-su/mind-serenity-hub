@@ -200,47 +200,55 @@ Deno.serve(async (req) => {
       });
     }
 
-    // 2. Generate via ElevenLabs
+    // 2. Generate via Lovable AI text-to-speech (chunked, then concatenated)
     console.log(`[narration] generating ${trackKey} with voice ${voiceMeta.name}`);
-    const ttsResponse = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceMeta.id}?output_format=mp3_44100_128`,
-      {
+    const chunks = chunkForTTS(script);
+    const parts: Uint8Array[] = [];
+
+    for (const chunk of chunks) {
+      const ttsResponse = await fetch(TTS_ENDPOINT, {
         method: 'POST',
         headers: {
-          'xi-api-key': ELEVENLABS_API_KEY,
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          text: script,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.65,
-            similarity_boost: 0.8,
-            style: 0.3,
-            use_speaker_boost: true,
-            speed: 0.92,
-          },
+          model: TTS_MODEL,
+          input: chunk,
+          voice: voiceMeta.id,
+          response_format: 'mp3',
+          speed: 0.9,
+          instructions:
+            'Speak as a professional meditation guide: slow, warm, soothing and unhurried. Leave natural pauses at sentence breaks. Keep the tone gentle and grounded throughout.',
         }),
-      }
-    );
-
-    if (!ttsResponse.ok) {
-      const err = await ttsResponse.text();
-      console.error('[narration] ElevenLabs error:', err);
-      // Detect free-tier abuse block / quota — signal client to use browser TTS fallback (return 200 so UI doesn't crash)
-      const isAbuseBlock = err.includes('detected_unusual_activity') || err.includes('Free Tier usage disabled');
-      const isQuota = ttsResponse.status === 401 || ttsResponse.status === 429 || err.includes('quota');
-      return new Response(JSON.stringify({
-        fallback: true,
-        reason: isAbuseBlock ? 'TTS_UNUSABLE' : isQuota ? 'TTS_QUOTA' : 'TTS_ERROR',
-        message: 'Premium narration temporarily unavailable. Using browser voice instead.',
-      }), {
-        status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
+
+      if (!ttsResponse.ok) {
+        const err = await ttsResponse.text().catch(() => '');
+        console.error('[narration] Lovable AI TTS error:', ttsResponse.status, err);
+        const isQuota = ttsResponse.status === 402;
+        const isRate = ttsResponse.status === 429;
+        return new Response(JSON.stringify({
+          fallback: true,
+          reason: isQuota ? 'TTS_QUOTA' : isRate ? 'TTS_RATE_LIMIT' : 'TTS_ERROR',
+          message: 'Premium narration temporarily unavailable. Using browser voice instead.',
+        }), {
+          status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      parts.push(new Uint8Array(await ttsResponse.arrayBuffer()));
     }
 
-    const audioBuffer = await ttsResponse.arrayBuffer();
+    const totalBytes = parts.reduce((n, p) => n + p.length, 0);
+    const audioBuffer = new Uint8Array(totalBytes);
+    let offset = 0;
+    for (const p of parts) {
+      audioBuffer.set(p, offset);
+      offset += p.length;
+    }
     const storagePath = `${category}/${trackKey}.mp3`;
+
 
     // 3. Upload to private storage (overwrite if existed)
     const { error: uploadError } = await admin.storage
