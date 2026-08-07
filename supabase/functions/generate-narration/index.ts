@@ -52,12 +52,40 @@ function defaultVoiceFor(category: string): VoiceKey {
   }
 }
 
+// Meditation scripts routinely exceed the model's single-request input limit.
+// Split at sentence boundaries into conservative chunks so nothing is truncated.
+function chunkForTTS(text: string, maxWords = 350): string[] {
+  const wordCount = (s: string) => (s.match(/\S+/g) ?? []).length;
+  const sentences = text.match(/[^.!?]+[.!?]*\s*/g) ?? [text];
+  const chunks: string[] = [];
+  let current = '';
+  const flush = () => {
+    if (current.trim()) chunks.push(current.trim());
+    current = '';
+  };
+  for (const sentence of sentences) {
+    if (wordCount(sentence) > maxWords) {
+      flush();
+      const words = sentence.match(/\S+/g) ?? [];
+      for (let i = 0; i < words.length; i += maxWords) {
+        chunks.push(words.slice(i, i + maxWords).join(' '));
+      }
+      continue;
+    }
+    if (current && wordCount(current) + wordCount(sentence) > maxWords) flush();
+    current += sentence;
+  }
+  flush();
+  return chunks.length ? chunks : [text];
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
-    if (!ELEVENLABS_API_KEY) throw new Error('ELEVENLABS_API_KEY missing');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY missing');
+
 
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
     const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
