@@ -27,8 +27,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!ELEVENLABS_API_KEY) {
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+
       return new Response(JSON.stringify({ error: "TTS_NOT_CONFIGURED" }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
