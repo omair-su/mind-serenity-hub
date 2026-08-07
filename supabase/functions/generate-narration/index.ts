@@ -170,7 +170,9 @@ Deno.serve(async (req) => {
 
     const voiceKey: VoiceKey = voice ?? defaultVoiceFor(category);
     const voiceMeta = VOICE_LIBRARY[voiceKey];
-    const scriptHash = await sha256(script + voiceKey);
+    // Model + voice are part of the hash so provider changes invalidate stale audio.
+    const scriptHash = await sha256(`${TTS_MODEL}|${voiceMeta.id}|${script}`);
+
 
     // Helper: build a fresh signed URL (1 hour) for a given storage path
     const signUrl = async (storagePath: string): Promise<string> => {
