@@ -2,7 +2,7 @@
 // Provides SLEEP_STORIES, COURSES, SESSIONS plus shared types used by the
 // Audio Library page and AudioPlayer component.
 //
-// Phase 2: every session now carries a real `script` (narrated by ElevenLabs
+// Phase 2: every session now carries a real `script` (narrated by studio AI
 // at playback time via useTextToSpeech) and a per-author `voice` key so that
 // each composer has a distinct studio voice instead of all four sounding the
 // same. `audioUrl` is retained only as a legacy/offline fallback.
@@ -25,9 +25,9 @@ export interface MeditationSession {
   /** Legacy placeholder URL — only used if narration generation fails. */
   audioUrl: string;
   author: string;
-  /** Full meditation/story script — narrated by ElevenLabs at playback. */
+  /** Full meditation/story script — narrated by studio AI at playback. */
   script?: string;
-  /** ElevenLabs voice for this track. Defaults to category default. */
+  /** Studio AI voice for this track. Defaults to category default. */
   voice?: LibraryVoice;
 }
 

@@ -24,7 +24,7 @@ interface PracticeModeProps {
     stop: () => void;
     hasAudio: boolean;
   };
-  /** Voice key for ElevenLabs */
+  /** Voice key for studio AI narration */
   voice?: "sarah" | "george" | "matilda" | "charlie";
   isPremium?: boolean;
   onClose: () => void;

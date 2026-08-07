@@ -367,7 +367,7 @@ export default function DayPage() {
     }
     setPremiumGate({
       feature: "Premium narration voices",
-      description: "Aria & George are studio-mastered ElevenLabs voices reserved for Willow Plus. Sarah and Matilda stay free for everyone.",
+      description: "Aria & George are studio-mastered AI voices reserved for Willow Plus. Sarah and Matilda stay free for everyone.",
     });
   };
 

@@ -27,7 +27,7 @@ const FREE_FEATURES = [
 const PLUS_FEATURES = [
   "Full 30-day flagship + 7-day mini programs (ADHD, Cycle Sync, Grief, Athletes)",
   "AI Coach (Claude) + daily personalized insight",
-  "Premium ElevenLabs narration voices",
+  "Premium studio AI narration voices",
   "Sleep stories, sound baths, body scans, 432/528 Hz therapy",
   "Sound Bed Designer + binaural beats",
   "Streak garden, heatmap, monthly PDF reports",

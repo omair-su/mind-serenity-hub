@@ -1,5 +1,5 @@
 // Hybrid voice playback for the Willow Coach.
-// - Premium: streams ElevenLabs MP3 via the coach-tts edge function.
+// - Premium: streams Lovable AI MP3 via the coach-tts edge function.
 // - Free / fallback: uses the browser's SpeechSynthesis API.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
