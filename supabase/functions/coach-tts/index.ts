@@ -1,5 +1,5 @@
-// Willow Coach voice replies — streams ElevenLabs TTS audio.
-// Premium-only to control ElevenLabs spend. Free users fall back to browser TTS.
+// Willow Coach voice replies — streams Lovable AI text-to-speech audio.
+// Premium-only to control spend. Free users fall back to browser TTS.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -8,9 +8,12 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// Sarah — warm, calming, on-brand for coaching.
-const COACH_VOICE_ID = "EXAVITQu4vr4xnSDxMaL";
+// Matches the "Sarah" brand voice — warm, calming, on-brand for coaching.
+const COACH_VOICE = "sage";
+const TTS_MODEL = "openai/gpt-4o-mini-tts";
+const TTS_ENDPOINT = "https://ai.gateway.lovable.dev/v1/audio/speech";
 const MAX_CHARS = 1500;
+
 
 function stripMarkdown(text: string): string {
   return text
