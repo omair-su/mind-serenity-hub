@@ -33,8 +33,11 @@ function prefersReducedMotion(): boolean {
 }
 
 /* ── Target 1: sample the logo bitmap into a point cloud ───────── */
-async function sampleLogo(count: number): Promise<Float32Array> {
+type LogoSample = { pos: Float32Array; tint: Float32Array };
+
+async function sampleLogo(count: number): Promise<LogoSample> {
   const out = new Float32Array(count * 3);
+  const tint = new Float32Array(count * 3);
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = logoSrc;
@@ -52,8 +55,11 @@ async function sampleLogo(count: number): Promise<Float32Array> {
       out[i * 3] = Math.cos(a) * r;
       out[i * 3 + 1] = Math.sin(a) * r;
       out[i * 3 + 2] = (Math.random() - 0.5) * 0.12;
+      tint[i * 3] = 0.49;
+      tint[i * 3 + 1] = 0.61;
+      tint[i * 3 + 2] = 0.46;
     }
-    return out;
+    return { pos: out, tint };
   }
 
   const S = 220;
@@ -61,7 +67,7 @@ async function sampleLogo(count: number): Promise<Float32Array> {
   canvas.width = S;
   canvas.height = S;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return out;
+  if (!ctx) return { pos: out, tint };
   ctx.drawImage(img, 0, 0, S, S);
   const { data } = ctx.getImageData(0, 0, S, S);
 
@@ -72,26 +78,31 @@ async function sampleLogo(count: number): Promise<Float32Array> {
       const alpha = data[i + 3] / 255;
       const lum = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114) / 255;
       // keep opaque ink (dark) pixels — works for both transparent and flat art
-      const ink = alpha > 0.35 && lum < 0.86;
-      if (ink) candidates.push(x, y);
+      const ink = alpha > 0.5 && lum < 0.9;
+      if (ink) candidates.push(x, y, i);
     }
   }
 
-  const n = candidates.length / 2;
-  if (n === 0) return out;
+  const n = candidates.length / 3;
+  if (n === 0) return { pos: out, tint };
 
   for (let i = 0; i < count; i++) {
     const k = (Math.random() * n) | 0;
-    const x = candidates[k * 2] + (Math.random() - 0.5);
-    const y = candidates[k * 2 + 1] + (Math.random() - 0.5);
-    const nx = (x / S - 0.5) * 2.55;
-    const ny = -(y / S - 0.5) * 2.55;
+    const x = candidates[k * 3] + (Math.random() - 0.5);
+    const y = candidates[k * 3 + 1] + (Math.random() - 0.5);
+    const src = candidates[k * 3 + 2];
+    // keep the emblem's own sage-and-gold shading in the cloud, slightly deepened
+    tint[i * 3] = Math.min(1, (data[src] / 255) * 0.82);
+    tint[i * 3 + 1] = Math.min(1, (data[src + 1] / 255) * 0.82);
+    tint[i * 3 + 2] = Math.min(1, (data[src + 2] / 255) * 0.82);
+    const nx = (x / S - 0.5) * 3.1;
+    const ny = -(y / S - 0.5) * 3.1;
     out[i * 3] = nx;
     out[i * 3 + 1] = ny;
     // subtle relief: the mark bows gently toward the viewer at its centre
-    out[i * 3 + 2] = Math.cos(nx * 0.9) * Math.cos(ny * 0.9) * 0.22 + (Math.random() - 0.5) * 0.05;
+    out[i * 3 + 2] = Math.cos(nx * 0.9) * Math.cos(ny * 0.9) * 0.28 + (Math.random() - 0.5) * 0.05;
   }
-  return out;
+  return { pos: out, tint };
 }
 
 /* ── Target 2: a willow leaf, curved and twisted in 3D ─────────── */
@@ -151,6 +162,7 @@ const vertexShader = /* glsl */ `
   attribute vec3 aLeaf;
   attribute vec3 aWave;
   attribute float aRand;
+  attribute vec3 aTint;
 
   uniform vec3  uWeights;   // logo / leaf / wave
   uniform float uTime;
@@ -161,8 +173,12 @@ const vertexShader = /* glsl */ `
 
   varying float vRand;
   varying float vGlow;
+  varying vec3 vTint;
+  varying float vLogo;
 
   void main() {
+    vTint = aTint;
+    vLogo = uWeights.x;
     vec3 pos = aLogo * uWeights.x + aLeaf * uWeights.y + aWave * uWeights.z;
 
     // calm drift — slow, organic, never jittery
@@ -201,6 +217,8 @@ const fragmentShader = /* glsl */ `
 
   varying float vRand;
   varying float vGlow;
+  varying vec3 vTint;
+  varying float vLogo;
 
   void main() {
     vec2 uv = gl_PointCoord - 0.5;
@@ -209,9 +227,11 @@ const fragmentShader = /* glsl */ `
     if (alpha < 0.01) discard;
 
     vec3 base = mix(uForest, uSage, smoothstep(0.0, 1.0, vGlow));
-    vec3 col  = mix(base, uGold, smoothstep(0.82, 1.0, vRand) * 0.9);
+    vec3 col  = mix(base, uGold, smoothstep(0.9, 1.0, vRand) * 0.85);
+    // while the emblem is formed, particles carry the logo's own shading
+    col = mix(col, vTint, clamp(vLogo, 0.0, 1.0) * 0.8);
 
-    gl_FragColor = vec4(col, alpha * uOpacity * (0.42 + vRand * 0.58));
+    gl_FragColor = vec4(col, alpha * uOpacity * (0.5 + vRand * 0.5));
   }
 `;
 
@@ -227,7 +247,7 @@ function ParticleField({
   const points = useRef<THREE.Points>(null);
   const mat = useRef<THREE.ShaderMaterial>(null);
   const { gl } = useThree();
-  const [logo, setLogo] = useState<Float32Array | null>(null);
+  const [logo, setLogo] = useState<LogoSample | null>(null);
 
   const leaf = useMemo(() => buildLeaf(count), [count]);
   const wave = useMemo(() => buildWaveField(count), [count]);
@@ -262,7 +282,7 @@ function ParticleField({
     () => ({
       uWeights: { value: new THREE.Vector3(1, 0, 0) },
       uTime: { value: 0 },
-      uSize: { value: 5.6 },
+      uSize: { value: 6.4 },
       uBreath: { value: 1 },
       uTurbulence: { value: 0 },
       uPixelRatio: { value: Math.min(gl.getPixelRatio(), 2) },
@@ -312,8 +332,9 @@ function ParticleField({
   return (
     <points ref={points} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[logo, 3]} />
-        <bufferAttribute attach="attributes-aLogo" args={[logo, 3]} />
+        <bufferAttribute attach="attributes-position" args={[logo.pos, 3]} />
+        <bufferAttribute attach="attributes-aLogo" args={[logo.pos, 3]} />
+        <bufferAttribute attach="attributes-aTint" args={[logo.tint, 3]} />
         <bufferAttribute attach="attributes-aLeaf" args={[leaf, 3]} />
         <bufferAttribute attach="attributes-aWave" args={[wave, 3]} />
         <bufferAttribute attach="attributes-aRand" args={[rand, 1]} />
