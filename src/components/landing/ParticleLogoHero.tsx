@@ -78,7 +78,7 @@ async function sampleLogo(count: number): Promise<Float32Array> {
   }
 
   const n = candidates.length / 2;
-  if (n === 0) return sampleLogo(0).then ? out : out;
+  if (n === 0) return out;
 
   for (let i = 0; i < count; i++) {
     const k = (Math.random() * n) | 0;
