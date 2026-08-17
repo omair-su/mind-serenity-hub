@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LogoIcon } from "@/components/WillowLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageSEO } from "@/hooks/usePageSEO";
-const SageOrb3D = lazy(() => import("@/components/landing/SageOrb3D"));
+const ParticleLogoHero = lazy(() => import("@/components/landing/ParticleLogoHero"));
 
 // Lazy below-the-fold sections
 const FAQSection = lazy(() => import("@/components/FAQSection"));
@@ -244,7 +244,7 @@ export default function LandingPage() {
                 }}
               >
                 <Suspense fallback={<div className="absolute inset-0" />}>
-                  <SageOrb3D />
+                  <ParticleLogoHero />
                 </Suspense>
                 <div
                   aria-hidden
