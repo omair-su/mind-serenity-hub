@@ -167,15 +167,15 @@ function buildLeaf(count: number): Float32Array {
 /* ── Target 3: a slow, breathing wave field ────────────────────── */
 function buildWaveField(count: number): Float32Array {
   const out = new Float32Array(count * 3);
-  const LINES = 7;
+  const LINES = 5;
   for (let i = 0; i < count; i++) {
     const stray = Math.random() < 0.05;
     const k = Math.floor(Math.random() * LINES);
     const t = Math.random();          // 0 → 1 along the ribbon
     const x = (t - 0.5) * 3.9;
-    const centre = (k / (LINES - 1) - 0.5) * 1.55;
+    const centre = (k / (LINES - 1) - 0.5) * 1.9;
     const phase = k * 0.55;
-    const amp = 0.2 + (k % 3) * 0.07;
+    const amp = 0.16 + (k % 3) * 0.05;
     // taper the ribbons at both ends so they dissolve instead of stopping
     const fade = Math.pow(Math.sin(Math.PI * t), 0.45);
     const y = centre + Math.sin(x * 1.55 + phase) * amp * fade;
@@ -225,8 +225,8 @@ const vertexShader = /* glsl */ `
 
     // wave field ripples only while the field is present
     float wave = sin(pos.x * 2.1 + uTime * 0.6) * cos(pos.y * 1.7 - uTime * 0.42);
-    pos.z += wave * 0.34 * uWeights.z;
-    pos.y += wave * 0.06 * uWeights.z;
+    pos.z += wave * 0.1 * uWeights.z;
+    pos.y += wave * 0.03 * uWeights.z;
 
     // transition turbulence: particles bloom outward mid-morph, then settle
     pos += normalize(pos + 0.0001) * uTurbulence * (0.18 + aRand * 0.5);
