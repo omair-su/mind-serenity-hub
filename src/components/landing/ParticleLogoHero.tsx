@@ -310,7 +310,7 @@ function ParticleField({
     () => ({
       uWeights: { value: new THREE.Vector3(1, 0, 0) },
       uTime: { value: 0 },
-      uSize: { value: 6.4 },
+      uSize: { value: 3.6 },
       uBreath: { value: 1 },
       uTurbulence: { value: 0 },
       uPixelRatio: { value: Math.min(gl.getPixelRatio(), 2) },
