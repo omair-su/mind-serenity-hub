@@ -114,10 +114,10 @@ function buildLeaf(count: number): Float32Array {
     const t = Math.random();
     const v = Math.random() * 2 - 1;
     // lanceolate willow profile: widest just below the middle, drawn to fine tips
-    const w = Math.pow(Math.sin(Math.PI * t), 0.72) * (1.0 - t * 0.32) * 0.52;
+    const w = Math.pow(Math.sin(Math.PI * t), 1.55) * (1.0 - t * 0.3) * 0.62;
     // denser near the midrib, thinning to the edge
     const vv = Math.sign(v) * Math.pow(Math.abs(v), 0.7);
-    const spine = (t - 0.5) * 3.25;
+    const spine = (t - 0.5) * 3.7;
     // the whole blade curves like a willow leaf hanging in air
     const bow = Math.sin(t * Math.PI) * 0.38;
     const x = vv * w + bow * 0.5;
