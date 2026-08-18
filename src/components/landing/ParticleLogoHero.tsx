@@ -167,22 +167,22 @@ function buildLeaf(count: number): Float32Array {
 /* ── Target 3: a slow, breathing wave field ────────────────────── */
 function buildWaveField(count: number): Float32Array {
   const out = new Float32Array(count * 3);
-  const LINES = 5;
+  const LINES = 4;
   for (let i = 0; i < count; i++) {
-    const stray = Math.random() < 0.05;
+    const stray = Math.random() < 0.02;
     const k = Math.floor(Math.random() * LINES);
     const t = Math.random();          // 0 → 1 along the ribbon
     const x = (t - 0.5) * 3.9;
-    const centre = (k / (LINES - 1) - 0.5) * 1.9;
+    const centre = (k / (LINES - 1) - 0.5) * 2.5;
     const phase = k * 0.55;
-    const amp = 0.16 + (k % 3) * 0.05;
+    const amp = 0.12 + (k % 3) * 0.03;
     // taper the ribbons at both ends so they dissolve instead of stopping
     const fade = Math.pow(Math.sin(Math.PI * t), 0.45);
     const y = centre + Math.sin(x * 1.55 + phase) * amp * fade;
-    const z = Math.cos(x * 1.15 - phase) * 0.3 * fade;
+    const z = Math.cos(x * 1.15 - phase) * 0.14 * fade;
 
     out[i * 3] = x;
-    out[i * 3 + 1] = y + (Math.random() - 0.5) * 0.045;
+    out[i * 3 + 1] = y + (Math.random() - 0.5) * 0.02;
     out[i * 3 + 2] = z + (Math.random() - 0.5) * 0.045;
 
     if (stray) {
