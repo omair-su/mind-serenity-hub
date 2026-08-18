@@ -303,15 +303,33 @@ function ParticleField({
 
   const weights = useRef(new THREE.Vector3(1, 0, 0));
   const pointer = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const perf = useRef({ acc: 0, frames: 0, quality: 1 });
 
   useEffect(() => {
     if (reduced) return;
-    const onMove = (e: PointerEvent) => {
-      pointer.current.tx = (e.clientX / window.innerWidth - 0.5) * 2;
-      pointer.current.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    const set = (cx: number, cy: number) => {
+      pointer.current.tx = (cx / window.innerWidth - 0.5) * 2;
+      pointer.current.ty = (cy / window.innerHeight - 0.5) * 2;
+    };
+    const onMove = (e: PointerEvent) => set(e.clientX, e.clientY);
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) set(t.clientX, t.clientY);
+    };
+    const onLeave = () => {
+      pointer.current.tx = 0;
+      pointer.current.ty = 0;
     };
     window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    window.addEventListener("touchend", onLeave, { passive: true });
+    window.addEventListener("pointerleave", onLeave, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("touchend", onLeave);
+      window.removeEventListener("pointerleave", onLeave);
+    };
   }, [reduced]);
 
   const uniforms = useMemo(
