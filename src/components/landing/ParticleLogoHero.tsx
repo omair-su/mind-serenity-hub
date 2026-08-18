@@ -167,20 +167,26 @@ function buildLeaf(count: number): Float32Array {
 /* ── Target 3: a slow, breathing wave field ────────────────────── */
 function buildWaveField(count: number): Float32Array {
   const out = new Float32Array(count * 3);
-  const cols = Math.ceil(Math.sqrt(count * 1.6));
-  const rows = Math.ceil(count / cols);
-  let i = 0;
-  for (let r = 0; r < rows && i < count; r++) {
-    for (let c = 0; c < cols && i < count; c++, i++) {
-      const u = c / (cols - 1) - 0.5;
-      const v = r / (rows - 1) - 0.5;
-      const x = u * 3.6 + (Math.random() - 0.5) * 0.04;
-      const y = v * 1.9 + (Math.random() - 0.5) * 0.04;
-      const z = Math.sin(u * 5.2) * 0.16 + Math.cos(v * 4.1) * 0.12;
-      out[i * 3] = x;
-      out[i * 3 + 1] = y * 0.9;
-      out[i * 3 + 2] = z;
+  const RINGS = 26;
+  for (let i = 0; i < count; i++) {
+    const onRing = Math.random() < 0.72;
+    // radius biased outward so the pool reads as concentric rings, not a slab
+    let rad = Math.sqrt(Math.random()) * 1.85;
+    if (onRing) {
+      const k = Math.floor(Math.random() * RINGS);
+      rad = ((k + 1) / RINGS) * 1.85 + (Math.random() - 0.5) * 0.022;
     }
+    const a = Math.random() * Math.PI * 2;
+    const x = Math.cos(a) * rad * 1.12;
+    const yFlat = Math.sin(a) * rad;
+    // ripple height radiating from the centre
+    const h = Math.sin(rad * 5.4) * 0.16 * (1 - rad / 2.4);
+
+    // lay the pool back so we look across the water, not straight down
+    const TIP = 1.02;
+    out[i * 3] = x;
+    out[i * 3 + 1] = yFlat * Math.cos(TIP) - h * Math.sin(TIP) * 0.6;
+    out[i * 3 + 2] = yFlat * Math.sin(TIP) + h * Math.cos(TIP);
   }
   return out;
 }
