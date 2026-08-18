@@ -108,33 +108,42 @@ async function sampleLogo(count: number): Promise<LogoSample> {
 /* ── Target 2: a willow leaf, curved and twisted in 3D ─────────── */
 function buildLeaf(count: number): Float32Array {
   const out = new Float32Array(count * 3);
+  const TILT = -0.28; // radians — the leaf hangs on a slight diagonal
   for (let i = 0; i < count; i++) {
-    const stray = Math.random() < 0.03;
-    // t runs tip-to-tip along the spine, v across the blade
-    const t = Math.random();
-    const v = Math.random() * 2 - 1;
-    // lanceolate willow profile: widest just below the middle, drawn to fine tips
-    const w = Math.pow(Math.sin(Math.PI * t), 1.55) * (1.0 - t * 0.3) * 0.62;
-    // denser near the midrib, thinning to the edge
-    const vv = Math.sign(v) * Math.pow(Math.abs(v), 0.7);
-    const spine = (t - 0.5) * 3.7;
-    // the whole blade curves like a willow leaf hanging in air
-    const bow = Math.sin(t * Math.PI) * 0.38;
-    const x = vv * w + bow * 0.5;
-    const y = spine;
-    // cross-section fold: the blade dips away from the midrib
-    const z = Math.sin(t * Math.PI) * 0.3 - Math.abs(vv) * w * 0.9;
-    // slow twist about the spine
-    const tw = (t - 0.5) * 0.8;
-    const cx = x * Math.cos(tw) - z * Math.sin(tw);
-    const cz = x * Math.sin(tw) + z * Math.cos(tw);
-    out[i * 3] = cx * 1.15;
-    out[i * 3 + 1] = y * 0.82;
-    out[i * 3 + 2] = cz;
+    const stray = Math.random() < 0.035;
+    const midrib = !stray && Math.random() < 0.16;
+
+    // u runs -1 (base) → 1 (tip) along the spine
+    const u = Math.random() * 2 - 1;
+    // lens profile with drawn-out points: round belly, fine tips
+    const w = Math.pow(Math.max(0, 1 - u * u), 0.62) * (1 - u * 0.22) * 0.58;
+    // across the blade, denser toward the midrib
+    let v = Math.random() * 2 - 1;
+    v = Math.sign(v) * Math.pow(Math.abs(v), 0.62);
+    if (midrib) v *= 0.12;
+
+    // the spine itself is an arc, not a straight line
+    const arc = (1 - u * u) * 0.34;
+    let x = v * w + arc;
+    let y = u * 1.72;
+    // blade folds away from the midrib and lifts at the belly
+    let z = (1 - u * u) * 0.34 - Math.abs(v) * w * 1.1;
+
+    // gentle twist about the spine, then tilt the whole leaf
+    const tw = u * 0.42;
+    const rx = x * Math.cos(tw) - z * Math.sin(tw);
+    z = x * Math.sin(tw) + z * Math.cos(tw);
+    x = rx;
+    const tx = x * Math.cos(TILT) - y * Math.sin(TILT);
+    const ty = x * Math.sin(TILT) + y * Math.cos(TILT);
+
+    out[i * 3] = tx;
+    out[i * 3 + 1] = ty;
+    out[i * 3 + 2] = z;
+
     if (stray) {
-      // a few motes drift free, like light caught around the leaf
-      out[i * 3] += (Math.random() - 0.5) * 1.7;
-      out[i * 3 + 1] += (Math.random() - 0.5) * 1.7;
+      out[i * 3] += (Math.random() - 0.5) * 1.8;
+      out[i * 3 + 1] += (Math.random() - 0.5) * 1.8;
       out[i * 3 + 2] += (Math.random() - 0.5) * 0.7;
     }
   }
