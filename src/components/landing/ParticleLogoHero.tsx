@@ -109,28 +109,33 @@ async function sampleLogo(count: number): Promise<LogoSample> {
 function buildLeaf(count: number): Float32Array {
   const out = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    // t along the leaf spine, v across its width
-    const t = Math.pow(Math.random(), 0.75);
-    const v = (Math.random() * 2 - 1) * Math.pow(Math.random(), 0.35);
-    // leaf half-width profile: fat mid, tapered tips
-    const w = Math.sin(Math.PI * t) * Math.pow(1 - Math.abs(t - 0.45), 0.6) * 0.62;
-    const spineY = (t - 0.5) * 2.9;
-    const x = v * w;
-    const y = spineY;
-    // gentle longitudinal curl + cross-section fold, like a leaf catching light
-    const z = Math.sin(t * Math.PI) * 0.42 - Math.abs(v) * w * 0.55;
-    // slight twist about the spine
-    const tw = (t - 0.5) * 0.7;
+    const stray = Math.random() < 0.03;
+    // t runs tip-to-tip along the spine, v across the blade
+    const t = Math.random();
+    const v = Math.random() * 2 - 1;
+    // lanceolate willow profile: widest just below the middle, drawn to fine tips
+    const w = Math.pow(Math.sin(Math.PI * t), 0.72) * (1.0 - t * 0.32) * 0.52;
+    // denser near the midrib, thinning to the edge
+    const vv = Math.sign(v) * Math.pow(Math.abs(v), 0.7);
+    const spine = (t - 0.5) * 3.25;
+    // the whole blade curves like a willow leaf hanging in air
+    const bow = Math.sin(t * Math.PI) * 0.38;
+    const x = vv * w + bow * 0.5;
+    const y = spine;
+    // cross-section fold: the blade dips away from the midrib
+    const z = Math.sin(t * Math.PI) * 0.3 - Math.abs(vv) * w * 0.9;
+    // slow twist about the spine
+    const tw = (t - 0.5) * 0.8;
     const cx = x * Math.cos(tw) - z * Math.sin(tw);
     const cz = x * Math.sin(tw) + z * Math.cos(tw);
-    out[i * 3] = cx * 1.35;
-    out[i * 3 + 1] = y * 0.85;
+    out[i * 3] = cx * 1.15;
+    out[i * 3 + 1] = y * 0.82;
     out[i * 3 + 2] = cz;
-    // a few points trail off as falling motes
-    if (Math.random() < 0.05) {
-      out[i * 3] += (Math.random() - 0.5) * 1.6;
-      out[i * 3 + 1] += (Math.random() - 0.5) * 1.6;
-      out[i * 3 + 2] += (Math.random() - 0.5) * 0.8;
+    if (stray) {
+      // a few motes drift free, like light caught around the leaf
+      out[i * 3] += (Math.random() - 0.5) * 1.7;
+      out[i * 3 + 1] += (Math.random() - 0.5) * 1.7;
+      out[i * 3 + 2] += (Math.random() - 0.5) * 0.7;
     }
   }
   return out;
@@ -203,7 +208,7 @@ const vertexShader = /* glsl */ `
     gl_PointSize = uSize * (0.55 + aRand * 0.9) * uPixelRatio * (7.5 / -mv.z);
 
     vRand = aRand;
-    vGlow = clamp(0.35 + pos.z * 0.55 + uTurbulence * 1.2, 0.0, 1.0);
+    vGlow = clamp(0.52 + pos.z * 0.5 + uTurbulence * 1.0, 0.0, 1.0);
   }
 `;
 
