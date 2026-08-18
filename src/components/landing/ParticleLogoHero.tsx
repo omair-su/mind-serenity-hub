@@ -108,30 +108,58 @@ async function sampleLogo(count: number): Promise<LogoSample> {
 /* ── Target 2: a willow leaf, curved and twisted in 3D ─────────── */
 function buildLeaf(count: number): Float32Array {
   const out = new Float32Array(count * 3);
+  const TILT = -0.26; // radians — the leaf hangs on a slight diagonal
+  const VEINS = 9;
+
+  // half-width of the blade at spine position u ∈ [-1, 1]
+  const halfWidth = (u: number) =>
+    Math.pow(Math.max(0, 1 - u * u), 0.62) * (1 - u * 0.22) * 0.6;
+
   for (let i = 0; i < count; i++) {
-    // t along the leaf spine, v across its width
-    const t = Math.pow(Math.random(), 0.75);
-    const v = (Math.random() * 2 - 1) * Math.pow(Math.random(), 0.35);
-    // leaf half-width profile: fat mid, tapered tips
-    const w = Math.sin(Math.PI * t) * Math.pow(1 - Math.abs(t - 0.45), 0.6) * 0.62;
-    const spineY = (t - 0.5) * 2.9;
-    const x = v * w;
-    const y = spineY;
-    // gentle longitudinal curl + cross-section fold, like a leaf catching light
-    const z = Math.sin(t * Math.PI) * 0.42 - Math.abs(v) * w * 0.55;
-    // slight twist about the spine
-    const tw = (t - 0.5) * 0.7;
-    const cx = x * Math.cos(tw) - z * Math.sin(tw);
-    const cz = x * Math.sin(tw) + z * Math.cos(tw);
-    out[i * 3] = cx * 1.35;
-    out[i * 3 + 1] = y * 0.85;
-    out[i * 3 + 2] = cz;
-    // a few points trail off as falling motes
-    if (Math.random() < 0.05) {
-      out[i * 3] += (Math.random() - 0.5) * 1.6;
-      out[i * 3 + 1] += (Math.random() - 0.5) * 1.6;
-      out[i * 3 + 2] += (Math.random() - 0.5) * 0.8;
+    const r = Math.random();
+    let u: number;
+    let v: number; // -1..1 across the blade, as a fraction of half-width
+
+    if (r < 0.42) {
+      // blade edge — the silhouette that makes the leaf legible
+      u = Math.random() * 2 - 1;
+      v = (Math.random() < 0.5 ? -1 : 1) * (1 - Math.random() * 0.06);
+    } else if (r < 0.6) {
+      // midrib
+      u = Math.random() * 2 - 1;
+      v = (Math.random() - 0.5) * 0.12;
+    } else if (r < 0.88) {
+      // veins fanning from the midrib toward the tip
+      const k = Math.floor(Math.random() * VEINS);
+      const base = -0.85 + (k / (VEINS - 1)) * 1.5;
+      const along = Math.random();
+      const side = k % 2 === 0 ? 1 : -1;
+      u = base + along * 0.34;
+      v = side * along * (0.95 + Math.random() * 0.05);
+    } else if (r < 0.965) {
+      // sparse interior haze
+      u = Math.random() * 2 - 1;
+      v = (Math.random() * 2 - 1) * 0.9;
+    } else {
+      // free motes drifting around the leaf
+      u = Math.random() * 2 - 1;
+      v = (Math.random() * 2 - 1) * 2.6;
     }
+
+    const w = halfWidth(u);
+    const arc = (1 - u * u) * 0.32; // the spine curves like a real leaf
+    let x = v * w + arc;
+    let y = u * 1.78;
+    let z = (1 - u * u) * 0.3 - Math.abs(v) * w * 1.1 + (Math.random() - 0.5) * 0.03;
+
+    const tw = u * 0.4; // slow twist about the spine
+    const rx = x * Math.cos(tw) - z * Math.sin(tw);
+    z = x * Math.sin(tw) + z * Math.cos(tw);
+    x = rx;
+
+    out[i * 3] = x * Math.cos(TILT) - y * Math.sin(TILT);
+    out[i * 3 + 1] = x * Math.sin(TILT) + y * Math.cos(TILT);
+    out[i * 3 + 2] = z;
   }
   return out;
 }
@@ -139,19 +167,27 @@ function buildLeaf(count: number): Float32Array {
 /* ── Target 3: a slow, breathing wave field ────────────────────── */
 function buildWaveField(count: number): Float32Array {
   const out = new Float32Array(count * 3);
-  const cols = Math.ceil(Math.sqrt(count * 1.6));
-  const rows = Math.ceil(count / cols);
-  let i = 0;
-  for (let r = 0; r < rows && i < count; r++) {
-    for (let c = 0; c < cols && i < count; c++, i++) {
-      const u = c / (cols - 1) - 0.5;
-      const v = r / (rows - 1) - 0.5;
-      const x = u * 3.6 + (Math.random() - 0.5) * 0.04;
-      const y = v * 1.9 + (Math.random() - 0.5) * 0.04;
-      const z = Math.sin(u * 5.2) * 0.16 + Math.cos(v * 4.1) * 0.12;
-      out[i * 3] = x;
-      out[i * 3 + 1] = y * 0.9;
-      out[i * 3 + 2] = z;
+  const LINES = 4;
+  for (let i = 0; i < count; i++) {
+    const stray = Math.random() < 0.02;
+    const k = Math.floor(Math.random() * LINES);
+    const t = Math.random();          // 0 → 1 along the ribbon
+    const x = (t - 0.5) * 3.9;
+    const centre = (k / (LINES - 1) - 0.5) * 2.5;
+    const phase = k * 0.55;
+    const amp = 0.12 + (k % 3) * 0.03;
+    // taper the ribbons at both ends so they dissolve instead of stopping
+    const fade = Math.pow(Math.sin(Math.PI * t), 0.45);
+    const y = centre + Math.sin(x * 1.55 + phase) * amp * fade;
+    const z = Math.cos(x * 1.15 - phase) * 0.14 * fade;
+
+    out[i * 3] = x;
+    out[i * 3 + 1] = y + (Math.random() - 0.5) * 0.02;
+    out[i * 3 + 2] = z + (Math.random() - 0.5) * 0.045;
+
+    if (stray) {
+      out[i * 3 + 1] += (Math.random() - 0.5) * 1.4;
+      out[i * 3] += (Math.random() - 0.5) * 0.6;
     }
   }
   return out;
@@ -189,8 +225,8 @@ const vertexShader = /* glsl */ `
 
     // wave field ripples only while the field is present
     float wave = sin(pos.x * 2.1 + uTime * 0.6) * cos(pos.y * 1.7 - uTime * 0.42);
-    pos.z += wave * 0.34 * uWeights.z;
-    pos.y += wave * 0.06 * uWeights.z;
+    pos.z += wave * 0.1 * uWeights.z;
+    pos.y += wave * 0.03 * uWeights.z;
 
     // transition turbulence: particles bloom outward mid-morph, then settle
     pos += normalize(pos + 0.0001) * uTurbulence * (0.18 + aRand * 0.5);
@@ -203,7 +239,7 @@ const vertexShader = /* glsl */ `
     gl_PointSize = uSize * (0.55 + aRand * 0.9) * uPixelRatio * (7.5 / -mv.z);
 
     vRand = aRand;
-    vGlow = clamp(0.35 + pos.z * 0.55 + uTurbulence * 1.2, 0.0, 1.0);
+    vGlow = clamp(0.52 + pos.z * 0.5 + uTurbulence * 1.0, 0.0, 1.0);
   }
 `;
 
@@ -282,7 +318,7 @@ function ParticleField({
     () => ({
       uWeights: { value: new THREE.Vector3(1, 0, 0) },
       uTime: { value: 0 },
-      uSize: { value: 6.4 },
+      uSize: { value: 3.6 },
       uBreath: { value: 1 },
       uTurbulence: { value: 0 },
       uPixelRatio: { value: Math.min(gl.getPixelRatio(), 2) },
@@ -306,7 +342,7 @@ function ParticleField({
     // target weights for the active stage
     const target = new THREE.Vector3(stage === 0 ? 1 : 0, stage === 1 ? 1 : 0, stage === 2 ? 1 : 0);
     const w = weights.current;
-    const speed = reduced ? 6 : 1.15;
+    const speed = reduced ? 6 : 2.2;
     w.lerp(target, 1 - Math.exp(-speed * d));
     u.uWeights.value.copy(w);
 
