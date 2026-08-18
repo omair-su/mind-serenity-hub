@@ -342,7 +342,7 @@ function ParticleField({
     // target weights for the active stage
     const target = new THREE.Vector3(stage === 0 ? 1 : 0, stage === 1 ? 1 : 0, stage === 2 ? 1 : 0);
     const w = weights.current;
-    const speed = reduced ? 6 : 1.15;
+    const speed = reduced ? 6 : 2.2;
     w.lerp(target, 1 - Math.exp(-speed * d));
     u.uWeights.value.copy(w);
 
