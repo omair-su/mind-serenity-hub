@@ -391,7 +391,7 @@ function ParticleField({
 export default function ParticleLogoHero() {
   const [ok, setOk] = useState(false);
   const [reduced, setReduced] = useState(false);
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [count, setCount] = useState(9000);
 
   useEffect(() => {
