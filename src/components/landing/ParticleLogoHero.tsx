@@ -32,6 +32,36 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
+/* ── Asset preloading: decode the emblem once, as early as possible ── */
+let logoPromise: Promise<HTMLImageElement | null> | null = null;
+
+export function logoImage(): Promise<HTMLImageElement | null> {
+  if (typeof window === "undefined") return Promise.resolve(null);
+  if (logoPromise) return logoPromise;
+
+  // hint the browser before the WebGL bundle even mounts
+  if (!document.querySelector(`link[rel="preload"][href="${logoSrc}"]`)) {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = logoSrc;
+    document.head.appendChild(link);
+  }
+
+  logoPromise = new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.decoding = "async";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = logoSrc;
+  });
+  return logoPromise;
+}
+
+// warm the cache at module evaluation time
+if (typeof window !== "undefined") void logoImage();
+
 /* ── Target 1: sample the logo bitmap into a point cloud ───────── */
 type LogoSample = { pos: Float32Array; tint: Float32Array };
 
