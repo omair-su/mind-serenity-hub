@@ -518,11 +518,16 @@ export default function ParticleLogoHero() {
   }
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0" ref={wrap}>
       <Canvas
         camera={{ position: [0, 0, 5.2], fov: 42 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        dpr={[1, maxDpr]}
+        frameloop={inView ? "always" : "never"}
+        gl={{
+          antialias: maxDpr <= 1.5,
+          alpha: true,
+          powerPreference: "high-performance",
+        }}
         style={{ background: "transparent" }}
       >
         <ParticleField count={count} stage={stage} reduced={reduced} />
