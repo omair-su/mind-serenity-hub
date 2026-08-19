@@ -92,7 +92,7 @@ async function sampleLogo(count: number): Promise<LogoSample> {
   canvas.height = S;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return { pos: out, tint };
-  ctx.drawImage(img, 0, 0, S, S);
+  ctx.drawImage(img!, 0, 0, S, S);
   const { data } = ctx.getImageData(0, 0, S, S);
 
   const candidates: number[] = [];
