@@ -32,20 +32,44 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
+/* ── Asset preloading: decode the emblem once, as early as possible ── */
+let logoPromise: Promise<HTMLImageElement | null> | null = null;
+
+export function logoImage(): Promise<HTMLImageElement | null> {
+  if (typeof window === "undefined") return Promise.resolve(null);
+  if (logoPromise) return logoPromise;
+
+  // hint the browser before the WebGL bundle even mounts
+  if (!document.querySelector(`link[rel="preload"][href="${logoSrc}"]`)) {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = logoSrc;
+    document.head.appendChild(link);
+  }
+
+  logoPromise = new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.decoding = "async";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = logoSrc;
+  });
+  return logoPromise;
+}
+
+// warm the cache at module evaluation time
+if (typeof window !== "undefined") void logoImage();
+
 /* ── Target 1: sample the logo bitmap into a point cloud ───────── */
 type LogoSample = { pos: Float32Array; tint: Float32Array };
 
 async function sampleLogo(count: number): Promise<LogoSample> {
   const out = new Float32Array(count * 3);
   const tint = new Float32Array(count * 3);
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = logoSrc;
-
-  const loaded = await new Promise<boolean>((resolve) => {
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-  });
+  const img = await logoImage();
+  const loaded = !!img && img.naturalWidth > 0;
 
   if (!loaded) {
     // Graceful fallback: a soft ring so the hero never renders empty.
@@ -68,7 +92,7 @@ async function sampleLogo(count: number): Promise<LogoSample> {
   canvas.height = S;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return { pos: out, tint };
-  ctx.drawImage(img, 0, 0, S, S);
+  ctx.drawImage(img!, 0, 0, S, S);
   const { data } = ctx.getImageData(0, 0, S, S);
 
   const candidates: number[] = [];
@@ -378,6 +402,31 @@ function ParticleField({
       points.current.rotation.y += (p.x * 0.32 - points.current.rotation.y) * d * 1.6;
       points.current.rotation.x += (-p.y * 0.2 - points.current.rotation.x) * d * 1.6;
       if (!reduced) points.current.rotation.z = Math.sin(t * 0.12) * 0.04;
+
+      // parallax: the cloud slides and drifts in depth with the pointer/touch
+      const px = p.x * 0.26;
+      const py = -p.y * 0.16;
+      points.current.position.x += (px - points.current.position.x) * d * 2.2;
+      points.current.position.y += (py - points.current.position.y) * d * 2.2;
+      const pz = -Math.abs(p.x) * 0.12 - Math.abs(p.y) * 0.08;
+      points.current.position.z += (pz - points.current.position.z) * d * 1.8;
+    }
+
+    // adaptive quality: sample frame cost and thin the cloud if the device struggles
+    if (!reduced) {
+      const perfRef = perf.current;
+      perfRef.acc += delta;
+      perfRef.frames += 1;
+      if (perfRef.acc >= 1) {
+        const fps = perfRef.frames / perfRef.acc;
+        if (fps < 40 && perfRef.quality > 0.45) perfRef.quality = Math.max(0.45, perfRef.quality - 0.18);
+        else if (fps > 55 && perfRef.quality < 1) perfRef.quality = Math.min(1, perfRef.quality + 0.1);
+        perfRef.acc = 0;
+        perfRef.frames = 0;
+        const geo = points.current?.geometry as THREE.BufferGeometry | undefined;
+        if (geo) geo.setDrawRange(0, Math.floor(count * perfRef.quality));
+        u.uSize.value = 3.6 / Math.sqrt(perfRef.quality);
+      }
     }
   });
 
@@ -411,20 +460,49 @@ export default function ParticleLogoHero() {
   const [reduced, setReduced] = useState(false);
   const [stage, setStage] = useState(0);
   const [count, setCount] = useState(9000);
+  const [maxDpr, setMaxDpr] = useState(2);
+  const [inView, setInView] = useState(true);
+  const wrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setOk(detectWebGL());
     setReduced(prefersReducedMotion());
+
+    // adaptive budget: screen size, cores, memory and pixel density
     const mobile = window.matchMedia("(max-width: 768px)").matches;
-    const weak = (navigator.hardwareConcurrency ?? 4) <= 4;
-    setCount(mobile ? 4500 : weak ? 7000 : 11000);
+    const cores = navigator.hardwareConcurrency ?? 4;
+    const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4;
+    const dpr = window.devicePixelRatio || 1;
+
+    let budget = mobile ? 4500 : cores <= 4 ? 7000 : 11000;
+    if (mem <= 4) budget *= 0.75;
+    if (cores <= 2) budget *= 0.7;
+    if (mobile && dpr >= 3) budget *= 0.8;
+    setCount(Math.max(2200, Math.round(budget)));
+
+    // never render more pixels than the device can comfortably push
+    setMaxDpr(mobile ? Math.min(dpr, 1.75) : Math.min(dpr, 2));
   }, []);
 
+  // pause the render loop when the hero scrolls away or the tab is hidden
   useEffect(() => {
-    if (!ok || reduced) return;
+    const el = wrap.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.05 });
+    io.observe(el);
+    const onVis = () => setInView(!document.hidden && !!wrap.current);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [ok]);
+
+  useEffect(() => {
+    if (!ok || reduced || !inView) return;
     const id = window.setInterval(() => setStage((s) => (s + 1) % 3), STAGE_MS);
     return () => window.clearInterval(id);
-  }, [ok, reduced]);
+  }, [ok, reduced, inView]);
 
   if (!ok) {
     return (
@@ -440,11 +518,16 @@ export default function ParticleLogoHero() {
   }
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0" ref={wrap}>
       <Canvas
         camera={{ position: [0, 0, 5.2], fov: 42 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        dpr={[1, maxDpr]}
+        frameloop={inView ? "always" : "never"}
+        gl={{
+          antialias: maxDpr <= 1.5,
+          alpha: true,
+          powerPreference: "high-performance",
+        }}
         style={{ background: "transparent" }}
       >
         <ParticleField count={count} stage={stage} reduced={reduced} />
