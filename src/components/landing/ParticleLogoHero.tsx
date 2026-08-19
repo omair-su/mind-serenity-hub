@@ -38,14 +38,8 @@ type LogoSample = { pos: Float32Array; tint: Float32Array };
 async function sampleLogo(count: number): Promise<LogoSample> {
   const out = new Float32Array(count * 3);
   const tint = new Float32Array(count * 3);
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = logoSrc;
-
-  const loaded = await new Promise<boolean>((resolve) => {
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-  });
+  const img = await logoImage();
+  const loaded = !!img && img.naturalWidth > 0;
 
   if (!loaded) {
     // Graceful fallback: a soft ring so the hero never renders empty.
