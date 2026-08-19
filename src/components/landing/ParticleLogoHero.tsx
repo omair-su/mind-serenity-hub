@@ -460,20 +460,49 @@ export default function ParticleLogoHero() {
   const [reduced, setReduced] = useState(false);
   const [stage, setStage] = useState(0);
   const [count, setCount] = useState(9000);
+  const [maxDpr, setMaxDpr] = useState(2);
+  const [inView, setInView] = useState(true);
+  const wrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setOk(detectWebGL());
     setReduced(prefersReducedMotion());
+
+    // adaptive budget: screen size, cores, memory and pixel density
     const mobile = window.matchMedia("(max-width: 768px)").matches;
-    const weak = (navigator.hardwareConcurrency ?? 4) <= 4;
-    setCount(mobile ? 4500 : weak ? 7000 : 11000);
+    const cores = navigator.hardwareConcurrency ?? 4;
+    const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4;
+    const dpr = window.devicePixelRatio || 1;
+
+    let budget = mobile ? 4500 : cores <= 4 ? 7000 : 11000;
+    if (mem <= 4) budget *= 0.75;
+    if (cores <= 2) budget *= 0.7;
+    if (mobile && dpr >= 3) budget *= 0.8;
+    setCount(Math.max(2200, Math.round(budget)));
+
+    // never render more pixels than the device can comfortably push
+    setMaxDpr(mobile ? Math.min(dpr, 1.75) : Math.min(dpr, 2));
   }, []);
 
+  // pause the render loop when the hero scrolls away or the tab is hidden
   useEffect(() => {
-    if (!ok || reduced) return;
+    const el = wrap.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.05 });
+    io.observe(el);
+    const onVis = () => setInView(!document.hidden && !!wrap.current);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [ok]);
+
+  useEffect(() => {
+    if (!ok || reduced || !inView) return;
     const id = window.setInterval(() => setStage((s) => (s + 1) % 3), STAGE_MS);
     return () => window.clearInterval(id);
-  }, [ok, reduced]);
+  }, [ok, reduced, inView]);
 
   if (!ok) {
     return (
